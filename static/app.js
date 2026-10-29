@@ -20,7 +20,9 @@ const state = {
     },
     settings: {
         furiganaVisible: true,
-        evidenceVisible: true
+        evidenceVisible: true,
+        fontFamily: 'gothic',  // 'gothic' | 'mincho'
+        fontSizePx: 20         // default 20px
     }
 };
 
@@ -47,12 +49,16 @@ const elements = {
     levelPills: document.getElementById('level-filter-pills'),
     categoryPills: document.getElementById('category-filter-pills'),
 
-    // Exercise Left Pane (Passage)
+    // Exercise Left Pane (Passage & Reader tools)
     passageTitle: document.getElementById('passage-title'),
     passageLevel: document.getElementById('passage-level'),
     passageCategory: document.getElementById('passage-category'),
     passageTime: document.getElementById('passage-time'),
     passageContent: document.getElementById('passage-content'),
+    btnFontGothic: document.getElementById('btn-font-gothic'),
+    btnFontMincho: document.getElementById('btn-font-mincho'),
+    btnFontIncrease: document.getElementById('btn-font-increase'),
+    btnFontDecrease: document.getElementById('btn-font-decrease'),
 
     // Exercise Right Pane (Questions)
     answeredCount: document.getElementById('answered-count'),
@@ -94,7 +100,7 @@ const CATEGORY_NAMES = {
     'medium': '中文 (Средние)',
     'long': '長文 (Длинные)',
     'info_search': '情報検索 (Поиск инфо)',
-    'article': '記事 (Статьи)'
+    'article': '記事・論説 (Статьи)'
 };
 
 function formatTime(totalSeconds) {
@@ -125,6 +131,31 @@ function stopTimer() {
 }
 
 // ============================================================================
+// Reader Customization (Font Size & Typeface)
+// ============================================================================
+
+function setReaderFont(typeface) {
+    state.settings.fontFamily = typeface;
+    if (typeface === 'mincho') {
+        elements.passageContent.classList.remove('font-gothic');
+        elements.passageContent.classList.add('font-mincho');
+        elements.btnFontMincho.classList.add('active');
+        elements.btnFontGothic.classList.remove('active');
+    } else {
+        elements.passageContent.classList.remove('font-mincho');
+        elements.passageContent.classList.add('font-gothic');
+        elements.btnFontGothic.classList.add('active');
+        elements.btnFontMincho.classList.remove('active');
+    }
+}
+
+function adjustFontSize(delta) {
+    const newSize = Math.max(16, Math.min(28, state.settings.fontSizePx + delta));
+    state.settings.fontSizePx = newSize;
+    elements.passageContent.style.fontSize = `${newSize}px`;
+}
+
+// ============================================================================
 // Catalog Loading & Rendering
 // ============================================================================
 
@@ -142,8 +173,8 @@ async function fetchAndRenderCatalog() {
 
         if (texts.length === 0) {
             elements.catalogGrid.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #fff; border-radius: 12px;">
-                    <p style="font-size: 1.1rem; color: var(--slate-600);">По выбранным фильтрам текстов не найдено.</p>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #fff; border-radius: 12px; border: 1px solid var(--washi-border);">
+                    <p style="font-size: 1.1rem; color: var(--sumi-600);">По выбранным фильтрам текстов пока нет.</p>
                 </div>
             `;
             return;
@@ -153,7 +184,7 @@ async function fetchAndRenderCatalog() {
             <div class="catalog-card">
                 <div class="card-top">
                     <div class="card-meta">
-                        <span class="level-tag">${text.level}</span>
+                        <span class="level-tag" data-lvl="${text.level}">${text.level}</span>
                         <span class="category-tag">${CATEGORY_NAMES[text.category] || text.category}</span>
                     </div>
                     <h3 class="card-title">${text.title}</h3>
@@ -164,7 +195,7 @@ async function fetchAndRenderCatalog() {
                 </div>
                 <div class="card-bottom">
                     <button class="btn btn-primary btn-full" onclick="startExercise(${text.id})">
-                        Начать решение →
+                        Решать текст →
                     </button>
                 </div>
             </div>
@@ -172,8 +203,8 @@ async function fetchAndRenderCatalog() {
     } catch (err) {
         console.error(err);
         elements.catalogGrid.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--danger);">
-                Не удалось подключиться к серверу. Пожалуйста, проверьте подключение.
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--vermilion);">
+                Не удалось подключиться к серверу. Пожалуйста, обновите страницу.
             </div>
         `;
     }
@@ -203,20 +234,23 @@ async function startExercise(textId) {
 
         // Header tags
         elements.headerLevelTag.textContent = textData.level;
+        elements.headerLevelTag.setAttribute('data-lvl', textData.level);
         elements.headerCategoryTag.textContent = CATEGORY_NAMES[textData.category] || textData.category;
         elements.timerTarget.textContent = `(Реком.: ${textData.recommended_time_min} мин)`;
 
         // Passage Left Pane
         elements.passageTitle.textContent = textData.title;
         elements.passageLevel.textContent = textData.level;
+        elements.passageLevel.setAttribute('data-lvl', textData.level);
         elements.passageCategory.textContent = CATEGORY_NAMES[textData.category] || textData.category;
         elements.passageTime.textContent = `${textData.recommended_time_min} мин`;
 
         // Render Japanese HTML (contains <ruby> and <span id="ev-...">)
         elements.passageContent.innerHTML = textData.content_html;
         elements.passageContent.classList.remove('show-evidence', 'hide-furigana');
+        elements.passageContent.style.fontSize = `${state.settings.fontSizePx}px`;
 
-        // Render Questions (Strict Reading Mode: No answers revealed!)
+        // Render Questions (Strict Reading Mode: No answers leaked!)
         renderQuestionsForReading(textData.questions);
 
         // Reset and start stopwatch
@@ -233,7 +267,7 @@ function renderQuestionsForReading(questions) {
     elements.answeredCount.textContent = '0';
     elements.btnSubmitAnswers.disabled = true;
 
-    elements.questionsList.innerHTML = questions.map((q, idx) => `
+    elements.questionsList.innerHTML = questions.map((q) => `
         <div class="question-card" id="card-q-${q.id}">
             <div class="question-top">
                 <span class="question-num-badge">№${q.question_number}</span>
@@ -379,7 +413,7 @@ function renderAnalysisView(data) {
                 <span class="vocab-trans">${v.translation}</span>
             </div>
         `).join('')
-        : '<p style="color: var(--slate-500);">Словарь пуст.</p>';
+        : '<p style="color: var(--sumi-500);">Словарь пуст.</p>';
 
     // Render Detailed Questions Breakdown
     elements.questionsList.innerHTML = data.questions.map(q => {
@@ -435,7 +469,7 @@ function renderAnalysisView(data) {
                     <p style="margin-top: 0.35rem;">${q.general_explanation}</p>
                     ${q.evidence_span_id ? `
                         <button type="button" class="btn-locate-evidence" onclick="locateEvidenceInText('${q.evidence_span_id}')">
-                            📍 Показать ключевое место в тексте (${q.evidence_span_id})
+                            📍 Показать доказательство в тексте
                         </button>
                     ` : ''}
                 </div>
@@ -478,12 +512,10 @@ function toggleEvidence() {
 }
 
 function locateEvidenceInText(spanId) {
-    // Ensure evidence highlighting is turned on
     if (!state.settings.evidenceVisible) {
         toggleEvidence();
     }
 
-    // Clear any previous active pulse
     document.querySelectorAll('.evidence-active-pulse').forEach(el => {
         el.classList.remove('evidence-active-pulse');
     });
@@ -508,7 +540,6 @@ function toggleSupplementaryDrawer(type) {
             vocabSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     } else {
-        // If already open and user clicked the same button, close it
         elements.supplementaryDrawer.classList.add('hidden');
     }
 }
@@ -535,11 +566,17 @@ function initEventListeners() {
     // Brand & abort buttons
     elements.btnHome.addEventListener('click', returnToCatalog);
     elements.btnAbortExercise.addEventListener('click', () => {
-        if (confirm('Прервать текущее решение и вернуться в каталог? Прогресс будет сброшен.')) {
+        if (confirm('Прервать текущее решение и вернуться в каталог?')) {
             returnToCatalog();
         }
     });
     elements.btnBackToCatalog.addEventListener('click', returnToCatalog);
+
+    // Reader tools (Font size & Typeface)
+    elements.btnFontGothic.addEventListener('click', () => setReaderFont('gothic'));
+    elements.btnFontMincho.addEventListener('click', () => setReaderFont('mincho'));
+    elements.btnFontIncrease.addEventListener('click', () => adjustFontSize(2));
+    elements.btnFontDecrease.addEventListener('click', () => adjustFontSize(-2));
 
     // Filter pills
     elements.levelPills.addEventListener('click', (e) => {
@@ -576,4 +613,3 @@ document.addEventListener('DOMContentLoaded', () => {
     initEventListeners();
     fetchAndRenderCatalog();
 });
-

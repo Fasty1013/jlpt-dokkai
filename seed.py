@@ -12,25 +12,18 @@ def seed_database():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    # Re-seed if less than 5 texts to provide rich multi-level variety
-    existing_count = db.query(Text).count()
-    if existing_count >= 5:
-        print(f"Database already has {existing_count} texts. Skipping seed.")
-        db.close()
-        return
-
-    # Clear old data to ensure clean updated state
+    # Re-seed to ensure all 8 comprehensive texts are present
     db.query(Option).delete()
     db.query(Question).delete()
     db.query(Text).delete()
     db.commit()
 
-    print("Seeding rich multi-level JLPT Dokkai texts (N5, N4, N3, N2)...")
+    print("Seeding rich multi-level JLPT Dokkai texts (N5, N4, N3, N2, N1)...")
 
     # =========================================================================
-    # 1. LEVEL N5: Short Memo (短文・連絡メモ)
+    # 1. N5: Short Memo (短文) - スミスさんのメモ
     # =========================================================================
-    n5_content = """
+    n5_memo_content = """
 <div class="passage-body">
     <p>タナカさんへ</p>
     <p><ruby>昨日<rt>きのう</rt></ruby><ruby>話<rt>はな</rt></ruby>した<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきました。<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>置<rt>お</rt></ruby>いておきますね。</p>
@@ -39,53 +32,140 @@ def seed_database():
 </div>
 """.strip()
 
-    n5_translation = """
-Танака-сан!
-Я принёс словарь японского языка, о котором мы говорили вчера. Я оставлю его у вас на столе.
-Сегодня с 5 часов у меня подработка в библиотеке, поэтому в 4:30 я уйду из аудитории. Если у вас будут вопросы, спросите меня до этого времени.
-От Смита.
-""".strip()
-
-    n5_vocab = [
-        {"word": "辞書", "furigana": "じしょ", "translation": "словарь"},
-        {"word": "置く", "furigana": "おく", "translation": "класть, ставить"},
-        {"word": "それまでに", "furigana": "それまでに", "translation": "до этого времени / к тому моменту"},
-        {"word": "アルバイト", "furigana": "あるばいと", "translation": "подработка (байт)"}
-    ]
-
-    text_n5 = Text(
+    text_n5_1 = Text(
         title="スミスさんからのメモ (Записка от Смита)",
         level="N5",
         category="short",
         recommended_time_min=2,
-        content_html=n5_content,
-        translation_ru=n5_translation,
-        vocabulary_json=n5_vocab
+        content_html=n5_memo_content,
+        translation_ru="Танака-сан!\nЯ принёс словарь японского языка, о котором мы говорили вчера. Я оставлю его у вас на столе.\nСегодня с 5 часов у меня подработка в библиотеке, поэтому в 4:30 я уйду из аудитории. Если у вас будут вопросы, спросите меня до этого времени.\nОт Смита.",
+        vocabulary_json=[
+            {"word": "辞書", "furigana": "じしょ", "translation": "словарь"},
+            {"word": "置く", "furigana": "おく", "translation": "класть, оставлять"},
+            {"word": "それまでに", "furigana": "それまでに", "translation": "к тому моменту / до этого времени"},
+            {"word": "アルバイト", "furigana": "あるばいと", "translation": "подработка"}
+        ]
     )
-
-    q_n5 = Question(
+    q_n5_1 = Question(
         question_number=1,
         question_text="タナカさんはスミスさんに質問したいとき、どうしなければなりませんか。",
-        general_explanation=(
-            "Правильный ответ — вариант 2. Смит пишет: «библиотека с 5:00, поэтому я ухожу в 4:30. Если есть вопросы — спроси до этого времени (それまでに)». Значит, задать вопрос нужно до 4:30."
-        ),
+        general_explanation="Правильный ответ — вариант 2. Смит прямо указывает, что уходит в 4:30, и просит задать вопросы до этого времени (それまでに).",
         evidence_span_id="ev-n5-1"
     )
-
-    q_n5.options = [
-        Option(option_number=1, option_text="５時までに図書館へ行きます。", is_correct=False,
-               option_explanation="Неверно. В 5 часов Смит уже будет работать в библиотеке, а не отвечать на вопросы по словарю в аудитории."),
-        Option(option_number=2, option_text="４時半までに教室で聞きます。", is_correct=True,
-               option_explanation="Верно! В тексте прямо указано: уходит из аудитории в 4:30, спросить нужно до этого времени (それまでに)."),
-        Option(option_number=3, option_text="５時半に辞書を返します。", is_correct=False,
-               option_explanation="Неверно. Про возврат словаря в 5:30 в записке вообще ничего не сказано."),
-        Option(option_number=4, option_text="４時に図書館へ電話をします。", is_correct=False,
-               option_explanation="Неверно. Звонить в библиотеку не требуется, Смит до 4:30 находится в аудитории.")
+    q_n5_1.options = [
+        Option(option_number=1, option_text="５時までに図書館へ行きます。", is_correct=False, option_explanation="Неверно. В 5:00 Смит уже будет работать в библиотеке."),
+        Option(option_number=2, option_text="４時半までに教室で聞きます。", is_correct=True, option_explanation="Верно! Смит уходит из класса в 4:30, спросить нужно до этого."),
+        Option(option_number=3, option_text="５時半に辞書を返します。", is_correct=False, option_explanation="Неверно. О времени возврата словаря ничего не говорится."),
+        Option(option_number=4, option_text="４時に図書館へ電話をします。", is_correct=False, option_explanation="Неверно. Звонить в библиотеку не требуется.")
     ]
-    text_n5.questions = [q_n5]
+    text_n5_1.questions = [q_n5_1]
 
     # =========================================================================
-    # 2. LEVEL N4: Medium Travel Story (中文・旅行記)
+    # 2. N5: Information Search (情報検索) - バーベキュー大会
+    # =========================================================================
+    n5_bbq_content = """
+<div class="flyer-container">
+    <div class="flyer-header">
+        <div class="flyer-badge">春のイベント</div>
+        <h2 class="flyer-title"><ruby>留学生<rt>りゅうがくせい</rt></ruby>バーベキュー<ruby>大会<rt>たいかい</rt></ruby>の<ruby>知<rt>し</rt></ruby>らせ</h2>
+        <p class="flyer-subtitle">みんなでおいしいお肉を食べながら楽しく話しましょう！</p>
+    </div>
+    <table class="flyer-table">
+        <tbody>
+            <tr>
+                <th><ruby>日時<rt>にちじ</rt></ruby></th>
+                <td>5<ruby>月<rt>がつ</rt></ruby>12<ruby>日<rt>にち</rt></ruby>（<ruby>日<rt>にち</rt></ruby>）11:00 〜 15:00</td>
+            </tr>
+            <tr>
+                <th><ruby>場所<rt>ばしょ</rt></ruby></th>
+                <td>みどり<ruby>公園<rt>こうえん</rt></ruby>（<ruby>南口<rt>みなみぐち</rt></ruby>から<ruby>歩<rt>ある</rt></ruby>いて5<ruby>分<rt>ふん</rt></ruby>）</td>
+            </tr>
+            <tr>
+                <th><ruby>参加費<rt>さんかひ</rt></ruby></th>
+                <td>1,500<ruby>円<rt>えん</rt></ruby>（<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>・お<ruby>茶<rt>ちゃ</rt></ruby>代）</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flyer-notes">
+        <h3>【<ruby>大切<rt>たいせつ</rt></ruby>なお<ruby>知<rt>し</rt></ruby>らせ】</h3>
+        <ul>
+            <li><span id="ev-n5-bbq-1">● お<ruby>茶<rt>ちゃ</rt></ruby>はありますが、ジュースや<ruby>好<rt>す</rt></ruby>きな<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>で<ruby>持<rt>も</rt></ruby>ってきてください。</span></li>
+            <li><span id="ev-n5-bbq-2">● <ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になります。<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>にホームページでお<ruby>知<rt>し</rt></ruby>らせします。</span></li>
+        </ul>
+    </div>
+</div>
+""".strip()
+
+    text_n5_2 = Text(
+        title="留学生バーベキュー大会のお知らせ (Объявление о барбекю)",
+        level="N5",
+        category="info_search",
+        recommended_time_min=3,
+        content_html=n5_bbq_content,
+        translation_ru="Объявление о барбекю для иностранных студентов:\nДата: 12 мая (вс) 11:00 - 15:00.\nМесто: парк Мидори (5 мин пешком от южного выхода).\nВзнос: 1,500 иен (еда и чай).\nВажные примечания:\n- Чай есть, но соки и другие любимые напитки приносите с собой сами.\n- В случае дождя мероприятие отменяется. Объявление будет опубликовано в 8 утра на сайте.",
+        vocabulary_json=[
+            {"word": "お知らせ", "furigana": "おしらせ", "translation": "объявление, извещение"},
+            {"word": "参加費", "furigana": "さんかひ", "translation": "взнос за участие"},
+            {"word": "中止", "furigana": "ちゅうし", "translation": "отмена мероприятия"},
+            {"word": "南口", "furigana": "みなみぐち", "translation": "южный выход станции"}
+        ]
+    )
+    q_n5_2 = Question(
+        question_number=1,
+        question_text="バーベキューに参加する人は、何を自分で持って行かなければなりませんか。",
+        general_explanation="Правильный ответ — вариант 3. В примечании с id='ev-n5-bbq-1' прямо написано, что чай и еда включены, а соки и свои напитки нужно принести самому.",
+        evidence_span_id="ev-n5-bbq-1"
+    )
+    q_n5_2.options = [
+        Option(option_number=1, option_text="バーベキューのお肉", is_correct=False, option_explanation="Неверно. Еда входит в стоимость участия 1,500 иен."),
+        Option(option_number=2, option_text="飲むためのお茶", is_correct=False, option_explanation="Неверно. Чай уже предоставляется организаторами (お茶はあります)."),
+        Option(option_number=3, option_text="ジュースなどの好きな飲み物", is_correct=True, option_explanation="Верно! Свои любимые напитки нужно приносить самостоятельно."),
+        Option(option_number=4, option_text="雨の日のための傘", is_correct=False, option_explanation="Неверно. В дождь барбекю отменяется совсем, зонт не поможет.")
+    ]
+    text_n5_2.questions = [q_n5_2]
+
+    # =========================================================================
+    # 3. N4: Short Trap (短文) - ゴミの分別
+    # =========================================================================
+    n4_trash_content = """
+<div class="passage-body">
+    <p>このアパートの<ruby>住人<rt>じゅうにん</rt></ruby>の<ruby>皆<rt>みな</rt></ruby>さんへ。</p>
+    <p><ruby>最近<rt>さいきん</rt></ruby>、ゴミの<ruby>出<rt>だ</rt></ruby>し<ruby>方<rt>かた</rt></ruby>のルールが<ruby>守<rt>まも</rt></ruby>られておらず、<ruby>近所<rt>きんじょ</rt></ruby>からの<ruby>苦情<rt>くじょう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。</p>
+    <p><ruby>燃<rt>も</rt></ruby>えるゴミは<ruby>火曜日<rt>かようび</rt></ruby>と<ruby>金曜日<rt>きんようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>までに出してください。<span id="ev-n4-trash-1">缶やビンなどの資源ゴミは水曜日ですが、前日の夜に出すと猫やカラスが荒らすので、必ず当日の朝に出すようにしてください。</span></p>
+    <p>ルールを<ruby>守<rt>まも</rt></ruby>って、きれいな<ruby>環境<rt>かんきょう</rt></ruby>をつくりましょう。</p>
+</div>
+""".strip()
+
+    text_n4_trash = Text(
+        title="アパートのゴミ出しのルール (Правила вывоза мусора в апартаментах)",
+        level="N4",
+        category="short",
+        recommended_time_min=3,
+        content_html=n4_trash_content,
+        translation_ru="Всем жильцам апартаментов!\nВ последнее время правила выброса мусора нарушаются, участились жалобы от соседей.\nСжигаемый мусор выносите по вторникам и пятницам до 8:00 утра. Вторсырьё (жестяные банки и бутылки) собирается по средам, однако выносить мусор накануне вечером запрещено во избежание разорения кошками и воронами — обязательно выносите строго утром в день сбора.",
+        vocabulary_json=[
+            {"word": "分別", "furigana": "ぶんべつ", "translation": "сортировка, разделение"},
+            {"word": "苦情", "furigana": "くじょう", "translation": "жалоба, претензия"},
+            {"word": "資源ゴミ", "furigana": "しげんごみ", "translation": "вторсырьё (банки, стекло, бумага)"},
+            {"word": "荒らす", "furigana": "あらす", "translation": "разорять, разбрасывать"}
+        ]
+    )
+    q_n4_trash = Question(
+        question_number=1,
+        question_text="ビンのゴミを出すとき、どうしなければなりませんか。",
+        general_explanation="Правильный ответ — вариант 4. В предложении ev-n4-trash-1 указано: вторсырье вывозят по средам, и выносить его накануне вечером нельзя — строго утром в среду.",
+        evidence_span_id="ev-n4-trash-1"
+    )
+    q_n4_trash.options = [
+        Option(option_number=1, option_text="火曜日の夜のうちに出しておく。", is_correct=False, option_explanation="Неверно (Ловушка времени). Накануне вечером выносить прямо запрещено из-за птиц и кошек."),
+        Option(option_number=2, option_text="火曜日か金曜日の朝8時までに出す。", is_correct=False, option_explanation="Неверно. Вторник и пятница — дни сжигаемого мусора, а не бутылок."),
+        Option(option_number=3, option_text="水曜日の夜、暗くなってから出す。", is_correct=False, option_explanation="Неверно. Мусор забирают утром, вечером мусоровоз уже проехал."),
+        Option(option_number=4, option_text="水曜日の朝に出す。", is_correct=True, option_explanation="Верно! Стеклянные бутылки (ビン) относятся к ресурсному мусору и выносятся строго утром в среду.")
+    ]
+    text_n4_trash.questions = [q_n4_trash]
+
+    # =========================================================================
+    # 4. N4: Medium Travel (中文) - 京都の一人旅
     # =========================================================================
     n4_content = """
 <div class="passage-body">
@@ -95,74 +175,51 @@ def seed_database():
 </div>
 """.strip()
 
-    n4_translation = """
-На прошлой неделе я впервые один отправился в путешествие в Киото. Поездки с друзьями тоже весёлые и оживлённые, но всегда приходится подстраиваться под чужое время и желания. В этот раз мне хотелось не спеша и в любое удобное время посмотреть именно те места, которые нравятся мне, поэтому я решил поехать один.
-В Киото я не только осматривал знаменитые храмы, но и неторопливо гулял по маленьким улочкам. Чай и данго в старой лавке традиционных сладостей, которую я нашел случайно, заблудившись, показались мне вкуснее, чем в любом заведении из путеводителя.
-Путешествовать одному было немного тревожно, но у меня остались свои особенные воспоминания, и это было замечательно. Я хочу снова попробовать съездить куда-нибудь один.
-""".strip()
-
-    n4_vocab = [
-        {"word": "相手に合わせる", "furigana": "あいてにあわせる", "translation": "подстраиваться под собеседника / спутника"},
-        {"word": "のんびり", "furigana": "のんびり", "translation": "беззаботно, не торопясь"},
-        {"word": "道に迷う", "furigana": "みちにまよう", "translation": "заблудиться"},
-        {"word": "偶然", "furigana": "ぐうぜん", "translation": "случайно, неожиданно"},
-        {"word": "和菓子屋", "furigana": "わがしや", "translation": "магазин традиционных японских сладостей"},
-        {"word": "載る", "furigana": "のる", "translation": "быть напечатанным, внесённым (в список)"}
-    ]
-
-    text_n4 = Text(
+    text_n4_kyoto = Text(
         title="京都への一人旅 (Одиночное путешествие в Киото)",
         level="N4",
         category="medium",
         recommended_time_min=4,
         content_html=n4_content,
-        translation_ru=n4_translation,
-        vocabulary_json=n4_vocab
+        translation_ru="На прошлой неделе я впервые один отправился в путешествие в Киото. Поездки с друзьями тоже весёлые, но всегда приходится подстраиваться под других. В этот раз мне хотелось спокойно посмотреть то, что нравится мне, поэтому я поехал один.\nВ Киото я не только осматривал знаменитые храмы, но и гулял по улочкам. Чай и данго в старой лавке, найденной случайно, когда я заблудился, показались вкуснее любого места из путеводителя.\nБыло немного тревожно, но остались чудесные воспоминания.",
+        vocabulary_json=[
+            {"word": "相手に合わせる", "furigana": "あいてにあわせる", "translation": "подстраиваться под спутника"},
+            {"word": "道に迷う", "furigana": "みちにまよう", "translation": "заблудиться"},
+            {"word": "偶然", "furigana": "ぐうぜん", "translation": "случайно"},
+            {"word": "和菓子屋", "furigana": "わがしや", "translation": "лавка японских сладостей"}
+        ]
     )
-
     q_n4_1 = Question(
         question_number=1,
         question_text="「私」はどうして一人で京都へ行きましたか。",
-        general_explanation=(
-            "Правильный ответ — вариант 3. В предложении ev-n4-1 автор объясняет мотив: в поездках с друзьями приходится подстраиваться, а в этот раз хотелось погулять в своём темпе (自分の好きな時に好きな場所をゆっくり見たかった)."
-        ),
+        general_explanation="Правильный ответ — вариант 3. В предложении ev-n4-1 автор говорит, что хотел посмотреть места в своём темпе, не подстраиваясь под чужие планы.",
         evidence_span_id="ev-n4-1"
     )
     q_n4_1.options = [
-        Option(option_number=1, option_text="友達と休みの日が合わなかったから。", is_correct=False,
-               option_explanation="Неверно (Ловушка додумывания). В тексте не сказано, что у друзей не совпали выходные."),
-        Option(option_number=2, option_text="京都の有名な寺を全部見たかったから。", is_correct=False,
-               option_explanation="Неверно. Автор хотел увидеть не 'все' храмы, а спокойно погулять в своём ритме."),
-        Option(option_number=3, option_text="他人に合わせず、自分のペースで楽しみたかったから。", is_correct=True,
-               option_explanation="Верно! Это синонимичный пересказ фразы «自分の好きな時に好きな場所をゆっくり見たかった»."),
-        Option(option_number=4, option_text="一人旅のガイドブックをもらったから。", is_correct=False,
-               option_explanation="Неверно. Наоборот, лучшим местом оказалась лавка, которой не было в путеводителях.")
+        Option(option_number=1, option_text="友達と休みの日が合わなかったから。", is_correct=False, option_explanation="Неверно. Автор не говорит, что друзья были заняты."),
+        Option(option_number=2, option_text="京都の有名な寺を全部見たかったから。", is_correct=False, option_explanation="Неверно. Целью было спокойствие, а не осмотр абсолютно всех храмов."),
+        Option(option_number=3, option_text="他人に合わせず、自分のペースで楽しみたかったから。", is_correct=True, option_explanation="Верно! Точный пересказ фразы «自分の好きな時に好きな場所をゆっくり見たかった»."),
+        Option(option_number=4, option_text="一人旅のガイドブックをもらったから。", is_correct=False, option_explanation="Неверно. Напротив, лучшие места были найдены случайно без гида.")
     ]
 
     q_n4_2 = Question(
         question_number=2,
         question_text="「私」が一番美味しく感じたのはどれですか。",
-        general_explanation=(
-            "Правильный ответ — вариант 4. Согласно ev-n4-2, когда автор заблудился и случайно наткнулся на старую лавочку, чай и данго там показались вкуснее любого распиаренного места из гида."
-        ),
+        general_explanation="Правильный ответ — вариант 4. Согласно ev-n4-2, самыми вкусными оказались чай и данго в неприметной старой лавке, найденной когда автор заблудился.",
         evidence_span_id="ev-n4-2"
     )
     q_n4_2.options = [
-        Option(option_number=1, option_text="有名な寺の近くで食べた料理", is_correct=False,
-               option_explanation="Неверно. Знаменитые храмы не связаны с самым вкусным угощением."),
-        Option(option_number=2, option_text="ガイドブックで一番おすすめされていた店のお菓子", is_correct=False,
-               option_explanation="Неверно. Напротив, угощение было вкуснее, чем в любом заведении из путеводителя (ガイドブックに載っているどんな店より)."),
-        Option(option_number=3, option_text="友達が教えてくれた京都のレストランの食事", is_correct=False,
-               option_explanation="Неверно. Друзья не советовали автору рестораны."),
-        Option(option_number=4, option_text="道に迷ったときに見つけた古い店のお茶と団子", is_correct=True,
-               option_explanation="Верно! Точное соответствие предложению с id='ev-n4-2'.")
+        Option(option_number=1, option_text="有名な寺の近くで食べた料理", is_correct=False, option_explanation="Неверно. Возле храмов автор не выделял еду."),
+        Option(option_number=2, option_text="ガイドブックで一番おすすめされていた店のお菓子", is_correct=False, option_explanation="Неверно. Лавка как раз не была указана в путеводителе."),
+        Option(option_number=3, option_text="友達が教えてくれた京都のレストランの食事", is_correct=False, option_explanation="Неверно. Друзья не давали рекомендаций."),
+        Option(option_number=4, option_text="道に迷ったときに見つけた古い店のお茶と団子", is_correct=True, option_explanation="Верно! Прямое совпадение с предложением в <span id='ev-n4-2'>.")
     ]
-    text_n4.questions = [q_n4_1, q_n4_2]
+    text_n4_kyoto.questions = [q_n4_1, q_n4_2]
 
     # =========================================================================
-    # 3. LEVEL N3: Short Text (短文) - Jogging Trap
+    # 5. N3: Short (短文) - ジョギングの落とし穴
     # =========================================================================
-    n3_short_content = """
+    n3_jogging_content = """
 <div class="passage-body">
     <p><ruby>最近<rt>さいきん</rt></ruby>、<ruby>健康<rt>けんこう</rt></ruby>のために<ruby>毎朝<rt>まいあさ</rt></ruby>ジョギングを<ruby>始<rt>はじ</rt></ruby>める<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。</p>
     <p><ruby>走<rt>はし</rt></ruby>ることは<ruby>手軽<rt>てがる</rt></ruby>にできて<ruby>気分<rt>きぶん</rt></ruby>も<ruby>爽<rt>さわ</rt></ruby>やかになるため、<ruby>長<rt>なが</rt></ruby>く<ruby>走<rt>はし</rt></ruby>れば<ruby>走<rt>はし</rt></ruby>るほど<ruby>体<rt>からだ</rt></ruby>にいいと<ruby>思<rt>おも</rt></ruby>われがちです。</p>
@@ -172,55 +229,36 @@ def seed_database():
 </div>
 """.strip()
 
-    n3_short_trans = """
-В последнее время растёт число людей, которые каждое утро начинают бегать трусцой ради здоровья.
-Бегом легко заняться, и он приносит чувство свежести и бодрости, поэтому часто думают, что чем дольше бегаешь, тем лучше для здоровья.
-Однако, если резко перегружать себя и бегать на большие дистанции, это, напротив, создаст серьёзную нагрузку на колени и сердце.
-Действительно важно не расстояние или скорость, а сохранение такого объёма физической нагрузки, который приносит удовольствие и позволяет продолжать тренировки в своём собственном темпе.
-Именно ненавязчивая, посильная привычка является кратчайшим путём к здоровью.
-""".strip()
-
-    n3_short_vocab = [
-        {"word": "手軽に", "furigana": "てがるに", "translation": "легко, просто, без хлопот"},
-        {"word": "〜がち", "furigana": "がち", "translation": "склонный к... / часто бывает так, что..."},
-        {"word": "かえって", "furigana": "かえって", "translation": "напротив, наоборот, вопреки ожиданиям"},
-        {"word": "負担", "furigana": "ふたん", "translation": "нагрузка, бремя"},
-        {"word": "運動量", "furigana": "うんどうりょう", "translation": "объём физической нагрузки"},
-        {"word": "近道", "furigana": "ちかみち", "translation": "кратчайший путь"}
-    ]
-
-    text_n3_1 = Text(
+    text_n3_jogging = Text(
         title="健康のためのジョギングについて (О беге ради здоровья)",
         level="N3",
         category="short",
         recommended_time_min=3,
-        content_html=n3_short_content,
-        translation_ru=n3_short_trans,
-        vocabulary_json=n3_short_vocab
+        content_html=n3_jogging_content,
+        translation_ru="В последнее время растёт число людей, которые каждое утро начинают бегать трусцой ради здоровья.\nБегом легко заняться, поэтому часто думают, что чем дольше бегаешь, тем лучше.\nОднако резкие перегрузки создают чрезмерную нагрузку на колени и сердце.\nДействительно важно не расстояние или скорость, а сохранение такого объёма нагрузки, который можно поддерживать в своём комфортном темпе.",
+        vocabulary_json=[
+            {"word": "手軽に", "furigana": "てがるに", "translation": "легко, просто"},
+            {"word": "〜がち", "furigana": "がち", "translation": "склонный к... / часто бывает так"},
+            {"word": "かえって", "furigana": "かえって", "translation": "напротив, наоборот"},
+            {"word": "負担", "furigana": "ふたん", "translation": "нагрузка, бремя"}
+        ]
     )
-    q_n3_1 = Question(
+    q_n3_jog = Question(
         question_number=1,
         question_text="筆者がジョギングについて最も言いたいことは何か。",
-        general_explanation=(
-            "Правильный ответ — вариант 3. Автор использует классическую для JLPT структуру «общее заблуждение (〜と思われがち) -> опровержение через しかし -> истинная мысль (本当に大切なのは〜)». "
-            "Ключевой вывод сформулирован в предложении с маркером '本当に大切なのは' (выделено в тексте): важна не длина дистанции или скорость, а комфортный собственный темп."
-        ),
+        general_explanation="Правильный ответ — вариант 3. В предложении 'ev-1' автор заключает: главное — не скорость и не километраж, а посильная привычка в комфортном темпе.",
         evidence_span_id="ev-1"
     )
-    q_n3_1.options = [
-        Option(option_number=1, option_text="走る距離をできるだけ長くすることが最も効果的だ。", is_correct=False,
-               option_explanation="Неверно (Ловушка ложного стереотипа). Автор указывает, что суждение «чем длиннее дистанция, тем полезнее» — лишь распространённое заблуждение (〜と思われがち)."),
-        Option(option_number=2, option_text="毎朝決まった時間に速いスピードで走ることが必要だ。", is_correct=False,
-               option_explanation="Неверно (Ловушка несуществующего требования). В тексте четко сказано: «距離やスピードではなく» — скорость и дистанция не главное."),
-        Option(option_number=3, option_text="自分のペースに合わせて、無理なく続けられる運動量を維持することが大切だ。", is_correct=True,
-               option_explanation="Верно! Вариант перефразирует мысль автора: «自分のペースで楽しく続けられる運動量を保つこと»."),
-        Option(option_number=4, option_text="膝や心臓を痛める危険があるので、ジョギングは避けたほうがよい。", is_correct=False,
-               option_explanation="Неверно (Ловушка крайности). Автор не советует избегать бега вообще, а предостерегает от резких чрезмерных перегрузок.")
+    q_n3_jog.options = [
+        Option(option_number=1, option_text="走る距離をできるだけ長くすることが最も効果的だ。", is_correct=False, option_explanation="Неверно (Ловушка стереотипа). Автор называет это опасным заблуждением."),
+        Option(option_number=2, option_text="毎朝決まった時間に速いスピードで走ることが必要だ。", is_correct=False, option_explanation="Неверно. Скорость автором категорически не навязывается."),
+        Option(option_number=3, option_text="自分のペースに合わせて、無理なく続けられる運動量を維持することが大切だ。", is_correct=True, option_explanation="Верно! Перефразирование ключевого тезиса в <span id='ev-1'>."),
+        Option(option_number=4, option_text="膝や心臓を痛める危険があるので、ジョギングは避けたほうがよい。", is_correct=False, option_explanation="Неверно. Автор не призывает избегать бега, а советует не перегружаться.")
     ]
-    text_n3_1.questions = [q_n3_1]
+    text_n3_jogging.questions = [q_n3_jog]
 
     # =========================================================================
-    # 4. LEVEL N3: Information Search (情報検索) - Fitness Club Flyer
+    # 6. N3: Info Search (情報検索) - フィットネスクラブ案内
     # =========================================================================
     n3_flyer_content = """
 <div class="flyer-container">
@@ -229,119 +267,73 @@ def seed_database():
         <h2 class="flyer-title"><ruby>桜<rt>さくら</rt></ruby>フィットネスクラブ <ruby>利用<rt>りよう</rt></ruby><ruby>案内<rt>あんない</rt></ruby></h2>
         <p class="flyer-subtitle">最新マシン・温水プール・スタジオレッスン完備！</p>
     </div>
-
     <table class="flyer-table">
         <thead>
             <tr>
-                <th>プラン名 (План)</th>
-                <th>利用可能時間 (Время доступа)</th>
-                <th>月会費（税込） (В месяц)</th>
+                <th>プラン名</th>
+                <th>利用可能時間</th>
+                <th>月会費（税込）</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><strong>デイタイム</strong></td>
-                <td>平日 10:00 〜 17:00</td>
-                <td>6,000円</td>
-            </tr>
-            <tr>
-                <td><strong>ナイト</strong></td>
-                <td>平日 18:00 〜 22:00</td>
-                <td>6,500円</td>
-            </tr>
-            <tr>
-                <td><strong>ホリデー</strong></td>
-                <td>土・日・祝日 10:00 〜 20:00</td>
-                <td>5,500円</td>
-            </tr>
-            <tr class="highlight-row">
-                <td><strong>フルタイム</strong></td>
-                <td>いつでも全日 10:00 〜 22:00</td>
-                <td>9,500円</td>
-            </tr>
+            <tr><td>デイタイム</td><td>平日 10:00 〜 17:00</td><td>6,000円</td></tr>
+            <tr><td>ナイト</td><td>平日 18:00 〜 22:00</td><td>6,500円</td></tr>
+            <tr><td>ホリデー</td><td>土・日・祝日 10:00 〜 20:00</td><td>5,500円</td></tr>
+            <tr class="highlight-row"><td>フルタイム</td><td>いつでも全日 10:00 〜 22:00</td><td>9,500円</td></tr>
         </tbody>
     </table>
-
     <div class="flyer-notes">
         <h3>【ご注意・各種割引について】</h3>
         <ul>
-            <li><span id="ev-info-1"><strong>● 学生割引：</strong> 高校生・大学生・専門学生の方は、学生証のご提示で<strong>月会費が毎月1,000円引き</strong>となります。（※ただし「ホリデープラン」は学生割引の対象外です）</span></li>
-            <li><span id="ev-info-2"><strong>● 春の入会キャンペーン：</strong> 通常、登録事務手数料<strong>3,000円が、今月中にWebサイトからお申し込みの場合に限り【0円（無料）】</strong>となります！</span></li>
-            <li><strong>● 専用個人ロッカー：</strong> 契約をご希望の方は、月額1,100円（税込）でご利用いただけます（任意）。</li>
-            <li>※休館日：毎週月曜日（祝日の場合は翌火曜日が休館となります）。</li>
+            <li><span id="ev-info-1"><strong>● 学生割引：</strong> 学生証提示で<strong>月会費が1,000円引き</strong>。（※ホリデープランは対象外）</span></li>
+            <li><span id="ev-info-2"><strong>● 春のキャンペーン：</strong> 登録事務手数料<strong>3,000円がWeb申込で【0円（無料）】</strong>！</span></li>
+            <li><strong>● 個人ロッカー：</strong> 月額1,100円（任意）。</li>
         </ul>
     </div>
 </div>
 """.strip()
 
-    n3_flyer_trans = """
-Правила и тарифы фитнес-клуба «Сакура» (Набор новых участников этой весной!)
-Современные тренажёры, подогреваемый бассейн, студия групповых занятий!
-
-Тарифные планы:
-- Дневной (Дэйтайм): будни 10:00 - 17:00 — 6,000 иен
-- Вечерний (Найт): будни 18:00 - 22:00 — 6,500 иен
-- Выходного дня (Холидэй): сб, вс, праздники 10:00 - 20:00 — 5,500 иен
-- Полный безлимит (Фуллтайм): в любое время каждый день 10:00 - 22:00 — 9,500 иен
-
-Внимание и скидки:
-- Студенческая скидка: скидка 1,000 иен на ежемесячный взнос (кроме плана «Холидэй»).
-- Весенняя кампания: регистрационный сбор 3,000 иен становится БЕСПЛАТНЫМ (0 иен) при подаче заявки через сайт в этом месяце.
-- Личный шкафчик: 1,100 иен в месяц (по желанию).
-- Выходной день: каждый понедельник.
-""".strip()
-
-    n3_flyer_vocab = [
-        {"word": "月会費", "furigana": "げっかいひ", "translation": "ежемесячный членский взнос"},
-        {"word": "全日", "furigana": "ぜんじつ", "translation": "все дни недели (любой день)"},
-        {"word": "提示", "furigana": "ていじ", "translation": "предъявление (документа)"},
-        {"word": "対象外", "furigana": "たいしょうがい", "translation": "не подпадающий под действие, исключение"},
-        {"word": "登録事務手数料", "furigana": "とうろくじむてすうりょう", "translation": "регистрационный сбор"},
-        {"word": "任意", "furigana": "にんい", "translation": "по желанию, опционально"}
-    ]
-
-    text_n3_2 = Text(
+    text_n3_flyer = Text(
         title="サクラ・フィットネスクラブ ご利用案内 (Памятка фитнес-клуба Сакура)",
         level="N3",
         category="info_search",
         recommended_time_min=5,
         content_html=n3_flyer_content,
-        translation_ru=n3_flyer_trans,
-        vocabulary_json=n3_flyer_vocab
+        translation_ru="Фитнес-клуб Сакура:\nТарифы: Дэйтайм (будни день) - 6,000; Найт (будни вечер) - 6,500; Холидэй (выходные) - 5,500; Фуллтайм (всегда) - 9,500.\nСкидки: Студентам -1,000 иен (кроме Холидэй). Регистрация 3,000 бесплатно при онлайн-заявке. Шкафчик 1,100 иен.",
+        vocabulary_json=[
+            {"word": "月会費", "furigana": "げっかいひ", "translation": "ежемесячный взнос"},
+            {"word": "対象外", "furigana": "たいしょうがい", "translation": "исключение, не подпадает"}
+        ]
     )
-    q_n3_2_1 = Question(
+    q_n3_flyer_1 = Question(
         question_number=1,
-        question_text="大学3年生のタナカさんは、平日の夜（19時以降）と土曜日の午後に利用したいと考えている。学生割引を使って最も安く利用できるプランと月会費の組み合わせはどれか。",
-        general_explanation=(
-            "Правильный ответ — вариант 3. Нужны и будни вечер, и суббота. Единственный подходящий план — «フルタイム» (9,500円). Со студенческой скидкой (1,000円引き): 9,500 - 1,000 = 8,500円."
-        ),
+        question_text="大学3年生のタナカさんは平日の夜（19時以降）と土曜日の午後に利用したい。学生割引を使って最も安く利用できるプランと月会費はどれか。",
+        general_explanation="Правильный ответ — вариант 3. Нужны и будни вечер, и суббота. Подходит только 'フルタイム' (9,500). Со студенческой скидкой 1,000: 9,500 - 1,000 = 8,500円.",
         evidence_span_id="ev-info-1"
     )
-    q_n3_2_1.options = [
-        Option(option_number=1, option_text="ナイトプラン：5,500円", is_correct=False, option_explanation="Неверно. План «ナイト» действует только по будням и не позволяет прийти в субботу."),
-        Option(option_number=2, option_text="ホリデープラン：4,500円", is_correct=False, option_explanation="Неверно. Не действует по будням вечером, плюс на него прямо запрещена студенческая скидка."),
-        Option(option_number=3, option_text="フルタイムプラン：8,500円", is_correct=True, option_explanation="Верно! Покрывает все дни, а со студенческой скидкой 1,000 иен цена составит 8,500 иен."),
-        Option(option_number=4, option_text="フルタイムプラン：9,500円", is_correct=False, option_explanation="Неверно. 9,500 — базовая цена без положенной студенческой скидки.")
+    q_n3_flyer_1.options = [
+        Option(option_number=1, option_text="ナイトプラン：5,500円", is_correct=False, option_explanation="Неверно. Не действует по субботам."),
+        Option(option_number=2, option_text="ホリデープラン：4,500円", is_correct=False, option_explanation="Неверно. Не действует по будням вечером, плюс на него нет скидки."),
+        Option(option_number=3, option_text="フルタイムプラン：8,500円", is_correct=True, option_explanation="Верно! Покрывает все дни, а со скидкой 1,000 получается 8,500 иен."),
+        Option(option_number=4, option_text="フルタイムプラン：9,500円", is_correct=False, option_explanation="Неверно. 9,500 — базовая стоимость без студенческой скидки.")
     ]
 
-    q_n3_2_2 = Question(
+    q_n3_flyer_2 = Question(
         question_number=2,
-        question_text="タナカさんが今月中にWebから入会し、専用個人ロッカーも申し込む場合、初月に支払う合計金額（月会費＋登録料＋ロッカー代）はいくらか。",
-        general_explanation=(
-            "Правильный ответ — вариант 1. Расчет: 8,500 (абонемент студента) + 0 (Web-акция отменяет 3,000) + 1,100 (шкафчик) = 9,600円."
-        ),
+        question_text="タナカさんが今月中Webから入会し、個人ロッカーも申し込む場合、初月の合計金額はいくらか。",
+        general_explanation="Правильный ответ — вариант 1. 8,500 (абонемент) + 0 (акция отменяет 3,000) + 1,100 (шкафчик) = 9,600円.",
         evidence_span_id="ev-info-2"
     )
-    q_n3_2_2.options = [
-        Option(option_number=1, option_text="9,600円", is_correct=True, option_explanation="Верно! Членский взнос (8,500) + регистрация по акции (0) + шкафчик (1,100) = 9,600円."),
-        Option(option_number=2, option_text="12,600円", is_correct=False, option_explanation="Неверно. Ошибочно включён регистрационный сбор 3,000, который по акции бесплатный."),
-        Option(option_number=3, option_text="8,500円", is_correct=False, option_explanation="Неверно. Забыли учесть аренду личного шкафчика (1,100)."),
-        Option(option_number=4, option_text="10,600円", is_correct=False, option_explanation="Неверно. Забыли применить студенческую скидку в 1,000 иен.")
+    q_n3_flyer_2.options = [
+        Option(option_number=1, option_text="9,600円", is_correct=True, option_explanation="Верно! 8,500 + 0 + 1,100 = 9,600 иен."),
+        Option(option_number=2, option_text="12,600円", is_correct=False, option_explanation="Неверно. Ошибочно посчитали 3,000 за регистрацию."),
+        Option(option_number=3, option_text="8,500円", is_correct=False, option_explanation="Неверно. Забыли 1,100 за шкафчик."),
+        Option(option_number=4, option_text="10,600円", is_correct=False, option_explanation="Неверно. Забыли вычесть скидку студента.")
     ]
-    text_n3_2.questions = [q_n3_2_1, q_n3_2_2]
+    text_n3_flyer.questions = [q_n3_flyer_1, q_n3_flyer_2]
 
     # =========================================================================
-    # 5. LEVEL N2: Authentic Article / Column (記事・評論 - 長文)
+    # 7. N2: Column / Article (記事・論説) - タイパと無駄な時間
     # =========================================================================
     n2_article_content = """
 <div class="passage-body">
@@ -352,75 +344,110 @@ def seed_database():
 </div>
 """.strip()
 
-    n2_article_trans = """
-В современном обществе «тайпа» (эффективность затраченного времени) и продуктивность стали наивысшим приоритетом во всех сферах жизни. Просмотр видео на двойной скорости и быстрое потребление сжатой выжимки информации кажутся рациональным способом выживания в эпоху информационного перегруза.
-Однако накопление готовых знаний и подлинное глубокое мышление вовсе не синонимичны. Когда человек потребляет исключительно информацию с заранее подготовленными готовыми выводами, его способность самостоятельно переваривать контекст событий и сложные, кажущиеся противоречивыми нюансы стремительно атрофируется.
-Некогда процесс размышления рождался именно в некоторого рода «бесполезной трате времени» — когда человек сомневался, замирал на месте и бесцельно блуждал в мыслях. Не окажется ли так, что на пределе тотальной оптимизации человек уподобится машине, быстро выдающей шаблонные правильные ответы, из которых вряд ли смогут родиться новые ценности и глубокие озарения?
-Именно сейчас мы должны перестать бояться «пустого времени», не ведущего к сиюминутному результату, и вернуть его себе как роскошь, необходимую для внутренней глубины.
-""".strip()
-
-    n2_article_vocab = [
-        {"word": "タイムパフォーマンス", "furigana": "たいむぱふぉーまんす", "translation": "тайпа (эффективность затраченного времени)"},
-        {"word": "同義", "furigana": "どうぎ", "translation": "синонимичный, тождественный по смыслу"},
-        {"word": "咀嚼する", "furigana": "そしゃくする", "translation": "разжёвывать; глубоко осмысливать, переваривать"},
-        {"word": "思索", "furigana": "しさく", "translation": "глубокое размышление, философские поиски"},
-        {"word": "画一的", "furigana": "かくいつてき", "translation": "шаблонный, однообразный, унифицированный"},
-        {"word": "洞察", "furigana": "どうさつ", "translation": "проницательность, глубинное понимание сути"},
-        {"word": "余白", "furigana": "よはく", "translation": "пустое пространство, резерв времени, пауза"}
-    ]
-
-    text_n2 = Text(
+    text_n2_article = Text(
         title="デジタル時代における「無駄な時間」の価値 (Ценность «потерянного времени» в цифровую эпоху)",
         level="N2",
         category="article",
         recommended_time_min=6,
         content_html=n2_article_content,
-        translation_ru=n2_article_trans,
-        vocabulary_json=n2_article_vocab
+        translation_ru="В современном обществе эффективность (тайпа) стала главным приоритетом. Видео на скорости x2 и дайджесты кажутся рациональными.\nОднако получение готовых знаний и глубокое мышление не тождественны. Потребляя лишь готовые выжимки, человек теряет способность самостоятельно понимать контекст и тонкие противоречия.\nРазмышление всегда требовало времени 'впустую'. Если всё механизировать, человек превратится в генератор шаблонных ответов. Нам нужно вернуть себе роскошь 'пустого времени' ради глубины мысли.",
+        vocabulary_json=[
+            {"word": "タイムパフォーマンス", "furigana": "たいむぱふぉーまんす", "translation": "тайпа (эффективность времени)"},
+            {"word": "咀嚼する", "furigana": "そしゃくする", "translation": "глубоко осмысливать"},
+            {"word": "画一的", "furigana": "かくいつてき", "translation": "шаблонный, одинаковый"},
+            {"word": "余白", "furigana": "よはく", "translation": "пауза, резерв времени"}
+        ]
     )
-
     q_n2_1 = Question(
         question_number=1,
         question_text="「要約された情報ばかりを摂取している」ことの弊害として、筆者が指摘しているのはどれか。",
-        general_explanation=(
-            "Правильный ответ — вариант 2. В абзаце ev-n2-1 автор прямо формулирует негативное последствие: падает способность самостоятельно осмысливать контекст и сложные противоречивые нюансы (自らの頭で咀嚼する力が急速に衰えてしまう)."
-        ),
+        general_explanation="Правильный ответ — вариант 2. В абзаце ev-n2-1 прямо указано: атрофируется способность самому глубоко переваривать контекст и противоречия.",
         evidence_span_id="ev-n2-1"
     )
     q_n2_1.options = [
-        Option(option_number=1, option_text="新しい情報技術に適応できなくなること。", is_correct=False,
-               option_explanation="Неверно. Автор не говорит о неспособности адаптироваться к технологиям — люди как раз активно пользуются ускоренным просмотром."),
-        Option(option_number=2, option_text="物事の文脈や複雑な意味を、自分の頭で深く考える力が弱まること。", is_correct=True,
-               option_explanation="Верно! Это точный пересказ фразы: «物事の背景にある文脈や、一見矛盾するように見える複雑なニュアンスを自らの頭で咀嚼する力が急速に衰えてしまう»."),
-        Option(option_number=3, option_text="動画を倍速で見ることで、視力や集中力が低下すること。", is_correct=False,
-               option_explanation="Неверно (Ловушка физиологических последствий). Про ухудшение зрения автор не упоминает."),
-        Option(option_number=4, option_text="他者と知識の量を競い合うようになってしまうこと。", is_correct=False,
-               option_explanation="Неверно. В тексте нет речи о конкуренции за объём знаний.")
+        Option(option_number=1, option_text="新しい情報技術に適応できなくなること。", is_correct=False, option_explanation="Неверно. Автор не говорит о неспособности освоить технологии."),
+        Option(option_number=2, option_text="物事の文脈や複雑な意味を、自分の頭で深く考える力が弱まること。", is_correct=True, option_explanation="Верно! Пересказ: «自らの頭で咀嚼する力が急速に衰えてしまう»."),
+        Option(option_number=3, option_text="動画を倍速で見ることで、視力や集中力が低下すること。", is_correct=False, option_explanation="Неверно. Физиологические последствия не упоминаются."),
+        Option(option_number=4, option_text="他者と知識の量を競い合うようになってしまうこと。", is_correct=False, option_explanation="Неверно. Про соперничество в тексте речи нет.")
     ]
 
     q_n2_2 = Question(
         question_number=2,
         question_text="筆者がこの文章で最も主張したいことは何か。",
-        general_explanation=(
-            "Правильный ответ — вариант 4. В заключительном предложении (и через риторический вопрос в ev-n2-2) автор формулирует главный посыл: не нужно бояться пауз и времени без сиюминутного результата («余白の時間»), так как именно в нём рождается глубина мысли и подлинные новые ценности."
-        ),
+        general_explanation="Правильный ответ — вариант 4. Главный вывод: не бояться пауз и времени без сиюминутной пользы ради глубины собственного разума.",
         evidence_span_id="ev-n2-2"
     )
     q_n2_2.options = [
-        Option(option_number=1, option_text="仕事の効率を上げるために、タイパを意識した生活を徹底すべきだ。", is_correct=False,
-               option_explanation="Неверно (Ловушка противоположного смысла). Автор критикует чрезмерную погоню за тайпа."),
-        Option(option_number=2, option_text="人間はAI機械には勝てないので、知識を暗記するのはやめるべきだ。", is_correct=False,
-               option_explanation="Неверно (Ловушка ложного пессимизма). Автор призывает не механизировать себя, а развивать глубину."),
-        Option(option_number=3, option_text="インターネット上の要約サイトや倍速視聴の利用を法律で禁止すべきだ。", is_correct=False,
-               option_explanation="Неверно (Ловушка радикального запрета). Автор не требует юридических запретов."),
-        Option(option_number=4, option_text="効率ばかりを追わず、思索を深めるための「余白の時間」を取り戻すべきだ。", is_correct=True,
-               option_explanation="Верно! Квинтэссенция мысли автора: «成果に直結しない余白の時間を恐れず、自らを深めるための贅沢として取り戻すべき».")
+        Option(option_number=1, option_text="仕事の効率を上げるために、タイパを意識した生活を徹底すべきだ。", is_correct=False, option_explanation="Неверно. Автор критикует фанатичную погоню за эффективностью."),
+        Option(option_number=2, option_text="人間はAI機械には勝てないので、知識を暗記するのはやめるべきだ。", is_correct=False, option_explanation="Неверно. Автор не делает такого вывода."),
+        Option(option_number=3, option_text="インターネット上の要約サイトや倍速視聴の利用を法律で禁止すべきだ。", is_correct=False, option_explanation="Неверно. Автор не призывает к запретам."),
+        Option(option_number=4, option_text="効率ばかりを追わず、思索を深めるための「余白の時間」を取り戻すべきだ。", is_correct=True, option_explanation="Верно! Истинная мысль заключительного предложения текста.")
     ]
-    text_n2.questions = [q_n2_1, q_n2_2]
+    text_n2_article.questions = [q_n2_1, q_n2_2]
 
-    db.add_all([text_n5, text_n4, text_n3_1, text_n3_2, text_n2])
+    # =========================================================================
+    # 8. N1: Editorial / Philosophy (長文・論説文) - 読解の最高峰
+    # =========================================================================
+    n1_content = """
+<div class="passage-body">
+    <p><ruby>他者<rt>たしゃ</rt></ruby>を「<ruby>理解<rt>りかい</rt></ruby>する」とは<ruby>一体<rt>いったい</rt></ruby>どういうことなのだろうか。<ruby>現代<rt>げんだい</rt></ruby>のコミュニケーションにおいては、SNSなどを<ruby>通<rt>つう</rt></ruby>じて「わかりやすさ」や「<ruby>即時的<rt>そくじてき</rt></ruby>な<ruby>共感<rt>きょうかん</rt>」ばかりが<ruby>称揚<rt>しょうよう</rt></ruby>される<ruby>傾向<rt>けいこう</rt></ruby>にある。しかし、<ruby>安易<rt>あんい</rt></ruby>に「あなたの<ruby>気持<rt>きも</rt></ruby>ちがよくわかる」と<ruby>口<rt>くち</rt></ruby>にすることは、かえって<ruby>相手<rt>あいて</rt></ruby>の<ruby>抱<rt>かか</rt></ruby>える<ruby>固有<rt>こゆう</rt></ruby>の<ruby>痛<rt>いた</rt></ruby>みや<ruby>複雑<rt>ふくざつ</rt></ruby>さを、<ruby>自<rt>みずか</rt></ruby>らの<ruby>貧弱<rt>ひんじゃく</rt></ruby>な<ruby>尺度<rt>しゃくど</rt></ruby>へと<ruby>矮小化<rt>わいしょうか</rt></ruby>してしまう<ruby>暴挙<rt>ぼうきょ</rt></ruby>になりかねない。</p>
+    <p><span id="ev-n1-1"><ruby>真<rt>しん</rt></ruby>の<ruby>対話<rt>たいわ</rt></ruby>の<ruby>出発点<rt>しゅっぱつてん</rt></ruby>とは、「<ruby>自分<rt>じぶん</rt></ruby>には<ruby>他者<rt>たしゃ</rt></ruby>のすべてを<ruby>完全<rt>かんぜん</rt></ruby>に<ruby>分<rt>わ</rt></ruby>かりきることはできない」という、ある<ruby>種<rt>しゅ</rt></ruby>の<ruby>絶対的<rt>ぜったいてき</rt></ruby>な<ruby>断絶<rt>だんぜつ</rt></ruby>を<ruby>謙虚<rt>けんきょ</rt></ruby>に<ruby>受<rt>う</rt></ruby>け<ruby>入<rt>い</rt></ruby>れることにほかならない。</span>どれほど<ruby>言葉<rt>ことば</rt></ruby>を<ruby>尽<rt>つ</rt></ruby>くしても<ruby>埋<rt>う</rt></ruby>まらない<ruby>溝<rt>みぞ</rt></ruby>があるからこそ、われわれは<ruby>耳<rt>みみ</rt></ruby>を<ruby>傾<rt>かたむ</rt></ruby>け<ruby>続<rt>つづ</rt></ruby>け、<ruby>想像力<rt>そうぞうりょく</rt></ruby>を<ruby>働<rt>はたら</rt></ruby>かせようとするのである。</p>
+    <p><span id="ev-n1-2"><ruby>分<rt>わ</rt></ruby>かりあえないという<ruby>絶望<rt>ぜつぼう</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まえた<ruby>上<rt>うえ</rt></ruby>でなお、<ruby>相手<rt>あいて</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>の<ruby>響<rt>ひび</rt></ruby>きに<ruby>寄<rt>よ</rt></ruby>り<ruby>添<rt>そ</rt></ruby>おうとする<ruby>不断<rt>ふだん</rt></ruby>の<ruby>姿勢<rt>しせい</rt></ruby>こそが、<ruby>人間<rt>にんげん</rt></ruby>が<ruby>紡<rt>つむ</rt></ruby>ぎうる<ruby>最<rt>もっと</rt></ruby>も<ruby>誠実<rt>せいじつ</rt></ruby>な<ruby>関係性<rt>かんけいせい</rt></ruby>なのではないだろうか。</span></p>
+</div>
+""".strip()
+
+    text_n1 = Text(
+        title="他者理解の不可能性と誠実さ (Невозможность полного понимания Другого и подлинная искренность)",
+        level="N1",
+        category="long",
+        recommended_time_min=7,
+        content_html=n1_content,
+        translation_ru="Что на самом деле значит 'понять другого человека'? В современных соцсетях превозносится мгновенное сопереживание. Однако легко брошенное 'я прекрасно тебя понимаю' рискует принизить уникальную боль собеседника до собственных рамок.\nПодлинный диалог начинается с признания: мы никогда не сможем понять другого до конца. Именно наличие этой непреодолимой пропасти побуждает нас слушать и подключать воображение.\nОсознавать невозможность абсолютного единения и тем не менее неустанно стремиться навстречу — это и есть самая искренняя форма человеческих отношений.",
+        vocabulary_json=[
+            {"word": "称揚する", "furigana": "しょうようする", "translation": "восхвалять, превозносить"},
+            {"word": "矮小化", "furigana": "わいしょうか", "translation": "умаление, искажение до мелочей"},
+            {"word": "断絶", "furigana": "だんぜつ", "translation": "разрыв, пропасть, разобщение"},
+            {"word": "不断の", "furigana": "ふだんの", "translation": "непрестанный, постоянный"}
+        ]
+    )
+    q_n1_1 = Question(
+        question_number=1,
+        question_text="筆者によると、「真の対話の出発点」とはどのようなことか。",
+        general_explanation="Правильный ответ — вариант 3. В ev-n1-1 автор прямо утверждает: исходный пункт диалога — смиренное признание того, что до конца понять другого невозможно (他者を完全に分かりきることはできないと受け入れること).",
+        evidence_span_id="ev-n1-1"
+    )
+    q_n1_1.options = [
+        Option(option_number=1, option_text="SNSを通じて互いの意見を即時的に共有し合うこと。", is_correct=False, option_explanation="Неверно. Автор критикует поверхностность мгновенных реакций в соцсетях."),
+        Option(option_number=2, option_text="相手の気持ちを自分の尺度に当てはめて共感すること。", is_correct=False, option_explanation="Неверно. Наоборот, сведение чужих чувств к своим меркам автор называет насилием (暴挙)."),
+        Option(option_number=3, option_text="他者を完全に理解することはできないという断絶を認めること。", is_correct=True, option_explanation="Верно! Прямое совпадение с ключевым тезисом в <span id='ev-n1-1'>."),
+        Option(option_number=4, option_text="言葉を使わずに感情だけで分かり合える関係を築くこと。", is_correct=False, option_explanation="Неверно. Автор подчеркивает важность вслушивания в речь (言葉の響き).")
+    ]
+
+    q_n1_2 = Question(
+        question_number=2,
+        question_text="この文章の結びとして、筆者が最も伝えたいことはどれか。",
+        general_explanation="Правильный ответ — вариант 1. Согласно ev-n1-2, самая искренняя форма отношений — зная о непреодолимой пропасти, всё равно продолжать чутко слушать и пытаться понять другого.",
+        evidence_span_id="ev-n1-2"
+    )
+    q_n1_2.options = [
+        Option(option_number=1, option_text="完全には理解し合えないと知りつつも、相手に寄り添い続けようとする姿勢が大切だ。", is_correct=True, option_explanation="Верно! Квинтэссенция мысли автора из предложения с тегом ev-n1-2."),
+        Option(option_number=2, option_text="分かり合えない人間関係には意味がないので、孤独を受け入れるべきだ。", is_correct=False, option_explanation="Неверно (Ловушка нигилизма). Автор не призывает закрываться в одиночестве."),
+        Option(option_number=3, option_text="誤解を避けるために、言葉数をできるだけ少なく抑えるべきだ。", is_correct=False, option_explanation="Неверно. Автор говорит о важности вслушивания и поиска взаимопонимания."),
+        Option(option_number=4, option_text="自分とまったく同じ考えを持つ人だけと付き合うのが誠実さである。", is_correct=False, option_explanation="Неверно. Это прямо противоположно идее эмпатии к непохожему Другому.")
+    ]
+    text_n1.questions = [q_n1_1, q_n1_2]
+
+    all_texts = [
+        text_n5_1, text_n5_2,
+        text_n4_trash, text_n4_kyoto,
+        text_n3_jogging, text_n3_flyer,
+        text_n2_article,
+        text_n1
+    ]
+
+    db.add_all(all_texts)
     db.commit()
-    print("Database seeding with N5, N4, N3, N2 completed successfully!")
+    print(f"Database seeded with {len(all_texts)} high-quality JLPT texts across N5-N1!")
     db.close()
 
 

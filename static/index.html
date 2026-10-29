@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JLPT Dokkai Master | 読解トレーナー</title>
-    <!-- Google Fonts: Noto Sans JP for accurate kanji & Inter for UI -->
+    <!-- Google Fonts: Noto Sans JP & Noto Serif JP for authentic book typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div id="app" class="app-layout">
-        <!-- Top Navigation Bar -->
+        <!-- Minimal Zen Header -->
         <header class="app-header">
-            <div class="header-brand" id="btn-home">
-                <span class="brand-badge">JLPT</span>
+            <div class="header-brand" id="btn-home" title="Вернуться в каталог">
+                <span class="brand-monogram">読</span>
                 <div class="brand-text">
                     <span class="brand-title">Dokkai Master</span>
-                    <span class="brand-sub">読解トレーナー</span>
+                    <span class="brand-sub">JLPT 読解トレーナー</span>
                 </div>
             </div>
 
@@ -30,16 +30,12 @@
                 </div>
                 
                 <div class="timer-box" id="timer-box">
-                    <svg class="timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span class="timer-label">Таймер:</span>
+                    <span class="timer-dot"></span>
                     <span class="timer-digits" id="timer-display">00:00</span>
                     <span class="timer-target" id="timer-target">(Реком.: 3 мин)</span>
                 </div>
 
-                <button class="btn btn-secondary btn-sm" id="btn-abort-exercise">
+                <button class="btn btn-ghost btn-sm" id="btn-abort-exercise">
                     ✕ Прервать
                 </button>
             </div>
@@ -50,18 +46,20 @@
             <!-- VIEW 1: CATALOG VIEW -->
             <section id="catalog-view" class="view catalog-view">
                 <div class="catalog-hero">
-                    <h1 class="hero-title">Тренажёр по чтению JLPT (読解)</h1>
+                    <div class="hero-badge">JLPT 読解 EXPERT PRACTICE</div>
+                    <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
                     <p class="hero-desc">
-                        Строгий экзаменационный режим: решите все вопросы к тексту без подсказок, затем получите детальный разбор ловушек, фуриганы и доказательств в тексте.
+                        Строгий экзаменационный режим: решите все вопросы без подсказок, затем получите детальный разбор ошибок, экзаменационных ловушек и доказательств в тексте.
                     </p>
                 </div>
 
                 <!-- Filters -->
                 <div class="filters-card">
                     <div class="filter-group">
+                        <span class="filter-icon">🏷️</span>
                         <label class="filter-label">Уровень JLPT:</label>
                         <div class="pill-selectors" id="level-filter-pills">
-                            <button class="filter-pill active" data-level="">Все</button>
+                            <button class="filter-pill active" data-level="">Все уровни</button>
                             <button class="filter-pill" data-level="N5">N5</button>
                             <button class="filter-pill" data-level="N4">N4</button>
                             <button class="filter-pill" data-level="N3">N3</button>
@@ -71,14 +69,15 @@
                     </div>
 
                     <div class="filter-group">
-                        <label class="filter-label">Категория текста:</label>
+                        <span class="filter-icon">📂</span>
+                        <label class="filter-label">Формат текста:</label>
                         <div class="pill-selectors" id="category-filter-pills">
-                            <button class="filter-pill active" data-category="">Все</button>
+                            <button class="filter-pill active" data-category="">Все форматы</button>
                             <button class="filter-pill" data-category="short">短文 (Короткие)</button>
                             <button class="filter-pill" data-category="medium">中文 (Средние)</button>
                             <button class="filter-pill" data-category="long">長文 (Длинные)</button>
-                            <button class="filter-pill" data-category="info_search">情報検索 (Поиск инфо)</button>
-                            <button class="filter-pill" data-category="article">記事 (Статьи)</button>
+                            <button class="filter-pill" data-category="info_search">情報検索 (Объявления/Поиск)</button>
+                            <button class="filter-pill" data-category="article">記事・論説 (Статьи)</button>
                         </div>
                     </div>
                 </div>
@@ -100,7 +99,7 @@
                         </div>
                         <div class="banner-info">
                             <h3 class="banner-title" id="banner-result-title">Отличный результат!</h3>
-                            <p class="banner-time" id="banner-result-meta">Затрачено времени: 01:45 | Рекомендовано: 3 мин</p>
+                            <p class="banner-time" id="banner-result-meta">Затрачено: 01:45 | Рекомендовано: 3 мин</p>
                         </div>
                     </div>
 
@@ -128,10 +127,10 @@
                     </div>
                 </div>
 
-                <!-- Drawer/Panel for Russian Translation & Vocabulary (Collapsible) -->
+                <!-- Supplementary Drawer for Russian Translation & Vocabulary -->
                 <div id="supplementary-drawer" class="supplementary-drawer hidden">
                     <div class="drawer-header">
-                        <h4 class="drawer-title" id="drawer-title">Перевод и словарь</h4>
+                        <h4 class="drawer-title" id="drawer-title">Перевод и лексика текста</h4>
                         <button class="drawer-close" id="btn-close-drawer">✕</button>
                     </div>
                     <div class="drawer-body">
@@ -140,7 +139,7 @@
                             <div class="translation-content" id="translation-text"></div>
                         </div>
                         <div id="drawer-vocab-section" class="drawer-section">
-                            <h5>Словарь текста</h5>
+                            <h5>Словарь ключевых слов</h5>
                             <div class="vocab-grid" id="vocab-list"></div>
                         </div>
                     </div>
@@ -152,14 +151,27 @@
                     <div class="split-pane split-pane-left">
                         <div class="passage-card">
                             <div class="passage-header">
-                                <h2 class="passage-title" id="passage-title">タイトル</h2>
-                                <div class="passage-meta">
-                                    <span class="meta-tag level" id="passage-level">N3</span>
-                                    <span class="meta-tag category" id="passage-category">短文</span>
-                                    <span class="meta-tag time" id="passage-time">3 мин</span>
+                                <div class="passage-meta-bar">
+                                    <div class="passage-meta">
+                                        <span class="meta-tag level" id="passage-level">N3</span>
+                                        <span class="meta-tag category" id="passage-category">短文</span>
+                                        <span class="meta-tag time" id="passage-time">3 мин</span>
+                                    </div>
+                                    <!-- Reader customization tools (Font Size & Font Style) -->
+                                    <div class="reader-tools">
+                                        <div class="font-toggle-group">
+                                            <button class="btn-tool-sm active" id="btn-font-gothic" title="Шрифт Готика (Без засечек)">Gothic</button>
+                                            <button class="btn-tool-sm" id="btn-font-mincho" title="Шрифт Минтё (С засечками - как в книге)">Mincho</button>
+                                        </div>
+                                        <div class="size-toggle-group">
+                                            <button class="btn-tool-sm" id="btn-font-decrease" title="Уменьшить шрифт">A−</button>
+                                            <button class="btn-tool-sm" id="btn-font-increase" title="Увеличить шрифт">A+</button>
+                                        </div>
+                                    </div>
                                 </div>
+                                <h2 class="passage-title" id="passage-title">タイトル</h2>
                             </div>
-                            <div class="passage-content japanese-text" id="passage-content">
+                            <div class="passage-content japanese-text font-gothic" id="passage-content">
                                 <!-- Raw HTML of text injected here -->
                             </div>
                         </div>
@@ -200,4 +212,3 @@
     <script src="/static/app.js"></script>
 </body>
 </html>
-
