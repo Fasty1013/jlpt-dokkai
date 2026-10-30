@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <!-- Google Fonts: Noto Sans JP & Noto Serif JP for authentic book typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <div id="app" class="app-layout">
         <!-- Minimal Zen Header -->
@@ -29,20 +33,24 @@
                     <span class="category-tag" id="header-category-tag">短文</span>
                     <span class="exam-archive-badge hidden" id="header-exam-badge"></span>
                 </div>
-                
+
                 <!-- Timer Widget (Optional: Shown only when user wants) -->
                 <div class="timer-box hidden" id="timer-box">
                     <span class="timer-dot" id="timer-dot"></span>
                     <span class="timer-digits" id="timer-display">03:00</span>
                     <div class="timer-actions">
-                        <button type="button" class="btn-timer-action" id="btn-timer-toggle-pause" title="Поставить на паузу / возобновить">⏸️</button>
-                        <button type="button" class="btn-timer-action" id="btn-timer-add-min" title="Добавить 1 минуту">+1м</button>
-                        <button type="button" class="btn-timer-action btn-timer-close" id="btn-timer-dismiss" title="Выключить таймер">✕</button>
+                        <button type="button" class="btn-timer-action" id="btn-timer-toggle-pause"
+                            title="Поставить на паузу / возобновить">⏸️</button>
+                        <button type="button" class="btn-timer-action" id="btn-timer-add-min"
+                            title="Добавить 1 минуту">+1м</button>
+                        <button type="button" class="btn-timer-action btn-timer-close" id="btn-timer-dismiss"
+                            title="Выключить таймер">✕</button>
                     </div>
                 </div>
 
                 <!-- Quick Button to add timer during test if user wants -->
-                <button type="button" class="btn btn-add-timer" id="btn-enable-timer-runtime" title="Включить таймер с ограничением времени">
+                <button type="button" class="btn btn-add-timer" id="btn-enable-timer-runtime"
+                    title="Включить таймер с ограничением времени">
                     ⏱️ Включить таймер
                 </button>
 
@@ -53,11 +61,13 @@
 
             <!-- Header Tab Navigation -->
             <nav class="header-nav" id="header-nav">
-                <button type="button" class="nav-tab active" id="btn-tab-catalog" data-tab="catalog" title="Каталог текстов и тестов JLPT">
+                <button type="button" class="nav-tab active" id="btn-tab-catalog" data-tab="catalog"
+                    title="Каталог текстов и тестов JLPT">
                     <span class="nav-icon">📚</span>
                     <span class="nav-label">Тексты и тесты</span>
                 </button>
-                <button type="button" class="nav-tab" id="btn-tab-notebook" data-tab="notebook" title="Мой персональный словарь">
+                <button type="button" class="nav-tab" id="btn-tab-notebook" data-tab="notebook"
+                    title="Мой персональный словарь">
                     <span class="nav-icon">⭐</span>
                     <span class="nav-label">Мой словарь</span>
                     <span class="notebook-badge" id="header-saved-count">0</span>
@@ -73,7 +83,8 @@
                     <div class="hero-badge">JLPT 読解 EXPERT PRACTICE</div>
                     <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
                     <p class="hero-desc">
-                        Более 300 реальных текстов уровней N5–N1: архивные экзамены JLPT, адаптированные новости NHK World и пошаговый экзаменационный интерфейс решения без подглядывания.
+                        Более 300 реальных текстов уровней N5–N1: архивные экзамены JLPT, адаптированные новости NHK
+                        World и пошаговый экзаменационный интерфейс решения без подглядывания.
                     </p>
                 </div>
 
@@ -126,14 +137,17 @@
             <section id="exercise-view" class="view exercise-view hidden">
                 <!-- Hardcore Exam Mode Active Notice (Shown if hints are disabled) -->
                 <div id="hardcore-notice" class="hardcore-notice hidden">
-                    ⚡ <strong>Режим «Строгий Экзамен»:</strong> Подсказки, переводы и подсветка доказательств в тексте отключены вашими настройками.
+                    ⚡ <strong>Режим «Строгий Экзамен»:</strong> Подсказки, переводы и подсветка доказательств в тексте
+                    отключены вашими настройками.
                 </div>
 
                 <!-- Timer Expired Notice (Shown if timer reaches 00:00) -->
                 <div id="timer-alert-banner" class="timer-alert-banner hidden">
                     <span class="alert-icon">⏱️</span>
-                    <span class="alert-text"><strong>Время вышло!</strong> Вы можете отправить ответы на проверку прямо сейчас или продолжить решать в спокойном темпе.</span>
-                    <button type="button" class="btn btn-outline-light btn-sm" id="btn-dismiss-timer-alert">Понятно, продолжить</button>
+                    <span class="alert-text"><strong>Время вышло!</strong> Вы можете отправить ответы на проверку прямо
+                        сейчас или продолжить решать в спокойном темпе.</span>
+                    <button type="button" class="btn btn-outline-light btn-sm" id="btn-dismiss-timer-alert">Понятно,
+                        продолжить</button>
                 </div>
 
                 <!-- Result Banner (Visible after submission) -->
@@ -151,11 +165,13 @@
 
                     <!-- Toolbar with Study Tools (Adaptive to Pre-test Config) -->
                     <div class="study-tools-bar" id="study-tools-bar">
-                        <button class="tool-btn active" id="btn-toggle-furigana" title="Показать или скрыть фуригану над кандзи">
+                        <button class="tool-btn active" id="btn-toggle-furigana"
+                            title="Показать или скрыть фуригану над кандзи">
                             <span class="tool-icon">あ</span>
                             <span class="tool-text">Фуригана: <strong id="furigana-status">ВКЛ</strong></span>
                         </button>
-                        <button class="tool-btn active" id="btn-toggle-evidence" title="Включить подсветку ключевых предложений в тексте">
+                        <button class="tool-btn active" id="btn-toggle-evidence"
+                            title="Включить подсветку ключевых предложений в тексте">
                             <span class="tool-icon">🔍</span>
                             <span class="tool-text">Доказательства: <strong id="evidence-status">ВКЛ</strong></span>
                         </button>
@@ -206,16 +222,21 @@
                                     </div>
                                     <!-- Reader customization tools (Font Size & Font Style & Popup Dict) -->
                                     <div class="reader-tools">
-                                        <button class="btn-tool-sm active" id="btn-toggle-popup-dict" title="Всплывающий словарь при выделении или клике на японские слова">
+                                        <button class="btn-tool-sm active" id="btn-toggle-popup-dict"
+                                            title="Всплывающий словарь при выделении или клике на японские слова">
                                             📖 Словарь: <strong id="popup-dict-status">ВКЛ</strong>
                                         </button>
                                         <div class="font-toggle-group">
-                                            <button class="btn-tool-sm active" id="btn-font-gothic" title="Шрифт Готика (Без засечек)">Gothic</button>
-                                            <button class="btn-tool-sm" id="btn-font-mincho" title="Шрифт Минтё (С засечками - как в книге)">Mincho</button>
+                                            <button class="btn-tool-sm active" id="btn-font-gothic"
+                                                title="Шрифт Готика (Без засечек)">Gothic</button>
+                                            <button class="btn-tool-sm" id="btn-font-mincho"
+                                                title="Шрифт Минтё (С засечками - как в книге)">Mincho</button>
                                         </div>
                                         <div class="size-toggle-group">
-                                            <button class="btn-tool-sm" id="btn-font-decrease" title="Уменьшить шрифт">A−</button>
-                                            <button class="btn-tool-sm" id="btn-font-increase" title="Увеличить шрифт">A+</button>
+                                            <button class="btn-tool-sm" id="btn-font-decrease"
+                                                title="Уменьшить шрифт">A−</button>
+                                            <button class="btn-tool-sm" id="btn-font-increase"
+                                                title="Увеличить шрифт">A+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -239,7 +260,8 @@
                                     </div>
                                 </div>
                                 <div class="progress-indicator" id="progress-indicator">
-                                    Отвечено: <span id="answered-count">0</span> / <span id="total-questions-count">0</span>
+                                    Отвечено: <span id="answered-count">0</span> / <span
+                                        id="total-questions-count">0</span>
                                 </div>
                             </div>
 
@@ -256,7 +278,8 @@
                                 <button type="button" class="btn btn-primary" id="btn-wizard-next" disabled>
                                     Следующий вопрос →
                                 </button>
-                                <button type="button" class="btn btn-primary btn-submit hidden" id="btn-wizard-submit" disabled>
+                                <button type="button" class="btn btn-primary btn-submit hidden" id="btn-wizard-submit"
+                                    disabled>
                                     Завершить и проверить ответы ✓
                                 </button>
                             </div>
@@ -282,7 +305,8 @@
                         <div class="hero-badge">PERSONAL VOCABULARY NOTEBOOK</div>
                         <h1 class="hero-title">⭐ Мой словарь японского языка</h1>
                         <p class="hero-desc">
-                            Ваш персональный список сохранённых японских слов, правильных чтений (фуригана) и переводов. Слушайте японское произношение и отмечайте выученное!
+                            Ваш персональный список сохранённых японских слов, правильных чтений (фуригана) и переводов.
+                            Слушайте японское произношение и отмечайте выученное!
                         </p>
                     </div>
 
@@ -290,12 +314,16 @@
                         <div class="notebook-toolbar">
                             <div class="notebook-search-box">
                                 <span class="search-icon">🔍</span>
-                                <input type="text" id="notebook-search-input" placeholder="Поиск по иероглифам, чтению (хирагане) или русскому переводу...">
+                                <input type="text" id="notebook-search-input"
+                                    placeholder="Поиск по иероглифам, чтению (хирагане) или русскому переводу...">
                             </div>
                             <div class="notebook-filters" id="notebook-filters">
-                                <button type="button" class="notebook-filter-pill active" data-filter="all">Все (<span id="notebook-count-all">0</span>)</button>
-                                <button type="button" class="notebook-filter-pill" data-filter="learning">Изучаю (<span id="notebook-count-learning">0</span>)</button>
-                                <button type="button" class="notebook-filter-pill" data-filter="learned">Выучено (<span id="notebook-count-learned">0</span>)</button>
+                                <button type="button" class="notebook-filter-pill active" data-filter="all">Все (<span
+                                        id="notebook-count-all">0</span>)</button>
+                                <button type="button" class="notebook-filter-pill" data-filter="learning">Изучаю (<span
+                                        id="notebook-count-learning">0</span>)</button>
+                                <button type="button" class="notebook-filter-pill" data-filter="learned">Выучено (<span
+                                        id="notebook-count-learned">0</span>)</button>
                             </div>
                         </div>
                         <div class="notebook-body" id="notebook-words-list">
@@ -303,7 +331,8 @@
                         </div>
                         <div class="notebook-footer">
                             <span class="notebook-stats" id="notebook-stats-text">Всего сохранённых слов: 0</span>
-                            <button type="button" class="btn btn-ghost btn-sm text-danger" id="btn-clear-notebook">Очистить весь словарь</button>
+                            <button type="button" class="btn btn-ghost btn-sm text-danger"
+                                id="btn-clear-notebook">Очистить весь словарь</button>
                         </div>
                     </div>
                 </div>
@@ -347,8 +376,10 @@
                                 <span class="setting-tag tag-warning" id="tag-hints">Режим анализа</span>
                             </div>
                             <p class="setting-desc">
-                                Включено: после сдачи подсвечиваются доказательства в тексте, перевод и разбор дистракторов.<br>
-                                <strong>Выключено:</strong> «Режим Хардкор / Экзамен» — только статус Верно/Неверно без подсказок и переводов.
+                                Включено: после сдачи подсвечиваются доказательства в тексте, перевод и разбор
+                                дистракторов.<br>
+                                <strong>Выключено:</strong> «Режим Хардкор / Экзамен» — только статус Верно/Неверно без
+                                подсказок и переводов.
                             </p>
                         </div>
                         <label class="switch">
@@ -364,16 +395,19 @@
                                 <span class="setting-tag" id="tag-timer">По желанию</span>
                             </div>
                             <p class="setting-desc">
-                                Включено: тренировка тайм-менеджмента как на реальном экзамене с предупреждением за 60 сек.<br>
+                                Включено: тренировка тайм-менеджмента как на реальном экзамене с предупреждением за 60
+                                сек.<br>
                                 <strong>Выключено:</strong> спокойное свободное чтение в своём темпе без таймера.
                             </p>
                             <!-- Duration selector when timer is enabled -->
                             <div class="timer-duration-selector hidden" id="timer-duration-selector">
                                 <span class="duration-label">Лимит времени:</span>
                                 <div class="stepper-box">
-                                    <button type="button" class="btn-stepper" id="btn-timer-minus" title="Уменьшить на 1 минуту">−</button>
+                                    <button type="button" class="btn-stepper" id="btn-timer-minus"
+                                        title="Уменьшить на 1 минуту">−</button>
                                     <span class="stepper-value"><strong id="modal-timer-minutes">3</strong> мин</span>
-                                    <button type="button" class="btn-stepper" id="btn-timer-plus" title="Увеличить на 1 минуту">+</button>
+                                    <button type="button" class="btn-stepper" id="btn-timer-plus"
+                                        title="Увеличить на 1 минуту">+</button>
                                 </div>
                             </div>
                         </div>
@@ -421,4 +455,5 @@
 
     <script src="/static/app.js"></script>
 </body>
+
 </html>

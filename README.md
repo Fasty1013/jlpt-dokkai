@@ -72,19 +72,54 @@ uvicorn main:app --reload --port 8000
 
 ---
 
+## 🤖 Мультиагентная система (.agents)
+
+В проекте настроена специализированная мультиагентная система для совместной работы над образовательным контентом и архитектурой кода:
+- **`@jlpt-expert`** (`.agents/agents/jlpt-expert.md`): Методолог экзамена JLPT (N5–N1), лингвист, специалист по грамматике, дистракторам и кандзи.
+- **`@senior-dev`** (`.agents/agents/senior-dev.md`): Senior Software Engineer (FastAPI, архитектура, безопасность Anti-Cheat, фронтенд, тесты).
+
+Подробная инструкция доступна в [**AGENTS.md**](./AGENTS.md).
+
+### Быстрый запуск агентов:
+```bash
+# Интерактивное меню выбора
+python run_agents.py
+
+# Только Лингвист-методолог JLPT
+python run_agents.py --expert
+
+# Только Senior-разработчик (с запуском тестов и аудитом Anti-Cheat)
+python run_agents.py --dev
+
+# Совместный запуск (Оркестратор: Эксперт + Разработчик)
+python run_agents.py --both -t "Добавление новых заданий N3"
+
+# Самодиагностика проекта (Синтаксис + Anti-Cheat + Тесты)
+python run_agents.py --check
+```
+
+---
+
 ## 📂 Структура проекта
 
 ```text
+├── .agents/
+│   └── agents/
+│       ├── jlpt-expert.md   # Конфигурация агента-лингвиста JLPT
+│       └── senior-dev.md    # Конфигурация Senior Software Engineer
+├── run_agents.py            # Менеджер и оркестратор мультиагентной системы
+├── AGENTS.md                # Документация и руководство по агентам
 ├── database.py              # Инициализация SQLAlchemy ORM
 ├── models.py                # Модели данных: Text, Question, Option
 ├── schemas.py               # Раздельные Pydantic-схемы (Чтение vs Анализ)
 ├── seed.py                  # База текстов с разметкой фуриганы и доказательств
 ├── main.py                  # FastAPI приложение, REST API, автосидирование
+├── test_api.py              # Автотесты бэкенда и Anti-Cheat протокола
 ├── requirements.txt         # Список зависимостей
 ├── static/
 │   ├── index.html           # Интерфейс (Split-Screen, Noto Sans JP)
 │   ├── styles.css           # CSS Variables, оформление кандзи и подсветка
-│   └── app.js               # Секундомер, фильтрация, Anti-Cheat логика
+│   └── app.js               # Пошаговый мастер вопросов (Wizard), таймер, словарь
 └── .gitignore               # Исключение локальных БД и кэша
 ```
 
