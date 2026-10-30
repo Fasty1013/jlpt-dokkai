@@ -40,6 +40,15 @@
                     ✕ Прервать
                 </button>
             </div>
+
+            <!-- Global Action: My Vocabulary Notebook -->
+            <div class="header-actions">
+                <button class="btn btn-notebook" id="btn-open-notebook" title="Открыть сохранённые слова">
+                    <span class="btn-icon">⭐</span>
+                    <span class="btn-text">Мой словарь</span>
+                    <span class="notebook-badge" id="header-saved-count">0</span>
+                </button>
+            </div>
         </header>
 
         <!-- Main Body -->
@@ -174,8 +183,11 @@
                                         <span class="meta-tag archive" id="passage-exam-badge">JLPT 過去問</span>
                                         <span class="meta-tag time" id="passage-time">3 мин</span>
                                     </div>
-                                    <!-- Reader customization tools (Font Size & Font Style) -->
+                                    <!-- Reader customization tools (Font Size & Font Style & Popup Dict) -->
                                     <div class="reader-tools">
+                                        <button class="btn-tool-sm active" id="btn-toggle-popup-dict" title="Всплывающий словарь при выделении или клике на японские слова">
+                                            📖 Словарь: <strong id="popup-dict-status">ВКЛ</strong>
+                                        </button>
                                         <div class="font-toggle-group">
                                             <button class="btn-tool-sm active" id="btn-font-gothic" title="Шрифт Готика (Без засечек)">Gothic</button>
                                             <button class="btn-tool-sm" id="btn-font-mincho" title="Шрифт Минтё (С засечками - как в книге)">Mincho</button>
@@ -298,6 +310,63 @@
                 <div class="modal-footer">
                     <button class="btn btn-ghost" id="modal-btn-cancel">Отмена</button>
                     <button class="btn btn-primary btn-lg" id="modal-btn-start">Начать решение →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YOMICHAN-STYLE POPUP DICTIONARY -->
+        <div id="popup-dictionary-card" class="popup-dict-card hidden">
+            <div class="popup-dict-header">
+                <div class="popup-word-group">
+                    <span class="popup-word" id="popup-word">持続可能</span>
+                    <span class="popup-reading" id="popup-reading">[じぞくかのう]</span>
+                    <span class="popup-level-tag" id="popup-level">N2</span>
+                </div>
+                <div class="popup-actions-top">
+                    <button class="btn-dict-audio" id="popup-btn-audio" title="Прослушать произношение">🔊</button>
+                    <button class="popup-dict-close" id="popup-btn-close">✕</button>
+                </div>
+            </div>
+            <div class="popup-dict-body">
+                <p class="popup-meaning" id="popup-meaning">устойчивый, экологичный; способный продолжаться долго</p>
+            </div>
+            <div class="popup-dict-footer">
+                <button class="btn-dict-save" id="popup-btn-save">
+                    <span class="btn-icon">⭐</span> <span id="popup-btn-save-text">В мой словарь</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SAVED WORDS NOTEBOOK MODAL -->
+        <div id="saved-words-modal-backdrop" class="modal-backdrop hidden">
+            <div class="notebook-modal-card">
+                <div class="notebook-header">
+                    <div class="notebook-title-wrap">
+                        <span class="notebook-icon">⭐</span>
+                        <div>
+                            <h3 class="notebook-title">Мой словарь</h3>
+                            <p class="notebook-subtitle">Сохранённые японские слова для повторения</p>
+                        </div>
+                    </div>
+                    <button class="modal-close" id="btn-close-notebook">✕</button>
+                </div>
+                <div class="notebook-toolbar">
+                    <div class="notebook-search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="notebook-search-input" placeholder="Поиск по иероглифам, чтению или значению...">
+                    </div>
+                    <div class="notebook-filters">
+                        <button class="notebook-filter-pill active" data-filter="all">Все (<span id="notebook-count-all">0</span>)</button>
+                        <button class="notebook-filter-pill" data-filter="learning">Изучаю (<span id="notebook-count-learning">0</span>)</button>
+                        <button class="notebook-filter-pill" data-filter="learned">Выучено (<span id="notebook-count-learned">0</span>)</button>
+                    </div>
+                </div>
+                <div class="notebook-body" id="notebook-words-list">
+                    <!-- Dynamically populated word items -->
+                </div>
+                <div class="notebook-footer">
+                    <span class="notebook-stats" id="notebook-stats-text">Всего слов: 0</span>
+                    <button class="btn btn-ghost btn-sm text-danger" id="btn-clear-notebook">Очистить список</button>
                 </div>
             </div>
         </div>

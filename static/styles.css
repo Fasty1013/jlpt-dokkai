@@ -1519,3 +1519,430 @@ input:checked + .slider:before {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   Global Header Actions & Notebook Button
+   ========================================================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-notebook {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fffdf5;
+    border: 1px solid #f2e29f;
+    color: #8c6b12;
+    padding: 0.45rem 0.95rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(140, 107, 18, 0.08);
+}
+
+.btn-notebook:hover {
+    background: #fff8d6;
+    border-color: #e5cc62;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(140, 107, 18, 0.15);
+}
+
+.notebook-badge {
+    background: #d97706;
+    color: #ffffff;
+    font-size: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-weight: 800;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Yomichan-Style Floating Popup Dictionary
+   ========================================================================== */
+
+.popup-dict-card {
+    position: fixed;
+    z-index: 1000;
+    background: #ffffff;
+    color: var(--sumi-900);
+    border: 1px solid var(--washi-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 35px -5px rgba(20, 25, 30, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 320px;
+    max-width: 90vw;
+    padding: 1rem;
+    animation: popupFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top center;
+    font-family: var(--font-ui);
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-dict-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--washi-border);
+    gap: 0.5rem;
+}
+
+.popup-word-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.45rem;
+}
+
+.popup-word {
+    font-family: var(--font-gothic);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--sumi-900);
+    line-height: 1.2;
+}
+
+.popup-reading {
+    font-family: var(--font-gothic);
+    font-size: 0.95rem;
+    color: var(--indigo);
+    font-weight: 600;
+}
+
+.popup-level-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    background: var(--vermilion-soft);
+    color: var(--vermilion);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.popup-actions-top {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.btn-dict-audio {
+    background: var(--washi-accent);
+    border: 1px solid var(--washi-border);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-dict-audio:hover {
+    background: var(--indigo-light);
+    transform: scale(1.08);
+}
+
+.popup-dict-close {
+    background: transparent;
+    border: none;
+    color: var(--sumi-400);
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.popup-dict-close:hover {
+    color: var(--sumi-900);
+    background: var(--washi-accent);
+}
+
+.popup-dict-body {
+    padding: 0.75rem 0;
+}
+
+.popup-meaning {
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--sumi-700);
+}
+
+.popup-dict-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--washi-accent);
+}
+
+.btn-dict-save {
+    background: var(--washi-accent);
+    border: 1px solid var(--washi-border);
+    color: var(--sumi-800);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.btn-dict-save:hover {
+    background: #fff8d6;
+    border-color: #e5cc62;
+    color: #8c6b12;
+}
+
+.btn-dict-save.is-saved {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+/* ==========================================================================
+   Saved Words Notebook Modal UI
+   ========================================================================== */
+
+.notebook-modal-card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3);
+    width: 620px;
+    max-width: 95vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notebook-header {
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--washi-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fafaf8;
+}
+
+.notebook-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.notebook-icon {
+    font-size: 1.75rem;
+}
+
+.notebook-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--sumi-900);
+}
+
+.notebook-subtitle {
+    font-size: 0.82rem;
+    color: var(--sumi-500);
+}
+
+.notebook-toolbar {
+    padding: 1rem 1.75rem;
+    background: #ffffff;
+    border-bottom: 1px solid var(--washi-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.notebook-search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--washi-accent);
+    border: 1px solid var(--washi-border);
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.75rem;
+}
+
+.notebook-search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 0.88rem;
+    color: var(--sumi-900);
+}
+
+.notebook-filters {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.notebook-filter-pill {
+    background: transparent;
+    border: 1px solid var(--washi-border);
+    color: var(--sumi-600);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.notebook-filter-pill.active {
+    background: var(--sumi-900);
+    color: #ffffff;
+    border-color: var(--sumi-900);
+}
+
+.notebook-body {
+    padding: 1rem 1.75rem;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: #fafaf8;
+}
+
+.notebook-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--sumi-400);
+}
+
+.notebook-empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.notebook-word-card {
+    background: #ffffff;
+    border: 1px solid var(--washi-border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    gap: 1rem;
+}
+
+.notebook-word-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.notebook-word-card.is-mastered {
+    background: #f8fafc;
+    opacity: 0.75;
+}
+
+.notebook-word-card.is-mastered .notebook-word-jp {
+    text-decoration: line-through;
+    color: var(--sumi-400);
+}
+
+.notebook-word-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.notebook-word-top {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.notebook-word-jp {
+    font-family: var(--font-gothic);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--sumi-900);
+}
+
+.notebook-word-reading {
+    font-size: 0.85rem;
+    color: var(--indigo);
+    font-weight: 600;
+}
+
+.notebook-word-meaning {
+    font-size: 0.85rem;
+    color: var(--sumi-600);
+}
+
+.notebook-word-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notebook-btn-icon {
+    background: var(--washi-accent);
+    border: 1px solid var(--washi-border);
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.notebook-btn-icon:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+}
+
+.notebook-footer {
+    padding: 0.85rem 1.75rem;
+    border-top: 1px solid var(--washi-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    font-size: 0.82rem;
+    color: var(--sumi-500);
+}
+
+.text-danger {
+    color: #b91c1c;
+}
+
+/* User Selection Cue in Reading Mode */
+.passage-content::selection,
+.passage-content *::selection {
+    background: #fde68a;
+    color: #1f2937;
+}

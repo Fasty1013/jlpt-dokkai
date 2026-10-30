@@ -61,7 +61,12 @@ const state = {
         fontSizePx: 20         // default 20px
     },
     // Analysis tab state
-    analysisActiveTabIdx: 0
+    analysisActiveTabIdx: 0,
+    // Interactive Dictionary & Notebook State
+    popupDictEnabled: true,
+    activePopupWord: null,
+    notebookFilter: 'all', // 'all' | 'learning' | 'learned'
+    notebookSearchQuery: ''
 };
 
 // ============================================================================
@@ -78,6 +83,8 @@ const elements = {
     timerDisplay: document.getElementById('timer-display'),
     timerTarget: document.getElementById('timer-target'),
     btnAbortExercise: document.getElementById('btn-abort-exercise'),
+    btnOpenNotebook: document.getElementById('btn-open-notebook'),
+    headerSavedCount: document.getElementById('header-saved-count'),
 
     // Views
     catalogView: document.getElementById('catalog-view'),
@@ -100,6 +107,30 @@ const elements = {
     btnFontMincho: document.getElementById('btn-font-mincho'),
     btnFontIncrease: document.getElementById('btn-font-increase'),
     btnFontDecrease: document.getElementById('btn-font-decrease'),
+    btnTogglePopupDict: document.getElementById('btn-toggle-popup-dict'),
+    popupDictStatus: document.getElementById('popup-dict-status'),
+
+    // Yomichan Floating Card
+    popupDictionaryCard: document.getElementById('popup-dictionary-card'),
+    popupWord: document.getElementById('popup-word'),
+    popupReading: document.getElementById('popup-reading'),
+    popupLevel: document.getElementById('popup-level'),
+    popupMeaning: document.getElementById('popup-meaning'),
+    popupBtnAudio: document.getElementById('popup-btn-audio'),
+    popupBtnClose: document.getElementById('popup-btn-close'),
+    popupBtnSave: document.getElementById('popup-btn-save'),
+    popupBtnSaveText: document.getElementById('popup-btn-save-text'),
+
+    // Notebook Modal
+    savedWordsModalBackdrop: document.getElementById('saved-words-modal-backdrop'),
+    btnCloseNotebook: document.getElementById('btn-close-notebook'),
+    notebookSearchInput: document.getElementById('notebook-search-input'),
+    notebookWordsList: document.getElementById('notebook-words-list'),
+    notebookCountAll: document.getElementById('notebook-count-all'),
+    notebookCountLearning: document.getElementById('notebook-count-learning'),
+    notebookCountLearned: document.getElementById('notebook-count-learned'),
+    notebookStatsText: document.getElementById('notebook-stats-text'),
+    btnClearNotebook: document.getElementById('btn-clear-notebook'),
 
     // Wizard Controls (Right Pane)
     wizardHeader: document.getElementById('wizard-header'),
@@ -823,6 +854,276 @@ function toggleSupplementaryDrawer(type) {
     }
 }
 
+// ============================================================================
+// Yomichan-Style Interactive Popup Dictionary & Personal Notebook
+// ============================================================================
+
+const NOTEBOOK_STORAGE_KEY = 'dokkai_saved_words';
+
+function speakJapanese(text) {
+    if (!('speechSynthesis' in window)) return;
+    try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+    } catch (e) {
+        console.warn('Speech synthesis error', e);
+    }
+}
+
+function getSavedWords() {
+    try {
+        const stored = localStorage.getItem(NOTEBOOK_STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+        console.warn('Failed to load saved words', e);
+        return [];
+    }
+}
+
+function saveWordsToStorage(words) {
+    try {
+        localStorage.setItem(NOTEBOOK_STORAGE_KEY, JSON.stringify(words));
+        updateNotebookBadge();
+    } catch (e) {
+        console.warn('Failed to save words to storage', e);
+    }
+}
+
+function updateNotebookBadge() {
+    const words = getSavedWords();
+    const count = words.length;
+    if (elements.headerSavedCount) {
+        elements.headerSavedCount.textContent = count;
+    }
+}
+
+function isWordSaved(wordText) {
+    const words = getSavedWords();
+    return words.some(w => w.word === wordText);
+}
+
+function toggleSaveWord(wordData) {
+    if (!wordData || !wordData.word) return;
+    let words = getSavedWords();
+    const existingIdx = words.findIndex(w => w.word === wordData.word);
+
+    if (existingIdx >= 0) {
+        words.splice(existingIdx, 1);
+        saveWordsToStorage(words);
+        if (elements.popupBtnSave) {
+            elements.popupBtnSave.classList.remove('is-saved');
+            elements.popupBtnSaveText.textContent = 'В мой словарь';
+        }
+    } else {
+        words.unshift({
+            id: Date.now(),
+            word: wordData.word,
+            reading: wordData.reading || '',
+            meaning: wordData.meaning || '',
+            level: wordData.level || 'JLPT',
+            mastered: false,
+            date: new Date().toLocaleDateString()
+        });
+        saveWordsToStorage(words);
+        if (elements.popupBtnSave) {
+            elements.popupBtnSave.classList.add('is-saved');
+            elements.popupBtnSaveText.textContent = '✓ В словаре';
+        }
+    }
+    renderNotebookWords();
+}
+
+function showPopupDictionary(wordData, clientX, clientY) {
+    state.activePopupWord = wordData;
+    elements.popupWord.textContent = wordData.word;
+    elements.popupReading.textContent = wordData.reading || '';
+    elements.popupLevel.textContent = wordData.level || 'JLPT';
+    elements.popupMeaning.textContent = wordData.meaning || 'Перевод не найден';
+
+    const saved = isWordSaved(wordData.word);
+    if (saved) {
+        elements.popupBtnSave.classList.add('is-saved');
+        elements.popupBtnSaveText.textContent = '✓ В словаре';
+    } else {
+        elements.popupBtnSave.classList.remove('is-saved');
+        elements.popupBtnSaveText.textContent = 'В мой словарь';
+    }
+
+    elements.popupDictionaryCard.classList.remove('hidden');
+
+    // Intelligent positioning
+    const cardRect = elements.popupDictionaryCard.getBoundingClientRect();
+    let top = clientY - cardRect.height - 12;
+    let left = clientX - cardRect.width / 2;
+
+    if (top < 10) {
+        top = clientY + 24;
+    }
+    if (left < 10) {
+        left = 10;
+    }
+    if (left + cardRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - cardRect.width - 10;
+    }
+
+    elements.popupDictionaryCard.style.top = `${top}px`;
+    elements.popupDictionaryCard.style.left = `${left}px`;
+}
+
+function hidePopupDictionary() {
+    if (elements.popupDictionaryCard) {
+        elements.popupDictionaryCard.classList.add('hidden');
+    }
+    state.activePopupWord = null;
+}
+
+function lookupAndShowWord(query, clientX, clientY) {
+    if (!state.popupDictEnabled) return;
+    if (!query) return;
+
+    // Clean word from rubies and punctuation
+    let cleanQuery = query.replace(/[、。！？\s\t\n・「」『』（）]/g, '').trim();
+    if (!cleanQuery || cleanQuery.length > 20) return;
+
+    // 1. Check local text vocabulary if active
+    if (state.activeText && state.activeText.vocabulary) {
+        const localMatch = state.activeText.vocabulary.find(
+            v => v.word === cleanQuery || cleanQuery.includes(v.word) || v.word.includes(cleanQuery)
+        );
+        if (localMatch) {
+            showPopupDictionary({
+                word: localMatch.word,
+                reading: localMatch.furigana ? `[${localMatch.furigana}]` : '',
+                meaning: localMatch.translation,
+                level: state.activeText.level || 'JLPT'
+            }, clientX, clientY);
+            return;
+        }
+    }
+
+    // 2. Fetch from backend dictionary API
+    fetch(`/api/dictionary/lookup?q=${encodeURIComponent(cleanQuery)}`)
+        .then(res => {
+            if (res.ok) return res.json();
+            throw new Error('Not found');
+        })
+        .then(data => {
+            showPopupDictionary({
+                word: data.word,
+                reading: data.reading ? `[${data.reading}]` : '',
+                meaning: data.meaning,
+                level: data.level || 'JLPT'
+            }, clientX, clientY);
+        })
+        .catch(() => {
+            // If unknown word, still allow saving or show kanji
+            if (cleanQuery.length >= 1 && cleanQuery.length <= 8) {
+                showPopupDictionary({
+                    word: cleanQuery,
+                    reading: '',
+                    meaning: 'Слово из текста (сохраните для разбора)',
+                    level: state.activeText ? state.activeText.level : 'JLPT'
+                }, clientX, clientY);
+            }
+        });
+}
+
+function togglePopupDictStatus() {
+    state.popupDictEnabled = !state.popupDictEnabled;
+    if (elements.popupDictStatus) {
+        elements.popupDictStatus.textContent = state.popupDictEnabled ? 'ВКЛ' : 'ВЫКЛ';
+    }
+    if (elements.btnTogglePopupDict) {
+        elements.btnTogglePopupDict.classList.toggle('active', state.popupDictEnabled);
+    }
+    if (!state.popupDictEnabled) {
+        hidePopupDictionary();
+    }
+}
+
+// Personal Notebook UI Handlers
+function openNotebookModal() {
+    renderNotebookWords();
+    elements.savedWordsModalBackdrop.classList.remove('hidden');
+}
+
+function closeNotebookModal() {
+    elements.savedWordsModalBackdrop.classList.add('hidden');
+}
+
+function renderNotebookWords() {
+    const allWords = getSavedWords();
+    const filter = state.notebookFilter;
+    const query = (state.notebookSearchQuery || '').toLowerCase().trim();
+
+    const countAll = allWords.length;
+    const countLearned = allWords.filter(w => w.mastered).length;
+    const countLearning = countAll - countLearned;
+
+    if (elements.notebookCountAll) elements.notebookCountAll.textContent = countAll;
+    if (elements.notebookCountLearning) elements.notebookCountLearning.textContent = countLearning;
+    if (elements.notebookCountLearned) elements.notebookCountLearned.textContent = countLearned;
+    if (elements.notebookStatsText) elements.notebookStatsText.textContent = `Всего сохранённых слов: ${countAll}`;
+
+    // Filter words
+    let filtered = allWords;
+    if (filter === 'learning') {
+        filtered = filtered.filter(w => !w.mastered);
+    } else if (filter === 'learned') {
+        filtered = filtered.filter(w => w.mastered);
+    }
+
+    if (query) {
+        filtered = filtered.filter(w => 
+            w.word.toLowerCase().includes(query) ||
+            (w.reading && w.reading.toLowerCase().includes(query)) ||
+            (w.meaning && w.meaning.toLowerCase().includes(query))
+        );
+    }
+
+    if (filtered.length === 0) {
+        elements.notebookWordsList.innerHTML = `
+            <div class="notebook-empty-state">
+                <div class="notebook-empty-icon">📖</div>
+                <p>В этой категории пока нет слов.</p>
+                <small>Выделяйте любые слова в текстах для мгновенного перевода и добавления в словарь.</small>
+            </div>
+        `;
+        return;
+    }
+
+    elements.notebookWordsList.innerHTML = filtered.map(w => `
+        <div class="notebook-word-card ${w.mastered ? 'is-mastered' : ''}" data-word="${escapeHtml(w.word)}">
+            <div class="notebook-word-info">
+                <div class="notebook-word-top">
+                    <span class="notebook-word-jp">${escapeHtml(w.word)}</span>
+                    ${w.reading ? `<span class="notebook-word-reading">${escapeHtml(w.reading)}</span>` : ''}
+                    <span class="popup-level-tag">${escapeHtml(w.level || 'JLPT')}</span>
+                </div>
+                <div class="notebook-word-meaning">${escapeHtml(w.meaning)}</div>
+            </div>
+            <div class="notebook-word-actions">
+                <button class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-speak="${escapeHtml(w.word)}">🔊</button>
+                <label class="switch" title="${w.mastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
+                    <input type="checkbox" class="cb-toggle-mastered" data-word="${escapeHtml(w.word)}" ${w.mastered ? 'checked' : ''}>
+                    <span class="slider round"></span>
+                </label>
+                <button class="notebook-btn-icon btn-delete-saved" title="Удалить" data-delete="${escapeHtml(w.word)}">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function clearAllSavedWords() {
+    if (confirm('Вы уверены, что хотите полностью очистить свой словарь?')) {
+        saveWordsToStorage([]);
+        renderNotebookWords();
+    }
+}
+
 function returnToCatalog() {
     stopTimer();
     state.currentView = 'catalog';
@@ -912,10 +1213,157 @@ function initEventListeners() {
     elements.btnToggleTranslation.addEventListener('click', () => toggleSupplementaryDrawer('translation'));
     elements.btnToggleVocab.addEventListener('click', () => toggleSupplementaryDrawer('vocab'));
     elements.btnCloseDrawer.addEventListener('click', () => elements.supplementaryDrawer.classList.add('hidden'));
+
+    // Interactive Yomichan Dictionary & Saved Words Notebook
+    if (elements.btnOpenNotebook) {
+        elements.btnOpenNotebook.addEventListener('click', openNotebookModal);
+    }
+    if (elements.btnCloseNotebook) {
+        elements.btnCloseNotebook.addEventListener('click', closeNotebookModal);
+    }
+    if (elements.savedWordsModalBackdrop) {
+        elements.savedWordsModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === elements.savedWordsModalBackdrop) {
+                closeNotebookModal();
+            }
+        });
+    }
+
+    if (elements.notebookSearchInput) {
+        elements.notebookSearchInput.addEventListener('input', (e) => {
+            state.notebookSearchQuery = e.target.value;
+            renderNotebookWords();
+        });
+    }
+
+    // Filter pills in Notebook
+    const notebookFilterPills = document.querySelectorAll('.notebook-filter-pill');
+    notebookFilterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            notebookFilterPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.notebookFilter = pill.dataset.filter || 'all';
+            renderNotebookWords();
+        });
+    });
+
+    // Delegation for actions in saved words list
+    if (elements.notebookWordsList) {
+        elements.notebookWordsList.addEventListener('click', (e) => {
+            const speakBtn = e.target.closest('.btn-speak-saved');
+            if (speakBtn) {
+                speakJapanese(speakBtn.dataset.speak);
+                return;
+            }
+            const deleteBtn = e.target.closest('.btn-delete-saved');
+            if (deleteBtn) {
+                const wordToDelete = deleteBtn.dataset.delete;
+                let words = getSavedWords();
+                words = words.filter(w => w.word !== wordToDelete);
+                saveWordsToStorage(words);
+                renderNotebookWords();
+                return;
+            }
+        });
+
+        elements.notebookWordsList.addEventListener('change', (e) => {
+            const cb = e.target.closest('.cb-toggle-mastered');
+            if (cb) {
+                const wordText = cb.dataset.word;
+                let words = getSavedWords();
+                const target = words.find(w => w.word === wordText);
+                if (target) {
+                    target.mastered = cb.checked;
+                    saveWordsToStorage(words);
+                    renderNotebookWords();
+                }
+            }
+        });
+    }
+
+    if (elements.btnClearNotebook) {
+        elements.btnClearNotebook.addEventListener('click', clearAllSavedWords);
+    }
+
+    // Reader Popup Dictionary Tool Button
+    if (elements.btnTogglePopupDict) {
+        elements.btnTogglePopupDict.addEventListener('click', togglePopupDictStatus);
+    }
+
+    // Floating Popup Controls
+    if (elements.popupBtnClose) {
+        elements.popupBtnClose.addEventListener('click', hidePopupDictionary);
+    }
+    if (elements.popupBtnAudio) {
+        elements.popupBtnAudio.addEventListener('click', () => {
+            if (state.activePopupWord && state.activePopupWord.word) {
+                speakJapanese(state.activePopupWord.word);
+            }
+        });
+    }
+    if (elements.popupBtnSave) {
+        elements.popupBtnSave.addEventListener('click', () => {
+            toggleSaveWord(state.activePopupWord);
+        });
+    }
+
+    // Selection & Click trigger on Passage text
+    if (elements.passageContent) {
+        elements.passageContent.addEventListener('mouseup', (e) => {
+            if (!state.popupDictEnabled) return;
+            const sel = window.getSelection();
+            const text = sel ? sel.toString().trim() : '';
+            if (text && text.length >= 1 && text.length <= 15) {
+                const range = sel.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                lookupAndShowWord(text, rect.left + rect.width / 2, rect.top);
+            }
+        });
+
+        // Double click or click on Japanese words/rubies
+        elements.passageContent.addEventListener('click', (e) => {
+            if (!state.popupDictEnabled) return;
+            const target = e.target;
+            const rubyEl = target.closest('ruby');
+            if (rubyEl) {
+                // Get the kanji text without rt
+                let kanjiText = '';
+                rubyEl.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        kanjiText += node.textContent.trim();
+                    } else if (node.nodeName !== 'RT' && node.nodeName !== 'RP') {
+                        kanjiText += node.textContent.trim();
+                    }
+                });
+                if (kanjiText) {
+                    const rect = rubyEl.getBoundingClientRect();
+                    lookupAndShowWord(kanjiText, rect.left + rect.width / 2, rect.top);
+                }
+            }
+        });
+    }
+
+    // Close popup dictionary when clicking outside
+    document.addEventListener('mousedown', (e) => {
+        if (!elements.popupDictionaryCard || elements.popupDictionaryCard.classList.contains('hidden')) return;
+        if (!elements.popupDictionaryCard.contains(e.target) && !elements.passageContent.contains(e.target)) {
+            hidePopupDictionary();
+        }
+    });
+
+    // Global keyboard shortcuts (Esc to close modals / popups)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hidePopupDictionary();
+            closeNotebookModal();
+            closePretestModal();
+        }
+    });
 }
 
 // Startup
 document.addEventListener('DOMContentLoaded', () => {
     initEventListeners();
+    updateNotebookBadge();
     fetchAndRenderCatalog();
 });

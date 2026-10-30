@@ -62,5 +62,12 @@ read_data_2 = get_text_for_reading(text2_id, db)
 assert len(read_data_2.questions) >= 1
 print("Text 2 loaded successfully with questions.")
 
+# 4. Test Dictionary Lookup
+from main import dictionary_lookup
+dict_res = dictionary_lookup(q="持続可能")
+assert dict_res["word"] == "持続可能"
+assert dict_res["level"] == "N2"
+print("Dictionary Lookup PASSED:", dict_res["word"], "->", dict_res["reading"])
+
 db.close()
 print("ALL BACKEND & ANTI-CHEAT TESTS PASSED!")

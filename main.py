@@ -26,6 +26,7 @@ from schemas import (
     VocabularyItemSchema,
 )
 from seed import seed_database
+from dictionary import lookup_word
 
 
 @asynccontextmanager
@@ -124,6 +125,18 @@ def get_text_for_reading(text_id: int, db: Session = Depends(get_db)):
         content_html=text.content_html,
         questions=questions_read
     )
+
+
+@app.get("/api/dictionary/lookup", tags=["Dictionary"])
+def dictionary_lookup(q: str = Query(..., min_length=1, max_length=50)):
+    """
+    Lookup endpoint for Yomichan-style popup dictionary.
+    Returns reading, JLPT level, and Russian translation.
+    """
+    result = lookup_word(q)
+    if not result:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Word not found")
+    return result
 
 
 @app.post("/api/texts/{text_id}/submit", response_model=TextAnalysisSchema, tags=["Analysis"])
