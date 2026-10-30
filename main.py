@@ -70,6 +70,7 @@ def list_texts(
                 level=text.level,
                 category=text.category,
                 source_exam=text.source_exam,
+                is_nhk=text.is_nhk,
                 recommended_time_min=text.recommended_time_min,
                 question_count=len(text.questions)
             )
@@ -118,6 +119,7 @@ def get_text_for_reading(text_id: int, db: Session = Depends(get_db)):
         level=text.level,
         category=text.category,
         source_exam=text.source_exam,
+        is_nhk=text.is_nhk,
         recommended_time_min=text.recommended_time_min,
         content_html=text.content_html,
         questions=questions_read
@@ -204,6 +206,7 @@ def submit_and_analyze(text_id: int, payload: SubmitPayloadSchema, db: Session =
         level=text.level,
         category=text.category,
         source_exam=text.source_exam,
+        is_nhk=text.is_nhk,
         recommended_time_min=text.recommended_time_min,
         content_html=text.content_html,
         translation_ru=text.translation_ru,

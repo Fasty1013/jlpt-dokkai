@@ -12,6 +12,7 @@ class TextListItemSchema(BaseModel):
     level: str
     category: str
     source_exam: Optional[str] = None
+    is_nhk: bool = False
     recommended_time_min: int
     question_count: int
 
@@ -46,6 +47,7 @@ class TextReadSchema(BaseModel):
     level: str
     category: str
     source_exam: Optional[str] = None
+    is_nhk: bool = False
     recommended_time_min: int
     content_html: str
     questions: List[QuestionReadSchema]
@@ -108,6 +110,7 @@ class TextAnalysisSchema(BaseModel):
     level: str
     category: str
     source_exam: Optional[str] = None
+    is_nhk: bool = False
     recommended_time_min: int
     content_html: str
     translation_ru: str

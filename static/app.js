@@ -35,7 +35,8 @@ const state = {
     currentView: 'catalog', // 'catalog' | 'exercise' | 'analysis'
     filters: {
         level: '',
-        category: ''
+        category: '',
+        source: '' // '' | 'nhk' | 'exam'
     },
     activeText: null,        // Loaded TextReadSchema or TextAnalysisSchema
     pendingTextId: null,     // Selected text awaiting modal confirmation
@@ -79,6 +80,7 @@ const elements = {
     catalogGrid: document.getElementById('catalog-grid'),
     levelPills: document.getElementById('level-filter-pills'),
     categoryPills: document.getElementById('category-filter-pills'),
+    sourcePills: document.getElementById('source-filter-pills'),
 
     // Exercise Left Pane (Passage & Reader tools)
     passageTitle: document.getElementById('passage-title'),
@@ -220,7 +222,14 @@ async function fetchAndRenderCatalog() {
         const texts = await response.json();
         cachedCatalogTexts = texts;
 
-        if (texts.length === 0) {
+        let filteredTexts = texts;
+        if (state.filters.source === 'nhk') {
+            filteredTexts = filteredTexts.filter(t => t.is_nhk === true);
+        } else if (state.filters.source === 'exam') {
+            filteredTexts = filteredTexts.filter(t => t.is_nhk === false);
+        }
+
+        if (filteredTexts.length === 0) {
             elements.catalogGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #fff; border-radius: 12px; border: 1px solid var(--washi-border);">
                     <p style="font-size: 1.1rem; color: var(--sumi-600);">По выбранным фильтрам текстов пока нет.</p>
@@ -229,12 +238,13 @@ async function fetchAndRenderCatalog() {
             return;
         }
 
-        elements.catalogGrid.innerHTML = texts.map(text => `
+        elements.catalogGrid.innerHTML = filteredTexts.map(text => `
             <div class="catalog-card">
                 <div class="card-top">
                     <div class="card-meta">
                         <span class="level-tag" data-lvl="${text.level}">${text.level}</span>
                         <span class="category-tag">${CATEGORY_NAMES[text.category] || text.category}</span>
+                        ${text.is_nhk ? `<span class="nhk-badge">NHK WORLD</span>` : ''}
                         ${text.source_exam ? `<span class="exam-archive-badge">📜 ${text.source_exam}</span>` : ''}
                     </div>
                     <h3 class="card-title">${text.title}</h3>
@@ -788,6 +798,17 @@ function initEventListeners() {
         state.filters.category = pill.dataset.category;
         fetchAndRenderCatalog();
     });
+
+    if (elements.sourcePills) {
+        elements.sourcePills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.sourcePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.filters.source = pill.dataset.source;
+            fetchAndRenderCatalog();
+        });
+    }
 
     // Form submission
     elements.questionsForm.addEventListener('submit', submitAnswers);
