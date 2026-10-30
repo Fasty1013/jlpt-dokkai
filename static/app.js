@@ -7,6 +7,16 @@
 // Application State & LocalStorage Configuration
 // ============================================================================
 
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 const CONFIG_STORAGE_KEY = 'dokkai_pretest_config';
 
 function loadStoredConfig() {
@@ -33,7 +43,8 @@ function saveStoredConfig(config) {
 }
 
 const state = {
-    currentView: 'catalog', // 'catalog' | 'exercise' | 'analysis'
+    currentView: 'catalog', // 'catalog' | 'exercise' | 'notebook'
+    activeTab: 'catalog',   // 'catalog' | 'notebook'
     filters: {
         level: '',
         category: '',
@@ -74,8 +85,11 @@ const state = {
 // ============================================================================
 
 const elements = {
-    // Top Bar
+    // Top Bar & Navigation Tabs
     btnHome: document.getElementById('btn-home'),
+    headerNav: document.getElementById('header-nav'),
+    btnTabCatalog: document.getElementById('btn-tab-catalog'),
+    btnTabNotebook: document.getElementById('btn-tab-notebook'),
     exerciseHeaderControls: document.getElementById('exercise-header-controls'),
     headerLevelTag: document.getElementById('header-level-tag'),
     headerCategoryTag: document.getElementById('header-category-tag'),
@@ -83,12 +97,12 @@ const elements = {
     timerDisplay: document.getElementById('timer-display'),
     timerTarget: document.getElementById('timer-target'),
     btnAbortExercise: document.getElementById('btn-abort-exercise'),
-    btnOpenNotebook: document.getElementById('btn-open-notebook'),
     headerSavedCount: document.getElementById('header-saved-count'),
 
     // Views
     catalogView: document.getElementById('catalog-view'),
     exerciseView: document.getElementById('exercise-view'),
+    notebookView: document.getElementById('notebook-view'),
 
     // Catalog
     catalogGrid: document.getElementById('catalog-grid'),
@@ -876,9 +890,11 @@ function speakJapanese(text) {
 function getSavedWords() {
     try {
         const stored = localStorage.getItem(NOTEBOOK_STORAGE_KEY);
-        return stored ? JSON.parse(stored) : [];
+        if (!stored) return [];
+        const parsed = JSON.parse(stored);
+        return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
-        console.warn('Failed to load saved words', e);
+        console.warn('Failed to load saved words, using fallback []', e);
         return [];
     }
 }
@@ -1044,77 +1060,111 @@ function togglePopupDictStatus() {
     }
 }
 
-// Personal Notebook UI Handlers
-function openNotebookModal() {
-    renderNotebookWords();
-    elements.savedWordsModalBackdrop.classList.remove('hidden');
-}
+// ============================================================================
+// Main Tab Switching & Personal Notebook Logic
+// ============================================================================
 
-function closeNotebookModal() {
-    elements.savedWordsModalBackdrop.classList.add('hidden');
+function switchMainTab(tabName) {
+    state.activeTab = tabName;
+
+    if (tabName === 'notebook') {
+        if (state.currentView === 'exercise') {
+            if (!confirm('Вы находитесь в режиме решения теста. Перейти во вкладку «Мой словарь»? (Текущая сессия чтения будет завершена)')) {
+                return;
+            }
+            stopTimer();
+        }
+        state.currentView = 'notebook';
+        elements.catalogView.classList.add('hidden');
+        elements.exerciseView.classList.add('hidden');
+        elements.exerciseHeaderControls.classList.add('hidden');
+        elements.supplementaryDrawer.classList.add('hidden');
+        elements.hardcoreNotice.classList.add('hidden');
+        elements.notebookView.classList.remove('hidden');
+
+        if (elements.btnTabCatalog) elements.btnTabCatalog.classList.remove('active');
+        if (elements.btnTabNotebook) elements.btnTabNotebook.classList.add('active');
+
+        renderNotebookWords();
+    } else {
+        returnToCatalog();
+    }
 }
 
 function renderNotebookWords() {
     const allWords = getSavedWords();
-    const filter = state.notebookFilter;
+    const safeWords = Array.isArray(allWords) ? allWords : [];
+    const filter = state.notebookFilter || 'all';
     const query = (state.notebookSearchQuery || '').toLowerCase().trim();
 
-    const countAll = allWords.length;
-    const countLearned = allWords.filter(w => w.mastered).length;
+    const countAll = safeWords.length;
+    const countLearned = safeWords.filter(w => w && w.mastered).length;
     const countLearning = countAll - countLearned;
 
     if (elements.notebookCountAll) elements.notebookCountAll.textContent = countAll;
     if (elements.notebookCountLearning) elements.notebookCountLearning.textContent = countLearning;
     if (elements.notebookCountLearned) elements.notebookCountLearned.textContent = countLearned;
+    if (elements.headerSavedCount) elements.headerSavedCount.textContent = countAll;
     if (elements.notebookStatsText) elements.notebookStatsText.textContent = `Всего сохранённых слов: ${countAll}`;
 
-    // Filter words
-    let filtered = allWords;
+    // Filter words safely
+    let filtered = safeWords;
     if (filter === 'learning') {
-        filtered = filtered.filter(w => !w.mastered);
+        filtered = filtered.filter(w => w && !w.mastered);
     } else if (filter === 'learned') {
-        filtered = filtered.filter(w => w.mastered);
+        filtered = filtered.filter(w => w && w.mastered);
     }
 
     if (query) {
         filtered = filtered.filter(w => 
-            w.word.toLowerCase().includes(query) ||
+            (w.word && w.word.toLowerCase().includes(query)) ||
             (w.reading && w.reading.toLowerCase().includes(query)) ||
             (w.meaning && w.meaning.toLowerCase().includes(query))
         );
     }
 
-    if (filtered.length === 0) {
-        elements.notebookWordsList.innerHTML = `
+    const container = elements.notebookWordsList;
+    if (!container) return;
+
+    if (!filtered || filtered.length === 0) {
+        container.innerHTML = `
             <div class="notebook-empty-state">
                 <div class="notebook-empty-icon">📖</div>
-                <p>В этой категории пока нет слов.</p>
-                <small>Выделяйте любые слова в текстах для мгновенного перевода и добавления в словарь.</small>
+                <p>В словаре пока нет сохранённых слов.</p>
+                <small>Выделяйте или кликайте на любые японские слова в текстах, чтобы посмотреть перевод и добавить их в свой персональный словарь.</small>
             </div>
         `;
         return;
     }
 
-    elements.notebookWordsList.innerHTML = filtered.map(w => `
-        <div class="notebook-word-card ${w.mastered ? 'is-mastered' : ''}" data-word="${escapeHtml(w.word)}">
+    container.innerHTML = filtered.map(w => {
+        const wordText = escapeHtml(w.word || '');
+        const readingText = escapeHtml(w.reading || '');
+        const levelText = escapeHtml(w.level || 'JLPT');
+        const meaningText = escapeHtml(w.meaning || '');
+        const isMastered = Boolean(w.mastered);
+
+        return `
+        <div class="notebook-word-card ${isMastered ? 'is-mastered' : ''}" data-word="${wordText}">
             <div class="notebook-word-info">
                 <div class="notebook-word-top">
-                    <span class="notebook-word-jp">${escapeHtml(w.word)}</span>
-                    ${w.reading ? `<span class="notebook-word-reading">${escapeHtml(w.reading)}</span>` : ''}
-                    <span class="popup-level-tag">${escapeHtml(w.level || 'JLPT')}</span>
+                    <span class="notebook-word-jp">${wordText}</span>
+                    ${readingText ? `<span class="notebook-word-reading">${readingText}</span>` : ''}
+                    <span class="popup-level-tag">${levelText}</span>
                 </div>
-                <div class="notebook-word-meaning">${escapeHtml(w.meaning)}</div>
+                <div class="notebook-word-meaning">${meaningText}</div>
             </div>
             <div class="notebook-word-actions">
-                <button class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-speak="${escapeHtml(w.word)}">🔊</button>
-                <label class="switch" title="${w.mastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
-                    <input type="checkbox" class="cb-toggle-mastered" data-word="${escapeHtml(w.word)}" ${w.mastered ? 'checked' : ''}>
+                <button type="button" class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-speak="${wordText}">🔊</button>
+                <label class="switch" title="${isMastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
+                    <input type="checkbox" class="cb-toggle-mastered" data-word="${wordText}" ${isMastered ? 'checked' : ''}>
                     <span class="slider round"></span>
                 </label>
-                <button class="notebook-btn-icon btn-delete-saved" title="Удалить" data-delete="${escapeHtml(w.word)}">🗑️</button>
+                <button type="button" class="notebook-btn-icon btn-delete-saved" title="Удалить" data-delete="${wordText}">🗑️</button>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function clearAllSavedWords() {
@@ -1127,15 +1177,20 @@ function clearAllSavedWords() {
 function returnToCatalog() {
     stopTimer();
     state.currentView = 'catalog';
+    state.activeTab = 'catalog';
     state.activeText = null;
     state.userAnswers = {};
     state.currentQuestionIndex = 0;
 
     elements.exerciseView.classList.add('hidden');
     elements.exerciseHeaderControls.classList.add('hidden');
+    elements.notebookView.classList.add('hidden');
     elements.catalogView.classList.remove('hidden');
     elements.supplementaryDrawer.classList.add('hidden');
     elements.hardcoreNotice.classList.add('hidden');
+
+    if (elements.btnTabCatalog) elements.btnTabCatalog.classList.add('active');
+    if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
 
     fetchAndRenderCatalog();
 }
@@ -1214,19 +1269,12 @@ function initEventListeners() {
     elements.btnToggleVocab.addEventListener('click', () => toggleSupplementaryDrawer('vocab'));
     elements.btnCloseDrawer.addEventListener('click', () => elements.supplementaryDrawer.classList.add('hidden'));
 
-    // Interactive Yomichan Dictionary & Saved Words Notebook
-    if (elements.btnOpenNotebook) {
-        elements.btnOpenNotebook.addEventListener('click', openNotebookModal);
+    // Top Navigation Tabs (Тексты и тесты vs Мой словарь)
+    if (elements.btnTabCatalog) {
+        elements.btnTabCatalog.addEventListener('click', () => switchMainTab('catalog'));
     }
-    if (elements.btnCloseNotebook) {
-        elements.btnCloseNotebook.addEventListener('click', closeNotebookModal);
-    }
-    if (elements.savedWordsModalBackdrop) {
-        elements.savedWordsModalBackdrop.addEventListener('click', (e) => {
-            if (e.target === elements.savedWordsModalBackdrop) {
-                closeNotebookModal();
-            }
-        });
+    if (elements.btnTabNotebook) {
+        elements.btnTabNotebook.addEventListener('click', () => switchMainTab('notebook'));
     }
 
     if (elements.notebookSearchInput) {

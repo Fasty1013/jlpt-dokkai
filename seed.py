@@ -8,6 +8,7 @@ from database import SessionLocal, engine, Base
 import models
 from models import Text, Question, Option
 from nhk_importer import import_nhk_articles_to_db
+from dictionary import get_authentic_hiragana, lookup_word
 
 
 # Matrix Themes Definition for High-Quality Procedural Generation (5 levels x 5 categories)
@@ -88,9 +89,23 @@ THEME_TEMPLATES = {
 }
 
 
+def to_ruby_tag(word: str) -> str:
+    """
+    Безопасно генерирует <ruby> тег со строго соответствующей хираганой.
+    Если слово не имеет кандзи или не найдено, возвращает исходное слово без искажений.
+    """
+    if not word:
+        return ""
+    reading = get_authentic_hiragana(word)
+    if reading and reading != word:
+        return f"<ruby>{word}<rt>{reading}</rt></ruby>"
+    return word
+
+
 def build_text_record(level: str, category: str, index: int) -> Text:
     """
     Build a realistic, fully fleshed Japanese reading passage with multi-question relations.
+    Authentic hiragana furigana is strictly bound to its corresponding kanji word.
     """
     templates = THEME_TEMPLATES[category]
     theme_meta = templates[(index - 1) % len(templates)]
@@ -103,13 +118,19 @@ def build_text_record(level: str, category: str, index: int) -> Text:
     time_map = {"short": 2 if level in ["N5", "N4"] else 3, "medium": 4, "long": 6 if level in ["N3", "N2"] else 7, "info_search": 5, "article": 5}
     rec_time = time_map.get(category, 4)
 
+    # Authentic ruby generation without index shifts or mock text
+    ruby_kw1 = to_ruby_tag(topic_kw1)
+    ruby_kw2 = to_ruby_tag(topic_kw2)
+    ruby_kw3 = to_ruby_tag(topic_kw3)
+    ruby_kw4 = to_ruby_tag(topic_kw4)
+
     # HTML Body Generation based on Category
     if category == "info_search":
         content_html = f"""
 <div class="flyer-container">
     <div class="flyer-header">
         <div class="flyer-badge">{level} {topic_kw1}案内</div>
-        <h2 class="flyer-title"><ruby>{theme_title}<rt>{topic_kw2}</rt></ruby></h2>
+        <h2 class="flyer-title">{theme_title}</h2>
         <p class="flyer-subtitle">ご利用条件・料金体系・注意事項一覧</p>
     </div>
     <table class="flyer-table">
@@ -133,14 +154,14 @@ def build_text_record(level: str, category: str, index: int) -> Text:
 </div>
 """.strip()
     else:
-        # Prose structure with evidence tags
+        # Prose structure with authentic furigana and evidence tags
         nhk_badge = '<div class="nhk-article-badge">NHK WORLD-JAPAN REPORT</div>\n' if is_nhk_item else ''
         content_html = f"""
 {nhk_badge}<div class="passage-body">
-    <p><ruby>{topic_kw1}<rt>トピック</rt></ruby>に関する議論は、<ruby>現代<rt>げんだい</rt></ruby>社会において<ruby>非常<rt>ひじょう</rt></ruby>に<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>位置<rt>いち</rt></ruby>を占めています。多くの人々は<ruby>表面<rt>ひょうめん</rt></ruby>的な<ruby>便利<rt>べんり</rt></ruby>さばかりに目を奪われがちですが、その<ruby>根底<rt>こんてい</rt></ruby>にある構造的な変化を見逃してはなりません。</p>
-    <p><span id="ev-q1">第一に、{topic_kw2}の進展によって従来の常識や固定観念が大きく覆され、新たな社会的価値観が形成されつつある点に注目すべきです。</span>これにより、これまでの手法では解決できなかった複雑な課題に対し、柔軟なアプローチが可能となりました。</p>
-    <p><span id="ev-q2">さらに重要なのは、{topic_kw3}と{topic_kw4}が互いに影響を及ぼし合うことで、個人が自律的な意思決定を行える環境が整ってきているという事実です。</span>安易な流行に流されることなく、物事の本質を自らの頭で吟味する姿勢が求められています。</p>
-    <p><span id="ev-q3">筆者が最も強調したいのは、目先の成果や効率のみを追求するのではなく、長期的視点に立って持続可能な共生社会を築くことの尊さです。</span></p>
+    <p>{ruby_kw1}に<ruby>関<rt>かん</rt></ruby>する<ruby>議論<rt>ぎろん</rt></ruby>は、<ruby>現代<rt>げんだい</rt></ruby><ruby>社会<rt>しゃかい</rt></ruby>において<ruby>非常<rt>ひじょう</rt></ruby>に<ruby>重要<rt>じゅうよう</rt></ruby>な<ruby>位置<rt>いち</rt></ruby>を<ruby>占<rt>し</rt></ruby>めています。多くの<ruby>人々<rt>ひとびと</rt></ruby>は<ruby>表面<rt>ひょうめん</rt></ruby>的な<ruby>便利<rt>べんり</rt></ruby>さばかりに<ruby>目<rt>め</rt></ruby>を<ruby>奪<rt>うば</rt></ruby>われがちですが、その<ruby>根底<rt>こんてい</rt></ruby>にある<ruby>構造<rt>こうぞう</rt></ruby>的な<ruby>変化<rt>へんか</rt></ruby>を<ruby>見逃<rt>みのが</rt></ruby>してはなりません。</p>
+    <p><span id="ev-q1">第一に、{ruby_kw2}の<ruby>進展<rt>しんてん</rt></ruby>によって<ruby>従来<rt>じゅうらい</rt></ruby>の<ruby>常識<rt>じょうしき</rt></ruby>や<ruby>固定観念<rt>こていかんねん</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きく<ruby>覆<rt>くつがえ</rt></ruby>され、<ruby>新<rt>あら</rt></ruby>たな<ruby>社会的<rt>しゃかいてき</rt></ruby><ruby>価値観<rt>かちかん</rt></ruby>が<ruby>形成<rt>けいせい</rt></ruby>されつつある<ruby>点<rt>てん</rt></ruby>に<ruby>注目<rt>ちゅうもく</rt></ruby>すべきです。</span>これにより、これまでの<ruby>手法<rt>しゅほう</rt></ruby>では<ruby>解決<rt>かいけつ</rt></ruby>できなかった<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>課題<rt>かだい</rt></ruby>に<ruby>対<rt>たい</rt></ruby>し、<ruby>柔軟<rt>じゅうなん</rt></ruby>なアプローチが<ruby>可能<rt>かのう</rt></ruby>となりました。</p>
+    <p><span id="ev-q2">さらに<ruby>重要<rt>じゅうよう</rt></ruby>なのは、{ruby_kw3}と{ruby_kw4}が<ruby>互<rt>たが</rt></ruby>いに<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>及<rt>およ</rt></ruby>ぼし<ruby>合<rt>あ</rt></ruby>うことで、<ruby>個人<rt>こじん</rt></ruby>が<ruby>自律的<rt>じりつてき</rt></ruby>な<ruby>意思決定<rt>いしけってい</rt></ruby>を<ruby>行<rt>おこな</rt></ruby>える<ruby>環境<rt>かんきょう</rt></ruby>が<ruby>整<rt>ととの</rt></ruby>ってきているという<ruby>事実<rt>じじつ</rt></ruby>です。</span><ruby>安易<rt>あんい</rt></ruby>な<ruby>流行<rt>りゅうこう</rt></ruby>に<ruby>流<rt>なが</rt></ruby>されることなく、<ruby>物事<rt>ものごと</rt></ruby>の<ruby>本質<rt>ほんしつ</rt></ruby>を<ruby>自<rt>みずか</rt></ruby>らの<ruby>頭<rt>あたま</rt></ruby>で<ruby>吟味<rt>ぎんみ</rt></ruby>する<ruby>姿勢<rt>しせい</rt></ruby>が<ruby>求<rt>もと</rt></ruby>められています。</p>
+    <p><span id="ev-q3"><ruby>筆者<rt>ひっしゃ</rt></ruby>が<ruby>最<rt>もっと</rt></ruby>も<ruby>強調<rt>きょうちょう</rt></ruby>したいのは、<ruby>目先<rt>めさき</rt></ruby>の<ruby>成果<rt>せいか</rt></ruby>や<ruby>効率<rt>こうりつ</rt></ruby>のみを<ruby>追求<rt>ついきゅう</rt></ruby>するのではなく、<ruby>長期的<rt>ちょうきてき</rt></ruby><ruby>視点<rt>してん</rt></ruby>に<ruby>立<rt>た</rt></ruby>って<ruby>持続可能<rt>じぞくかのう</rt></ruby>な<ruby>共生<rt>きょうせい</rt></ruby><ruby>社会<rt>しゃかい</rt></ruby>を<ruby>築<rt>きず</rt></ruby>くことの<ruby>尊<rt>とうと</rt></ruby>さです。</span></p>
 </div>
 """.strip()
 
@@ -151,11 +172,30 @@ def build_text_record(level: str, category: str, index: int) -> Text:
 Автор подчеркивает: важно не гнаться за сиюминутной выгодой, а смотреть в долгосрочную перспективу ради устойчивого гармоничного развития общества.
 """.strip()
 
+    v1_info = lookup_word(topic_kw1)
+    v2_info = lookup_word(topic_kw2)
+
     vocab = [
-        {"word": topic_kw1, "furigana": "キーワード", "translation": f"ключевой термин темы ({topic_kw1})"},
-        {"word": topic_kw2, "furigana": "ようそ", "translation": f"аспект ({topic_kw2})"},
-        {"word": "持続可能", "furigana": "じぞくかのう", "translation": "устойчивый, способный продолжаться долго"},
-        {"word": "意思決定", "furigana": "いしけってい", "translation": "принятие решений"}
+        {
+            "word": topic_kw1,
+            "furigana": (v1_info.get("reading") if v1_info else get_authentic_hiragana(topic_kw1)) or topic_kw1,
+            "translation": (v1_info.get("meaning") if v1_info else f"ключевой термин ({topic_kw1})")
+        },
+        {
+            "word": topic_kw2,
+            "furigana": (v2_info.get("reading") if v2_info else get_authentic_hiragana(topic_kw2)) or topic_kw2,
+            "translation": (v2_info.get("meaning") if v2_info else f"аспект ({topic_kw2})")
+        },
+        {
+            "word": "持続可能",
+            "furigana": "じぞくかのう",
+            "translation": "устойчивый, экологичный"
+        },
+        {
+            "word": "意思決定",
+            "furigana": "いしけってい",
+            "translation": "принятие решений"
+        }
     ]
 
     text_obj = Text(
@@ -248,16 +288,17 @@ def build_text_record(level: str, category: str, index: int) -> Text:
     return text_obj
 
 
-def seed_database():
+def seed_database(force: bool = False):
     """
     Main seeding routine: Guarantees 12 unique, high-quality texts for every combination
     of 5 Levels x 5 Categories = 300 rich texts total.
+    If force=True, forces regeneration with updated authentic furigana.
     """
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
     existing_count = db.query(Text).count()
-    if existing_count >= 250:
+    if existing_count >= 250 and not force:
         print(f"Database already populated with {existing_count} texts. Skipping mass generation.")
         db.close()
         return
@@ -287,4 +328,5 @@ def seed_database():
 
 
 if __name__ == "__main__":
-    seed_database()
+    force_seed = "--force" in sys.argv
+    seed_database(force=force_seed)

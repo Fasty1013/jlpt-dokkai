@@ -41,14 +41,18 @@
                 </button>
             </div>
 
-            <!-- Global Action: My Vocabulary Notebook -->
-            <div class="header-actions">
-                <button class="btn btn-notebook" id="btn-open-notebook" title="Открыть сохранённые слова">
-                    <span class="btn-icon">⭐</span>
-                    <span class="btn-text">Мой словарь</span>
+            <!-- Header Tab Navigation -->
+            <nav class="header-nav" id="header-nav">
+                <button type="button" class="nav-tab active" id="btn-tab-catalog" data-tab="catalog" title="Каталог текстов и тестов JLPT">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label">Тексты и тесты</span>
+                </button>
+                <button type="button" class="nav-tab" id="btn-tab-notebook" data-tab="notebook" title="Мой персональный словарь">
+                    <span class="nav-icon">⭐</span>
+                    <span class="nav-label">Мой словарь</span>
                     <span class="notebook-badge" id="header-saved-count">0</span>
                 </button>
-            </div>
+            </nav>
         </header>
 
         <!-- Main Body -->
@@ -253,6 +257,40 @@
                     </div>
                 </div>
             </section>
+
+            <!-- VIEW 3: NOTEBOOK VIEW (Вкладка "Мой словарь") -->
+            <section id="notebook-view" class="view notebook-view hidden">
+                <div class="notebook-page-container">
+                    <div class="catalog-hero">
+                        <div class="hero-badge">PERSONAL VOCABULARY NOTEBOOK</div>
+                        <h1 class="hero-title">⭐ Мой словарь японского языка</h1>
+                        <p class="hero-desc">
+                            Ваш персональный список сохранённых японских слов, правильных чтений (фуригана) и переводов. Слушайте японское произношение и отмечайте выученное!
+                        </p>
+                    </div>
+
+                    <div class="notebook-page-card">
+                        <div class="notebook-toolbar">
+                            <div class="notebook-search-box">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" id="notebook-search-input" placeholder="Поиск по иероглифам, чтению (хирагане) или русскому переводу...">
+                            </div>
+                            <div class="notebook-filters" id="notebook-filters">
+                                <button type="button" class="notebook-filter-pill active" data-filter="all">Все (<span id="notebook-count-all">0</span>)</button>
+                                <button type="button" class="notebook-filter-pill" data-filter="learning">Изучаю (<span id="notebook-count-learning">0</span>)</button>
+                                <button type="button" class="notebook-filter-pill" data-filter="learned">Выучено (<span id="notebook-count-learned">0</span>)</button>
+                            </div>
+                        </div>
+                        <div class="notebook-body" id="notebook-words-list">
+                            <!-- Dynamically populated word items -->
+                        </div>
+                        <div class="notebook-footer">
+                            <span class="notebook-stats" id="notebook-stats-text">Всего сохранённых слов: 0</span>
+                            <button type="button" class="btn btn-ghost btn-sm text-danger" id="btn-clear-notebook">Очистить весь словарь</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- PRE-TEST SETTINGS MODAL -->
@@ -334,40 +372,6 @@
                 <button class="btn-dict-save" id="popup-btn-save">
                     <span class="btn-icon">⭐</span> <span id="popup-btn-save-text">В мой словарь</span>
                 </button>
-            </div>
-        </div>
-
-        <!-- SAVED WORDS NOTEBOOK MODAL -->
-        <div id="saved-words-modal-backdrop" class="modal-backdrop hidden">
-            <div class="notebook-modal-card">
-                <div class="notebook-header">
-                    <div class="notebook-title-wrap">
-                        <span class="notebook-icon">⭐</span>
-                        <div>
-                            <h3 class="notebook-title">Мой словарь</h3>
-                            <p class="notebook-subtitle">Сохранённые японские слова для повторения</p>
-                        </div>
-                    </div>
-                    <button class="modal-close" id="btn-close-notebook">✕</button>
-                </div>
-                <div class="notebook-toolbar">
-                    <div class="notebook-search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="notebook-search-input" placeholder="Поиск по иероглифам, чтению или значению...">
-                    </div>
-                    <div class="notebook-filters">
-                        <button class="notebook-filter-pill active" data-filter="all">Все (<span id="notebook-count-all">0</span>)</button>
-                        <button class="notebook-filter-pill" data-filter="learning">Изучаю (<span id="notebook-count-learning">0</span>)</button>
-                        <button class="notebook-filter-pill" data-filter="learned">Выучено (<span id="notebook-count-learned">0</span>)</button>
-                    </div>
-                </div>
-                <div class="notebook-body" id="notebook-words-list">
-                    <!-- Dynamically populated word items -->
-                </div>
-                <div class="notebook-footer">
-                    <span class="notebook-stats" id="notebook-stats-text">Всего слов: 0</span>
-                    <button class="btn btn-ghost btn-sm text-danger" id="btn-clear-notebook">Очистить список</button>
-                </div>
             </div>
         </div>
     </div>
