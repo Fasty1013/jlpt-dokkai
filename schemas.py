@@ -78,6 +78,7 @@ class OptionAnalysisSchema(BaseModel):
     option_number: int
     option_text: str
     is_correct: bool
+    trap_type: Optional[str] = None
     option_explanation: str
     was_selected: bool
 

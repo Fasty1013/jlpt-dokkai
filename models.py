@@ -7,6 +7,7 @@ class Text(Base):
     __tablename__ = "texts"
 
     id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(100), unique=True, nullable=True, index=True)
     title = Column(String(255), nullable=False)
     level = Column(String(10), nullable=False, index=True)  # N5, N4, N3, N2, N1
     category = Column(String(50), nullable=False, index=True)  # short, medium, long, info_search, article
@@ -52,6 +53,7 @@ class Option(Base):
     option_number = Column(Integer, nullable=False)
     option_text = Column(SqlText, nullable=False)
     is_correct = Column(Boolean, nullable=False, default=False)
+    trap_type = Column(String(50), nullable=True)
     option_explanation = Column(SqlText, nullable=False)
 
     question = relationship("Question", back_populates="options")

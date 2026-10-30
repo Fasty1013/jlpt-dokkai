@@ -310,21 +310,22 @@ def seed_database(force: bool = False):
     db.commit()
 
     all_texts_batch = []
-    # 5 Levels x 5 Categories x 12 unique texts = 300 texts
-    for lvl in LEVELS:
+    # 2 Levels (N5, N4) x 5 Categories x 12 unique texts = 120 baseline texts
+    for lvl in ["N5", "N4"]:
         for cat in CATEGORIES:
             for idx in range(1, 13):
                 text_item = build_text_record(level=lvl, category=cat, index=idx)
                 all_texts_batch.append(text_item)
 
-    print(f"Adding {len(all_texts_batch)} synthesized texts to database...")
+    print(f"Adding {len(all_texts_batch)} baseline texts for N5/N4 to database...")
     db.add_all(all_texts_batch)
     db.commit()
     db.close()
 
-    # Also import real NHK articles
-    nhk_count = import_nhk_articles_to_db()
-    print(f"Large-scale seeding completed successfully! Total 300+ texts generated (including {nhk_count} NHK features).")
+    # Load high-difficulty authentic exam materials for N3, N2, N1 from content/*.json
+    from content_loader import load_content
+    load_content(force_replace_n3_n1=True)
+    print(f"Large-scale seeding completed successfully! Total 302 texts (N5-N4 baseline + N3-N1 authentic content).")
 
 
 if __name__ == "__main__":

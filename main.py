@@ -182,6 +182,7 @@ def submit_and_analyze(text_id: int, payload: SubmitPayloadSchema, db: Session =
                     option_number=opt.option_number,
                     option_text=opt.option_text,
                     is_correct=opt.is_correct,
+                    trap_type=opt.trap_type,
                     option_explanation=opt.option_explanation,
                     was_selected=was_selected
                 )

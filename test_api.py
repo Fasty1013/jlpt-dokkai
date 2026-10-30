@@ -32,7 +32,24 @@ assert "vocabulary_json" not in dumped, "Leak: vocabulary found in text schema!"
 first_opt = first_q["options"][0]
 assert "is_correct" not in first_opt, "Leak: is_correct found in option!"
 assert "option_explanation" not in first_opt, "Leak: option_explanation found in option!"
-print("Anti-Cheat Strict Mode PASSED: No answers or explanations leaked to client.")
+assert "trap_type" not in first_opt, "Leak: trap_type found in option before submit!"
+print("Anti-Cheat Strict Mode PASSED: No answers, explanations, or trap types leaked to client.")
+
+# 2.1 Test Anti-Cheat across N3, N2, N1 authentic texts
+for test_lvl in ["N3", "N2", "N1"]:
+    lvl_texts = [t for t in catalog if t.level == test_lvl]
+    assert len(lvl_texts) > 0, f"No texts found for level {test_lvl}!"
+    sample_text = get_text_for_reading(text_id=lvl_texts[0].id, db=db)
+    s_dump = sample_text.model_dump()
+    assert "translation_ru" not in s_dump, f"Leak: translation_ru found in {test_lvl}!"
+    for q in s_dump["questions"]:
+        assert "evidence_span_id" not in q, f"Leak: evidence_span_id found in {test_lvl} question!"
+        assert "general_explanation" not in q, f"Leak: general_explanation in {test_lvl} question!"
+        for o in q["options"]:
+            assert "is_correct" not in o, f"Leak: is_correct in {test_lvl} option!"
+            assert "option_explanation" not in o, f"Leak: option_explanation in {test_lvl} option!"
+            assert "trap_type" not in o, f"Leak: trap_type in {test_lvl} option!"
+print("Cross-Level Anti-Cheat Isolation PASSED: N3, N2, N1 fully verified.")
 
 # 3. Test Submit and Analyze endpoint function
 # Find which option is correct in the database for question 1
