@@ -1,5 +1,6 @@
 /**
  * JLPT Dokkai Master - Frontend Application Logic (Vanilla JS ES6+)
+ * Supports Step-by-Step Question Wizard & Tabbed Post-Submit Analysis
  */
 
 // ============================================================================
@@ -41,7 +42,11 @@ const state = {
     activeText: null,        // Loaded TextReadSchema or TextAnalysisSchema
     pendingTextId: null,     // Selected text awaiting modal confirmation
     pendingTextData: null,
+    
+    // Step-by-Step Wizard State
+    currentQuestionIndex: 0, // 0-based index of the active question
     userAnswers: {},         // questionId -> selectedOptionId
+    
     timer: {
         seconds: 0,
         intervalId: null
@@ -54,7 +59,9 @@ const state = {
         evidenceVisible: true,
         fontFamily: 'gothic',  // 'gothic' | 'mincho'
         fontSizePx: 20         // default 20px
-    }
+    },
+    // Analysis tab state
+    analysisActiveTabIdx: 0
 };
 
 // ============================================================================
@@ -94,15 +101,19 @@ const elements = {
     btnFontIncrease: document.getElementById('btn-font-increase'),
     btnFontDecrease: document.getElementById('btn-font-decrease'),
 
-    // Exercise Right Pane (Questions)
+    // Wizard Controls (Right Pane)
+    wizardHeader: document.getElementById('wizard-header'),
+    wizardStepLabel: document.getElementById('wizard-step-label'),
+    wizardTrack: document.getElementById('wizard-track'),
     answeredCount: document.getElementById('answered-count'),
     totalQuestionsCount: document.getElementById('total-questions-count'),
-    questionsForm: document.getElementById('questions-form'),
-    questionsList: document.getElementById('questions-list'),
-    btnSubmitAnswers: document.getElementById('btn-submit-answers'),
-    submitActionBar: document.getElementById('submit-action-bar'),
+    wizardCardArea: document.getElementById('wizard-card-area'),
+    wizardNavBar: document.getElementById('wizard-nav-bar'),
+    btnWizardPrev: document.getElementById('btn-wizard-prev'),
+    btnWizardNext: document.getElementById('btn-wizard-next'),
+    btnWizardSubmit: document.getElementById('btn-wizard-submit'),
 
-    // Analysis Post-Submit Banner & Tools
+    // Analysis Post-Submit Tabbed View
     analysisBanner: document.getElementById('analysis-banner'),
     scoreText: document.getElementById('score-text'),
     scorePercent: document.getElementById('score-percent'),
@@ -118,6 +129,9 @@ const elements = {
     btnToggleVocab: document.getElementById('btn-toggle-vocab'),
     vocabCountBadge: document.getElementById('vocab-count-badge'),
     btnBackToCatalog: document.getElementById('btn-back-to-catalog'),
+    analysisQAContainer: document.getElementById('analysis-qa-container'),
+    analysisTabs: document.getElementById('analysis-tabs'),
+    analysisActiveCard: document.getElementById('analysis-active-card'),
 
     // Supplementary Drawer
     supplementaryDrawer: document.getElementById('supplementary-drawer'),
@@ -271,7 +285,7 @@ async function fetchAndRenderCatalog() {
 }
 
 // ============================================================================
-// Pre-Test Settings Modal Logic (Feature 2)
+// Pre-Test Settings Modal Logic
 // ============================================================================
 
 function openPretestModal(textId) {
@@ -285,7 +299,6 @@ function openPretestModal(textId) {
         elements.modalTextTitle.textContent = 'Текст задания';
     }
 
-    // Load current config into toggle checkboxes
     elements.pretestToggleFurigana.checked = state.pretestConfig.showFurigana;
     elements.pretestToggleHints.checked = state.pretestConfig.showHintsAndAnalysis;
     updateModalSettingTags();
@@ -333,7 +346,7 @@ function confirmPretestSettingsAndStart() {
 }
 
 // ============================================================================
-// Exercise (Strict Anti-Cheat Reading Mode)
+// Exercise (Strict Anti-Cheat Reading Mode & Step-by-Step Wizard)
 // ============================================================================
 
 async function startExercise(textId) {
@@ -344,6 +357,7 @@ async function startExercise(textId) {
         const textData = await response.json();
         state.activeText = textData;
         state.userAnswers = {};
+        state.currentQuestionIndex = 0;
         state.currentView = 'exercise';
 
         // Switch Views
@@ -351,10 +365,15 @@ async function startExercise(textId) {
         elements.exerciseView.classList.remove('hidden');
         elements.exerciseHeaderControls.classList.remove('hidden');
         elements.analysisBanner.classList.add('hidden');
+        elements.analysisQAContainer.classList.add('hidden');
         elements.supplementaryDrawer.classList.add('hidden');
-        elements.submitActionBar.classList.remove('hidden');
 
-        // Apply pre-test settings to Header
+        // Show Wizard UI
+        elements.wizardHeader.classList.remove('hidden');
+        elements.wizardCardArea.classList.remove('hidden');
+        elements.wizardNavBar.classList.remove('hidden');
+
+        // Header tags
         elements.headerLevelTag.textContent = textData.level;
         elements.headerLevelTag.setAttribute('data-lvl', textData.level);
         elements.headerCategoryTag.textContent = CATEGORY_NAMES[textData.category] || textData.category;
@@ -387,7 +406,7 @@ async function startExercise(textId) {
         elements.passageContent.innerHTML = textData.content_html;
         elements.passageContent.style.fontSize = `${state.settings.fontSizePx}px`;
 
-        // Apply pre-test Furigana setting
+        // Apply Furigana setting
         if (state.pretestConfig.showFurigana) {
             state.settings.furiganaVisible = true;
             elements.passageContent.classList.remove('hide-furigana');
@@ -402,15 +421,15 @@ async function startExercise(textId) {
 
         elements.passageContent.classList.remove('show-evidence');
 
-        // Show/Hide Hardcore Notice
+        // Hardcore Mode Notice
         if (!state.pretestConfig.showHintsAndAnalysis) {
             elements.hardcoreNotice.classList.remove('hidden');
         } else {
             elements.hardcoreNotice.classList.add('hidden');
         }
 
-        // Render Questions (Strict Reading Mode: No answers leaked!)
-        renderQuestionsForReading(textData.questions);
+        // Render Wizard dots & active question
+        renderWizard();
 
         // Reset and start stopwatch
         startTimer();
@@ -421,70 +440,113 @@ async function startExercise(textId) {
     }
 }
 
-function renderQuestionsForReading(questions) {
-    elements.totalQuestionsCount.textContent = questions.length;
-    elements.answeredCount.textContent = '0';
-    elements.btnSubmitAnswers.disabled = true;
+function renderWizard() {
+    const questions = state.activeText.questions;
+    const totalQ = questions.length;
+    const currentQIdx = state.currentQuestionIndex;
+    const currentQ = questions[currentQIdx];
 
-    elements.questionsList.innerHTML = questions.map((q) => `
-        <div class="question-card" id="card-q-${q.id}">
+    // Status label & progress
+    elements.wizardStepLabel.textContent = `Вопрос ${currentQIdx + 1} из ${totalQ}`;
+    elements.totalQuestionsCount.textContent = totalQ;
+    elements.answeredCount.textContent = Object.keys(state.userAnswers).length;
+
+    // Track dots
+    elements.wizardTrack.innerHTML = questions.map((q, idx) => {
+        const isAnswered = state.userAnswers[q.id] !== undefined;
+        const isActive = idx === currentQIdx;
+        let dotClass = 'wizard-dot';
+        if (isActive) dotClass += ' active';
+        else if (isAnswered) dotClass += ' answered';
+        return `<span class="${dotClass}" title="Вопрос ${idx + 1}"></span>`;
+    }).join('');
+
+    // Render single active question card
+    const selectedOptId = state.userAnswers[currentQ.id];
+
+    elements.wizardCardArea.innerHTML = `
+        <div class="question-card" id="card-q-${currentQ.id}">
             <div class="question-top">
-                <span class="question-num-badge">№${q.question_number}</span>
-                <p class="question-prompt">${q.question_text}</p>
+                <span class="question-num-badge">№${currentQ.question_number}</span>
+                <p class="question-prompt">${currentQ.question_text}</p>
             </div>
             <div class="options-group">
-                ${q.options.map(opt => `
-                    <div class="option-item" id="opt-item-${opt.id}">
-                        <label class="option-label" for="radio-opt-${opt.id}">
-                            <input 
-                                type="radio" 
-                                id="radio-opt-${opt.id}" 
-                                name="question_${q.id}" 
-                                value="${opt.id}" 
-                                class="option-radio"
-                                onchange="handleOptionSelect(${q.id}, ${opt.id})"
-                            >
-                            <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
-                        </label>
-                    </div>
-                `).join('')}
+                ${currentQ.options.map(opt => {
+                    const isChecked = selectedOptId === opt.id;
+                    return `
+                        <div class="option-item ${isChecked ? 'selected' : ''}" id="opt-item-${opt.id}">
+                            <label class="option-label" for="radio-opt-${opt.id}">
+                                <input 
+                                    type="radio" 
+                                    id="radio-opt-${opt.id}" 
+                                    name="question_${currentQ.id}" 
+                                    value="${opt.id}" 
+                                    class="option-radio"
+                                    ${isChecked ? 'checked' : ''}
+                                    onchange="handleOptionSelect(${currentQ.id}, ${opt.id})"
+                                >
+                                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
+                            </label>
+                        </div>
+                    `;
+                }).join('')}
             </div>
         </div>
-    `).join('');
+    `;
+
+    // Navigation buttons state
+    elements.btnWizardPrev.disabled = (currentQIdx === 0);
+
+    const isCurrentAnswered = selectedOptId !== undefined;
+    const isLastQuestion = (currentQIdx === totalQ - 1);
+    const allAnswered = Object.keys(state.userAnswers).length === totalQ;
+
+    if (isLastQuestion) {
+        elements.btnWizardNext.classList.add('hidden');
+        elements.btnWizardSubmit.classList.remove('hidden');
+        elements.btnWizardSubmit.disabled = !allAnswered;
+    } else {
+        elements.btnWizardNext.classList.remove('hidden');
+        elements.btnWizardSubmit.classList.add('hidden');
+        elements.btnWizardNext.disabled = !isCurrentAnswered;
+    }
 }
 
 function handleOptionSelect(questionId, optionId) {
     state.userAnswers[questionId] = optionId;
 
-    // Highlight selected option visually
-    const qCard = document.getElementById(`card-q-${questionId}`);
-    if (qCard) {
-        qCard.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+    // Highlight selected visually
+    const card = document.getElementById(`card-q-${questionId}`);
+    if (card) {
+        card.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
         const optItem = document.getElementById(`opt-item-${optionId}`);
         if (optItem) optItem.classList.add('selected');
     }
 
-    // Update answered count
-    const totalQuestions = state.activeText.questions.length;
-    const answeredCount = Object.keys(state.userAnswers).length;
-    elements.answeredCount.textContent = answeredCount;
+    // Refresh Wizard status and next button availability
+    renderWizard();
+}
 
-    // Enable submit if and only if all questions are answered
-    if (answeredCount === totalQuestions) {
-        elements.btnSubmitAnswers.disabled = false;
-        elements.btnSubmitAnswers.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } else {
-        elements.btnSubmitAnswers.disabled = true;
+function wizardGoNext() {
+    const totalQ = state.activeText.questions.length;
+    if (state.currentQuestionIndex < totalQ - 1) {
+        state.currentQuestionIndex += 1;
+        renderWizard();
+    }
+}
+
+function wizardGoPrev() {
+    if (state.currentQuestionIndex > 0) {
+        state.currentQuestionIndex -= 1;
+        renderWizard();
     }
 }
 
 // ============================================================================
-// Submission & Analysis Mode (Post-Submit Flow)
+// Submission & Analysis Mode (Post-Submit Flow with Tabbed Analysis)
 // ============================================================================
 
-async function submitAnswers(e) {
-    e.preventDefault();
-
+async function submitAnswers() {
     const totalQuestions = state.activeText.questions.length;
     const answeredCount = Object.keys(state.userAnswers).length;
 
@@ -493,19 +555,17 @@ async function submitAnswers(e) {
         return;
     }
 
-    // Stop stopwatch
     stopTimer();
     const timeSpent = state.timer.seconds;
 
-    // Prepare payload
     const answersPayload = Object.entries(state.userAnswers).map(([qId, optId]) => ({
         question_id: parseInt(qId, 10),
         selected_option_id: parseInt(optId, 10)
     }));
 
     try {
-        elements.btnSubmitAnswers.disabled = true;
-        elements.btnSubmitAnswers.textContent = 'Проверка ответов...';
+        elements.btnWizardSubmit.disabled = true;
+        elements.btnWizardSubmit.textContent = 'Проверка ответов...';
 
         const response = await fetch(`/api/texts/${state.activeText.id}/submit`, {
             method: 'POST',
@@ -521,24 +581,28 @@ async function submitAnswers(e) {
         const analysisData = await response.json();
         state.activeText = analysisData;
         state.currentView = 'analysis';
+        state.analysisActiveTabIdx = 0;
 
-        // Render analysis respecting pre-test configurations
         renderAnalysisView(analysisData);
 
     } catch (err) {
         console.error(err);
         alert('Не удалось отправить ответы на проверку.');
-        elements.btnSubmitAnswers.disabled = false;
-        elements.btnSubmitAnswers.textContent = 'Проверить ответы';
+        elements.btnWizardSubmit.disabled = false;
+        elements.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
     }
 }
 
 function renderAnalysisView(data) {
-    // Hide submit button bar
-    elements.submitActionBar.classList.add('hidden');
+    // Hide Wizard Controls
+    elements.wizardHeader.classList.add('hidden');
+    elements.wizardCardArea.classList.add('hidden');
+    elements.wizardNavBar.classList.add('hidden');
 
-    // Show Analysis Banner
+    // Show Analysis Banner & Tabbed Area
     elements.analysisBanner.classList.remove('hidden');
+    elements.analysisQAContainer.classList.remove('hidden');
+
     elements.scoreText.textContent = `${data.correct_count} / ${data.total_questions}`;
     elements.scorePercent.textContent = `${data.score_percent}% ВЕРНО`;
 
@@ -556,7 +620,6 @@ function renderAnalysisView(data) {
     const allowHints = state.pretestConfig.showHintsAndAnalysis;
 
     if (allowHints) {
-        // Normal interactive analysis tools enabled
         state.settings.evidenceVisible = true;
         elements.passageContent.classList.add('show-evidence');
         elements.evidenceStatus.textContent = 'ВКЛ';
@@ -577,7 +640,6 @@ function renderAnalysisView(data) {
             `).join('')
             : '<p style="color: var(--sumi-500);">Словарь пуст.</p>';
     } else {
-        // Hardcore Mode: Disable evidence, hide translation & vocabulary tools
         state.settings.evidenceVisible = false;
         elements.passageContent.classList.remove('show-evidence');
         elements.btnToggleEvidence.classList.add('hidden');
@@ -586,82 +648,110 @@ function renderAnalysisView(data) {
         elements.supplementaryDrawer.classList.add('hidden');
     }
 
-    // Render Questions Breakdown
-    elements.questionsList.innerHTML = data.questions.map(q => {
+    // Render Analysis Tabs
+    renderAnalysisTabs();
+}
+
+function renderAnalysisTabs() {
+    const questions = state.activeText.questions;
+    const activeIdx = state.analysisActiveTabIdx;
+
+    elements.analysisTabs.innerHTML = questions.map((q, idx) => {
+        const isActive = idx === activeIdx;
+        const isCorrect = q.is_user_correct;
         return `
-            <div class="question-card" id="card-q-${q.id}">
-                <div class="question-top">
-                    <span class="question-num-badge">№${q.question_number}</span>
-                    <p class="question-prompt">${q.question_text}</p>
-                    <span class="option-status-badge ${q.is_user_correct ? 'badge-correct' : 'badge-user-wrong'}">
-                        ${q.is_user_correct ? '✓ Верно' : '✗ Ошибка'}
-                    </span>
-                </div>
-
-                <div class="options-group">
-                    ${q.options.map(opt => {
-                        let stateClass = '';
-                        let badgeHtml = '';
-                        let explanationBoxHtml = '';
-
-                        if (opt.is_correct) {
-                            stateClass = 'state-correct';
-                            badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
-                        } else if (opt.was_selected) {
-                            stateClass = 'state-wrong-selected';
-                            badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
-                        }
-
-                        // If hints are enabled, show detailed option explanation
-                        if (allowHints && opt.option_explanation) {
-                            const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
-                            explanationBoxHtml = `
-                                <div class="option-explanation-box ${expClass}">
-                                    ${opt.option_explanation}
-                                </div>
-                            `;
-                        }
-
-                        return `
-                            <div class="option-item ${stateClass}">
-                                <div class="option-label">
-                                    <input 
-                                        type="radio" 
-                                        disabled 
-                                        ${opt.was_selected ? 'checked' : ''} 
-                                        class="option-radio"
-                                    >
-                                    <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
-                                    ${badgeHtml}
-                                </div>
-                                ${explanationBoxHtml}
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <!-- General question analysis & Evidence locator (Only if hints enabled) -->
-                ${allowHints ? `
-                    <div class="question-general-explanation">
-                        <strong>💡 Разбор вопроса:</strong>
-                        <p style="margin-top: 0.35rem;">${q.general_explanation}</p>
-                        ${q.evidence_span_id ? `
-                            <button type="button" class="btn-locate-evidence" onclick="locateEvidenceInText('${q.evidence_span_id}')">
-                                📍 Показать доказательство в тексте
-                            </button>
-                        ` : ''}
-                    </div>
-                ` : `
-                    <div class="question-general-explanation" style="background: #fafaf9; border-left-color: var(--sumi-400); color: var(--sumi-500); font-style: italic;">
-                        Разбор и подсказки скрыты в соответствии с вашими предварительными настройками.
-                    </div>
-                `}
-            </div>
+            <button class="analysis-tab-btn ${isActive ? 'active' : ''}" onclick="switchAnalysisTab(${idx})">
+                <span class="analysis-tab-status ${isCorrect ? 'correct' : 'wrong'}"></span>
+                Вопрос №${q.question_number}
+            </button>
         `;
     }).join('');
 
-    // Smoothly scroll to top of right pane to see results
-    document.querySelector('.split-pane-right').scrollTo({ top: 0, behavior: 'smooth' });
+    renderAnalysisActiveCard(questions[activeIdx]);
+}
+
+function switchAnalysisTab(idx) {
+    state.analysisActiveTabIdx = idx;
+    renderAnalysisTabs();
+}
+
+function renderAnalysisActiveCard(q) {
+    const allowHints = state.pretestConfig.showHintsAndAnalysis;
+
+    elements.analysisActiveCard.innerHTML = `
+        <div class="question-card" id="card-q-${q.id}">
+            <div class="question-top">
+                <span class="question-num-badge">№${q.question_number}</span>
+                <p class="question-prompt">${q.question_text}</p>
+                <span class="option-status-badge ${q.is_user_correct ? 'badge-correct' : 'badge-user-wrong'}">
+                    ${q.is_user_correct ? '✓ Верно' : '✗ Ошибка'}
+                </span>
+            </div>
+
+            <div class="options-group">
+                ${q.options.map(opt => {
+                    let stateClass = '';
+                    let badgeHtml = '';
+                    let explanationBoxHtml = '';
+
+                    if (opt.is_correct) {
+                        stateClass = 'state-correct';
+                        badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
+                    } else if (opt.was_selected) {
+                        stateClass = 'state-wrong-selected';
+                        badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
+                    }
+
+                    if (allowHints && opt.option_explanation) {
+                        const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
+                        explanationBoxHtml = `
+                            <div class="option-explanation-box ${expClass}">
+                                ${opt.option_explanation}
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <div class="option-item ${stateClass}">
+                            <div class="option-label">
+                                <input 
+                                    type="radio" 
+                                    disabled 
+                                    ${opt.was_selected ? 'checked' : ''} 
+                                    class="option-radio"
+                                >
+                                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
+                                ${badgeHtml}
+                            </div>
+                            ${explanationBoxHtml}
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <!-- General question analysis & Evidence locator -->
+            ${allowHints ? `
+                <div class="question-general-explanation">
+                    <strong>💡 Разбор вопроса:</strong>
+                    <p style="margin-top: 0.35rem;">${q.general_explanation}</p>
+                    ${q.evidence_span_id ? `
+                        <button type="button" class="btn-locate-evidence" onclick="locateEvidenceInText('${q.evidence_span_id}')">
+                            📍 Показать доказательство в тексте
+                        </button>
+                    ` : ''}
+                </div>
+            ` : `
+                <div class="question-general-explanation" style="background: #fafaf9; border-left-color: var(--sumi-400); color: var(--sumi-500); font-style: italic;">
+                    Разбор и подсказки скрыты в соответствии с вашими предварительными настройками.
+                </div>
+            `}
+        </div>
+    `;
+
+    // Automatically highlight the evidence for this question if hints are enabled
+    if (allowHints && q.evidence_span_id) {
+        locateEvidenceInText(q.evidence_span_id);
+    }
 }
 
 // ============================================================================
@@ -738,6 +828,7 @@ function returnToCatalog() {
     state.currentView = 'catalog';
     state.activeText = null;
     state.userAnswers = {};
+    state.currentQuestionIndex = 0;
 
     elements.exerciseView.classList.add('hidden');
     elements.exerciseHeaderControls.classList.add('hidden');
@@ -767,6 +858,11 @@ function initEventListeners() {
     elements.btnFontMincho.addEventListener('click', () => setReaderFont('mincho'));
     elements.btnFontIncrease.addEventListener('click', () => adjustFontSize(2));
     elements.btnFontDecrease.addEventListener('click', () => adjustFontSize(-2));
+
+    // Wizard navigation buttons
+    elements.btnWizardNext.addEventListener('click', wizardGoNext);
+    elements.btnWizardPrev.addEventListener('click', wizardGoPrev);
+    elements.btnWizardSubmit.addEventListener('click', submitAnswers);
 
     // Pre-test modal events
     elements.modalBtnCancel.addEventListener('click', closePretestModal);
@@ -809,9 +905,6 @@ function initEventListeners() {
             fetchAndRenderCatalog();
         });
     }
-
-    // Form submission
-    elements.questionsForm.addEventListener('submit', submitAnswers);
 
     // Analysis tools
     elements.btnToggleFurigana.addEventListener('click', toggleFurigana);

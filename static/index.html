@@ -50,7 +50,7 @@
                     <div class="hero-badge">JLPT 読解 EXPERT PRACTICE</div>
                     <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
                     <p class="hero-desc">
-                        Архивные тексты реальных экзаменов JLPT, строгий анти-чит режим решения и глубокий интерактивный разбор грамматических ловушек и доказательств.
+                        Более 300 реальных текстов уровней N5–N1: архивные экзамены JLPT, адаптированные новости NHK World и пошаговый экзаменационный интерфейс решения без подглядывания.
                     </p>
                 </div>
 
@@ -194,38 +194,56 @@
                         </div>
                     </div>
 
-                    <!-- Right Column: Questions & Submission / Analysis -->
+                    <!-- Right Column: Step-by-Step Question Wizard & Analysis View -->
                     <div class="split-pane split-pane-right">
                         <div class="questions-container">
-                            <div class="questions-header">
-                                <h3 class="questions-title">Вопросы к тексту</h3>
+                            <!-- Question Step Indicator Header -->
+                            <div class="wizard-header" id="wizard-header">
+                                <div class="wizard-status">
+                                    <span class="wizard-step-label" id="wizard-step-label">Вопрос 1 из 1</span>
+                                    <div class="wizard-track" id="wizard-track">
+                                        <!-- Step dots generated dynamically -->
+                                    </div>
+                                </div>
                                 <div class="progress-indicator" id="progress-indicator">
                                     Отвечено: <span id="answered-count">0</span> / <span id="total-questions-count">0</span>
                                 </div>
                             </div>
 
-                            <form id="questions-form">
-                                <div id="questions-list" class="questions-list">
-                                    <!-- Dynamic question cards -->
-                                </div>
+                            <!-- Single Question Active Card Area -->
+                            <div id="wizard-card-area" class="wizard-card-area">
+                                <!-- Dynamic single active question rendered here -->
+                            </div>
 
-                                <!-- Solve Submit Bar -->
-                                <div class="submit-action-bar" id="submit-action-bar">
-                                    <button type="submit" class="btn btn-primary btn-lg" id="btn-submit-answers" disabled>
-                                        Проверить ответы
-                                    </button>
-                                    <p class="submit-hint" id="submit-hint">
-                                        Выберите вариант ответа для каждого вопроса, чтобы отправить решение.
-                                    </p>
+                            <!-- Wizard Navigation Bar (Prev / Next / Submit) -->
+                            <div class="wizard-nav-bar" id="wizard-nav-bar">
+                                <button type="button" class="btn btn-secondary" id="btn-wizard-prev" disabled>
+                                    ← Назад
+                                </button>
+                                <button type="button" class="btn btn-primary" id="btn-wizard-next" disabled>
+                                    Следующий вопрос →
+                                </button>
+                                <button type="button" class="btn btn-primary btn-submit hidden" id="btn-wizard-submit" disabled>
+                                    Завершить и проверить ответы ✓
+                                </button>
+                            </div>
+
+                            <!-- Analysis Post-Submit Tabs & Card View -->
+                            <div id="analysis-qa-container" class="analysis-qa-container hidden">
+                                <div class="analysis-tabs" id="analysis-tabs">
+                                    <!-- Dynamic tabs: Вопрос 1, Вопрос 2, etc. -->
                                 </div>
-                            </form>
+                                <div id="analysis-active-card" class="analysis-active-card">
+                                    <!-- Active question analysis card -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- PRE-TEST SETTINGS MODAL (Feature 2) -->
+        <!-- PRE-TEST SETTINGS MODAL -->
         <div id="pretest-modal-backdrop" class="modal-backdrop hidden">
             <div class="modal-card">
                 <div class="modal-header">
