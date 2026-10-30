@@ -30,11 +30,21 @@
                     <span class="exam-archive-badge hidden" id="header-exam-badge"></span>
                 </div>
                 
-                <div class="timer-box" id="timer-box">
-                    <span class="timer-dot"></span>
-                    <span class="timer-digits" id="timer-display">00:00</span>
-                    <span class="timer-target" id="timer-target">(Реком.: 3 мин)</span>
+                <!-- Timer Widget (Optional: Shown only when user wants) -->
+                <div class="timer-box hidden" id="timer-box">
+                    <span class="timer-dot" id="timer-dot"></span>
+                    <span class="timer-digits" id="timer-display">03:00</span>
+                    <div class="timer-actions">
+                        <button type="button" class="btn-timer-action" id="btn-timer-toggle-pause" title="Поставить на паузу / возобновить">⏸️</button>
+                        <button type="button" class="btn-timer-action" id="btn-timer-add-min" title="Добавить 1 минуту">+1м</button>
+                        <button type="button" class="btn-timer-action btn-timer-close" id="btn-timer-dismiss" title="Выключить таймер">✕</button>
+                    </div>
                 </div>
+
+                <!-- Quick Button to add timer during test if user wants -->
+                <button type="button" class="btn btn-add-timer" id="btn-enable-timer-runtime" title="Включить таймер с ограничением времени">
+                    ⏱️ Включить таймер
+                </button>
 
                 <button class="btn btn-ghost btn-sm" id="btn-abort-exercise">
                     ✕ Прервать
@@ -117,6 +127,13 @@
                 <!-- Hardcore Exam Mode Active Notice (Shown if hints are disabled) -->
                 <div id="hardcore-notice" class="hardcore-notice hidden">
                     ⚡ <strong>Режим «Строгий Экзамен»:</strong> Подсказки, переводы и подсветка доказательств в тексте отключены вашими настройками.
+                </div>
+
+                <!-- Timer Expired Notice (Shown if timer reaches 00:00) -->
+                <div id="timer-alert-banner" class="timer-alert-banner hidden">
+                    <span class="alert-icon">⏱️</span>
+                    <span class="alert-text"><strong>Время вышло!</strong> Вы можете отправить ответы на проверку прямо сейчас или продолжить решать в спокойном темпе.</span>
+                    <button type="button" class="btn btn-outline-light btn-sm" id="btn-dismiss-timer-alert">Понятно, продолжить</button>
                 </div>
 
                 <!-- Result Banner (Visible after submission) -->
@@ -340,8 +357,34 @@
                         </label>
                     </div>
 
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label-wrap">
+                                <span class="setting-name">Таймер с обратным отсчётом</span>
+                                <span class="setting-tag" id="tag-timer">По желанию</span>
+                            </div>
+                            <p class="setting-desc">
+                                Включено: тренировка тайм-менеджмента как на реальном экзамене с предупреждением за 60 сек.<br>
+                                <strong>Выключено:</strong> спокойное свободное чтение в своём темпе без таймера.
+                            </p>
+                            <!-- Duration selector when timer is enabled -->
+                            <div class="timer-duration-selector hidden" id="timer-duration-selector">
+                                <span class="duration-label">Лимит времени:</span>
+                                <div class="stepper-box">
+                                    <button type="button" class="btn-stepper" id="btn-timer-minus" title="Уменьшить на 1 минуту">−</button>
+                                    <span class="stepper-value"><strong id="modal-timer-minutes">3</strong> мин</span>
+                                    <button type="button" class="btn-stepper" id="btn-timer-plus" title="Увеличить на 1 минуту">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pretest-toggle-timer">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
                     <div class="modal-test-meta" id="modal-test-meta-info">
-                        ⏱️ Рекомендуемое время: <span id="modal-time-estimate">3</span> мин
+                        ⏱️ Рекомендуемое время для текста: <span id="modal-time-estimate">3</span> мин
                     </div>
                 </div>
 

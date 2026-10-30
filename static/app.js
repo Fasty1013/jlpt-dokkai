@@ -30,7 +30,9 @@ function loadStoredConfig() {
     }
     return {
         showFurigana: true,
-        showHintsAndAnalysis: true
+        showHintsAndAnalysis: true,
+        enableTimer: false,
+        timerMinutes: 3
     };
 }
 
@@ -59,8 +61,12 @@ const state = {
     userAnswers: {},         // questionId -> selectedOptionId
     
     timer: {
-        seconds: 0,
-        intervalId: null
+        enabled: false,
+        totalSeconds: 180,
+        remainingSeconds: 180,
+        secondsSpent: 0,
+        intervalId: null,
+        isPaused: false
     },
     // Pre-test configuration
     pretestConfig: loadStoredConfig(),
@@ -94,10 +100,19 @@ const elements = {
     headerLevelTag: document.getElementById('header-level-tag'),
     headerCategoryTag: document.getElementById('header-category-tag'),
     headerExamBadge: document.getElementById('header-exam-badge'),
-    timerDisplay: document.getElementById('timer-display'),
-    timerTarget: document.getElementById('timer-target'),
     btnAbortExercise: document.getElementById('btn-abort-exercise'),
     headerSavedCount: document.getElementById('header-saved-count'),
+
+    // Timer Elements in Header
+    timerBox: document.getElementById('timer-box'),
+    timerDisplay: document.getElementById('timer-display'),
+    timerDot: document.getElementById('timer-dot'),
+    btnTimerTogglePause: document.getElementById('btn-timer-toggle-pause'),
+    btnTimerAddMin: document.getElementById('btn-timer-add-min'),
+    btnTimerDismiss: document.getElementById('btn-timer-dismiss'),
+    btnEnableTimerRuntime: document.getElementById('btn-enable-timer-runtime'),
+    timerAlertBanner: document.getElementById('timer-alert-banner'),
+    btnDismissTimerAlert: document.getElementById('btn-dismiss-timer-alert'),
 
     // Views
     catalogView: document.getElementById('catalog-view'),
@@ -191,11 +206,17 @@ const elements = {
     modalTimeEstimate: document.getElementById('modal-time-estimate'),
     pretestToggleFurigana: document.getElementById('pretest-toggle-furigana'),
     pretestToggleHints: document.getElementById('pretest-toggle-hints'),
+    pretestToggleTimer: document.getElementById('pretest-toggle-timer'),
+    timerDurationSelector: document.getElementById('timer-duration-selector'),
+    modalTimerMinutes: document.getElementById('modal-timer-minutes'),
+    btnTimerMinus: document.getElementById('btn-timer-minus'),
+    btnTimerPlus: document.getElementById('btn-timer-plus'),
+    tagFurigana: document.getElementById('tag-furigana'),
+    tagHints: document.getElementById('tag-hints'),
+    tagTimer: document.getElementById('tag-timer'),
     modalBtnCancel: document.getElementById('modal-btn-cancel'),
     modalBtnClose: document.getElementById('modal-btn-close'),
-    modalBtnStart: document.getElementById('modal-btn-start'),
-    tagFurigana: document.getElementById('tag-furigana'),
-    tagHints: document.getElementById('tag-hints')
+    modalBtnStart: document.getElementById('modal-btn-start')
 };
 
 // ============================================================================
@@ -217,24 +238,135 @@ function formatTime(totalSeconds) {
 }
 
 // ============================================================================
-// Timer Functions
+// Timer Functions (Optional Countdown / Free Reading Mode)
 // ============================================================================
-
-function startTimer() {
-    stopTimer();
-    state.timer.seconds = 0;
-    elements.timerDisplay.textContent = '00:00';
-    state.timer.intervalId = setInterval(() => {
-        state.timer.seconds += 1;
-        elements.timerDisplay.textContent = formatTime(state.timer.seconds);
-    }, 1000);
-}
 
 function stopTimer() {
     if (state.timer.intervalId) {
         clearInterval(state.timer.intervalId);
         state.timer.intervalId = null;
     }
+}
+
+function startUntimedMode() {
+    stopTimer();
+    state.timer.enabled = false;
+    state.timer.secondsSpent = 0;
+    state.timer.isPaused = false;
+
+    if (elements.timerBox) elements.timerBox.classList.add('hidden');
+    if (elements.btnEnableTimerRuntime) elements.btnEnableTimerRuntime.classList.remove('hidden');
+    if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
+
+    state.timer.intervalId = setInterval(() => {
+        if (!state.timer.isPaused) {
+            state.timer.secondsSpent += 1;
+        }
+    }, 1000);
+}
+
+function startCountdownTimer(minutes) {
+    stopTimer();
+    const durMins = Math.max(1, parseInt(minutes, 10) || 3);
+    const totalSec = durMins * 60;
+
+    state.timer.enabled = true;
+    state.timer.totalSeconds = totalSec;
+    state.timer.remainingSeconds = totalSec;
+    state.timer.secondsSpent = 0;
+    state.timer.isPaused = false;
+
+    if (elements.timerBox) {
+        elements.timerBox.classList.remove('hidden', 'timer-warning', 'timer-expired', 'is-paused');
+    }
+    if (elements.btnEnableTimerRuntime) {
+        elements.btnEnableTimerRuntime.classList.add('hidden');
+    }
+    if (elements.timerAlertBanner) {
+        elements.timerAlertBanner.classList.add('hidden');
+    }
+    if (elements.timerDisplay) {
+        elements.timerDisplay.textContent = formatTime(totalSec);
+    }
+    if (elements.btnTimerTogglePause) {
+        elements.btnTimerTogglePause.textContent = '⏸️';
+    }
+
+    state.timer.intervalId = setInterval(() => {
+        if (state.timer.isPaused) return;
+
+        state.timer.secondsSpent += 1;
+        state.timer.remainingSeconds -= 1;
+
+        if (elements.timerDisplay) {
+            elements.timerDisplay.textContent = formatTime(Math.max(0, state.timer.remainingSeconds));
+        }
+
+        if (state.timer.remainingSeconds <= 60 && state.timer.remainingSeconds > 0) {
+            if (elements.timerBox) elements.timerBox.classList.add('timer-warning');
+        }
+
+        if (state.timer.remainingSeconds <= 0) {
+            state.timer.remainingSeconds = 0;
+            stopTimer();
+
+            if (elements.timerBox) {
+                elements.timerBox.classList.remove('timer-warning');
+                elements.timerBox.classList.add('timer-expired');
+            }
+            if (elements.timerAlertBanner) {
+                elements.timerAlertBanner.classList.remove('hidden');
+            }
+        }
+    }, 1000);
+}
+
+function toggleTimerPause() {
+    if (!state.timer.enabled) return;
+    state.timer.isPaused = !state.timer.isPaused;
+
+    if (elements.timerBox) {
+        elements.timerBox.classList.toggle('is-paused', state.timer.isPaused);
+    }
+    if (elements.btnTimerTogglePause) {
+        elements.btnTimerTogglePause.textContent = state.timer.isPaused ? '▶️' : '⏸️';
+    }
+}
+
+function addTimerMinute() {
+    if (!state.timer.enabled) {
+        startCountdownTimer(3);
+        return;
+    }
+    state.timer.remainingSeconds += 60;
+    state.timer.totalSeconds += 60;
+
+    if (elements.timerDisplay) {
+        elements.timerDisplay.textContent = formatTime(state.timer.remainingSeconds);
+    }
+    if (elements.timerBox) {
+        elements.timerBox.classList.remove('timer-expired');
+        if (state.timer.remainingSeconds > 60) {
+            elements.timerBox.classList.remove('timer-warning');
+        }
+    }
+    if (elements.timerAlertBanner) {
+        elements.timerAlertBanner.classList.add('hidden');
+    }
+    if (!state.timer.intervalId && !state.timer.isPaused) {
+        startCountdownTimer(Math.ceil(state.timer.remainingSeconds / 60));
+    }
+}
+
+function dismissTimer() {
+    if (confirm('Выключить таймер и продолжить решать в спокойном темпе?')) {
+        startUntimedMode();
+    }
+}
+
+function enableTimerAtRuntime() {
+    const recMin = (state.activeText && state.activeText.recommended_time_min) ? state.activeText.recommended_time_min : 3;
+    startCountdownTimer(recMin);
 }
 
 // ============================================================================
@@ -337,17 +469,27 @@ function openPretestModal(textId) {
     state.pendingTextId = textId;
     const textInfo = cachedCatalogTexts.find(t => t.id === textId);
 
+    const recMin = textInfo ? textInfo.recommended_time_min : 3;
     if (textInfo) {
         elements.modalTextTitle.textContent = textInfo.title;
-        elements.modalTimeEstimate.textContent = textInfo.recommended_time_min;
+        elements.modalTimeEstimate.textContent = recMin;
     } else {
         elements.modalTextTitle.textContent = 'Текст задания';
+        elements.modalTimeEstimate.textContent = recMin;
     }
 
     elements.pretestToggleFurigana.checked = state.pretestConfig.showFurigana;
     elements.pretestToggleHints.checked = state.pretestConfig.showHintsAndAnalysis;
-    updateModalSettingTags();
 
+    // Timer preferences
+    if (elements.pretestToggleTimer) {
+        elements.pretestToggleTimer.checked = Boolean(state.pretestConfig.enableTimer);
+    }
+    if (elements.modalTimerMinutes) {
+        elements.modalTimerMinutes.textContent = state.pretestConfig.timerMinutes || recMin;
+    }
+
+    updateModalSettingTags();
     elements.pretestModalBackdrop.classList.remove('hidden');
 }
 
@@ -372,14 +514,32 @@ function updateModalSettingTags() {
         elements.tagHints.textContent = 'Хардкор (Без подсказок)';
         elements.tagHints.className = 'setting-tag tag-warning';
     }
+
+    if (elements.pretestToggleTimer && elements.tagTimer) {
+        const timerActive = elements.pretestToggleTimer.checked;
+        const mins = elements.modalTimerMinutes ? elements.modalTimerMinutes.textContent : '3';
+        if (timerActive) {
+            elements.tagTimer.textContent = `ВКЛ: ${mins} мин`;
+            elements.tagTimer.className = 'setting-tag tag-warning';
+            if (elements.timerDurationSelector) elements.timerDurationSelector.classList.remove('hidden');
+        } else {
+            elements.tagTimer.textContent = 'ВЫКЛ: Без таймера';
+            elements.tagTimer.className = 'setting-tag';
+            if (elements.timerDurationSelector) elements.timerDurationSelector.classList.add('hidden');
+        }
+    }
 }
 
 function confirmPretestSettingsAndStart() {
     const showFurigana = elements.pretestToggleFurigana.checked;
     const showHints = elements.pretestToggleHints.checked;
+    const enableTimer = elements.pretestToggleTimer ? elements.pretestToggleTimer.checked : false;
+    const timerMins = elements.modalTimerMinutes ? parseInt(elements.modalTimerMinutes.textContent, 10) : 3;
 
     state.pretestConfig.showFurigana = showFurigana;
     state.pretestConfig.showHintsAndAnalysis = showHints;
+    state.pretestConfig.enableTimer = enableTimer;
+    state.pretestConfig.timerMinutes = timerMins;
     saveStoredConfig(state.pretestConfig);
 
     const textId = state.pendingTextId;
@@ -430,7 +590,13 @@ async function startExercise(textId) {
             elements.headerExamBadge.classList.add('hidden');
         }
 
-        elements.timerTarget.textContent = `(Реком.: ${textData.recommended_time_min} мин)`;
+        // Initialize Timer Mode (Countdown if chosen, otherwise untimed free reading)
+        if (state.pretestConfig.enableTimer) {
+            const chosenMinutes = state.pretestConfig.timerMinutes || textData.recommended_time_min;
+            startCountdownTimer(chosenMinutes);
+        } else {
+            startUntimedMode();
+        }
 
         // Passage Left Pane
         elements.passageTitle.textContent = textData.title;
@@ -601,7 +767,7 @@ async function submitAnswers() {
     }
 
     stopTimer();
-    const timeSpent = state.timer.seconds;
+    const timeSpent = state.timer.secondsSpent;
 
     const answersPayload = Object.entries(state.userAnswers).map(([qId, optId]) => ({
         question_id: parseInt(qId, 10),
@@ -660,7 +826,13 @@ function renderAnalysisView(data) {
     }
 
     const spentTimeFormatted = formatTime(data.time_spent_sec || 0);
-    elements.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} | Рекомендовано: ${data.recommended_time_min} мин`;
+    if (state.timer.enabled) {
+        const targetFormatted = formatTime(state.timer.totalSeconds);
+        const inLimit = (data.time_spent_sec || 0) <= state.timer.totalSeconds;
+        elements.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} из ${targetFormatted} (${inLimit ? 'Уложились в лимит ✅' : 'Лимит превышен ⏱️'})`;
+    } else {
+        elements.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} | Режим: Свободное чтение без таймера`;
+    }
 
     const allowHints = state.pretestConfig.showHintsAndAnalysis;
 
@@ -1226,11 +1398,51 @@ function initEventListeners() {
     elements.modalBtnStart.addEventListener('click', confirmPretestSettingsAndStart);
     elements.pretestToggleFurigana.addEventListener('change', updateModalSettingTags);
     elements.pretestToggleHints.addEventListener('change', updateModalSettingTags);
+    if (elements.pretestToggleTimer) {
+        elements.pretestToggleTimer.addEventListener('change', updateModalSettingTags);
+    }
+    if (elements.btnTimerMinus) {
+        elements.btnTimerMinus.addEventListener('click', () => {
+            let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
+            if (cur > 1) {
+                elements.modalTimerMinutes.textContent = cur - 1;
+                updateModalSettingTags();
+            }
+        });
+    }
+    if (elements.btnTimerPlus) {
+        elements.btnTimerPlus.addEventListener('click', () => {
+            let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
+            if (cur < 20) {
+                elements.modalTimerMinutes.textContent = cur + 1;
+                updateModalSettingTags();
+            }
+        });
+    }
     elements.pretestModalBackdrop.addEventListener('click', (e) => {
         if (e.target === elements.pretestModalBackdrop) {
             closePretestModal();
         }
     });
+
+    // Runtime Timer Buttons in Header & Alerts
+    if (elements.btnTimerTogglePause) {
+        elements.btnTimerTogglePause.addEventListener('click', toggleTimerPause);
+    }
+    if (elements.btnTimerAddMin) {
+        elements.btnTimerAddMin.addEventListener('click', addTimerMinute);
+    }
+    if (elements.btnTimerDismiss) {
+        elements.btnTimerDismiss.addEventListener('click', dismissTimer);
+    }
+    if (elements.btnEnableTimerRuntime) {
+        elements.btnEnableTimerRuntime.addEventListener('click', enableTimerAtRuntime);
+    }
+    if (elements.btnDismissTimerAlert) {
+        elements.btnDismissTimerAlert.addEventListener('click', () => {
+            if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
+        });
+    }
 
     // Filter pills
     elements.levelPills.addEventListener('click', (e) => {
