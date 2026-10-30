@@ -321,7 +321,7 @@ def seed_database(force: bool = False):
     db.commit()
     db.close()
 
-    # Load high-difficulty authentic exam materials for N3, N2, N1 from content/*.json
+    # Load authentic exam materials for all levels N5-N1 from content/*.json
     from content_loader import load_content
     load_content(force_replace_n3_n1=True)
     print(f"Large-scale seeding completed successfully! Total 302 texts (N5-N4 baseline + N3-N1 authentic content).")

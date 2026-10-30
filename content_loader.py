@@ -40,11 +40,13 @@ def backup_database():
     else:
         print(f"! База данных {DB_PATH.name} пока не существует. Создание новой.")
 
-def load_content(levels_to_replace: list = None):
+def load_content(levels_to_replace: list = None, force_replace_n3_n1: bool = False, **kwargs):
     """
     Загружает контент из content/n5.json ... content/n1.json.
     Идемпотентный upsert по полю slug.
     """
+    if force_replace_n3_n1 and not levels_to_replace:
+        levels_to_replace = ["N3", "N2", "N1"]
     print("\n--- [Запуск валидатора контента перед импортом] ---")
     is_valid, report = validate_all_content(check_inventory_targets=True)
     if not is_valid:
