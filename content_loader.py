@@ -40,10 +40,10 @@ def backup_database():
     else:
         print(f"! База данных {DB_PATH.name} пока не существует. Создание новой.")
 
-def load_content(force_replace_n3_n1: bool = True):
+def load_content(levels_to_replace: list = None):
     """
-    Загружает контент из content/n3.json, content/n2.json, content/n1.json.
-    N5 и N4 сохраняются без изменений.
+    Загружает контент из content/n5.json ... content/n1.json.
+    Идемпотентный upsert по полю slug.
     """
     print("\n--- [Запуск валидатора контента перед импортом] ---")
     is_valid, report = validate_all_content(check_inventory_targets=True)
@@ -60,19 +60,14 @@ def load_content(force_replace_n3_n1: bool = True):
     db = SessionLocal()
 
     try:
-        if force_replace_n3_n1:
-            print("Удаление устаревших текстов уровней N3, N2, N1 (каскадное удаление зависимостей)...")
-            deleted_q = db.query(Text).filter(Text.level.in_(["N3", "N2", "N1"])).delete(synchronize_session="fetch")
+        if levels_to_replace:
+            print(f"Обновление текстов для уровней: {levels_to_replace} (каскадное удаление зависимостей)...")
+            deleted_q = db.query(Text).filter(Text.level.in_(levels_to_replace)).delete(synchronize_session="fetch")
             db.commit()
-            print(f"✓ Удалено устаревших текстов N3-N1: {deleted_q}")
+            print(f"✓ Очищено устаревших текстов: {deleted_q}")
 
-        # Проверяем сохранность N5 и N4
-        n5_count = db.query(Text).filter(Text.level == "N5").count()
-        n4_count = db.query(Text).filter(Text.level == "N4").count()
-        print(f"✓ Проверка сохранности: текстов N5 в базе: {n5_count}, N4 в базе: {n4_count}")
-
-        # Загружаем файлы JSON
-        json_files = ["n3.json", "n2.json", "n1.json"]
+        # Загружаем все 5 файлов JSON
+        json_files = ["n5.json", "n4.json", "n3.json", "n2.json", "n1.json"]
         total_texts_loaded = 0
         total_questions_loaded = 0
 
@@ -180,4 +175,5 @@ def load_content(force_replace_n3_n1: bool = True):
         db.close()
 
 if __name__ == "__main__":
-    load_content(force_replace_n3_n1=True)
+    load_content(levels_to_replace=["N5", "N4", "N3", "N2", "N1"])
+

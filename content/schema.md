@@ -114,3 +114,4 @@
 | `is_correct` | `bool` | `true` для верного ответа, `false` для неверных. |
 | `trap_type` | `string | null` | Для верного ответа — `null`. Для неверных вариантов — тип дистрактора (`overgeneralization`, `opposite_meaning`, `not_mentioned`, `partial_match`, `extreme_condition`, `subject_swap`, `fact_opinion_confusion`). |
 | `explanation_ru` | `string` | Подробный разбор на русском языке с объяснением ловушки. |
+

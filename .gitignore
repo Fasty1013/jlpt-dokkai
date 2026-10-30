@@ -32,6 +32,11 @@ ENV/
 *.sqlite
 *.sqlite3
 
+# User Uploaded Documents & Staging
+*.pdf
+uploads/
+content/staging/*.pdf
+
 # IDE & OS
 .vscode/
 .idea/

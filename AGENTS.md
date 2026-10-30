@@ -83,3 +83,4 @@ python run_agents.py -b
 # Быстрая самодиагностика целостности проекта (Синтаксис + Anti-Cheat + Тесты)
 python run_agents.py --check
 ```
+

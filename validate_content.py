@@ -26,7 +26,7 @@ CONTENT_DIR = BASE_DIR / "content"
 
 VALID_LEVELS = {"N5", "N4", "N3", "N2", "N1"}
 VALID_CATEGORIES = {"short", "medium", "long", "info_search", "article"}
-VALID_SOURCE_TYPES = {"jlpt_official", "news_adapted", "original"}
+VALID_SOURCE_TYPES = {"jlpt_official", "news_adapted", "original", "pdf_import"}
 VALID_QUESTION_TYPES = {"claim", "detail", "reference", "inference", "integrated", "info_search"}
 VALID_TRAP_TYPES = {
     "overgeneralization",
@@ -42,6 +42,20 @@ VALID_TRAP_TYPES = {
 
 # Target inventory counts from Stage 0 reconnaissance
 EXPECTED_INVENTORY = {
+    "N5": {
+        "short": {"texts": 12, "questions": 12},
+        "medium": {"texts": 12, "questions": 24},
+        "long": {"texts": 12, "questions": 36},
+        "info_search": {"texts": 12, "questions": 24},
+        "article": {"texts": 12, "questions": 36},
+    },
+    "N4": {
+        "short": {"texts": 12, "questions": 12},
+        "medium": {"texts": 12, "questions": 24},
+        "long": {"texts": 12, "questions": 36},
+        "info_search": {"texts": 12, "questions": 24},
+        "article": {"texts": 12, "questions": 36},
+    },
     "N3": {
         "short": {"texts": 12, "questions": 12},
         "medium": {"texts": 12, "questions": 24},
@@ -315,3 +329,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

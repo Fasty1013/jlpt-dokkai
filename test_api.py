@@ -52,13 +52,16 @@ for test_lvl in ["N3", "N2", "N1"]:
 print("Cross-Level Anti-Cheat Isolation PASSED: N3, N2, N1 fully verified.")
 
 # 3. Test Submit and Analyze endpoint function
-# Find which option is correct in the database for question 1
+# Find correct options for all questions in this text to test 100% submission
 from models import Question as QModel
-q_db = db.query(QModel).filter(QModel.id == first_q["id"]).first()
-correct_opt = [o for o in q_db.options if o.is_correct][0]
+answers_payload = []
+for q_item in read_data.questions:
+    q_db = db.query(QModel).filter(QModel.id == q_item.id).first()
+    corr_opt = [o for o in q_db.options if o.is_correct][0]
+    answers_payload.append(AnswerSubmissionSchema(question_id=q_item.id, selected_option_id=corr_opt.id))
 
 payload = SubmitPayloadSchema(
-    answers=[AnswerSubmissionSchema(question_id=first_q["id"], selected_option_id=correct_opt.id)],
+    answers=answers_payload,
     time_spent_sec=75
 )
 
@@ -66,7 +69,7 @@ analysis_data = submit_and_analyze(text_id=text_id, payload=payload, db=db)
 analysis_dumped = analysis_data.model_dump()
 
 print(f"User score: {analysis_data.correct_count} / {analysis_data.total_questions} ({analysis_data.score_percent}%)")
-assert analysis_data.correct_count == 1
+assert analysis_data.correct_count == len(read_data.questions)
 assert analysis_data.score_percent == 100.0
 assert "translation_ru" in analysis_dumped
 assert len(analysis_dumped["vocabulary"]) > 0
