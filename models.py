@@ -10,6 +10,7 @@ class Text(Base):
     title = Column(String(255), nullable=False)
     level = Column(String(10), nullable=False, index=True)  # N5, N4, N3, N2, N1
     category = Column(String(50), nullable=False, index=True)  # short, medium, long, info_search, article
+    source_exam = Column(String(100), nullable=True)  # e.g., "JLPT 2022.12 N3", "JLPT 2021.07 N2"
     recommended_time_min = Column(Integer, default=3)
     content_html = Column(SqlText, nullable=False)
     translation_ru = Column(SqlText, nullable=False)
@@ -53,4 +54,3 @@ class Option(Base):
     option_explanation = Column(SqlText, nullable=False)
 
     question = relationship("Question", back_populates="options")
-

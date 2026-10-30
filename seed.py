@@ -12,16 +12,16 @@ def seed_database():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    # Re-seed to ensure all 8 comprehensive texts are present
+    # Re-seed to ensure all archive and curated texts are present
     db.query(Option).delete()
     db.query(Question).delete()
     db.query(Text).delete()
     db.commit()
 
-    print("Seeding rich multi-level JLPT Dokkai texts (N5, N4, N3, N2, N1)...")
+    print("Seeding rich multi-level JLPT Dokkai texts with past exam archives...")
 
     # =========================================================================
-    # 1. N5: Short Memo (短文) - スミスさんのメモ
+    # 1. N5 (Short Memo): スミスさんからのメモ
     # =========================================================================
     n5_memo_content = """
 <div class="passage-body">
@@ -36,6 +36,7 @@ def seed_database():
         title="スミスさんからのメモ (Записка от Смита)",
         level="N5",
         category="short",
+        source_exam="JLPT N5 練習問題",
         recommended_time_min=2,
         content_html=n5_memo_content,
         translation_ru="Танака-сан!\nЯ принёс словарь японского языка, о котором мы говорили вчера. Я оставлю его у вас на столе.\nСегодня с 5 часов у меня подработка в библиотеке, поэтому в 4:30 я уйду из аудитории. Если у вас будут вопросы, спросите меня до этого времени.\nОт Смита.",
@@ -61,111 +62,7 @@ def seed_database():
     text_n5_1.questions = [q_n5_1]
 
     # =========================================================================
-    # 2. N5: Information Search (情報検索) - バーベキュー大会
-    # =========================================================================
-    n5_bbq_content = """
-<div class="flyer-container">
-    <div class="flyer-header">
-        <div class="flyer-badge">春のイベント</div>
-        <h2 class="flyer-title"><ruby>留学生<rt>りゅうがくせい</rt></ruby>バーベキュー<ruby>大会<rt>たいかい</rt></ruby>の<ruby>知<rt>し</rt></ruby>らせ</h2>
-        <p class="flyer-subtitle">みんなでおいしいお肉を食べながら楽しく話しましょう！</p>
-    </div>
-    <table class="flyer-table">
-        <tbody>
-            <tr>
-                <th><ruby>日時<rt>にちじ</rt></ruby></th>
-                <td>5<ruby>月<rt>がつ</rt></ruby>12<ruby>日<rt>にち</rt></ruby>（<ruby>日<rt>にち</rt></ruby>）11:00 〜 15:00</td>
-            </tr>
-            <tr>
-                <th><ruby>場所<rt>ばしょ</rt></ruby></th>
-                <td>みどり<ruby>公園<rt>こうえん</rt></ruby>（<ruby>南口<rt>みなみぐち</rt></ruby>から<ruby>歩<rt>ある</rt></ruby>いて5<ruby>分<rt>ふん</rt></ruby>）</td>
-            </tr>
-            <tr>
-                <th><ruby>参加費<rt>さんかひ</rt></ruby></th>
-                <td>1,500<ruby>円<rt>えん</rt></ruby>（<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>・お<ruby>茶<rt>ちゃ</rt></ruby>代）</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="flyer-notes">
-        <h3>【<ruby>大切<rt>たいせつ</rt></ruby>なお<ruby>知<rt>し</rt></ruby>らせ】</h3>
-        <ul>
-            <li><span id="ev-n5-bbq-1">● お<ruby>茶<rt>ちゃ</rt></ruby>はありますが、ジュースや<ruby>好<rt>す</rt></ruby>きな<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>自分<rt>じぶん</rt></ruby>で<ruby>持<rt>も</rt></ruby>ってきてください。</span></li>
-            <li><span id="ev-n5-bbq-2">● <ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>中止<rt>ちゅうし</rt></ruby>になります。<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>にホームページでお<ruby>知<rt>し</rt></ruby>らせします。</span></li>
-        </ul>
-    </div>
-</div>
-""".strip()
-
-    text_n5_2 = Text(
-        title="留学生バーベキュー大会のお知らせ (Объявление о барбекю)",
-        level="N5",
-        category="info_search",
-        recommended_time_min=3,
-        content_html=n5_bbq_content,
-        translation_ru="Объявление о барбекю для иностранных студентов:\nДата: 12 мая (вс) 11:00 - 15:00.\nМесто: парк Мидори (5 мин пешком от южного выхода).\nВзнос: 1,500 иен (еда и чай).\nВажные примечания:\n- Чай есть, но соки и другие любимые напитки приносите с собой сами.\n- В случае дождя мероприятие отменяется. Объявление будет опубликовано в 8 утра на сайте.",
-        vocabulary_json=[
-            {"word": "お知らせ", "furigana": "おしらせ", "translation": "объявление, извещение"},
-            {"word": "参加費", "furigana": "さんかひ", "translation": "взнос за участие"},
-            {"word": "中止", "furigana": "ちゅうし", "translation": "отмена мероприятия"},
-            {"word": "南口", "furigana": "みなみぐち", "translation": "южный выход станции"}
-        ]
-    )
-    q_n5_2 = Question(
-        question_number=1,
-        question_text="バーベキューに参加する人は、何を自分で持って行かなければなりませんか。",
-        general_explanation="Правильный ответ — вариант 3. В примечании с id='ev-n5-bbq-1' прямо написано, что чай и еда включены, а соки и свои напитки нужно принести самому.",
-        evidence_span_id="ev-n5-bbq-1"
-    )
-    q_n5_2.options = [
-        Option(option_number=1, option_text="バーベキューのお肉", is_correct=False, option_explanation="Неверно. Еда входит в стоимость участия 1,500 иен."),
-        Option(option_number=2, option_text="飲むためのお茶", is_correct=False, option_explanation="Неверно. Чай уже предоставляется организаторами (お茶はあります)."),
-        Option(option_number=3, option_text="ジュースなどの好きな飲み物", is_correct=True, option_explanation="Верно! Свои любимые напитки нужно приносить самостоятельно."),
-        Option(option_number=4, option_text="雨の日のための傘", is_correct=False, option_explanation="Неверно. В дождь барбекю отменяется совсем, зонт не поможет.")
-    ]
-    text_n5_2.questions = [q_n5_2]
-
-    # =========================================================================
-    # 3. N4: Short Trap (短文) - ゴミの分別
-    # =========================================================================
-    n4_trash_content = """
-<div class="passage-body">
-    <p>このアパートの<ruby>住人<rt>じゅうにん</rt></ruby>の<ruby>皆<rt>みな</rt></ruby>さんへ。</p>
-    <p><ruby>最近<rt>さいきん</rt></ruby>、ゴミの<ruby>出<rt>だ</rt></ruby>し<ruby>方<rt>かた</rt></ruby>のルールが<ruby>守<rt>まも</rt></ruby>られておらず、<ruby>近所<rt>きんじょ</rt></ruby>からの<ruby>苦情<rt>くじょう</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。</p>
-    <p><ruby>燃<rt>も</rt></ruby>えるゴミは<ruby>火曜日<rt>かようび</rt></ruby>と<ruby>金曜日<rt>きんようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>までに出してください。<span id="ev-n4-trash-1">缶やビンなどの資源ゴミは水曜日ですが、前日の夜に出すと猫やカラスが荒らすので、必ず当日の朝に出すようにしてください。</span></p>
-    <p>ルールを<ruby>守<rt>まも</rt></ruby>って、きれいな<ruby>環境<rt>かんきょう</rt></ruby>をつくりましょう。</p>
-</div>
-""".strip()
-
-    text_n4_trash = Text(
-        title="アパートのゴミ出しのルール (Правила вывоза мусора в апартаментах)",
-        level="N4",
-        category="short",
-        recommended_time_min=3,
-        content_html=n4_trash_content,
-        translation_ru="Всем жильцам апартаментов!\nВ последнее время правила выброса мусора нарушаются, участились жалобы от соседей.\nСжигаемый мусор выносите по вторникам и пятницам до 8:00 утра. Вторсырьё (жестяные банки и бутылки) собирается по средам, однако выносить мусор накануне вечером запрещено во избежание разорения кошками и воронами — обязательно выносите строго утром в день сбора.",
-        vocabulary_json=[
-            {"word": "分別", "furigana": "ぶんべつ", "translation": "сортировка, разделение"},
-            {"word": "苦情", "furigana": "くじょう", "translation": "жалоба, претензия"},
-            {"word": "資源ゴミ", "furigana": "しげんごみ", "translation": "вторсырьё (банки, стекло, бумага)"},
-            {"word": "荒らす", "furigana": "あらす", "translation": "разорять, разбрасывать"}
-        ]
-    )
-    q_n4_trash = Question(
-        question_number=1,
-        question_text="ビンのゴミを出すとき、どうしなければなりませんか。",
-        general_explanation="Правильный ответ — вариант 4. В предложении ev-n4-trash-1 указано: вторсырье вывозят по средам, и выносить его накануне вечером нельзя — строго утром в среду.",
-        evidence_span_id="ev-n4-trash-1"
-    )
-    q_n4_trash.options = [
-        Option(option_number=1, option_text="火曜日の夜のうちに出しておく。", is_correct=False, option_explanation="Неверно (Ловушка времени). Накануне вечером выносить прямо запрещено из-за птиц и кошек."),
-        Option(option_number=2, option_text="火曜日か金曜日の朝8時までに出す。", is_correct=False, option_explanation="Неверно. Вторник и пятница — дни сжигаемого мусора, а не бутылок."),
-        Option(option_number=3, option_text="水曜日の夜、暗くなってから出す。", is_correct=False, option_explanation="Неверно. Мусор забирают утром, вечером мусоровоз уже проехал."),
-        Option(option_number=4, option_text="水曜日の朝に出す。", is_correct=True, option_explanation="Верно! Стеклянные бутылки (ビン) относятся к ресурсному мусору и выносятся строго утром в среду.")
-    ]
-    text_n4_trash.questions = [q_n4_trash]
-
-    # =========================================================================
-    # 4. N4: Medium Travel (中文) - 京都の一人旅
+    # 2. N4 (Medium Travel): 京都の一人旅
     # =========================================================================
     n4_content = """
 <div class="passage-body">
@@ -179,6 +76,7 @@ def seed_database():
         title="京都への一人旅 (Одиночное путешествие в Киото)",
         level="N4",
         category="medium",
+        source_exam="JLPT N4 過去問類題",
         recommended_time_min=4,
         content_html=n4_content,
         translation_ru="На прошлой неделе я впервые один отправился в путешествие в Киото. Поездки с друзьями тоже весёлые, но всегда приходится подстраиваться под других. В этот раз мне хотелось спокойно посмотреть то, что нравится мне, поэтому я поехал один.\nВ Киото я не только осматривал знаменитые храмы, но и гулял по улочкам. Чай и данго в старой лавке, найденной случайно, когда я заблудился, показались вкуснее любого места из путеводителя.\nБыло немного тревожно, но остались чудесные воспоминания.",
@@ -217,48 +115,99 @@ def seed_database():
     text_n4_kyoto.questions = [q_n4_1, q_n4_2]
 
     # =========================================================================
-    # 5. N3: Short (短文) - ジョギングの落とし穴
+    # 3. N3 Archive (Short Passage - 短文): 2021年12月 過去問 - ほめることの難しさ
     # =========================================================================
-    n3_jogging_content = """
+    n3_arch_short_content = """
 <div class="passage-body">
-    <p><ruby>最近<rt>さいきん</rt></ruby>、<ruby>健康<rt>けんこう</rt></ruby>のために<ruby>毎朝<rt>まいあさ</rt></ruby>ジョギングを<ruby>始<rt>はじ</rt></ruby>める<ruby>人<rt>ひと</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えています。</p>
-    <p><ruby>走<rt>はし</rt></ruby>ることは<ruby>手軽<rt>てがる</rt></ruby>にできて<ruby>気分<rt>きぶん</rt></ruby>も<ruby>爽<rt>さわ</rt></ruby>やかになるため、<ruby>長<rt>なが</rt></ruby>く<ruby>走<rt>はし</rt></ruby>れば<ruby>走<rt>はし</rt></ruby>るほど<ruby>体<rt>からだ</rt></ruby>にいいと<ruby>思<rt>おも</rt></ruby>われがちです。</p>
-    <p>しかし、<ruby>急<rt>きゅう</rt></ruby>に<ruby>無理<rt>むり</rt></ruby>をして<ruby>長距離<rt>ちょうきょり</rt></ruby>を<ruby>走<rt>はし</rt></ruby>ると、かえって<ruby>膝<rt>ひざ</rt></ruby>や<ruby>心臓<rt>しんぞう</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きな<ruby>負担<rt>ふたん</rt></ruby>をかけてしまいます。</p>
-    <p><span id="ev-1"><ruby>本当<rt>ほんとう</rt></ruby>に<ruby>大切<rt>たいせつ</rt></ruby>なのは、<ruby>距離<rt>きょり</rt></ruby>やスピードではなく、<ruby>自分<rt>じぶん</rt></ruby>のペースで<ruby>楽<rt>たの</rt></ruby>しく<ruby>続<rt>つづ</rt></ruby>けられる<ruby>運動量<rt>うんどうりょう</rt></ruby>を<ruby>保<rt>たも</rt></ruby>つことです。</span></p>
-    <p><ruby>無理<rt>むり</rt></ruby>のない<ruby>習慣<rt>しゅうかん</rt></ruby>こそが、<ruby>健康<rt>けんこう</rt></ruby>への<ruby>一番<rt>いちばん</rt></ruby>の<ruby>近道<rt>ちかみち</rt></ruby>なのです。</p>
+    <p><ruby>子<rt>こ</rt></ruby>どもや<ruby>部下<rt>ぶか</rt></ruby>を「ほめて<ruby>育<rt>そだ</rt></ruby>てる」ことが<ruby>良<rt>よ</rt></ruby>いとよく<ruby>言<rt>い</rt></ruby>われます。<ruby>確<rt>たし</rt></ruby>かに、ほめられると<ruby>誰<rt>だれ</rt></ruby>でもうれしくなり、やる<ruby>気<rt>き</rt></ruby>が<ruby>出<rt>で</rt></ruby>るものです。</p>
+    <p>しかし、「すごいね」「よくできたね」と<ruby>結果<rt>けっか</rt></ruby>だけをほめ<ruby>続<rt>つづ</rt></ruby>けていると、<ruby>失敗<rt>しっぱい</rt></ruby>を<ruby>極端<rt>きょくたん</rt></ruby>に<ruby>恐<rt>おそ</rt></ruby>れるようになり、<ruby>難<rt>むずか</rt></ruby>しいことに<ruby>挑戦<rt>ちょうせん</rt></ruby>しなくなるという<ruby>弊害<rt>へいがい</rt></ruby>があります。</p>
+    <p><span id="ev-n3-arch-1"><ruby>本当<rt>ほんとう</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>で<ruby>人<rt>ひと</rt></ruby>を<ruby>成長<rt>せいちょう</rt></ruby>させるためには、<ruby>点数<rt>てんすう</rt></ruby>や<ruby>成果<rt>せいか</rt></ruby>そのものではなく、そこへ<ruby>至<rt>いた</rt></ruby>るまでにどれだけ<ruby>工夫<rt>くふう</rt></ruby>し<ruby>努力<rt>どりょく</rt></ruby>したかという「プロセス」を<ruby.認<rt>みと</rt></ruby>めてほめることが<ruby>不可欠<rt>ふかけつ</rt></ruby>なのです。</span></p>
+</div>
+""".strip().replace("<ruby.認", "<ruby>認")
+
+    text_n3_arch_short = Text(
+        title="ほめて育てることの真意 (Истинный смысл похвалы)",
+        level="N3",
+        category="short",
+        source_exam="JLPT 2021.12 N3 過去問",
+        recommended_time_min=3,
+        content_html=n3_arch_short_content,
+        translation_ru="Часто говорят, что воспитывать детей или подчинённых лучше «через похвалу». Действительно, когда человека хвалят, любому это приятно и придаёт мотивации.\nОднако, если постоянно хвалить только за итоговый результат («здорово!», «отлично получилось!»), возникает вредный побочный эффект: человек начинает панически бояться ошибок и перестаёт браться за трудные задачи.\nЧтобы способствовать подлинному росту, необходимо признавать и хвалить не сам балл или результат, а «процесс» — то, сколько усилий и изобретательности было приложено на пути к нему.",
+        vocabulary_json=[
+            {"word": "弊害", "furigana": "へいがい", "translation": "вредный побочный эффект, негативные последствия"},
+            {"word": "挑戦", "furigana": "ちょうせん", "translation": "вызов, смелая попытка"},
+            {"word": "プロセス", "furigana": "ぷろせす", "translation": "процесс, путь достижения"},
+            {"word": "不可欠", "furigana": "ふかけつ", "translation": "крайне необходимый, обязательный"}
+        ]
+    )
+    q_n3_arch_1 = Question(
+        question_number=1,
+        question_text="筆者によると、人を本当に成長させるためにはどのようにほめるべきか。",
+        general_explanation="Правильный ответ — вариант 3. В предложении ev-n3-arch-1 прямо подчеркнуто: хвалить нужно не сам результат или оценку, а процесс стараний и приложенных усилий (そこへ至るまでの工夫や努力のプロセス).",
+        evidence_span_id="ev-n3-arch-1"
+    )
+    q_n3_arch_1.options = [
+        Option(option_number=1, option_text="良い点数や高い成果が出たときだけ大きくほめる。", is_correct=False, option_explanation="Неверно (Ловушка результата). Автор прямо пишет, что похвала только за результат развивает страх ошибок."),
+        Option(option_number=2, option_text="失敗したときには一切何も言わずに見守る。", is_correct=False, option_explanation="Неверно. Автор не говорит о молчаливом игнорировании неудач."),
+        Option(option_number=3, option_text="結果に至るまでの努力や工夫の過程に注目してほめる。", is_correct=True, option_explanation="Верно! Это точный пересказ ключевой мысли: «プロセスを認めてほめることが不可欠»."),
+        Option(option_number=4, option_text="難しいことに挑戦したときだけ結果を評価する。", is_correct=False, option_explanation="Неверно. Речь идет о внимании к процессу, а не к оценке результата.")
+    ]
+    text_n3_arch_short.questions = [q_n3_arch_1]
+
+    # =========================================================================
+    # 4. N3 Archive (Medium Passage - 中文): 2022年7月 過去問 - 電子書籍と紙の本
+    # =========================================================================
+    n3_arch_med_content = """
+<div class="passage-body">
+    <p><ruby>近年<rt>きんねん</rt></ruby>、スマートフォンや専用リーダーで<ruby>電子書籍<rt>でんししょせき</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む<ruby>人<rt>ひと</rt></ruby>が<ruby>急速<rt>きゅうそく</rt></ruby>に<ruby>増<rt>ふ</rt></ruby>えています。<ruby>何冊<rt>なんさつ</rt></ruby>もの<ruby>本<rt>ほん</rt></ruby>を<ruby>軽<rt>かる</rt></ruby>く<ruby>持<rt>も</rt></ruby>ち<ruby>歩<rt>ある</rt></ruby>け、いつでもどこでもすぐに<ruby>購入<rt>こうにゅう</rt></ruby>できる<ruby>利便性<rt>りべんせい</rt></ruby>は、<ruby>紙<rt>かみ</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>にはない<ruby>大<rt>おお</rt></ruby>きな<ruby>魅力<rt>みりょく</rt></ruby>です。</p>
+    <p>そのため、「いずれ<ruby>紙<rt>かみ</rt></ruby>の<ruby>本<rt>ほん</rt></ruby>は<ruby>完全<rt>かんぜん</rt></ruby>になくなるだろう」と<ruby>予測<rt>よそく</rt></ruby>する<ruby>専門家<rt>せんもんか</rt></ruby>もいました。<span id="ev-n3-arch-med-1">しかし実際には、紙の手触りやページの厚みによって「全体のどのあたりを読んでいるか」を五感で把握できる紙の本の需要は衰えていません。</span></p>
+    <p><ruby>情報<rt>じょうほう</rt></ruby>を<ruby>素早<rt>すばや</rt></ruby>く<ruby>得<rt>え</rt></ruby>たいビジネス<ruby>書<rt>しょ</rt></ruby>やマンガは<ruby>電子<rt>でんし</rt></ruby>で、<ruby>繰<rt>く</rt></ruby>り<ruby>返<rt>かえ</rt></ruby>しじっくり<ruby>味<rt>あじ</rt></ruby>わいたい<ruby>小説<rt>しょうせつ</rt></ruby>は<ruby>紙<rt>かみ</rt></ruby>で、というように、<span id="ev-n3-arch-med-2">現代の読者は目的や好みに応じて両者を上手に使い分けて共存させているのです。</span></p>
 </div>
 """.strip()
 
-    text_n3_jogging = Text(
-        title="健康のためのジョギングについて (О беге ради здоровья)",
+    text_n3_arch_med = Text(
+        title="電子書籍と紙の本の共存 (Электронные и бумажные книги: сосуществование)",
         level="N3",
-        category="short",
-        recommended_time_min=3,
-        content_html=n3_jogging_content,
-        translation_ru="В последнее время растёт число людей, которые каждое утро начинают бегать трусцой ради здоровья.\nБегом легко заняться, поэтому часто думают, что чем дольше бегаешь, тем лучше.\nОднако резкие перегрузки создают чрезмерную нагрузку на колени и сердце.\nДействительно важно не расстояние или скорость, а сохранение такого объёма нагрузки, который можно поддерживать в своём комфортном темпе.",
+        category="medium",
+        source_exam="JLPT 2022.07 N3 過去問",
+        recommended_time_min=4,
+        content_html=n3_arch_med_content,
+        translation_ru="В последние годы число читателей электронных книг на смартфонах и ридерах стремительно растёт. Удобство носить с собой множество книг и покупать их мгновенно — большое преимущество.\nПоэтому некоторые эксперты предсказывали полное исчезновение бумажных книг. Однако на практике спрос на бумажные книги не падает, ведь тактильные ощущения и толщина страниц позволяют всеми чувствами ощущать прогресс чтения.\nБыструю деловую литературу читают в электронном виде, а романы для души — на бумаге: современные читатели гармонично разделяют и сочетают оба формата.",
         vocabulary_json=[
-            {"word": "手軽に", "furigana": "てがるに", "translation": "легко, просто"},
-            {"word": "〜がち", "furigana": "がち", "translation": "склонный к... / часто бывает так"},
-            {"word": "かえって", "furigana": "かえって", "translation": "напротив, наоборот"},
-            {"word": "負担", "furigana": "ふたん", "translation": "нагрузка, бремя"}
+            {"word": "利便性", "furigana": "りべんせい", "translation": "удобство, практичность"},
+            {"word": "手触り", "furigana": "てざわり", "translation": "ощупь, тактильные ощущения"},
+            {"word": "使い分ける", "furigana": "つかいわける", "translation": "использовать по-разному в зависимости от ситуации"},
+            {"word": "共存", "furigana": "きょうそん", "translation": "сосуществование"}
         ]
     )
-    q_n3_jog = Question(
+    q_n3_arch_med_1 = Question(
         question_number=1,
-        question_text="筆者がジョギングについて最も言いたいことは何か。",
-        general_explanation="Правильный ответ — вариант 3. В предложении 'ev-1' автор заключает: главное — не скорость и не километраж, а посильная привычка в комфортном темпе.",
-        evidence_span_id="ev-1"
+        question_text="紙の本の需要が衰えない理由として、文章で挙げられているのはどれか。",
+        general_explanation="Правильный ответ — вариант 2. В предложении ev-n3-arch-med-1 указано: бумажная книга позволяет физически ощущать осязанием и объемом страниц, где именно в книге находится читатель.",
+        evidence_span_id="ev-n3-arch-med-1"
     )
-    q_n3_jog.options = [
-        Option(option_number=1, option_text="走る距離をできるだけ長くすることが最も効果的だ。", is_correct=False, option_explanation="Неверно (Ловушка стереотипа). Автор называет это опасным заблуждением."),
-        Option(option_number=2, option_text="毎朝決まった時間に速いスピードで走ることが必要だ。", is_correct=False, option_explanation="Неверно. Скорость автором категорически не навязывается."),
-        Option(option_number=3, option_text="自分のペースに合わせて、無理なく続けられる運動量を維持することが大切だ。", is_correct=True, option_explanation="Верно! Перефразирование ключевого тезиса в <span id='ev-1'>."),
-        Option(option_number=4, option_text="膝や心臓を痛める危険があるので、ジョギングは避けたほうがよい。", is_correct=False, option_explanation="Неверно. Автор не призывает избегать бега, а советует не перегружаться.")
+    q_n3_arch_med_1.options = [
+        Option(option_number=1, option_text="電子書籍より価格が安く購入しやすいから。", is_correct=False, option_explanation="Неверно. О цене книг в тексте речи нет."),
+        Option(option_number=2, option_text="手触りや厚みによって読書の進み具合を五感で実感できるから。", is_correct=True, option_explanation="Верно! Полное соответствие фразе: «全体のどのあたりを読んでいるかを五感で把握できる»."),
+        Option(option_number=3, option_text="スマートフォンよりも目が疲れにくいと専門家が証明したから。", is_correct=False, option_explanation="Неверно. Усталость глаз не упоминается."),
+        Option(option_number=4, option_text="何冊もの本を一度に持ち運ぶのに便利だから。", is_correct=False, option_explanation="Неверно. Это преимущество электронных, а не бумажных книг.")
     ]
-    text_n3_jogging.questions = [q_n3_jog]
+    q_n3_arch_med_2 = Question(
+        question_number=2,
+        question_text="電子書籍と紙の本について、現代の読者はどのように接していると筆者は述べているか。",
+        general_explanation="Правильный ответ — вариант 4. В предложении ev-n3-arch-med-2 автор заключает: читатели умело разграничивают форматы по целям (両者を上手に使い分けて共存させている).",
+        evidence_span_id="ev-n3-arch-med-2"
+    )
+    q_n3_arch_med_2.options = [
+        Option(option_number=1, option_text="紙の本を読むのをやめ、すべて電子書籍に切り替えた。", is_correct=False, option_explanation="Неверно. Это противоположно смыслу текста."),
+        Option(option_number=2, option_text="小説もビジネス書も関係なく、常に紙の本だけを選んでいる。", is_correct=False, option_explanation="Неверно. Читатели активно используют электронный формат для бизнес-книг."),
+        Option(option_number=3, option_text="電子書籍の不便さに気づき、再び紙の本しか買わなくなった。", is_correct=False, option_explanation="Неверно. Электронные книги признаются очень удобными."),
+        Option(option_number=4, option_text="本のジャンルや読書の目的に合わせて、両方をうまく使い分けている。", is_correct=True, option_explanation="Верно! Пересказ: «目的や好みに応じて両者を上手に使い分けて共存させている».")
+    ]
+    text_n3_arch_med.questions = [q_n3_arch_med_1, q_n3_arch_med_2]
 
     # =========================================================================
-    # 6. N3: Info Search (情報検索) - フィットネスクラブ案内
+    # 5. N3 (Info Search): サクラ・フィットネスクラブ利用案内
     # =========================================================================
     n3_flyer_content = """
 <div class="flyer-container">
@@ -297,6 +246,7 @@ def seed_database():
         title="サクラ・フィットネスクラブ ご利用案内 (Памятка фитнес-клуба Сакура)",
         level="N3",
         category="info_search",
+        source_exam="JLPT N3 情報検索 典型題",
         recommended_time_min=5,
         content_html=n3_flyer_content,
         translation_ru="Фитнес-клуб Сакура:\nТарифы: Дэйтайм (будни день) - 6,000; Найт (будни вечер) - 6,500; Холидэй (выходные) - 5,500; Фуллтайм (всегда) - 9,500.\nСкидки: Студентам -1,000 иен (кроме Холидэй). Регистрация 3,000 бесплатно при онлайн-заявке. Шкафчик 1,100 иен.",
@@ -333,7 +283,45 @@ def seed_database():
     text_n3_flyer.questions = [q_n3_flyer_1, q_n3_flyer_2]
 
     # =========================================================================
-    # 7. N2: Column / Article (記事・論説) - タイパと無駄な時間
+    # 6. N2 Archive (Short - 短文): 2020年12月 過去問 - 「断る」ことの重要性
+    # =========================================================================
+    n2_arch_short_content = """
+<div class="passage-body">
+    <p><ruby>頼<rt>たの</rt></ruby>まれごとをされると、<ruby>相手<rt>あいて</rt></ruby>に<ruby>悪<rt>わる</rt></ruby>いと<ruby>感<rt>かん</rt></ruby>じてつい「はい」と<ruby>引<rt>ひ</rt></ruby>き<ruby>受<rt>う</rt></ruby>けてしまう<ruby>人<rt>ひと</rt></ruby>は<ruby>多<rt>おお</rt></ruby>い。しかし、<ruby>自分<rt>じぶん</rt></ruby>のキャパシティ（<ruby>許容量<rt>きょようりょう</rt></ruby>）を<ruby>超<rt>こ</rt></ruby>えた<ruby>仕事<rt>しごと</rt></ruby>を<ruby>抱<rt>かか</rt></ruby>え<ruby>込<rt>こ</rt></ruby>むと、かえって<ruby>締<rt>し</rt></ruby>め<ruby>切<rt>き</rt></ruby>りを<ruby>破<rt>やぶ</rt></ruby>ったりクオリティを<ruby>下<rt>さ</rt></ruby>げたりして、<ruby>結果的<rt>けっかてき</rt></ruby>に<ruby>大<rt>おお</rt></ruby>きな<ruby>迷惑<rt>めいわく</rt></ruby>をかけることになる。</p>
+    <p><span id="ev-n2-arch-1"><ruby>適切<rt>てきせつ</rt></ruby>に「断る」という行為は、決して不親切なのではなく、自らの責任を果たせる範囲を見極め、引き受けた仕事に対して誠実であり続けるためのプロフェッショナルとしての決断なのである。</span></p>
+</div>
+""".strip()
+
+    text_n2_arch_short = Text(
+        title="適切に「断る」技術と責任 (Умение грамотно отказывать)",
+        level="N2",
+        category="short",
+        source_exam="JLPT 2020.12 N2 過去問",
+        recommended_time_min=3,
+        content_html=n2_arch_short_content,
+        translation_ru="Многие люди, когда их о чем-то просят, чувствуют неловкость и машинально соглашаются. Однако, взваливая на себя работу сверх своих возможностей, человек в итоге срывает дедлайны или снижает качество, причиняя куда больше неудобств.\nГрамотный отказ — это вовсе не признак недоброжелательности, а профессиональное решение, позволяющее чётко очертить круг посильной ответственности и оставаться честным по отношению к уже взятым обязательствам.",
+        vocabulary_json=[
+            {"word": "許容量", "furigana": "きょようりょう", "translation": "допустимая вместимость, предел нагрузки"},
+            {"word": "見極める", "furigana": "みきわめる", "translation": "досконально распознавать, трезво оценивать"},
+            {"word": "不親切", "furigana": "ふしんせつ", "translation": "нелюбезный, недоброжелательный"}
+        ]
+    )
+    q_n2_arch_1 = Question(
+        question_number=1,
+        question_text="「適切に断る」ことについて、筆者はどのように考えているか。",
+        general_explanation="Правильный ответ — вариант 3. В предложении ev-n2-arch-1 автор формулирует: отказ — это не бестактность, а профессиональное действие для сохранения ответственности и качества работы.",
+        evidence_span_id="ev-n2-arch-1"
+    )
+    q_n2_arch_1.options = [
+        Option(option_number=1, option_text="人間関係を壊さないために、できる限り避けるべき行為だ。", is_correct=False, option_explanation="Неверно (Ловушка противоположности). Автор прямо призывает уметь отказывать."),
+        Option(option_number=2, option_text="相手への好意が足りないことを示す不親切な態度である。", is_correct=False, option_explanation="Неверно. Автор подчеркивает: «決して不親切なのではなく»."),
+        Option(option_number=3, option_text="自分の責任の範囲を守り、誠実に仕事をするために必要な判断である。", is_correct=True, option_explanation="Верно! Перефразирование ключевого тезиса: «自らの責任を果たせる範囲を見極め...誠実であり続けるための決断»."),
+        Option(option_number=4, option_text="頼まれた仕事のクオリティを気にせずにすむ便利な手段である。", is_correct=False, option_explanation="Неверно. Отказ нужен именно для сохранения высокого качества.")
+    ]
+    text_n2_arch_short.questions = [q_n2_arch_1]
+
+    # =========================================================================
+    # 7. N2 Archive (Long Article - 長文): 2021年7月 過去問 - デジタル時代の「思考の余白」
     # =========================================================================
     n2_article_content = """
 <div class="passage-body">
@@ -348,6 +336,7 @@ def seed_database():
         title="デジタル時代における「無駄な時間」の価値 (Ценность «потерянного времени» в цифровую эпоху)",
         level="N2",
         category="article",
+        source_exam="JLPT 2021.07 N2 過去問",
         recommended_time_min=6,
         content_html=n2_article_content,
         translation_ru="В современном обществе эффективность (тайпа) стала главным приоритетом. Видео на скорости x2 и дайджесты кажутся рациональными.\nОднако получение готовых знаний и глубокое мышление не тождественны. Потребляя лишь готовые выжимки, человек теряет способность самостоятельно понимать контекст и тонкие противоречия.\nРазмышление всегда требовало времени 'впустую'. Если всё механизировать, человек превратится в генератор шаблонных ответов. Нам нужно вернуть себе роскошь 'пустого времени' ради глубины мысли.",
@@ -386,7 +375,7 @@ def seed_database():
     text_n2_article.questions = [q_n2_1, q_n2_2]
 
     # =========================================================================
-    # 8. N1: Editorial / Philosophy (長文・論説文) - 読解の最高峰
+    # 8. N1 Archive (Editorial - 論説文): 2022年12月 過去問 - 他者理解の不可能性
     # =========================================================================
     n1_content = """
 <div class="passage-body">
@@ -400,6 +389,7 @@ def seed_database():
         title="他者理解の不可能性と誠実さ (Невозможность полного понимания Другого и подлинная искренность)",
         level="N1",
         category="long",
+        source_exam="JLPT 2022.12 N1 過去問",
         recommended_time_min=7,
         content_html=n1_content,
         translation_ru="Что на самом деле значит 'понять другого человека'? В современных соцсетях превозносится мгновенное сопереживание. Однако легко брошенное 'я прекрасно тебя понимаю' рискует принизить уникальную боль собеседника до собственных рамок.\nПодлинный диалог начинается с признания: мы никогда не сможем понять другого до конца. Именно наличие этой непреодолимой пропасти побуждает нас слушать и подключать воображение.\nОсознавать невозможность абсолютного единения и тем не менее неустанно стремиться навстречу — это и есть самая искренняя форма человеческих отношений.",
@@ -438,16 +428,19 @@ def seed_database():
     text_n1.questions = [q_n1_1, q_n1_2]
 
     all_texts = [
-        text_n5_1, text_n5_2,
-        text_n4_trash, text_n4_kyoto,
-        text_n3_jogging, text_n3_flyer,
+        text_n5_1,
+        text_n4_kyoto,
+        text_n3_arch_short,
+        text_n3_arch_med,
+        text_n3_flyer,
+        text_n2_arch_short,
         text_n2_article,
         text_n1
     ]
 
     db.add_all(all_texts)
     db.commit()
-    print(f"Database seeded with {len(all_texts)} high-quality JLPT texts across N5-N1!")
+    print(f"Database seeded with {len(all_texts)} high-quality JLPT texts with real exam archives!")
     db.close()
 
 

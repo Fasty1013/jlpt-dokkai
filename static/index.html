@@ -27,6 +27,7 @@
                 <div class="meta-pill" id="exercise-meta-pill">
                     <span class="level-tag" id="header-level-tag">N3</span>
                     <span class="category-tag" id="header-category-tag">短文</span>
+                    <span class="exam-archive-badge hidden" id="header-exam-badge"></span>
                 </div>
                 
                 <div class="timer-box" id="timer-box">
@@ -49,7 +50,7 @@
                     <div class="hero-badge">JLPT 読解 EXPERT PRACTICE</div>
                     <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
                     <p class="hero-desc">
-                        Строгий экзаменационный режим: решите все вопросы без подсказок, затем получите детальный разбор ошибок, экзаменационных ловушек и доказательств в тексте.
+                        Архивные тексты реальных экзаменов JLPT, строгий анти-чит режим решения и глубокий интерактивный разбор грамматических ловушек и доказательств.
                     </p>
                 </div>
 
@@ -90,6 +91,11 @@
 
             <!-- VIEW 2: EXERCISE & ANALYSIS SPLIT VIEW -->
             <section id="exercise-view" class="view exercise-view hidden">
+                <!-- Hardcore Exam Mode Active Notice (Shown if hints are disabled) -->
+                <div id="hardcore-notice" class="hardcore-notice hidden">
+                    ⚡ <strong>Режим «Строгий Экзамен»:</strong> Подсказки, переводы и подсветка доказательств в тексте отключены вашими настройками.
+                </div>
+
                 <!-- Result Banner (Visible after submission) -->
                 <div id="analysis-banner" class="analysis-banner hidden">
                     <div class="banner-summary">
@@ -103,8 +109,8 @@
                         </div>
                     </div>
 
-                    <!-- Toolbar with Study Tools -->
-                    <div class="study-tools-bar">
+                    <!-- Toolbar with Study Tools (Adaptive to Pre-test Config) -->
+                    <div class="study-tools-bar" id="study-tools-bar">
                         <button class="tool-btn active" id="btn-toggle-furigana" title="Показать или скрыть фуригану над кандзи">
                             <span class="tool-icon">あ</span>
                             <span class="tool-text">Фуригана: <strong id="furigana-status">ВКЛ</strong></span>
@@ -155,6 +161,7 @@
                                     <div class="passage-meta">
                                         <span class="meta-tag level" id="passage-level">N3</span>
                                         <span class="meta-tag category" id="passage-category">短文</span>
+                                        <span class="meta-tag archive" id="passage-exam-badge">JLPT 過去問</span>
                                         <span class="meta-tag time" id="passage-time">3 мин</span>
                                     </div>
                                     <!-- Reader customization tools (Font Size & Font Style) -->
@@ -207,6 +214,65 @@
                 </div>
             </section>
         </main>
+
+        <!-- PRE-TEST SETTINGS MODAL (Feature 2) -->
+        <div id="pretest-modal-backdrop" class="modal-backdrop hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <div class="modal-icon">⚙️</div>
+                    <div class="modal-header-text">
+                        <h3 class="modal-title">Параметры прохождения теста</h3>
+                        <p class="modal-subtitle" id="modal-text-title">Название текста</p>
+                    </div>
+                    <button class="modal-close" id="modal-btn-close">✕</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label-wrap">
+                                <span class="setting-name">Показывать фуригану (<ruby>漢字<rt>かんじ</rt></ruby>)</span>
+                                <span class="setting-tag" id="tag-furigana">Рекомендуется для тренировки</span>
+                            </div>
+                            <p class="setting-desc">
+                                Включено: над кандзи отображаются подсказки чтения.<br>
+                                <strong>Выключено:</strong> чистые кандзи как на реальном экзамене JLPT.
+                            </p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pretest-toggle-furigana" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label-wrap">
+                                <span class="setting-name">Подсветка ключевых слов и подробный разбор</span>
+                                <span class="setting-tag tag-warning" id="tag-hints">Режим анализа</span>
+                            </div>
+                            <p class="setting-desc">
+                                Включено: после сдачи подсвечиваются доказательства в тексте, перевод и разбор дистракторов.<br>
+                                <strong>Выключено:</strong> «Режим Хардкор / Экзамен» — только статус Верно/Неверно без подсказок и переводов.
+                            </p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="pretest-toggle-hints" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="modal-test-meta" id="modal-test-meta-info">
+                        ⏱️ Рекомендуемое время: <span id="modal-time-estimate">3</span> мин
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-ghost" id="modal-btn-cancel">Отмена</button>
+                    <button class="btn btn-primary btn-lg" id="modal-btn-start">Начать решение →</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/static/app.js"></script>

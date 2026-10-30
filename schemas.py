@@ -11,6 +11,7 @@ class TextListItemSchema(BaseModel):
     title: str
     level: str
     category: str
+    source_exam: Optional[str] = None
     recommended_time_min: int
     question_count: int
 
@@ -44,6 +45,7 @@ class TextReadSchema(BaseModel):
     title: str
     level: str
     category: str
+    source_exam: Optional[str] = None
     recommended_time_min: int
     content_html: str
     questions: List[QuestionReadSchema]
@@ -105,6 +107,7 @@ class TextAnalysisSchema(BaseModel):
     title: str
     level: str
     category: str
+    source_exam: Optional[str] = None
     recommended_time_min: int
     content_html: str
     translation_ru: str
@@ -116,4 +119,3 @@ class TextAnalysisSchema(BaseModel):
     questions: List[QuestionAnalysisSchema]
 
     model_config = ConfigDict(from_attributes=True)
-
