@@ -253,3 +253,4 @@ if __name__ == "__main__":
     test_sample = "<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時に開きます。"
     res = analyze(test_sample, "N5")
     print("Test N5 Analysis:", res)
+

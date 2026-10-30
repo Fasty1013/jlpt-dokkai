@@ -6,3 +6,4 @@ Provides text complexity analysis, kanji/grammar audit, and monotonicity verific
 from .analyzer import analyze, check_corpus_monotonicity, clean_japanese_html
 
 __all__ = ["analyze", "check_corpus_monotonicity", "clean_japanese_html"]
+

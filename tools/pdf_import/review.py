@@ -147,3 +147,4 @@ def reject_draft(slug: str) -> bool:
         return True
     print(f"Черновик {slug} не найден.")
     return False
+

@@ -7,7 +7,6 @@ if hasattr(sys.stdout, 'reconfigure'):
 from database import SessionLocal, engine, Base
 import models
 from models import Text, Question, Option
-from nhk_importer import import_nhk_articles_to_db
 from dictionary import get_authentic_hiragana, lookup_word
 
 

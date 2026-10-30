@@ -175,3 +175,4 @@ def validate_pdf_file(file_path: Path) -> Dict[str, Any]:
         "is_scanned": is_scanned,
         "ocr_available": ocr_available
     }
+
