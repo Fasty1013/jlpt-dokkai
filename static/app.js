@@ -642,12 +642,8 @@ async function startExercise(textId) {
         // Render Wizard dots & active question
         renderWizard();
 
-        // Reset and start stopwatch
-        startTimer();
-
     } catch (err) {
-        console.error(err);
-        alert('Ошибка при загрузке текста задания.');
+        console.error('Ошибка инициализации упражнения:', err);
     }
 }
 
