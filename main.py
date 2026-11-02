@@ -70,6 +70,17 @@ app = FastAPI(
 # API Endpoints
 # =============================================================================
 
+@app.get("/api/health", tags=["Health"])
+def health_check(db: Session = Depends(get_db)):
+    """Healthcheck endpoint for Render and uptime monitoring."""
+    text_count = db.query(models.Text).count()
+    return {
+        "status": "ok",
+        "database": "connected",
+        "texts_count": text_count
+    }
+
+
 @app.get("/api/texts", response_model=List[TextListItemSchema], tags=["Catalog"])
 def list_texts(
     level: Optional[str] = Query(None, description="JLPT Level: N5, N4, N3, N2, N1"),
