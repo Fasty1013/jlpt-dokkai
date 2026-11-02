@@ -202,6 +202,7 @@ const elements = {
 
     // Pre-test Modal
     pretestModalBackdrop: document.getElementById('pretest-modal-backdrop'),
+    modalBody: document.querySelector('#pretest-modal-backdrop .modal-body'),
     modalTextTitle: document.getElementById('modal-text-title'),
     modalTimeEstimate: document.getElementById('modal-time-estimate'),
     pretestToggleFurigana: document.getElementById('pretest-toggle-furigana'),
@@ -502,6 +503,7 @@ function openPretestModal(textId) {
     }
 
     updateModalSettingTags();
+    if (elements.modalBody) elements.modalBody.scrollTop = 0;
     elements.pretestModalBackdrop.classList.remove('hidden');
 }
 
