@@ -113,3 +113,4 @@ CREATE INDEX idx_completions_date ON completions_compact (user_id, completed_dat
 5. **Приватность Лидерборда:**
    - По умолчанию `is_leaderboard_public = false` (Opt-in).
    - Email пользователя **никогда не выводится** в публичные списки. Отображается только выбранный `nickname` и `avatar_id`.
+

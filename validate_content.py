@@ -234,7 +234,11 @@ def validate_all_content(check_inventory_targets: bool = False) -> Tuple[bool, D
         print(f"Директория {CONTENT_DIR} не найдена.")
         return False, {}
 
-    json_files = sorted(list(CONTENT_DIR.glob("*.json")))
+    EXCLUDED_FILES = {"difficulty_bands.json"}
+    json_files = sorted([
+        p for p in CONTENT_DIR.glob("*.json")
+        if p.name not in EXCLUDED_FILES and not p.name.startswith(".")
+    ])
     if not json_files:
         print(f"В директории {CONTENT_DIR} нет файлов JSON.")
         return False, {}
