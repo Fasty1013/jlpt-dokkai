@@ -61,28 +61,30 @@ def migrate():
     else:
         print(f"✓ Резервная копия уже существует: {BACKUP_PATH.name}")
 
-    # 2. Добавляем недостающие колонки в texts через ALTER TABLE (SQLite)
-    with engine.connect() as conn:
-        res = conn.exec_driver_sql("PRAGMA table_info(texts)")
-        existing_cols = {row[1] for row in res.fetchall()}
+    # 2. Добавляем недостающие колонки в texts через ALTER TABLE (кроссплатформенно)
+    from sqlalchemy import inspect
+    inspector = inspect(engine)
+    if "texts" in inspector.get_table_names():
+        existing_cols = {col["name"] for col in inspector.get_columns("texts")}
 
         new_columns = [
-            ("origin", "VARCHAR(30) DEFAULT 'archive' NOT NULL"),
-            ("verification_status", "VARCHAR(30) DEFAULT 'expert_reviewed' NOT NULL"),
+            ("origin", "VARCHAR(30) DEFAULT 'archive'"),
+            ("verification_status", "VARCHAR(30) DEFAULT 'expert_reviewed'"),
             ("profile_key", "VARCHAR(80)"),
             ("topic_tags", "JSON DEFAULT '[]'"),
             ("content_hash", "VARCHAR(64)"),
             ("difficulty_vector", "JSON DEFAULT '{}'"),
             ("novelty_report", "JSON DEFAULT '{}'"),
-            ("report_count", "INTEGER DEFAULT 0 NOT NULL"),
-            ("is_active", "BOOLEAN DEFAULT 1 NOT NULL")
+            ("report_count", "INTEGER DEFAULT 0"),
+            ("is_active", "BOOLEAN DEFAULT TRUE")
         ]
 
-        for col_name, col_def in new_columns:
-            if col_name not in existing_cols:
-                print(f"  + Добавление колонки texts.{col_name}...")
-                conn.exec_driver_sql(f"ALTER TABLE texts ADD COLUMN {col_name} {col_def}")
-                conn.commit()
+        with engine.connect() as conn:
+            for col_name, col_def in new_columns:
+                if col_name not in existing_cols:
+                    print(f"  + Добавление колонки texts.{col_name}...")
+                    conn.exec_driver_sql(f"ALTER TABLE texts ADD COLUMN {col_name} {col_def}")
+                    conn.commit()
 
     # 3. Создаем новые таблицы
     Base.metadata.create_all(bind=engine)

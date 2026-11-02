@@ -27,7 +27,7 @@ class Text(Base):
     verification_status = Column(String(30), default="expert_reviewed", nullable=False)  # expert_reviewed, auto_verified, unverified
     profile_key = Column(String(80), nullable=True, index=True)  # e.g. "N3:short:detail:1:S"
     topic_tags = Column(JSON, nullable=True, default=list)
-    content_hash = Column(String(64), unique=True, nullable=True, index=True)
+    content_hash = Column(String(64), nullable=True, index=True)
     difficulty_vector = Column(JSON, nullable=True, default=dict)
     novelty_report = Column(JSON, nullable=True, default=dict)
     report_count = Column(Integer, default=0, nullable=False)
