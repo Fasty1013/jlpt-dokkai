@@ -663,6 +663,7 @@ async function reviewSolvedTask(textId) {
         state.activeText = data;
         state.currentView = 'analysis';
         state.analysisActiveTabIdx = 0;
+        history.pushState({ view: 'analysis', textId: textId }, '', '#analysis');
         renderAnalysisView(data);
     } catch (e) {
         console.error(e);
@@ -698,6 +699,7 @@ function handleSlotReplacement(solvedTextId, replacement) {
 
 function openReportModal(textId, title) {
     state.reportingTextId = textId;
+    history.pushState({ modal: 'report', textId: textId }, '', '#report');
     if (elements.reportModalTaskTitle) {
         elements.reportModalTaskTitle.textContent = title || `Задание #${textId}`;
     }
@@ -776,6 +778,7 @@ window.openReportModal = openReportModal;
 
 function openPretestModal(textId) {
     state.pendingTextId = textId;
+    history.pushState({ modal: 'pretest', textId: textId }, '', '#pretest');
     const textInfo = cachedCatalogTexts.find(t => t.id === textId);
 
     const recMin = textInfo ? textInfo.recommended_time_min : 3;
@@ -874,6 +877,9 @@ async function startExercise(textId) {
         state.userAnswers = {};
         state.currentQuestionIndex = 0;
         state.currentView = 'exercise';
+
+        // History state for phone / browser Back button
+        history.pushState({ view: 'exercise', textId: textId }, '', '#exercise');
 
         // Switch Views
         elements.catalogView.classList.add('hidden');
@@ -1011,8 +1017,15 @@ function renderWizard() {
         </div>
     `;
 
-    // Navigation buttons state
-    elements.btnWizardPrev.disabled = (currentQIdx === 0);
+    // Navigation buttons state: "Назад" на первом вопросе возвращает на главную
+    elements.btnWizardPrev.disabled = false;
+    if (currentQIdx === 0) {
+        elements.btnWizardPrev.textContent = '← На главную';
+        elements.btnWizardPrev.title = 'Вернуться на главную страницу каталога';
+    } else {
+        elements.btnWizardPrev.textContent = '← Назад';
+        elements.btnWizardPrev.title = 'Вернуться к предыдущему вопросу';
+    }
 
     const isCurrentAnswered = selectedOptId !== undefined;
     const isLastQuestion = (currentQIdx === totalQ - 1);
@@ -1056,6 +1069,9 @@ function wizardGoPrev() {
     if (state.currentQuestionIndex > 0) {
         state.currentQuestionIndex -= 1;
         renderWizard();
+    } else {
+        // На первом вопросе кнопка Назад возвращает на главную страницу
+        returnToCatalog();
     }
 }
 
@@ -1583,16 +1599,11 @@ function togglePopupDictStatus() {
 // Main Tab Switching & Personal Notebook Logic
 // ============================================================================
 
-function switchMainTab(tabName) {
+function switchMainTab(tabName, pushState = true) {
     state.activeTab = tabName;
 
     if (tabName === 'notebook') {
-        if (state.currentView === 'exercise') {
-            if (!confirm('Вы находитесь в режиме решения теста. Перейти во вкладку «Мой словарь»? (Текущая сессия чтения будет завершена)')) {
-                return;
-            }
-            stopTimer();
-        }
+        stopTimer();
         state.currentView = 'notebook';
         elements.catalogView.classList.add('hidden');
         elements.exerciseView.classList.add('hidden');
@@ -1606,14 +1617,12 @@ function switchMainTab(tabName) {
         if (elements.btnTabNotebook) elements.btnTabNotebook.classList.add('active');
         if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
 
+        if (pushState) {
+            history.pushState({ view: 'notebook' }, '', '#notebook');
+        }
         renderNotebookWords();
     } else if (tabName === 'import') {
-        if (state.currentView === 'exercise') {
-            if (!confirm('Вы находитесь в режиме решения теста. Перейти во вкладку «Импорт PDF»? (Текущая сессия чтения будет завершена)')) {
-                return;
-            }
-            stopTimer();
-        }
+        stopTimer();
         state.currentView = 'import';
         elements.catalogView.classList.add('hidden');
         elements.exerciseView.classList.add('hidden');
@@ -1627,9 +1636,12 @@ function switchMainTab(tabName) {
         if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
         if (elements.btnTabImport) elements.btnTabImport.classList.add('active');
 
+        if (pushState) {
+            history.pushState({ view: 'import' }, '', '#import');
+        }
         fetchAndRenderDrafts();
     } else {
-        returnToCatalog();
+        returnToCatalog(pushState);
     }
 }
 
@@ -1716,13 +1728,14 @@ function clearAllSavedWords() {
     }
 }
 
-function returnToCatalog() {
+function returnToCatalog(pushState = true) {
     stopTimer();
     state.currentView = 'catalog';
     state.activeTab = 'catalog';
     state.activeText = null;
     state.userAnswers = {};
     state.currentQuestionIndex = 0;
+    state.isRetryMode = false;
 
     elements.exerciseView.classList.add('hidden');
     elements.exerciseHeaderControls.classList.add('hidden');
@@ -1735,6 +1748,13 @@ function returnToCatalog() {
     if (elements.btnTabCatalog) elements.btnTabCatalog.classList.add('active');
     if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
     if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
+
+    closePretestModal();
+    closeReportModal();
+
+    if (pushState) {
+        history.pushState({ view: 'catalog' }, '', window.location.pathname);
+    }
 
     fetchAndRenderCatalog();
 }
@@ -2043,14 +2063,42 @@ window.publishDraft = publishDraft;
 window.deleteDraft = deleteDraft;
 
 function initEventListeners() {
-    // Brand & abort buttons
-    elements.btnHome.addEventListener('click', returnToCatalog);
-    elements.btnAbortExercise.addEventListener('click', () => {
-        if (confirm('Прервать текущее решение и вернуться в каталог?')) {
-            returnToCatalog();
+    // Brand & abort buttons -> always cleanly return to catalog without exiting site
+    elements.btnHome.addEventListener('click', () => returnToCatalog(true));
+    elements.btnAbortExercise.addEventListener('click', () => returnToCatalog(true));
+    elements.btnBackToCatalog.addEventListener('click', () => returnToCatalog(true));
+
+    // Global Smartphone & Browser Back Button (popstate) Handler
+    window.addEventListener('popstate', (e) => {
+        // 1. If any modal is open, close it and stay on the current page
+        if (elements.pretestModalBackdrop && !elements.pretestModalBackdrop.classList.contains('hidden')) {
+            closePretestModal();
+            return;
         }
+        if (elements.reportModalBackdrop && !elements.reportModalBackdrop.classList.contains('hidden')) {
+            closeReportModal();
+            return;
+        }
+        if (elements.supplementaryDrawer && !elements.supplementaryDrawer.classList.contains('hidden')) {
+            elements.supplementaryDrawer.classList.add('hidden');
+            return;
+        }
+
+        // 2. If in exercise mode or analysis view, return to catalog without throwing user out
+        if (state.currentView === 'exercise' || state.currentView === 'analysis') {
+            returnToCatalog(false);
+            return;
+        }
+
+        // 3. If in notebook or import view, return to catalog
+        if (state.activeTab !== 'catalog') {
+            switchMainTab('catalog', false);
+            return;
+        }
+
+        // 4. If already on catalog, keep user on catalog
+        history.pushState({ view: 'catalog' }, '', window.location.pathname);
     });
-    elements.btnBackToCatalog.addEventListener('click', returnToCatalog);
 
     // Reader tools (Font size & Typeface)
     elements.btnFontGothic.addEventListener('click', () => setReaderFont('gothic'));
@@ -2416,6 +2464,7 @@ function initEventListeners() {
 
 // Startup
 document.addEventListener('DOMContentLoaded', () => {
+    history.replaceState({ view: 'catalog' }, '', window.location.pathname);
     initEventListeners();
     updateNotebookBadge();
     fetchAndRenderCatalog();
