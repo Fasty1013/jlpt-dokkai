@@ -96,12 +96,14 @@ const elements = {
     headerNav: document.getElementById('header-nav'),
     btnTabCatalog: document.getElementById('btn-tab-catalog'),
     btnTabNotebook: document.getElementById('btn-tab-notebook'),
+    btnTabImport: document.getElementById('btn-tab-import'),
     exerciseHeaderControls: document.getElementById('exercise-header-controls'),
     headerLevelTag: document.getElementById('header-level-tag'),
     headerCategoryTag: document.getElementById('header-category-tag'),
     headerExamBadge: document.getElementById('header-exam-badge'),
     btnAbortExercise: document.getElementById('btn-abort-exercise'),
     headerSavedCount: document.getElementById('header-saved-count'),
+    headerDraftsCount: document.getElementById('header-drafts-count'),
 
     // Timer Elements in Header
     timerBox: document.getElementById('timer-box'),
@@ -118,6 +120,26 @@ const elements = {
     catalogView: document.getElementById('catalog-view'),
     exerciseView: document.getElementById('exercise-view'),
     notebookView: document.getElementById('notebook-view'),
+    importView: document.getElementById('import-view'),
+
+    // PDF Import Elements
+    formPdfUpload: document.getElementById('form-pdf-upload'),
+    pdfDropzone: document.getElementById('pdf-dropzone'),
+    pdfFileInput: document.getElementById('pdf-file-input'),
+    dropzonePrompt: document.getElementById('dropzone-prompt'),
+    dropzoneFileInfo: document.getElementById('dropzone-file-info'),
+    dropzoneFileName: document.getElementById('dropzone-file-name'),
+    dropzoneFileSize: document.getElementById('dropzone-file-size'),
+    btnClearFile: document.getElementById('btn-clear-file'),
+    importLevel: document.getElementById('import-level'),
+    importCategory: document.getElementById('import-category'),
+    importTitleOverride: document.getElementById('import-title-override'),
+    btnStartUpload: document.getElementById('btn-start-upload'),
+    uploadLoadingSpinner: document.getElementById('upload-loading-spinner'),
+    uploadStatusText: document.getElementById('upload-status-text'),
+    stagingDraftsList: document.getElementById('staging-drafts-list'),
+    draftsCount: document.getElementById('drafts-count'),
+    btnRefreshDrafts: document.getElementById('btn-refresh-drafts'),
 
     // Catalog
     catalogGrid: document.getElementById('catalog-grid'),
@@ -1263,6 +1285,7 @@ function switchMainTab(tabName) {
         state.currentView = 'notebook';
         elements.catalogView.classList.add('hidden');
         elements.exerciseView.classList.add('hidden');
+        if (elements.importView) elements.importView.classList.add('hidden');
         elements.exerciseHeaderControls.classList.add('hidden');
         elements.supplementaryDrawer.classList.add('hidden');
         elements.hardcoreNotice.classList.add('hidden');
@@ -1270,8 +1293,30 @@ function switchMainTab(tabName) {
 
         if (elements.btnTabCatalog) elements.btnTabCatalog.classList.remove('active');
         if (elements.btnTabNotebook) elements.btnTabNotebook.classList.add('active');
+        if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
 
         renderNotebookWords();
+    } else if (tabName === 'import') {
+        if (state.currentView === 'exercise') {
+            if (!confirm('Вы находитесь в режиме решения теста. Перейти во вкладку «Импорт PDF»? (Текущая сессия чтения будет завершена)')) {
+                return;
+            }
+            stopTimer();
+        }
+        state.currentView = 'import';
+        elements.catalogView.classList.add('hidden');
+        elements.exerciseView.classList.add('hidden');
+        elements.notebookView.classList.add('hidden');
+        elements.exerciseHeaderControls.classList.add('hidden');
+        elements.supplementaryDrawer.classList.add('hidden');
+        elements.hardcoreNotice.classList.add('hidden');
+        if (elements.importView) elements.importView.classList.remove('hidden');
+
+        if (elements.btnTabCatalog) elements.btnTabCatalog.classList.remove('active');
+        if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
+        if (elements.btnTabImport) elements.btnTabImport.classList.add('active');
+
+        fetchAndRenderDrafts();
     } else {
         returnToCatalog();
     }
@@ -1371,19 +1416,320 @@ function returnToCatalog() {
     elements.exerciseView.classList.add('hidden');
     elements.exerciseHeaderControls.classList.add('hidden');
     elements.notebookView.classList.add('hidden');
+    if (elements.importView) elements.importView.classList.add('hidden');
     elements.catalogView.classList.remove('hidden');
     elements.supplementaryDrawer.classList.add('hidden');
     elements.hardcoreNotice.classList.add('hidden');
 
     if (elements.btnTabCatalog) elements.btnTabCatalog.classList.add('active');
     if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
+    if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
 
     fetchAndRenderCatalog();
 }
 
 // ============================================================================
-// Event Listeners & Initialization
+// PDF Book Ingestion & Staging Management
 // ============================================================================
+
+let currentDraftsCache = [];
+
+function formatFileSize(bytes) {
+    if (!bytes || bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function handlePdfFileSelected(file) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+        alert('Пожалуйста, выберите файл в формате .pdf');
+        return;
+    }
+    state.selectedPdfFile = file;
+    if (elements.dropzoneFileName) elements.dropzoneFileName.textContent = file.name;
+    if (elements.dropzoneFileSize) elements.dropzoneFileSize.textContent = formatFileSize(file.size);
+    if (elements.dropzonePrompt) elements.dropzonePrompt.classList.add('hidden');
+    if (elements.dropzoneFileInfo) elements.dropzoneFileInfo.classList.remove('hidden');
+}
+
+function clearSelectedPdfFile() {
+    state.selectedPdfFile = null;
+    if (elements.pdfFileInput) elements.pdfFileInput.value = '';
+    if (elements.dropzonePrompt) elements.dropzonePrompt.classList.remove('hidden');
+    if (elements.dropzoneFileInfo) elements.dropzoneFileInfo.classList.add('hidden');
+}
+
+async function handlePdfUpload(e) {
+    e.preventDefault();
+    if (!state.selectedPdfFile) {
+        alert('Пожалуйста, выберите или перетащите PDF файл книги.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', state.selectedPdfFile);
+    formData.append('level', elements.importLevel ? elements.importLevel.value : 'N3');
+    formData.append('category', elements.importCategory ? elements.importCategory.value : 'short');
+    const titleVal = elements.importTitleOverride ? elements.importTitleOverride.value.trim() : '';
+    if (titleVal) {
+        formData.append('title_override', titleVal);
+    }
+
+    if (elements.btnStartUpload) elements.btnStartUpload.disabled = true;
+    if (elements.uploadLoadingSpinner) elements.uploadLoadingSpinner.classList.remove('hidden');
+    if (elements.uploadStatusText) elements.uploadStatusText.textContent = 'Распознавание книги: извлечение страниц, вопросов и ключей...';
+
+    try {
+        const resp = await fetch('/api/admin/upload-pdf', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await resp.json();
+        if (!resp.ok || !data.success) {
+            throw new Error(data.error || data.detail || 'Не удалось распознать PDF');
+        }
+
+        clearSelectedPdfFile();
+        if (elements.importTitleOverride) elements.importTitleOverride.value = '';
+
+        await fetchAndRenderDrafts();
+
+        const count = data.drafts ? data.drafts.length : 0;
+        alert(`✓ Успешно! Извлечено заданий/текстов: ${count}. Они отображаются в песочнице черновиков ниже.`);
+    } catch (err) {
+        console.error('PDF upload error:', err);
+        alert(`Ошибка при обработке PDF:\n${err.message}`);
+    } finally {
+        if (elements.btnStartUpload) elements.btnStartUpload.disabled = false;
+        if (elements.uploadLoadingSpinner) elements.uploadLoadingSpinner.classList.add('hidden');
+    }
+}
+
+async function fetchAndRenderDrafts() {
+    try {
+        const resp = await fetch('/api/admin/drafts');
+        if (!resp.ok) return;
+        const drafts = await resp.json();
+        currentDraftsCache = Array.isArray(drafts) ? drafts : [];
+
+        // Update badge counts
+        const count = currentDraftsCache.length;
+        if (elements.draftsCount) elements.draftsCount.textContent = count;
+        if (elements.headerDraftsCount) {
+            elements.headerDraftsCount.textContent = count;
+            if (count > 0) {
+                elements.headerDraftsCount.classList.remove('hidden');
+            } else {
+                elements.headerDraftsCount.classList.add('hidden');
+            }
+        }
+
+        renderDraftsList(currentDraftsCache);
+    } catch (err) {
+        console.error('Failed to fetch drafts:', err);
+    }
+}
+
+function renderDraftsList(drafts) {
+    if (!elements.stagingDraftsList) return;
+
+    if (!drafts || drafts.length === 0) {
+        elements.stagingDraftsList.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-icon">📭</span>
+                <h3>Песочница черновиков пуста</h3>
+                <p>Загрузите PDF книгу выше — распознанные тексты и вопросы появятся здесь перед публикацией.</p>
+            </div>
+        `;
+        return;
+    }
+
+    elements.stagingDraftsList.innerHTML = drafts.map(draft => {
+        const confidencePct = Math.round((draft.confidence || 0) * 100);
+        const confColor = confidencePct >= 80 ? 'color-good' : (confidencePct >= 60 ? 'color-med' : 'color-low');
+        const needsReviewBadge = draft.needs_review
+            ? `<span class="badge-review-needed">⚠️ Требует проверки</span>`
+            : `<span class="badge-review-ready">✓ Готов к публикации</span>`;
+
+        const warningsHtml = (draft.needs_manual_review && draft.needs_manual_review.length > 0)
+            ? `<div class="draft-warnings-box">
+                <strong>Замечания системы:</strong>
+                <ul>${draft.needs_manual_review.map(r => `<li>${r}</li>`).join('')}</ul>
+               </div>`
+            : '';
+
+        const questionsHtml = (draft.questions || []).map((q, qIdx) => {
+            const hasMatched = q.answer_matched;
+            const matchStatus = hasMatched
+                ? `<span class="match-badge match-ok">✓ Ответ найден в ключе</span>`
+                : `<span class="match-badge match-missing">✗ Ответ не найден в ключе (выберите верный)</span>`;
+
+            const optionsHtml = (q.options || []).map(opt => {
+                const isChecked = opt.is_correct ? 'checked' : '';
+                return `
+                    <label class="draft-option-row">
+                        <input type="radio" name="opt-correct-${draft.slug}-${qIdx}" 
+                            value="${opt.option_number}" ${isChecked}
+                            onchange="markDraftCorrectOption('${draft.slug}', ${qIdx}, ${opt.option_number})">
+                        <span class="draft-opt-num">${opt.option_number}.</span>
+                        <span class="draft-opt-text">${opt.text}</span>
+                    </label>
+                `;
+            }).join('');
+
+            return `
+                <div class="draft-q-item">
+                    <div class="draft-q-header">
+                        <span class="draft-q-num">Вопрос ${q.question_number || (qIdx + 1)}:</span>
+                        <span class="draft-q-prompt">${q.prompt}</span>
+                        ${matchStatus}
+                    </div>
+                    <div class="draft-options-group">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="staging-draft-card" id="card-${draft.slug}">
+                <div class="staging-card-top">
+                    <div class="staging-meta">
+                        <span class="level-tag" data-lvl="${draft.level}">${draft.level}</span>
+                        <span class="category-tag">${CATEGORY_NAMES[draft.category] || draft.category}</span>
+                        <span class="confidence-pill ${confColor}">Точность: ${confidencePct}%</span>
+                        ${needsReviewBadge}
+                    </div>
+                    <h3 class="staging-card-title">${draft.title}</h3>
+                    <div class="staging-source-note">${draft.source_note || ''}</div>
+                    ${warningsHtml}
+                </div>
+
+                <!-- Reading Passage Preview -->
+                <div class="staging-passage-preview">
+                    <details class="draft-details">
+                        <summary class="draft-summary">
+                            <span>📖 Текст для чтения (${(draft.body_html || '').replace(/<[^>]+>/g, '').length} симв.)</span>
+                            <span class="details-cue">Развернуть / скрыть</span>
+                        </summary>
+                        <div class="draft-passage-body">
+                            ${draft.body_html || ''}
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Questions and Options Block -->
+                <div class="staging-questions-block">
+                    <h4 class="staging-block-title">❓ Вопросы и варианты (${(draft.questions || []).length}):</h4>
+                    ${questionsHtml}
+                </div>
+
+                <!-- Actions Footer -->
+                <div class="staging-actions-footer">
+                    <div class="draft-footer-left">
+                        <button type="button" class="btn btn-ghost btn-sm" onclick="saveDraft('${draft.slug}')">
+                            💾 Сохранить изменения
+                        </button>
+                        <button type="button" class="btn btn-ghost btn-sm text-danger" onclick="deleteDraft('${draft.slug}')">
+                            🗑 Удалить
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="publishDraft('${draft.slug}')">
+                        🚀 Опубликовать в тренажёр →
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function markDraftCorrectOption(slug, qIdx, optNumber) {
+    const draft = currentDraftsCache.find(d => d.slug === slug);
+    if (!draft || !draft.questions || !draft.questions[qIdx]) return;
+    const q = draft.questions[qIdx];
+    q.options.forEach(opt => {
+        opt.is_correct = (opt.option_number === optNumber);
+    });
+    q.answer_matched = true;
+}
+
+async function saveDraft(slug) {
+    const draft = currentDraftsCache.find(d => d.slug === slug);
+    if (!draft) return;
+
+    try {
+        const resp = await fetch(`/api/admin/drafts/${slug}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(draft)
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.detail || 'Не удалось сохранить');
+        alert('✓ Изменения черновика успешно сохранены!');
+    } catch (err) {
+        alert(`Ошибка при сохранении: ${err.message}`);
+    }
+}
+
+async function publishDraft(slug) {
+    const draft = currentDraftsCache.find(d => d.slug === slug);
+    if (draft && draft.questions) {
+        const missingAns = draft.questions.some(q => !q.options.some(o => o.is_correct));
+        if (missingAns) {
+            alert('Внимание: в одном из вопросов не выбран правильный ответ! Выберите правильный вариант (радиокнопкой) перед публикацией.');
+            return;
+        }
+    }
+
+    try {
+        // Save current modifications first
+        if (draft) {
+            await fetch(`/api/admin/drafts/${slug}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(draft)
+            });
+        }
+
+        const resp = await fetch(`/api/admin/drafts/${slug}/publish`, {
+            method: 'POST'
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.success) {
+            const errList = data.detail?.errors ? data.detail.errors.join('\n') : (data.detail || 'Ошибка');
+            throw new Error(errList);
+        }
+
+        alert(`✓ Задание «${draft ? draft.title : slug}» успешно опубликовано и добавлено в каталог сайта!`);
+        await fetchAndRenderDrafts();
+        fetchAndRenderCatalog();
+    } catch (err) {
+        alert(`Не удалось опубликовать материал:\n${err.message}`);
+    }
+}
+
+async function deleteDraft(slug) {
+    if (!confirm('Вы уверены, что хотите удалить этот черновик?')) return;
+    try {
+        const resp = await fetch(`/api/admin/drafts/${slug}`, {
+            method: 'DELETE'
+        });
+        if (!resp.ok) throw new Error('Ошибка удаления');
+        await fetchAndRenderDrafts();
+    } catch (err) {
+        alert(`Ошибка: ${err.message}`);
+    }
+}
+
+// Global functions exposed to window for inline onclick attributes
+window.markDraftCorrectOption = markDraftCorrectOption;
+window.saveDraft = saveDraft;
+window.publishDraft = publishDraft;
+window.deleteDraft = deleteDraft;
 
 function initEventListeners() {
     // Brand & abort buttons
@@ -1495,12 +1841,54 @@ function initEventListeners() {
     elements.btnToggleVocab.addEventListener('click', () => toggleSupplementaryDrawer('vocab'));
     elements.btnCloseDrawer.addEventListener('click', () => elements.supplementaryDrawer.classList.add('hidden'));
 
-    // Top Navigation Tabs (Тексты и тесты vs Мой словарь)
+    // Top Navigation Tabs (Тексты и тесты vs Мой словарь vs Импорт PDF)
     if (elements.btnTabCatalog) {
         elements.btnTabCatalog.addEventListener('click', () => switchMainTab('catalog'));
     }
     if (elements.btnTabNotebook) {
         elements.btnTabNotebook.addEventListener('click', () => switchMainTab('notebook'));
+    }
+    if (elements.btnTabImport) {
+        elements.btnTabImport.addEventListener('click', () => switchMainTab('import'));
+    }
+
+    // PDF Import UI Events
+    if (elements.formPdfUpload) {
+        elements.formPdfUpload.addEventListener('submit', handlePdfUpload);
+    }
+    if (elements.btnRefreshDrafts) {
+        elements.btnRefreshDrafts.addEventListener('click', fetchAndRenderDrafts);
+    }
+    if (elements.pdfDropzone && elements.pdfFileInput) {
+        elements.pdfDropzone.addEventListener('click', (e) => {
+            if (e.target.closest('#btn-clear-file')) return;
+            elements.pdfFileInput.click();
+        });
+        elements.pdfFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handlePdfFileSelected(e.target.files[0]);
+            }
+        });
+        elements.pdfDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            elements.pdfDropzone.classList.add('dragover');
+        });
+        elements.pdfDropzone.addEventListener('dragleave', () => {
+            elements.pdfDropzone.classList.remove('dragover');
+        });
+        elements.pdfDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            elements.pdfDropzone.classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handlePdfFileSelected(e.dataTransfer.files[0]);
+            }
+        });
+    }
+    if (elements.btnClearFile) {
+        elements.btnClearFile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearSelectedPdfFile();
+        });
     }
 
     if (elements.notebookSearchInput) {
@@ -1640,4 +2028,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initEventListeners();
     updateNotebookBadge();
     fetchAndRenderCatalog();
+    fetchAndRenderDrafts();
 });

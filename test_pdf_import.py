@@ -286,6 +286,62 @@ class TestPDFImportPipeline(unittest.TestCase):
         self.assertTrue(rej_success)
         self.assertFalse(stage_file2.exists(), "Draft must be deleted upon rejection")
 
+    def test_07_admin_api_endpoints(self):
+        """7. Test FastAPI admin endpoints for uploading, listing, updating, publishing, and deleting drafts."""
+        pdf_path = self.temp_path / "api_upload_sample.pdf"
+        create_sample_japanese_pdf(pdf_path, include_answer_key=True)
+
+        # 1. Upload via multipart/form-data
+        with open(pdf_path, "rb") as fp:
+            resp = self.client.post(
+                "/api/admin/upload-pdf",
+                files={"file": ("sample.pdf", fp, "application/pdf")},
+                data={"level": "N3", "category": "short", "title_override": "API Upload Test"}
+            )
+        self.assertEqual(resp.status_code, 200, f"Upload failed: {resp.text}")
+        data = resp.json()
+        self.assertTrue(data["success"])
+        self.assertGreaterEqual(len(data["drafts"]), 1)
+        slug = data["drafts"][0]["slug"]
+
+        try:
+            # 2. List drafts
+            list_resp = self.client.get("/api/admin/drafts")
+            self.assertEqual(list_resp.status_code, 200)
+            draft_slugs = [d["slug"] for d in list_resp.json()]
+            self.assertIn(slug, draft_slugs)
+
+            # 3. Get single draft
+            get_resp = self.client.get(f"/api/admin/drafts/{slug}")
+            self.assertEqual(get_resp.status_code, 200)
+            draft_data = get_resp.json()
+            self.assertEqual(draft_data["title"], "API Upload Test")
+
+            # 4. Update draft (e.g. change title)
+            draft_data["title"] = "Updated Title Test"
+            put_resp = self.client.put(f"/api/admin/drafts/{slug}", json=draft_data)
+            self.assertEqual(put_resp.status_code, 200)
+
+            # 5. Publish draft
+            pub_resp = self.client.post(f"/api/admin/drafts/{slug}/publish")
+            self.assertEqual(pub_resp.status_code, 200, f"Publish failed: {pub_resp.text}")
+            self.assertTrue(pub_resp.json()["success"])
+
+            # Verify in DB and cleanup
+            db = SessionLocal()
+            try:
+                db_text = db.query(Text).filter(Text.slug == slug).first()
+                self.assertIsNotNone(db_text)
+                self.assertEqual(db_text.title, "Updated Title Test")
+                db.delete(db_text)
+                db.commit()
+            finally:
+                db.close()
+        finally:
+            stage_file = STAGING_DIR / f"{slug}.json"
+            if stage_file.exists():
+                stage_file.unlink()
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
