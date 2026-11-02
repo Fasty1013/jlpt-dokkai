@@ -44,6 +44,15 @@ function saveStoredConfig(config) {
     }
 }
 
+function getUserId() {
+    let uid = localStorage.getItem('dokkai_user_id');
+    if (!uid) {
+        uid = 'user-' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        localStorage.setItem('dokkai_user_id', uid);
+    }
+    return uid;
+}
+
 const state = {
     currentView: 'catalog', // 'catalog' | 'exercise' | 'notebook'
     activeTab: 'catalog',   // 'catalog' | 'notebook'
@@ -52,6 +61,18 @@ const state = {
         category: '',
         source: '' // '' | 'nhk' | 'exam'
     },
+    // Stream State
+    streamProfile: {
+        level: 'N5',
+        category: 'short',
+        solvedWhen: 'all_questions_answered'
+    },
+    cachedSlots: [],
+    cachedSolved: [],
+    solvedFilter: 'all',
+    reportingTextId: null,
+    isRetryMode: false,
+
     activeText: null,        // Loaded TextReadSchema or TextAnalysisSchema
     pendingTextId: null,     // Selected text awaiting modal confirmation
     pendingTextData: null,
@@ -141,7 +162,33 @@ const elements = {
     draftsCount: document.getElementById('drafts-count'),
     btnRefreshDrafts: document.getElementById('btn-refresh-drafts'),
 
-    // Catalog
+    // Continuous Stream Elements
+    activeSlotsList: document.getElementById('active-slots-list'),
+    solvedTasksList: document.getElementById('solved-tasks-list'),
+    streamLevelPills: document.getElementById('stream-level-pills'),
+    streamCategoryPills: document.getElementById('stream-category-pills'),
+    streamModePills: document.getElementById('stream-mode-pills'),
+    btnRefreshSlots: document.getElementById('btn-refresh-slots'),
+    solvedFilterPills: document.getElementById('solved-filter-pills'),
+    solvedArchiveTotal: document.getElementById('solved-archive-total'),
+    mobileActiveCount: document.getElementById('mobile-active-count'),
+    mobileSolvedCount: document.getElementById('mobile-solved-count'),
+    streamMobileTabs: document.getElementById('stream-mobile-tabs'),
+    tabColActive: document.getElementById('tab-col-active'),
+    tabColSolved: document.getElementById('tab-col-solved'),
+    colActiveSlots: document.getElementById('col-active-slots'),
+    colSolvedArchive: document.getElementById('col-solved-archive'),
+
+    // Report Defect Modal Elements
+    reportModalBackdrop: document.getElementById('report-modal-backdrop'),
+    reportModalTaskTitle: document.getElementById('report-modal-task-title'),
+    btnCloseReportModal: document.getElementById('btn-close-report-modal'),
+    btnCancelReport: document.getElementById('btn-cancel-report'),
+    btnSubmitReport: document.getElementById('btn-submit-report'),
+    reportReasonSelect: document.getElementById('report-reason-select'),
+    reportDetailsTextarea: document.getElementById('report-details-textarea'),
+
+    // Catalog Legacy Fallback (if needed)
     catalogGrid: document.getElementById('catalog-grid'),
     levelPills: document.getElementById('level-filter-pills'),
     categoryPills: document.getElementById('category-filter-pills'),
@@ -430,71 +477,298 @@ function adjustFontSize(delta) {
 }
 
 // ============================================================================
-// Catalog Loading & Rendering
+// ============================================================================
+// Continuous Stream Loading & Rendering (Two Columns: «Задания» и «Решённые»)
 // ============================================================================
 
 let cachedCatalogTexts = [];
 
 async function fetchAndRenderCatalog() {
-    elements.catalogGrid.innerHTML = '<div class="loading-spinner">Загрузка каталога текстов...</div>';
+    return fetchAndRenderStream();
+}
 
-    const params = new URLSearchParams();
-    if (state.filters.level) params.append('level', state.filters.level);
-    if (state.filters.category) params.append('category', state.filters.category);
+async function fetchAndRenderStream() {
+    await Promise.all([
+        fetchAndRenderSlots(),
+        fetchAndRenderSolvedTasks()
+    ]);
+}
+
+async function fetchAndRenderSlots() {
+    if (!elements.activeSlotsList) return;
+    elements.activeSlotsList.innerHTML = '<div class="loading-spinner">Загрузка слотов заданий...</div>';
+
+    const userId = getUserId();
+    const params = new URLSearchParams({
+        user_id: userId,
+        level: state.streamProfile.level,
+        category: state.streamProfile.category
+    });
 
     try {
-        const response = await fetch(`/api/texts?${params.toString()}`);
-        if (!response.ok) throw new Error('Ошибка загрузки каталога');
-        const texts = await response.json();
-        cachedCatalogTexts = texts;
+        const response = await fetch(`/api/stream/slots?${params.toString()}`);
+        if (!response.ok) throw new Error('Ошибка загрузки слотов');
+        const data = await response.json();
+        const slots = data.slots || [];
+        state.cachedSlots = slots;
 
-        let filteredTexts = texts;
-        if (state.filters.source === 'nhk') {
-            filteredTexts = filteredTexts.filter(t => t.is_nhk === true);
-        } else if (state.filters.source === 'exam') {
-            filteredTexts = filteredTexts.filter(t => t.is_nhk === false);
+        // Также кешируем тексты слотов для совместимости с модалом предстартовых настроек
+        cachedCatalogTexts = slots.filter(s => s.text).map(s => s.text);
+
+        if (elements.mobileActiveCount) {
+            const activeCount = slots.filter(s => s.state === 'active' && s.text).length;
+            elements.mobileActiveCount.textContent = activeCount;
         }
 
-        if (filteredTexts.length === 0) {
-            elements.catalogGrid.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #fff; border-radius: 12px; border: 1px solid var(--washi-border);">
-                    <p style="font-size: 1.1rem; color: var(--sumi-600);">По выбранным фильтрам текстов пока нет.</p>
+        elements.activeSlotsList.innerHTML = slots.map(slot => {
+            if (slot.state === 'placeholder' || !slot.text) {
+                return `
+                    <div class="stream-slot-placeholder" data-position="${slot.position}">
+                        <div class="placeholder-pulse">⏳</div>
+                        <div class="placeholder-title">Готовится новое задание...</div>
+                        <div class="placeholder-desc">Для профиля ${escapeHtml(data.profile_key)} генерируется или подбирается оригинальный учебный материал.</div>
+                    </div>
+                `;
+            }
+
+            const t = slot.text;
+            let originBadge = '';
+            if (t.origin === 'parametric') {
+                originBadge = '<span class="origin-badge-param">⚡ Параметрический</span>';
+            } else if (t.origin === 'ai_generated') {
+                originBadge = '<span class="origin-badge-param" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe;">🤖 ИИ-генерация</span>';
+            } else if (t.category === 'nhk' || (t.title && t.title.includes('NHK'))) {
+                originBadge = '<span class="nhk-badge">NHK WORLD</span>';
+            } else {
+                originBadge = '<span class="exam-archive-badge">📜 JLPT 過去問</span>';
+            }
+
+            return `
+                <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}">
+                    <div class="slot-position-badge">Слот #${slot.position}</div>
+                    <div class="slot-meta-row">
+                        <span class="level-tag" data-lvl="${t.level}">${t.level}</span>
+                        <span class="category-tag">${CATEGORY_NAMES[t.category] || t.category}</span>
+                        ${originBadge}
+                    </div>
+                    <h3 class="slot-title">${escapeHtml(t.title)}</h3>
+                    <div class="slot-footer">
+                        <div class="slot-specs">
+                            <span>⏱️ ${t.recommended_time_min} мин</span>
+                            <span>❓ ${t.question_count} вопр.</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="openPretestModal(${t.id})">
+                            Начать решение →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (err) {
+        console.error(err);
+        elements.activeSlotsList.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--vermilion);">
+                Не удалось загрузить активные задания. Пожалуйста, обновите страницу.
+            </div>
+        `;
+    }
+}
+
+async function fetchAndRenderSolvedTasks() {
+    if (!elements.solvedTasksList) return;
+
+    const userId = getUserId();
+    const params = new URLSearchParams({
+        user_id: userId,
+        level: state.streamProfile.level
+    });
+
+    if (state.solvedFilter === 'perfect') {
+        params.append('only_perfect', 'true');
+    } else if (state.solvedFilter === 'errors') {
+        params.append('only_errors', 'true');
+    }
+
+    try {
+        const response = await fetch(`/api/stream/solved?${params.toString()}`);
+        if (!response.ok) throw new Error('Ошибка загрузки архива решённых заданий');
+        const data = await response.json();
+        const items = data.items || [];
+        state.cachedSolved = items;
+
+        if (elements.solvedArchiveTotal) {
+            elements.solvedArchiveTotal.textContent = data.total || 0;
+        }
+        if (elements.mobileSolvedCount) {
+            elements.mobileSolvedCount.textContent = data.total || 0;
+        }
+
+        if (items.length === 0) {
+            elements.solvedTasksList.innerHTML = `
+                <div class="stream-empty-solved">
+                    <span class="empty-icon">📖</span>
+                    <p>Здесь будут сохраняться решённые вами задания.</p>
+                    <span class="empty-hint">Выберите любое задание из левой колонки «Задания», чтобы начать!</span>
                 </div>
             `;
             return;
         }
 
-        elements.catalogGrid.innerHTML = filteredTexts.map(text => `
-            <div class="catalog-card">
-                <div class="card-top">
-                    <div class="card-meta">
-                        <span class="level-tag" data-lvl="${text.level}">${text.level}</span>
-                        <span class="category-tag">${CATEGORY_NAMES[text.category] || text.category}</span>
-                        ${text.is_nhk ? `<span class="nhk-badge">NHK WORLD</span>` : ''}
-                        ${text.source_exam ? `<span class="exam-archive-badge">📜 ${text.source_exam}</span>` : ''}
+        elements.solvedTasksList.innerHTML = items.map(t => {
+            const isPerfect = (t.last_score === 100 || t.perfect);
+            const scoreBadgeClass = isPerfect ? 'score-perfect' : 'score-errors';
+            const scoreBadgeText = isPerfect ? '100% ★ Идеально' : `${t.last_score}% с ошибками`;
+            const dateStr = t.solved_at ? new Date(t.solved_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+            return `
+                <div class="stream-solved-card" data-text-id="${t.text_id}">
+                    <div class="solved-card-header">
+                        <span class="solved-score-badge ${scoreBadgeClass}">${scoreBadgeText}</span>
+                        <span class="solved-card-date">${dateStr}</span>
                     </div>
-                    <h3 class="card-title">${text.title}</h3>
-                    <div class="card-specs">
-                        <span class="card-spec-item">⏱️ ${text.recommended_time_min} мин</span>
-                        <span class="card-spec-item">❓ ${text.question_count} вопр.</span>
+                    <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
+                    <div class="solved-card-actions">
+                        <button class="btn-solved-action btn-review" onclick="reviewSolvedTask(${t.text_id})">
+                            🔍 Обзор разбора
+                        </button>
+                        <button class="btn-solved-action" onclick="retrySolvedTask(${t.text_id})">
+                            🔁 Пройти заново
+                        </button>
+                        <button class="btn-solved-action" onclick="openReportModal(${t.text_id}, '${escapeHtml(t.title)}')">
+                            ⚠️ Сообщить об ошибке
+                        </button>
                     </div>
                 </div>
-                <div class="card-bottom">
-                    <button class="btn btn-primary btn-full" onclick="openPretestModal(${text.id})">
-                        Начать решение →
-                    </button>
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     } catch (err) {
         console.error(err);
-        elements.catalogGrid.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--vermilion);">
-                Не удалось подключиться к серверу. Пожалуйста, обновите страницу.
+        elements.solvedTasksList.innerHTML = `
+            <div style="text-align: center; padding: 1.5rem; color: var(--vermilion);">
+                Не удалось загрузить архив решённых заданий.
             </div>
         `;
     }
 }
+
+async function reviewSolvedTask(textId) {
+    try {
+        const res = await fetch(`/api/stream/solved/${textId}?user_id=${getUserId()}`);
+        if (res.status === 403) {
+            alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
+            return;
+        }
+        if (!res.ok) throw new Error('Ошибка загрузки разбора');
+        const data = await res.json();
+        state.activeText = data;
+        state.currentView = 'analysis';
+        state.analysisActiveTabIdx = 0;
+        renderAnalysisView(data);
+    } catch (e) {
+        console.error(e);
+        alert('Не удалось загрузить разбор задания');
+    }
+}
+
+async function retrySolvedTask(textId) {
+    try {
+        const res = await fetch(`/api/stream/retry/${textId}?user_id=${getUserId()}`, { method: 'POST' });
+        if (!res.ok) throw new Error('Ошибка запуска повтора');
+        const data = await res.json();
+        state.isRetryMode = true;
+        state.pendingTextData = data;
+        openPretestModal(textId);
+    } catch (e) {
+        console.error(e);
+        alert('Не удалось запустить повторное прохождение');
+    }
+}
+
+function handleSlotReplacement(solvedTextId, replacement) {
+    const card = document.querySelector(`.stream-slot-card[data-text-id="${solvedTextId}"]`);
+    if (card) {
+        card.classList.add('slot-solving-out');
+        setTimeout(() => {
+            fetchAndRenderSlots();
+        }, 350);
+    } else {
+        fetchAndRenderSlots();
+    }
+}
+
+function openReportModal(textId, title) {
+    state.reportingTextId = textId;
+    if (elements.reportModalTaskTitle) {
+        elements.reportModalTaskTitle.textContent = title || `Задание #${textId}`;
+    }
+    if (elements.reportDetailsTextarea) {
+        elements.reportDetailsTextarea.value = '';
+    }
+    if (elements.reportModalBackdrop) {
+        elements.reportModalBackdrop.classList.remove('hidden');
+    }
+}
+
+function closeReportModal() {
+    state.reportingTextId = null;
+    if (elements.reportModalBackdrop) {
+        elements.reportModalBackdrop.classList.add('hidden');
+    }
+}
+
+async function submitReportDefect() {
+    if (!state.reportingTextId) return;
+    const reason = elements.reportReasonSelect ? elements.reportReasonSelect.value : 'Опечатка';
+    const details = elements.reportDetailsTextarea ? elements.reportDetailsTextarea.value.trim() : '';
+
+    try {
+        if (elements.btnSubmitReport) {
+            elements.btnSubmitReport.disabled = true;
+            elements.btnSubmitReport.textContent = 'Отправка...';
+        }
+        const res = await fetch(`/api/texts/${state.reportingTextId}/report`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reason: reason,
+                details: details,
+                user_id: getUserId()
+            })
+        });
+        if (!res.ok) throw new Error('Ошибка отправки замечания');
+        const resData = await res.json();
+        closeReportModal();
+        alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
+        fetchAndRenderSlots();
+    } catch (e) {
+        console.error(e);
+        alert('Не удалось отправить замечание.');
+    } finally {
+        if (elements.btnSubmitReport) {
+            elements.btnSubmitReport.disabled = false;
+            elements.btnSubmitReport.textContent = 'Отправить замечание';
+        }
+    }
+}
+
+function switchMobileStreamCol(col) {
+    if (!elements.tabColActive || !elements.tabColSolved) return;
+    if (col === 'active') {
+        elements.tabColActive.classList.add('active');
+        elements.tabColSolved.classList.remove('active');
+        if (elements.colActiveSlots) elements.colActiveSlots.classList.remove('hidden-mobile');
+        if (elements.colSolvedArchive) elements.colSolvedArchive.classList.add('hidden-mobile');
+    } else {
+        elements.tabColActive.classList.remove('active');
+        elements.tabColSolved.classList.add('active');
+        if (elements.colActiveSlots) elements.colActiveSlots.classList.add('hidden-mobile');
+        if (elements.colSolvedArchive) elements.colSolvedArchive.classList.remove('hidden-mobile');
+    }
+}
+
+window.reviewSolvedTask = reviewSolvedTask;
+window.retrySolvedTask = retrySolvedTask;
+window.openReportModal = openReportModal;
 
 // ============================================================================
 // Pre-Test Settings Modal Logic
@@ -810,23 +1084,60 @@ async function submitAnswers() {
         elements.btnWizardSubmit.disabled = true;
         elements.btnWizardSubmit.textContent = 'Проверка ответов...';
 
-        const response = await fetch(`/api/texts/${state.activeText.id}/submit`, {
+        const idempotencyKey = 'idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const solvedWhen = state.streamProfile.solvedWhen || 'all_questions_answered';
+
+        const response = await fetch('/api/stream/complete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                user_id: getUserId(),
+                text_id: state.activeText.id,
                 answers: answersPayload,
-                time_spent_sec: timeSpent
+                idempotency_key: idempotencyKey,
+                mode: state.isRetryMode ? 'retry' : 'first',
+                solved_when: solvedWhen,
+                all_correct_max_attempts: 2
             })
         });
 
         if (!response.ok) throw new Error('Ошибка сервера при проверке ответов');
 
-        const analysisData = await response.json();
+        const streamResult = await response.json();
+
+        // Если режим "all_correct" и есть ошибки (задание еще не решено)
+        if (!streamResult.is_solved) {
+            const errCount = streamResult.error_question_ids ? streamResult.error_question_ids.length : 1;
+            alert(`Внимательно перепроверьте свои ответы! В ${errCount} вопросах допущены ошибки. Попытка ${streamResult.attempts_used} из ${streamResult.attempts_max}.`);
+
+            // Сбрасываем выбор только в ошибочных вопросах, не сливая правильные ответы!
+            if (streamResult.error_question_ids) {
+                streamResult.error_question_ids.forEach(qid => {
+                    delete state.userAnswers[qid];
+                });
+            }
+            elements.btnWizardSubmit.disabled = false;
+            elements.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
+            // Перерисовываем Wizard для исправления ошибок
+            renderWizard();
+            return;
+        }
+
+        // Задание успешно завершено (solved)
+        const analysisData = streamResult;
         state.activeText = analysisData;
         state.currentView = 'analysis';
         state.analysisActiveTabIdx = 0;
 
         renderAnalysisView(analysisData);
+
+        // Атомарно передаем замену слота для плавной анимации
+        if (analysisData.replacement) {
+            handleSlotReplacement(analysisData.text_id, analysisData.replacement);
+        } else {
+            fetchAndRenderSlots();
+        }
+        fetchAndRenderSolvedTasks();
 
     } catch (err) {
         console.error(err);
@@ -1804,24 +2115,104 @@ function initEventListeners() {
         });
     }
 
-    // Filter pills
-    elements.levelPills.addEventListener('click', (e) => {
-        const pill = e.target.closest('.filter-pill');
-        if (!pill) return;
-        elements.levelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        state.filters.level = pill.dataset.level;
-        fetchAndRenderCatalog();
-    });
+    // Continuous Stream Controls (Level, Category, Mode)
+    if (elements.streamLevelPills) {
+        elements.streamLevelPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.streamLevelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.streamProfile.level = pill.dataset.level;
+            fetchAndRenderStream();
+        });
+    }
 
-    elements.categoryPills.addEventListener('click', (e) => {
-        const pill = e.target.closest('.filter-pill');
-        if (!pill) return;
-        elements.categoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        state.filters.category = pill.dataset.category;
-        fetchAndRenderCatalog();
-    });
+    if (elements.streamCategoryPills) {
+        elements.streamCategoryPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.streamCategoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.streamProfile.category = pill.dataset.category;
+            fetchAndRenderSlots();
+        });
+    }
+
+    if (elements.streamModePills) {
+        elements.streamModePills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.streamProfile.solvedWhen = pill.dataset.solvedWhen || 'all_questions_answered';
+        });
+    }
+
+    if (elements.btnRefreshSlots) {
+        elements.btnRefreshSlots.addEventListener('click', () => {
+            fetchAndRenderSlots();
+        });
+    }
+
+    if (elements.solvedFilterPills) {
+        elements.solvedFilterPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.mini-pill');
+            if (!pill) return;
+            elements.solvedFilterPills.querySelectorAll('.mini-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.solvedFilter = pill.dataset.solvedFilter || 'all';
+            fetchAndRenderSolvedTasks();
+        });
+    }
+
+    // Mobile Column Switcher
+    if (elements.tabColActive) {
+        elements.tabColActive.addEventListener('click', () => switchMobileStreamCol('active'));
+    }
+    if (elements.tabColSolved) {
+        elements.tabColSolved.addEventListener('click', () => switchMobileStreamCol('solved'));
+    }
+
+    // Report Defect Modal Events
+    if (elements.btnCloseReportModal) {
+        elements.btnCloseReportModal.addEventListener('click', closeReportModal);
+    }
+    if (elements.btnCancelReport) {
+        elements.btnCancelReport.addEventListener('click', closeReportModal);
+    }
+    if (elements.btnSubmitReport) {
+        elements.btnSubmitReport.addEventListener('click', submitReportDefect);
+    }
+    if (elements.reportModalBackdrop) {
+        elements.reportModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === elements.reportModalBackdrop) {
+                closeReportModal();
+            }
+        });
+    }
+
+    // Filter pills (Legacy fallback if elements exist)
+    if (elements.levelPills) {
+        elements.levelPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.levelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.filters.level = pill.dataset.level;
+            fetchAndRenderCatalog();
+        });
+    }
+
+    if (elements.categoryPills) {
+        elements.categoryPills.addEventListener('click', (e) => {
+            const pill = e.target.closest('.filter-pill');
+            if (!pill) return;
+            elements.categoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            state.filters.category = pill.dataset.category;
+            fetchAndRenderCatalog();
+        });
+    }
 
     if (elements.sourcePills) {
         elements.sourcePills.addEventListener('click', (e) => {

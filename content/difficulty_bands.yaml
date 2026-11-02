@@ -1,0 +1,315 @@
+version: 1.0
+min_reference_items: 8
+profiles:
+  N1:article:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [384.0, 388.0]
+      avg_sentence_len: [96.0, 97.0]
+      max_sentence_len: [118.0, 122.0]
+      kanji_ratio: [0.42, 0.46]
+  N1:info_search:info_search:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [373.1, 376.0]
+      avg_sentence_len: [124.34, 125.3]
+      max_sentence_len: [253.1, 256.0]
+      kanji_ratio: [0.65, 0.68]
+  N1:long:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [319.0, 325.0]
+      avg_sentence_len: [79.8, 81.2]
+      max_sentence_len: [92.0, 92.0]
+      kanji_ratio: [0.43, 0.44]
+  N1:medium:detail:2:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [225.0, 233.9]
+      avg_sentence_len: [75.0, 77.97]
+      max_sentence_len: [81.0, 81.0]
+      kanji_ratio: [0.42, 0.45]
+  N1:short:claim:1:M:
+    sample_size: 1
+    is_expert_fallback: true
+    metrics:
+      char_count: [550, 1450]
+      avg_sentence_len: [32.0, 85.0]
+      max_sentence_len: [65, 145]
+      kanji_ratio: [0.26, 0.52]
+  N1:short:claim:1:S:
+    sample_size: 11
+    is_expert_fallback: false
+    metrics:
+      char_count: [243.0, 248.0]
+      avg_sentence_len: [81.0, 82.7]
+      max_sentence_len: [100.0, 100.0]
+      kanji_ratio: [0.42, 0.44]
+  N2:article:detail:2:S:
+    sample_size: 1
+    is_expert_fallback: true
+    metrics:
+      char_count: [285, 712]
+      avg_sentence_len: [28.0, 70.0]
+      max_sentence_len: [55, 115]
+      kanji_ratio: [0.22, 0.46]
+  N2:article:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [297.1, 305.9]
+      avg_sentence_len: [74.23, 76.47]
+      max_sentence_len: [97.1, 105.9]
+      kanji_ratio: [0.44, 0.46]
+  N2:info_search:info_search:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [333.0, 338.0]
+      avg_sentence_len: [111.0, 112.7]
+      max_sentence_len: [235.0, 240.0]
+      kanji_ratio: [0.44, 0.48]
+  N2:long:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [315.1, 320.8]
+      avg_sentence_len: [78.82, 80.16]
+      max_sentence_len: [87.1, 92.8]
+      kanji_ratio: [0.39, 0.42]
+  N2:medium:detail:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [277.1, 282.0]
+      avg_sentence_len: [55.42, 56.4]
+      max_sentence_len: [74.0, 74.0]
+      kanji_ratio: [0.42, 0.45]
+  N2:short:claim:1:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [228.1, 233.9]
+      avg_sentence_len: [76.03, 77.97]
+      max_sentence_len: [83.1, 88.9]
+      kanji_ratio: [0.37, 0.4]
+  N3:article:detail:2:S:
+    sample_size: 1
+    is_expert_fallback: true
+    metrics:
+      char_count: [165, 510]
+      avg_sentence_len: [22.0, 55.0]
+      max_sentence_len: [40, 85]
+      kanji_ratio: [0.18, 0.42]
+  N3:article:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [289.0, 291.0]
+      avg_sentence_len: [72.2, 72.8]
+      max_sentence_len: [95.0, 97.0]
+      kanji_ratio: [0.36, 0.4]
+  N3:info_search:info_search:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [278.1, 282.0]
+      avg_sentence_len: [92.73, 94.0]
+      max_sentence_len: [196.1, 200.0]
+      kanji_ratio: [0.38, 0.41]
+  N3:long:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [314.0, 316.8]
+      avg_sentence_len: [52.3, 52.77]
+      max_sentence_len: [75.0, 77.8]
+      kanji_ratio: [0.34, 0.37]
+  N3:medium:detail:2:M:
+    sample_size: 4
+    is_expert_fallback: true
+    metrics:
+      char_count: [220, 680]
+      avg_sentence_len: [22.0, 55.0]
+      max_sentence_len: [40, 85]
+      kanji_ratio: [0.18, 0.42]
+  N3:medium:detail:2:S:
+    sample_size: 8
+    is_expert_fallback: false
+    metrics:
+      char_count: [247.0, 248.3]
+      avg_sentence_len: [49.4, 49.66]
+      max_sentence_len: [62.0, 62.0]
+      kanji_ratio: [0.34, 0.37]
+  N3:short:detail:1:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [188.2, 193.0]
+      avg_sentence_len: [47.05, 48.2]
+      max_sentence_len: [69.0, 69.0]
+      kanji_ratio: [0.29, 0.34]
+  N4:article:claim:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [394.2, 401.9]
+      avg_sentence_len: [56.33, 57.39]
+      max_sentence_len: [66.0, 71.9]
+      kanji_ratio: [0.36, 0.38]
+  N4:article:detail:3:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [187.0, 190.0]
+      avg_sentence_len: [37.4, 38.0]
+      max_sentence_len: [48.0, 48.0]
+      kanji_ratio: [0.27, 0.3]
+  N4:info_search:info_search:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [312.1, 316.8]
+      avg_sentence_len: [104.03, 105.63]
+      max_sentence_len: [210.1, 214.8]
+      kanji_ratio: [0.37, 0.4]
+  N4:info_search:info_search:2:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [172.0, 173.9]
+      avg_sentence_len: [86.0, 86.95]
+      max_sentence_len: [123.0, 124.9]
+      kanji_ratio: [0.34, 0.37]
+  N4:long:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [375.0, 380.8]
+      avg_sentence_len: [53.6, 54.37]
+      max_sentence_len: [68.0, 71.8]
+      kanji_ratio: [0.4, 0.41]
+  N4:long:detail:3:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [219.1, 223.9]
+      avg_sentence_len: [36.52, 37.29]
+      max_sentence_len: [52.0, 52.0]
+      kanji_ratio: [0.29, 0.31]
+  N4:medium:detail:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [372.2, 395.9]
+      avg_sentence_len: [53.13, 56.58]
+      max_sentence_len: [66.0, 69.9]
+      kanji_ratio: [0.38, 0.41]
+  N4:medium:detail:2:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [161.0, 164.8]
+      avg_sentence_len: [40.2, 41.16]
+      max_sentence_len: [47.0, 47.0]
+      kanji_ratio: [0.25, 0.28]
+  N4:short:claim:1:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [371.0, 372.0]
+      avg_sentence_len: [53.0, 53.1]
+      max_sentence_len: [65.1, 66.9]
+      kanji_ratio: [0.4, 0.41]
+  N4:short:detail:1:XS:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [110.2, 116.9]
+      avg_sentence_len: [27.55, 29.18]
+      max_sentence_len: [47.0, 47.0]
+      kanji_ratio: [0.26, 0.3]
+  N5:article:claim:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [394.2, 401.9]
+      avg_sentence_len: [56.33, 57.39]
+      max_sentence_len: [66.0, 71.9]
+      kanji_ratio: [0.36, 0.38]
+  N5:article:detail:3:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [141.0, 143.9]
+      avg_sentence_len: [28.2, 28.78]
+      max_sentence_len: [37.0, 37.0]
+      kanji_ratio: [0.27, 0.3]
+  N5:info_search:info_search:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [312.1, 316.8]
+      avg_sentence_len: [104.03, 105.63]
+      max_sentence_len: [210.1, 214.8]
+      kanji_ratio: [0.37, 0.4]
+  N5:info_search:info_search:2:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [130.1, 134.0]
+      avg_sentence_len: [65.05, 67.0]
+      max_sentence_len: [104.1, 108.0]
+      kanji_ratio: [0.31, 0.35]
+  N5:long:detail:3:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [375.0, 380.8]
+      avg_sentence_len: [53.6, 54.37]
+      max_sentence_len: [68.0, 71.8]
+      kanji_ratio: [0.4, 0.41]
+  N5:long:detail:3:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [179.0, 182.0]
+      avg_sentence_len: [25.6, 26.0]
+      max_sentence_len: [39.0, 39.0]
+      kanji_ratio: [0.24, 0.26]
+  N5:medium:detail:2:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [372.2, 395.9]
+      avg_sentence_len: [53.13, 56.58]
+      max_sentence_len: [66.0, 69.9]
+      kanji_ratio: [0.38, 0.41]
+  N5:medium:detail:2:S:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [133.0, 138.0]
+      avg_sentence_len: [22.2, 23.0]
+      max_sentence_len: [30.0, 30.0]
+      kanji_ratio: [0.25, 0.28]
+  N5:short:claim:1:M:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [371.0, 372.0]
+      avg_sentence_len: [53.0, 53.1]
+      max_sentence_len: [65.1, 66.9]
+      kanji_ratio: [0.4, 0.41]
+  N5:short:detail:1:XS:
+    sample_size: 12
+    is_expert_fallback: false
+    metrics:
+      char_count: [71.1, 77.9]
+      avg_sentence_len: [17.8, 19.47]
+      max_sentence_len: [26.0, 26.0]
+      kanji_ratio: [0.22, 0.31]

@@ -119,6 +119,28 @@ def run_project_diagnostics() -> bool:
             print(f"  {RED}✗ Ошибка выполнения тестов:{RESET}\n{res.stderr or res.stdout}")
             all_ok = False
 
+    # 4. Запуск тестов жизненного цикла потока и Anti-Cheat
+    print(f"\n{BLUE}► 4. Запуск тестов потока заданий (test_stream.py)...{RESET}")
+    stream_test_path = BASE_DIR / "test_stream.py"
+    if stream_test_path.exists():
+        env = os.environ.copy()
+        env["PYTHONIOENCODING"] = "utf-8"
+        res = subprocess.run(
+            [sys.executable, str(stream_test_path)],
+            capture_output=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env
+        )
+        if res.returncode == 0:
+            print(f"  {GREEN}✓ Все тесты test_stream.py успешно пройдены!{RESET}")
+            if res.stdout:
+                for line in res.stdout.strip().split("\n")[-3:]:
+                    print(f"    {line}")
+        else:
+            print(f"  {RED}✗ Ошибка выполнения test_stream.py:{RESET}\n{res.stderr or res.stdout}")
+            all_ok = False
+
     return all_ok
 
 def run_jlpt_expert(task: str = ""):

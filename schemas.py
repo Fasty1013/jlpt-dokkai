@@ -123,3 +123,24 @@ class TextAnalysisSchema(BaseModel):
     questions: List[QuestionAnalysisSchema]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# ==========================================
+# 5. Stream Flow & Reporting Schemas
+# ==========================================
+
+class StreamCompleteRequest(BaseModel):
+    user_id: str = "default-user"
+    text_id: int
+    answers: List[AnswerSubmissionSchema]
+    idempotency_key: str
+    mode: str = "first"
+    solved_when: str = "all_questions_answered"
+    all_correct_max_attempts: int = 2
+
+
+class ReportTaskRequest(BaseModel):
+    reason: str
+    details: Optional[str] = None
+    user_id: Optional[str] = None
+

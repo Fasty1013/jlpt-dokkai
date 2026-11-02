@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2.1">
 </head>
 
 <body>
@@ -83,25 +83,23 @@
 
         <!-- Main Body -->
         <main class="app-main">
-            <!-- VIEW 1: CATALOG VIEW -->
+            <!-- VIEW 1: TWO-COLUMN STREAM VIEW («Задания» и «Решённые») -->
             <section id="catalog-view" class="view catalog-view">
                 <div class="catalog-hero">
-                    <div class="hero-badge">JLPT 読解 EXPERT PRACTICE</div>
+                    <div class="hero-badge">JLPT 読解 CONTINUOUS STREAM</div>
                     <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
                     <p class="hero-desc">
-                        Более 300 реальных текстов уровней N5–N1: архивные экзамены JLPT, адаптированные новости NHK
-                        World и пошаговый экзаменационный интерфейс решения без подглядывания.
+                        Непрерывный поток заданий JLPT N5–N1: 3 активных слота вашего уровня сложности. При решении задание мгновенно переходит в «Решённые», а на его место приходит новое.
                     </p>
                 </div>
 
-                <!-- Filters -->
-                <div class="filters-card">
+                <!-- Stream Profile & Mode Controls -->
+                <div class="filters-card stream-control-card">
                     <div class="filter-group">
-                        <span class="filter-icon">🏷️</span>
+                        <span class="filter-icon">🎯</span>
                         <label class="filter-label">Уровень JLPT:</label>
-                        <div class="pill-selectors" id="level-filter-pills">
-                            <button class="filter-pill active" data-level="">Все уровни</button>
-                            <button class="filter-pill" data-level="N5">N5</button>
+                        <div class="pill-selectors" id="stream-level-pills">
+                            <button class="filter-pill active" data-level="N5">N5</button>
                             <button class="filter-pill" data-level="N4">N4</button>
                             <button class="filter-pill" data-level="N3">N3</button>
                             <button class="filter-pill" data-level="N2">N2</button>
@@ -111,31 +109,74 @@
 
                     <div class="filter-group">
                         <span class="filter-icon">📂</span>
-                        <label class="filter-label">Формат текста:</label>
-                        <div class="pill-selectors" id="category-filter-pills">
-                            <button class="filter-pill active" data-category="">Все форматы</button>
-                            <button class="filter-pill" data-category="short">短文 (Короткие)</button>
+                        <label class="filter-label">Формат задания:</label>
+                        <div class="pill-selectors" id="stream-category-pills">
+                            <button class="filter-pill active" data-category="short">短文 (Короткие)</button>
                             <button class="filter-pill" data-category="medium">中文 (Средние)</button>
                             <button class="filter-pill" data-category="long">長文 (Длинные)</button>
-                            <button class="filter-pill" data-category="info_search">情報検索 (Объявления/Поиск)</button>
-                            <button class="filter-pill" data-category="article">記事・論説 (Статьи)</button>
+                            <button class="filter-pill" data-category="info_search">情報検索 (Объявления)</button>
                         </div>
                     </div>
 
-                    <div class="filter-group">
-                        <span class="filter-icon">🌐</span>
-                        <label class="filter-label">Источник:</label>
-                        <div class="pill-selectors" id="source-filter-pills">
-                            <button class="filter-pill active" data-source="">Все источники</button>
-                            <button class="filter-pill" data-source="nhk">NHK World News</button>
-                            <button class="filter-pill" data-source="exam">JLPT 過去問 (Архив)</button>
+                    <div class="filter-group filter-group-mode">
+                        <span class="filter-icon">⚖️</span>
+                        <label class="filter-label">Условие сдачи:</label>
+                        <div class="pill-selectors" id="stream-mode-pills">
+                            <button class="filter-pill active" data-solved-when="all_questions_answered" title="Завершать задание сразу после ответа на все вопросы">Сразу (все вопросы)</button>
+                            <button class="filter-pill" data-solved-when="all_correct" title="Только при 100% правильных ответах (до 2 попыток исправления ошибок)">Только все верные</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Text Cards Grid -->
-                <div class="catalog-grid" id="catalog-grid">
-                    <div class="loading-spinner">Загрузка каталога текстов...</div>
+                <!-- Mobile Column Switcher (Visible on small screens) -->
+                <div class="stream-mobile-tabs" id="stream-mobile-tabs">
+                    <button type="button" class="stream-mobile-tab active" id="tab-col-active" data-col="active">
+                        ⚡ Задания <span class="stream-badge-count" id="mobile-active-count">3</span>
+                    </button>
+                    <button type="button" class="stream-mobile-tab" id="tab-col-solved" data-col="solved">
+                        🏆 Решённые <span class="stream-badge-count" id="mobile-solved-count">0</span>
+                    </button>
+                </div>
+
+                <!-- Two-Column Stream Layout -->
+                <div class="stream-container" id="stream-container">
+                    <!-- COLUMN 1: Active Slots («Задания») -->
+                    <div class="stream-column stream-column-active" id="col-active-slots">
+                        <div class="stream-column-header">
+                            <div class="stream-column-title-wrap">
+                                <h2 class="stream-column-title">⚡ Задания</h2>
+                                <span class="stream-column-desc">3 активных слота выбранного профиля сложности</span>
+                            </div>
+                            <button type="button" class="btn-refresh-slots" id="btn-refresh-slots" title="Обновить слоты">🔄</button>
+                        </div>
+
+                        <div class="stream-slots-list" id="active-slots-list">
+                            <div class="loading-spinner">Загрузка активных заданий...</div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 2: Solved Archive («Решённые») -->
+                    <div class="stream-column stream-column-solved" id="col-solved-archive">
+                        <div class="stream-column-header">
+                            <div class="stream-column-title-wrap">
+                                <h2 class="stream-column-title">🏆 Решённые</h2>
+                                <span class="stream-column-desc">Архив выполненных заданий (<span id="solved-archive-total">0</span>)</span>
+                            </div>
+                            <div class="solved-filter-pills" id="solved-filter-pills">
+                                <button class="mini-pill active" data-solved-filter="all">Все</button>
+                                <button class="mini-pill" data-solved-filter="perfect">100%</button>
+                                <button class="mini-pill" data-solved-filter="errors">С ошибками</button>
+                            </div>
+                        </div>
+
+                        <div class="stream-solved-list" id="solved-tasks-list">
+                            <div class="stream-empty-solved">
+                                <span class="empty-icon">📖</span>
+                                <p>Здесь будут сохраняться решённые вами задания.</p>
+                                <span class="empty-hint">Выберите любое задание из левой колонки «Задания», чтобы начать!</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -538,6 +579,47 @@
             </div>
         </div>
 
+        <!-- REPORT DEFECT MODAL -->
+        <div id="report-modal-backdrop" class="modal-backdrop hidden">
+            <div class="modal-card modal-card-sm">
+                <div class="modal-header">
+                    <div class="modal-icon">⚠️</div>
+                    <div class="modal-header-text">
+                        <h3 class="modal-title">Сообщить об ошибке в задании</h3>
+                        <p class="modal-subtitle" id="report-modal-task-title">Название текста</p>
+                    </div>
+                    <button class="modal-close" id="btn-close-report-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-row">
+                        <div class="setting-info" style="width: 100%;">
+                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;">Тип проблемы:</span>
+                            <select id="report-reason-select" class="form-select" style="width: 100%; padding: 0.6rem; border: 1px solid var(--washi-border); border-radius: var(--radius-sm); font-size: 0.95rem; background: #fff;">
+                                <option value="Опечатка в тексте или вопросе">Опечатка в японском тексте или вопросе</option>
+                                <option value="Неверный ответ или спорный ключ">Неверный правильный ответ / спорный ключ</option>
+                                <option value="Ошибка фуриганы">Неправильное чтение кандзи (фуригана)</option>
+                                <option value="Несоответствие уровню JLPT">Текст не соответствует заявленному уровню</option>
+                                <option value="Другая ошибка">Другое замечание</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info" style="width: 100%;">
+                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;">Подробности (необязательно):</span>
+                            <textarea id="report-details-textarea" style="width: 100%; padding: 0.6rem; border: 1px solid var(--washi-border); border-radius: var(--radius-sm); font-size: 0.95rem; resize: vertical;" rows="3" placeholder="Укажите конкретную строчку или предложение..."></textarea>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--sumi-500); padding: 0.5rem 0.75rem; background: var(--washi-accent); border-radius: var(--radius-sm); border-left: 3px solid var(--vermilion);">
+                        ℹ️ Задания с 3 и более жалобами автоматически снимаются с показа для проверки экспертом.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-ghost" id="btn-cancel-report">Отмена</button>
+                    <button class="btn btn-primary" id="btn-submit-report">Отправить замечание</button>
+                </div>
+            </div>
+        </div>
+
         <!-- YOMICHAN-STYLE POPUP DICTIONARY -->
         <div id="popup-dictionary-card" class="popup-dict-card hidden">
             <div class="popup-dict-header">
@@ -562,7 +644,7 @@
         </div>
     </div>
 
-    <script src="/static/app.js"></script>
+    <script src="/static/app.js?v=2.1"></script>
 </body>
 
 </html>
