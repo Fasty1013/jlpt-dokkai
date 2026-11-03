@@ -9,7 +9,7 @@ from typing import List, Optional, Dict, Any
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-from fastapi import FastAPI, Depends, HTTPException, Query, status, UploadFile, File, Form
+from fastapi import FastAPI, Depends, HTTPException, Query, status, UploadFile, File, Form, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session, joinedload
@@ -135,12 +135,17 @@ def list_texts(
 
 
 @app.get("/api/texts/{text_id}", response_model=TextReadSchema, tags=["Reading (Anti-Cheat)"])
-def get_text_for_reading(text_id: int, db: Session = Depends(get_db)):
+def get_text_for_reading(text_id: int, db: Session = Depends(get_db), response: Response = Response()):
     """
     STRICT ANTI-CHEAT ENDPOINT:
     Returns ONLY the text, questions, and option texts.
     Does NOT leak answers, explanations, translations, or evidence span IDs.
     """
+    # Prevent browser from caching texts to avoid stale exercises
+    if isinstance(response, Response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
     text = (
         db.query(models.Text)
         .options(joinedload(models.Text.questions).joinedload(models.Question.options))
@@ -298,13 +303,18 @@ def get_stream_slots(
     profile_key: Optional[str] = Query(None, description="Ключ профиля сложности, например N5:short:detail:1:XS"),
     level: Optional[str] = Query("N5", description="Уровень JLPT (N5-N1), если profile_key не указан"),
     category: Optional[str] = Query("short", description="Категория (short, medium, long, info_search)"),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    response: Response = Response()
 ):
     """
     Возвращает 3 активных слота заданий для выбранного профиля сложности.
     При нехватке слотов атомарно дозаполняет их новыми непройденными заданиями.
     Anti-Cheat: правильные ответы и объяснения не возвращаются.
     """
+    if isinstance(response, Response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
     if not profile_key:
         profile_key = get_default_profile_for_level(level or "N5", category or "short")
     slots = get_or_create_slots(db, user_id=user_id, profile_key=profile_key)

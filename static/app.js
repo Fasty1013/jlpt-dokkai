@@ -505,8 +505,13 @@ async function fetchAndRenderSlots() {
         category: state.streamProfile.category
     });
 
+    params.append('_t', Date.now().toString());
+
     try {
-        const response = await fetch(`/api/stream/slots?${params.toString()}`);
+        const response = await fetch(`/api/stream/slots?${params.toString()}`, {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         if (!response.ok) throw new Error('Ошибка загрузки слотов');
         const data = await response.json();
         const slots = data.slots || [];
@@ -544,7 +549,7 @@ async function fetchAndRenderSlots() {
             }
 
             return `
-                <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}">
+                <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}" onclick="openPretestModal(${t.id})" style="cursor: pointer;">
                     <div class="slot-position-badge">Слот #${slot.position}</div>
                     <div class="slot-meta-row">
                         <span class="level-tag" data-lvl="${t.level}">${t.level}</span>
@@ -557,7 +562,7 @@ async function fetchAndRenderSlots() {
                             <span>⏱️ ${t.recommended_time_min} мин</span>
                             <span>❓ ${t.question_count} вопр.</span>
                         </div>
-                        <button class="btn btn-primary btn-sm" onclick="openPretestModal(${t.id})">
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openPretestModal(${t.id})">
                             Начать решение →
                         </button>
                     </div>
@@ -589,8 +594,13 @@ async function fetchAndRenderSolvedTasks() {
         params.append('only_errors', 'true');
     }
 
+    params.append('_t', Date.now().toString());
+
     try {
-        const response = await fetch(`/api/stream/solved?${params.toString()}`);
+        const response = await fetch(`/api/stream/solved?${params.toString()}`, {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         if (!response.ok) throw new Error('Ошибка загрузки архива решённых заданий');
         const data = await response.json();
         const items = data.items || [];
@@ -777,9 +787,10 @@ window.openReportModal = openReportModal;
 // ============================================================================
 
 function openPretestModal(textId) {
-    state.pendingTextId = textId;
-    history.pushState({ modal: 'pretest', textId: textId }, '', '#pretest');
-    const textInfo = cachedCatalogTexts.find(t => t.id === textId);
+    const targetId = Number(textId);
+    state.pendingTextId = targetId;
+    history.pushState({ modal: 'pretest', textId: targetId }, '', '#pretest');
+    const textInfo = cachedCatalogTexts.find(t => String(t.id) === String(targetId));
 
     const recMin = textInfo ? textInfo.recommended_time_min : 3;
     if (textInfo) {
@@ -869,7 +880,10 @@ function confirmPretestSettingsAndStart() {
 
 async function startExercise(textId) {
     try {
-        const response = await fetch(`/api/texts/${textId}`);
+        const response = await fetch(`/api/texts/${textId}?_t=${Date.now()}`, {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         if (!response.ok) throw new Error('Не удалось загрузить задание');
 
         const textData = await response.json();
