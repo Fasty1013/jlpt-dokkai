@@ -46,3 +46,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# QA Testing Evidence & Dependencies
+docs/qa/evidence/
+tests/qa/node_modules/
+tests/qa/playwright-report/
+tests/qa/test-results/
