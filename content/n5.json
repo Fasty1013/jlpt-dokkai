@@ -7,8 +7,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>図書館はあさ9時からよる7時まであいています。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 図書館の利用時間変更. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>から、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>平日<rt>へいじつ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時（くじ）から<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>は、<ruby>午前<rt>ごぜん</rt></ruby>10時（じゅうじ）から<ruby>午後<rt>ごご</rt></ruby>5時（ごじ）まで<ruby>開<rt>あ</rt></ruby>いています。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+    "translation_ru": "Со следующего понедельника меняются часы работы библиотеки. По будням — с 9:00 до 18:00. По субботам и воскресеньям библиотека открыта с 10:00 до 17:00. Спасибо за понимание.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -32,37 +32,37 @@
         "slug": "n5-short-001-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "日曜日は何時から何時まで図書館が開いていますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В предложении ev-q1 прямо сказано: по субботам и воскресеньям библиотека открыта с 10:00 до 17:00.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "午前10時から午後5時まで",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Правильно! Точное время работы в выходные дни (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "午前9時から午後6時まで",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. Это часы работы по будням (平日)."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "午前9時から午後5時まで",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. Такого расписания в тексте нет."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "午後1時から午後6時まで",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -76,8 +76,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>今週の日曜日のあさ、みんなで公園をそうじします。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 週末の公園そうじ. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>今週<rt>こんしゅう</rt></ruby>の<ruby>日曜日<rt>にちようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>8時（はちじ）から、<ruby>中央<rt>ちゅうおう</rt></ruby><ruby>公園<rt>こうえん</rt></ruby>のそうじをします。</p>\n<p><ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>になります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>参加<rt>さんか</rt></ruby>する<ruby>人<rt>ひと</rt></ruby>は、<ruby>汚<rt>よご</rt></ruby>れてもいい<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>て、<ruby>手袋<rt>てぶくろ</rt></ruby>を<ruby>持<rt>も</rt></ruby>ってきてください。</span></p>\n<p>ごみ<ruby>袋<rt>ぶくろ</rt></ruby>は<ruby>公園<rt>こうえん</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>で<ruby>渡<rt>わた</rt></ruby>します。</p>\n</div>",
+    "translation_ru": "В это воскресенье с 8 утра состоится уборка Центрального парка. В случае дождя мероприятие переносится на следующую неделю. Участников просят надеть рабочую одежду и принести перчатки. Мешки для мусора раздадут у входа.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -101,37 +101,37 @@
         "slug": "n5-short-002-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "そうじに参加する人は何を持ってこなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В тексте четко указано (ev-q1): участники должны надеть одежду, которую не жалко испачкать, и взять с собой перчатки (手袋).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "手袋（てぶくろ）",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! В тексте прямо сказано принести перчатки (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "ごみ袋（ぶくろ）",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Мешки для мусора раздадут у парка."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "傘（かさ）",
             "is_correct": false,
             "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "explanation_ru": "Неверно. В дождь уборка переносится."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "お金（かね）",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно. Участие бесплатное."
           }
         ]
       }
@@ -145,8 +145,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>金曜日のごご6時から留学生パーティーがあります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 留学生パーティー. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）から、<ruby>留学生<rt>りゅうがくせい</rt></ruby>パーティーをします。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>場所<rt>ばしょ</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>センターの3<ruby>階<rt>かい</rt></ruby>の301<ruby>号室<rt>ごうしつ</rt></ruby>です。</span></p>\n<p>お<ruby>金<rt>かね</rt></ruby>は一人（ひとり）500<ruby>円<rt>えん</rt></ruby>です。<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>と<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>があります。</p>\n<p><ruby>参加<rt>さんか</rt></ruby>したい<ruby>人<rt>ひと</rt></ruby>は、<ruby>水曜日<rt>すいようび</rt></ruby>までに<ruby>山田<rt>やまだ</rt></ruby>さんに言ってください。</p>\n</div>",
+    "translation_ru": "В следующую пятницу с 18:00 состоится вечеринка иностранных студентов. Место проведения — Студенческий центр, 3-й этаж, комната 301. Взнос 500 иен с человека. Еда и напитки включены. Желающих просим сообщить Ямаде-сану до среды.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -170,37 +170,37 @@
         "slug": "n5-short-003-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "パーティーはどこで行われますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В предложении ev-q1 указано место: комната 301 на 3-м этаже студенческого центра.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "学生センターの301号室",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Точное указание аудитории (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "学生センターの1階",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Мероприятие на 3-м этаже."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "山田さんの家",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Ямаде-сану нужно лишь сдать заявку."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "中央公園の広場",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -214,8 +214,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>黒いかばんのわすれものがあります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: わすれもののおしらせ. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p>2<ruby>階<rt>かい</rt></ruby>の<ruby>教室<rt>きょうしつ</rt></ruby>に<ruby>黒<rt>くろ</rt></ruby>い<ruby>傘<rt>かさ</rt></ruby>のわすれものがありました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>心<rt>こころ</rt></ruby>あたりのある<ruby>人<rt>ひと</rt></ruby>は、1<ruby>階<rt>かい</rt></ruby>の<ruby>事務室<rt>じむしつ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p><ruby>今週<rt>こんしゅう</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>まで<ruby>預<rt>あず</rt></ruby>かっています。</p>\n<p>よろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+    "translation_ru": "В аудитории на 2-м этаже был забыт черный зонт. Если вы потеряли зонт, обратитесь в канцелярию на 1-м этаже. Вещь хранится до пятницы текущей недели.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -239,37 +239,37 @@
         "slug": "n5-short-004-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "傘をわすれた人はどうしなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В предложении ev-q1 написано: прийти в канцелярию на первом этаже (1階の事務室に来てください).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "1階の事務室に行く",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Зонт находится в канцелярии на 1-м этаже (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "2階の教室で探す",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Зонт уже перенесен в канцелярию."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "新しい傘を買う",
             "is_correct": false,
             "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "来週まで待つ",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно. Срок хранения — только до пятницы."
           }
         ]
       }
@@ -283,8 +283,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>あしたのごご2時からエレベーターはとまります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: エレベーターの点検. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>明日<rt>あした</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>1時（いちじ）から<ruby>午後<rt>ごご</rt></ruby>3時（さんじ）まで、エレベーターの<ruby>点検<rt>てんけん</rt></ruby>をします。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">この<ruby>時間<rt>じかん</rt></ruby>はエレベーターを<ruby>使<rt>つか</rt></ruby>うことができませんので、<ruby>階段<rt>かいだん</rt></ruby>をご<ruby>利用<rt>りよう</rt></ruby>ください。</span></p>\n<p>ご<ruby>不便<rt>ふべん</rt></ruby>をおかけしますが、ご<ruby>協力<rt>きょうりょく</rt></ruby>をお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+    "translation_ru": "Завтра с 13:00 до 15:00 проводится техосмотр лифта. В это время лифт работать не будет, просьба пользоваться лестницей. Приносим извинения за неудобства.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -308,37 +308,37 @@
         "slug": "n5-short-005-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "明日の午後2時に上の階へ行く時、どうしなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В период с 13:00 до 15:00 лифт выключен, необходимо пользоваться лестницей (ev-q1).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "階段（かいだん）を使う",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Лифт остановлен, нужно идти по лестнице (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "エレベーターを待つ",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "explanation_ru": "Неверно. Лифт не работает во время техосмотра."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "事務室に電話する",
             "is_correct": false,
             "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "午後5時まで待つ",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. Работы завершатся в 15:00."
           }
         ]
       }
@@ -352,8 +352,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>来週の水曜日に健康しんだんがあります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 健康しんだんの日. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>来月<rt>らいげつ</rt></ruby>の10<ruby>日<rt>とおか</rt></ruby>に、<ruby>健康<rt>けんこう</rt></ruby><ruby>診断<rt>しんだん</rt></ruby>があります。</p>\n<p><ruby>朝<rt>あさ</rt></ruby>9時（くじ）から11時（じゅういちじ）までに<ruby>体育館<rt>たいいくかん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>てください。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>9時（くじ）から、<ruby>何<rt>なに</rt></ruby>も<ruby>食<rt>た</rt></ruby>べないでください。</span></p>\n<p><ruby>水<rt>みず</rt></ruby>は<ruby>飲<rt>の</rt></ruby>んでもかまいません。</p>\n</div>",
+    "translation_ru": "10-го числа следующего месяца проводится медосмотр. Приходите в спортзал с 9:00 до 11:00. С 21:00 предыдущего дня ничего не ешьте. Воду пить разрешается.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -377,37 +377,37 @@
         "slug": "n5-short-006-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "健康診断を受ける人は、どうしなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В тексте четко сказано (ev-q1): с 21:00 накануне ничего не есть.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "前の日の夜9時から何も食べない",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Четкое правило подготовки (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "水を絶対に飲んではいけない",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "explanation_ru": "Неверно. Воду пить можно (水は飲んでもかまいません)."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "当日の朝ごはんをたくさん食べる",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно. Завтракать запрещено."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "お昼の12時以降に行く",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. Прием с 9 до 11 утра."
           }
         ]
       }
@@ -421,8 +421,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>来週のシフトを店長に教えてください。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: アルバイトの時間. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>田中<rt>たなか</rt></ruby>さん、店長（てんちょう）の<ruby>佐藤<rt>さとう</rt></ruby>です。</p>\n<p><ruby>今週<rt>こんしゅう</rt></ruby>のシフトですが、<ruby>木曜日<rt>もくようび</rt></ruby>にアルバイトが<ruby>足<rt>た</rt></ruby>りなくなりました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">もしできたら、<ruby>金曜日<rt>きんようび</rt></ruby>ではなく<ruby>木曜日<rt>もくようび</rt></ruby>の<ruby>夕方<rt>ゆうがた</rt></ruby>に<ruby>来<rt>き</rt></ruby>てもらえませんか。</span></p>\n<p><ruby>返事<rt>へんじ</rt></ruby>を<ruby>今日<rt>きょう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>までにメールでください。</p>\n</div>",
+    "translation_ru": "Танака-сан, это менеджер Сато. На этой неделе в четверг не хватает сотрудников. Если у вас получится, не могли бы вы выйти в четверг вечером вместо пятницы? Дайте ответ по почте до сегодняшнего вечера.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -446,37 +446,37 @@
         "slug": "n5-short-007-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "店長は田中さんに何をお願いしていますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "Менеджер просит Танаку выйти в четверг вечером вместо пятницы (ev-q1).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "金曜日のかわりに木曜日に働くこと",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Просьба выйти в четверг вместо пятницы (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "木曜日のアルバイトを休むこと",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "explanation_ru": "Неверно. Наоборот, просят выйти на смену."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "今すぐ店に電話をかけること",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Ответ просят отправить по почте."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "来週のシフトを増やすこと",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -490,8 +490,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>不在票が入っていました。電話してください。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 荷物の配達について. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>不在<rt>ふざい</rt></ruby><ruby>連絡票<rt>れんらくひょう</rt></ruby></p>\n<p><ruby>本日<rt>ほんじつ</rt></ruby>、お<ruby>荷物<rt>にもつ</rt></ruby>をお<ruby>届<rt>とど</rt></ruby>けにまいりましたが、お<ruby>留守<rt>るす</rt></ruby>でした。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">もう<ruby>一度<rt>いちど</rt></ruby><ruby>届<rt>とど</rt></ruby>けてほしい<ruby>場合<rt>ばあい</rt></ruby>は、<ruby>本日<rt>ほんじつ</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>7時（しちじ）までに<ruby>電話<rt>でんわ</rt></ruby>をください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いいたします。</p>\n</div>",
+    "translation_ru": "Уведомление о доставке. Сегодня была предпринята попытка доставки посылки, однако вас не оказалось дома. Для повторной доставки просьба позвонить сегодня до 19:00.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -515,37 +515,37 @@
         "slug": "n5-short-008-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "荷物をもう一度届けてもらうには、どうすればいいですか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В тексте четко сказано (ev-q1): позвонить сегодня до 19:00.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "今日の夜7時までに電話する",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Точная инструкция из уведомления (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "郵便局へ荷物を取りに行く",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно. Указан заказ повторной доставки по телефону."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "明日まで何もしないで待つ",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно. Нужно сделать звонок."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "荷物の送り主に連絡する",
             "is_correct": false,
             "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -559,8 +559,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>あまいイチゴのケーキをはじめました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: カフェの新しいケーキ. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p>さくらカフェの<ruby>新<rt>あたら</rt></ruby>しいお知らせです。</p>\n<p><ruby>明日<rt>あした</rt></ruby>から「いちごのケーキ」を<ruby>始<rt>はじ</rt></ruby>めます。<ruby>一<rt>ひと</rt></ruby>つ450<ruby>円<rt>えん</rt></ruby>です。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">とても<ruby>人気<rt>にんき</rt></ruby>がありますので、1<ruby>日<rt>にち</rt></ruby>に20<ruby>個<rt>こ</rt></ruby>だけの<ruby>限定<rt>げんてい</rt></ruby><ruby>販売<rt>はんばい</rt></ruby>です。</span></p>\n<p>ぜひ<ruby>食<rt>た</rt></ruby>べに<ruby>来<rt>き</rt></ruby>てください。</p>\n</div>",
+    "translation_ru": "Новость от кафе Сакура. С завтрашнего дня в продаже клубничный торт по цене 450 иен. Из-за высокого спроса количество ограничено 20 порциями в день. Будем рады видеть вас!",
     "vocabulary": [
       {
         "word": "図書館",
@@ -584,37 +584,37 @@
         "slug": "n5-short-009-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "新しいケーキについて、正しいものはどれか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В предложении ev-q1 указано: ограниченная продажа по 20 штук в день (1日に20個だけの限定販売).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "1日に20個しか売られない",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Лимит 20 штук в сутки (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "無料で食べることができる",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "explanation_ru": "Неверно. Цена торта 450 иен."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "来週から売り始める",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. Продажи начинаются завтра (明日から)."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "夕方だけ売っている",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -628,8 +628,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>工事のためバス停が少しうしろにかわります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: バス停の場所. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>道路<rt>どうろ</rt></ruby>の<ruby>工事<rt>こうじ</rt></ruby>のため、バスの<ruby>乗<rt>の</rt></ruby>り<ruby>場<rt>ば</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>期間<rt>きかん</rt></ruby>は5<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>ついたち</rt></ruby>から5<ruby>月<rt>がつ</rt></ruby>15<ruby>日<rt>じゅうごにち</rt></ruby>までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>新<rt>あたら</rt></ruby>しいバス<ruby>停<rt>てい</rt></ruby>は、これまでの<ruby>場所<rt>ばしょ</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>へ50メートル<ruby>歩<rt>ある</rt></ruby>いたコンビニの<ruby>前<rt>まえ</rt></ruby>です。</span></p>\n<p>お<ruby>間違<rt>まちが</rt></ruby>いのないようにお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+    "translation_ru": "Из-за дорожных работ остановка автобуса переносится с 1 по 15 мая. Новая остановка находится перед магазином комбини в 50 метрах направо от прежнего места.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -653,37 +653,37 @@
         "slug": "n5-short-010-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "工事の間、どこでバスに乗りますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В предложении ev-q1 написано: у магазина комбини в 50 метрах направо от старой остановки.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "これまでの場所から右へ50メートルのコンビニの前",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Точное указание временной остановки (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "駅の中の切符売り場",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "図書館の裏側",
             "is_correct": false,
             "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "工事している道路の真ん中",
             "is_correct": false,
             "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -697,8 +697,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>日本語のスピーチ大会が12月にあります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: スピーチ大会. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>日本語<rt>にほんご</rt></ruby><ruby>学校<rt>がっこう</rt></ruby>のスピーチ<ruby>大会<rt>たいかい</rt></ruby>のおしらせです。</p>\n<p><ruby>日時<rt>にちじ</rt></ruby>は7<ruby>月<rt>がつ</rt></ruby>20<ruby>日<rt>はつか</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>2時（にじ）からです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">スピーチをしたい<ruby>人<rt>ひと</rt></ruby>は、6<ruby>月<rt>がつ</rt></ruby>30<ruby>日<rt>さんじゅうにち</rt></ruby>までに<ruby>自分<rt>じぶん</rt></ruby>の<ruby>原稿<rt>げんこう</rt></ruby>を<ruby>先生<rt>せんせい</rt></ruby>に<ruby>出<rt>だ</rt></ruby>してください。</span></p>\n<p>たくさんのご<ruby>応募<rt>おうぼ</rt></ruby>をお<ruby>待<rt>ま</rt></ruby>ちしています。</p>\n</div>",
+    "translation_ru": "Объявление о конкурсе речей школы японского языка. Дата: 20 июля в 14:00. Желающие выступить с речью должны сдать рукопись преподавателю до 30 июня.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -722,37 +722,37 @@
         "slug": "n5-short-011-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "スピーチをしたい人は、何をしなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "В тексте сказано (ev-q1): сдать свою рукопись преподавателю до 30 июня.",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "6月30日までに原稿を先生に出す",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Срок и требование для участия (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "7月20日に原稿を書き始める",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. 20 июля уже сам конкурс."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "参加費500円を支払う",
             "is_correct": false,
             "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "explanation_ru": "Неверно. Плата не требуется."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "スピーチを聞くだけにする",
             "is_correct": false,
             "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -766,8 +766,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 2,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>図書館<rt>としょかん</rt></ruby>や<ruby>町<rt>まち</rt></ruby>のお<ruby>知<rt>し</rt></ruby>らせです。</p>\n<p>あしたの日本語の授業はお休みです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>時間<rt>じかん</rt></ruby>や<ruby>場所<rt>ばしょ</rt></ruby>をよく<ruby>見<rt>み</rt></ruby>て、<ruby>前<rt>まえ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>までに<ruby>受付<rt>うけつけ</rt></ruby>に<ruby>来<rt>き</rt></ruby>てください。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-    "translation_ru": "Объявление: 授業の休み. Пожалуйста, проверьте время и место и подойдите к стойке регистрации за день до мероприятия.",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>学生<rt>がくせい</rt></ruby>のみなさんへ。</p>\n<p><ruby>明日<rt>あした</rt></ruby>の<ruby>木曜日<rt>もくようび</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きな<ruby>台風<rt>たいふう</rt></ruby>が<ruby>来<rt>く</rt></ruby>るため、すべての<ruby>授業<rt>じゅぎょう</rt></ruby>はお<ruby>休<rt>やす</rt></ruby>みです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>危<rt>あぶ</rt></ruby>ないですから、<ruby>外<rt>そと</rt></ruby>へ<ruby>出<rt>で</rt></ruby>ないで、<ruby>家<rt>いえ</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>してください。</span></p>\n<p><ruby>金曜日<rt>きんようび</rt></ruby>からは<ruby>普通<rt>ふつう</rt></ruby>どおり<ruby>授業<rt>じゅぎょう</rt></ruby>があります。</p>\n</div>",
+    "translation_ru": "Студентам. Завтра в четверг из-за надвигающегося сильного тайфуна все занятия отменяются. В целях безопасности не выходите на улицу и занимайтесь дома. С пятницы занятия возобновятся в обычном режиме.",
     "vocabulary": [
       {
         "word": "図書館",
@@ -791,37 +791,37 @@
         "slug": "n5-short-012-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "このおしらせを読（よ）んで、どうしなければなりませんか。",
+        "prompt": "明日はどうしなければなりませんか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте четко сказано (ev-q1): нужно проверить время и место и прийти к стойке регистрации заранее.",
+        "general_explanation": "Из-за тайфуна занятия отменены, студентам предписано оставаться дома и учиться (ev-q1).",
         "options": [
           {
             "option_number": 1,
-            "text": "時間や場所を見て、前の日までに受付に行く。",
+            "text": "学校へ行かず、家で勉強する",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Точный ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Предписание оставаться дома из-за тайфуна (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "何も見ないで当日にすぐ行く。",
+            "text": "台風を見るために外へ出かける",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Нужно проверить время и прийти заранее."
+            "explanation_ru": "Неверно. Выходить на улицу опасно."
           },
           {
             "option_number": 3,
-            "text": "来年の春まで何もしない。",
+            "text": "金曜日も学校を休む",
             "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Такого в тексте нет."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. В пятницу занятия в обычном режиме."
           },
           {
             "option_number": 4,
-            "text": "毎日夜遅くに電話をかける。",
+            "text": "朝早く学校へ行く",
             "is_correct": false,
-            "trap_type": "misinterpretation",
-            "explanation_ru": "Неверно. Нужно прийти к стойке регистрации."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно. Школа закрыта."
           }
         ]
       }
@@ -835,8 +835,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「私の好きな町と公園」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 私の好きな町と公園. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>の<ruby>住<rt>す</rt></ruby>んでいる<ruby>町<rt>まち</rt></ruby>は、<ruby>緑<rt>みどり</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くてとても<ruby>静<rt>しず</rt></ruby>かなところです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>駅<rt>えき</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くには<ruby>大<rt>おお</rt></ruby>きな<ruby>公園<rt>こうえん</rt></ruby>があって、<ruby>春<rt>はる</rt></ruby>にはきれいな<ruby>桜<rt>さくら</rt></ruby>の花（はな）がたくさん<ruby>咲<rt>さ</rt></ruby>きます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>日曜日<rt>にちようび</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>に、この<ruby>公園<rt>こうえん</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>してカメラで<ruby>鳥<rt>とり</rt></ruby>や<ruby>花<rt>はな</rt></ruby>の<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>るのが<ruby>好<rt>す</rt></ruby>きです。</span></p>\n<p>とても<ruby>気持<rt>きも</rt></ruby>ちがいいですから、みなさんもぜひ<ruby>来<rt>き</rt></ruby>てください。</p>\n</div>",
+    "translation_ru": "Город, в котором я живу — очень тихое и зеленое место. Около станции есть большой парк, весной там цветет много красивой сакуры. Каждое воскресенье утром я люблю гулять по этому парку и фотографировать птиц и цветы на камеру. Это очень приятно, поэтому обязательно приходите!",
     "vocabulary": [
       {
         "word": "毎日",
@@ -860,75 +860,75 @@
         "slug": "n5-medium-001-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "駅の近くには何がありますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 прямо сказано: около станции есть большой парк с цветущей сакурой.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "桜がたくさん咲く大きな公園",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Правильно! В тексте прямо говорится о большом парке около станции (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "とてもにぎやかなデパート",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно. Город тихий, универмаг не упоминается."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "高いビルばかりの道",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно. В городе много зелени."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "古い図書館",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-001-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "「私」は日曜日の朝に何をしますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "Согласно предложению ev-q2, автор гуляет по парку и фотографирует птиц и цветы.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "公園を散歩して写真を撮る",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Точное действие из предложения ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "駅の前で買い物をする",
+            "is_correct": false,
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "家でずっと寝ている",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "友だちとサッカーをする",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -942,8 +942,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「毎朝の朝ごはんとくだもの」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 毎朝の朝ごはんとくだもの. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby>6時半（ろくじはん）に<ruby>起<rt>お</rt></ruby>きます。<ruby>朝<rt>あさ</rt></ruby>ごはんは<ruby>一日<rt>いちにち</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で一番（いちばん）<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>食事<rt>しょくじ</rt></ruby>です。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>温<rt>あたた</rt></ruby>かいご<ruby>飯<rt>はん</rt></ruby>とみそ<ruby>汁<rt>しる</rt></ruby>、それに<ruby>卵<rt>たまご</rt></ruby><ruby>焼<rt>や</rt></ruby>きをよく<ruby>食<rt>た</rt></ruby>べます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\">ご<ruby>飯<rt>はん</rt></ruby>のあとには、りんごやバナナなどの<ruby>果物<rt>くだもの</rt></ruby>を<ruby>食<rt>た</rt></ruby>べてから、お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</span></p>\n<p>しっかり<ruby>食<rt>た</rt></ruby>べると、<ruby>午前<rt>ごぜん</rt></ruby><ruby>中<rt>ちゅう</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>も元気にがんばることができます。</p>\n</div>",
+    "translation_ru": "Я просыпаюсь каждое утро в 6:30. Завтрак — самый важный прием пищи за день. Я часто ем теплый рис, мисо-суп и тамагояки (японский омлет). После еды я ем фрукты вроде яблок или бананов и пью чай. Плотный завтрак дает силы усердно учиться всё утро.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -967,75 +967,75 @@
         "slug": "n5-medium-002-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "「私」は朝ごはんに何をよく食べますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указаны: рис, мисо-суп и тамагояки.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "ご飯とみそ汁と卵焼き",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Точный список блюд из ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "パンとコーヒーだけ",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно. Автор ест традиционный завтрак."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "肉とラーメン",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "何も食べない",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-002-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "ご飯を食べた後で、何をしますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 указано: ест фрукты (яблоки, бананы) и пьет чай.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "果物を食べてお茶を飲む",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Прямой вывод из предложения ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "すぐに学校へ走っていく",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "もう一度寝る",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "薬を飲む",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1049,8 +1049,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「日曜日のお買い物とスーパー」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 日曜日のお買い物とスーパー. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>日曜日<rt>にちようび</rt></ruby>の<ruby>午後<rt>ごご</rt></ruby>に、<ruby>近<rt>ちか</rt></ruby>くのスーパーへ<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>日曜日<rt>にちようび</rt></ruby>は<ruby>野菜<rt>やさい</rt></ruby>と<ruby>魚<rt>さかな</rt></ruby>がいつもより<ruby>安<rt>やす</rt></ruby>くなるので、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>来<rt>き</rt></ruby>ます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は一週間（いっしゅうかん）の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>をたくさん<ruby>買<rt>か</rt></ruby>って、<ruby>大<rt>おお</rt></ruby>きなバッグに<ruby>入<rt>い</rt></ruby>れて<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>帰<rt>かえ</rt></ruby>ります。</span></p>\n<p><ruby>夜<rt>よる</rt></ruby>には<ruby>買<rt>か</rt></ruby>った<ruby>魚<rt>さかな</rt></ruby>で、おいしい<ruby>夕飯<rt>ゆうはん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>るのが<ruby>楽<rt>たの</rt></ruby>しみです。</p>\n</div>",
+    "translation_ru": "Каждое воскресенье днем я хожу за покупками в соседний супермаркет. По воскресеньям овощи и рыба дешевле обычного, поэтому приходит много людей. Я покупаю еду на всю неделю, складываю в большую сумку и возвращаюсь на велосипеде. Вечером приятно приготовить вкусный ужин из купленной рыбы.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1074,75 +1074,75 @@
         "slug": "n5-medium-003-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "どうして日曜日にたくさんの人がスーパーへ来ますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 объясняется: по воскресеньям овощи и рыба дешевле обычного.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "野菜や魚がいつもより安くなるから",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Причина указана в ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "お菓子が無料でもらえるから",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "日曜日しか開いていないから",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно. Это обычный супермаркет."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "駅の近くに移転したから",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-003-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "「私」はどうやって買い物の荷物を持ち帰りますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "Согласно предложению ev-q2: складывает в большую сумку и везет на велосипеде.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "大きなバッグに入れて自転車で帰る",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Способ транспортировки из предложения ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "タクシーを呼んで帰る",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "スーパーの人に届けてもらう",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "歩いて少しずつ運ぶ",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1156,8 +1156,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「日本のコンビニとべんりなもの」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 日本のコンビニとべんりなもの. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>日本<rt>にほん</rt></ruby>には、たくさんのコンビニエンスストア（コンビニ）があります。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">コンビニは24<ruby>時間<rt>じかん</rt></ruby>いつも<ruby>開<rt>あ</rt></ruby>いていて、おにぎりやお<ruby>弁当<rt>べんとう</rt></ruby>をいつでも<ruby>買<rt>か</rt></ruby>うことができます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\">それだけでなく、お<ruby>金<rt>かね</rt></ruby>を<ruby>払<rt>はら</rt></ruby>ったり、<ruby>荷物<rt>にもつ</rt></ruby>を<ruby>送<rt>おく</rt></ruby>ったりすることもできます。</span></p>\n<p><ruby>夜遅<rt>よるおそ</rt></ruby>くに困（こま）った時でも、コンビニがあるととても<ruby>安心<rt>あんしん</rt></ruby>です。</p>\n</div>",
+    "translation_ru": "В Японии очень много круглосуточных магазинов (комбини). Комбини открыты 24 часа в сутки, там всегда можно купить онигири или бенто. Кроме того, там можно оплачивать счета и отправлять посылки. Даже поздно ночью наличие комбини дает чувство спокойствия.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1181,75 +1181,75 @@
         "slug": "n5-medium-004-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "コンビニの特徴（とくちょう）について、何と言っていますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 говорится: открыты 24 часа в сутки, всегда можно купить еду.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "24時間いつでも開いている",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Главная особенность комбини (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "昼の12時に閉まる",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "食べ物は売っていない",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно. Продаются онигири и бенто."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "日曜日は休みになる",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-004-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "買い物以外にコンビニでできることは何ですか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 указано: можно оплачивать счета и отправлять посылки.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "お金を払ったり荷物を送ったりすること",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Дополнительные сервисы из ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "電車の切符を買うことだけ",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "薬を作ること",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "料理を習うこと",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1263,8 +1263,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「友だちと行く楽しい旅行」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 友だちと行く楽しい旅行. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>先週<rt>せんしゅう</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>、<ruby>私<rt>わたし</rt></ruby>は<ruby>学校<rt>がっこう</rt></ruby>の<ruby>友<rt>とも</rt></ruby>だちのリーさんと<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>朝<rt>あさ</rt></ruby>7時（しちじ）の<ruby>新幹線<rt>しんかんせん</rt></ruby>に<ruby>乗<rt>の</rt></ruby>って、2<ruby>時間<rt>じかん</rt></ruby>ぐらいで<ruby>着<rt>つ</rt></ruby>きました。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>京都<rt>きょうと</rt></ruby>では<ruby>有名<rt>ゆうめい</rt></ruby>なお<ruby>寺<rt>てら</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、おいしい<ruby>抹茶<rt>まっちゃ</rt></ruby>のアイスクリームを<ruby>食<rt>た</rt></ruby>べました。</span></p>\n<p>とても<ruby>楽<rt>たの</rt></ruby>しかったですから、また<ruby>行<rt>い</rt></ruby>きたいです。</p>\n</div>",
+    "translation_ru": "В прошлую субботу я вместе с другом по школе Ли-саном поехал в Киото. Мы сели на синкансэн в 7 утра и доехали примерно за 2 часа. В Киото мы посмотрели знаменитые храмы и поели вкусное мороженое с чаем маття. Было очень весело, хочу поехать снова.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1288,75 +1288,75 @@
         "slug": "n5-medium-005-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "京都までどうやって行きましたか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указано: поехали на синкансэне (新幹線に乗って).",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "朝7時の新幹線に乗って行った",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Способ передвижения из ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "夜行バスに乗って行った",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "飛行機に乗って行った",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "自転車で2時間走った",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-005-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "京都で何をしましたか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 написано: посмотрели знаменитые храмы и поели мороженое с маття.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "有名なお寺を見てアイスを食べた",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Достопримечательности и еда из ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "ずっと映画館で映画を見た",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "海で泳いだ",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "本を買ってすぐ帰った",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1370,8 +1370,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「私のいえの犬と猫」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 私のいえの犬と猫. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>には、<ruby>犬<rt>いぬ</rt></ruby>が1<ruby>匹<rt>ぴき</rt></ruby>と<ruby>猫<rt>ねこ</rt></ruby>が1<ruby>匹<rt>ぴき</rt></ruby>います。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>犬<rt>いぬ</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>は「シロ」で、<ruby>体<rt>からだ</rt></ruby>が<ruby>白<rt>しろ</rt></ruby>くて<ruby>大<rt>おお</rt></ruby>きい犬です。いつも<ruby>元気<rt>げんき</rt></ruby>に<ruby>庭<rt>にわ</rt></ruby>を<ruby>走<rt>はし</rt></ruby>っています。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>猫<rt>ねこ</rt></ruby>の「トラ」は<ruby>小<rt>ちい</rt></ruby>さくて、あたたかい<ruby>部屋<rt>へや</rt></ruby>のソファーでよく<ruby>寝<rt>ね</rt></ruby>ています。</span></p>\n<p>2<ruby>匹<rt>ひき</rt></ruby>ともとてもかわいくて、<ruby>私<rt>わたし</rt></ruby>の<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>家族<rt>かぞく</rt></ruby>です。</p>\n</div>",
+    "translation_ru": "В моем доме живут одна собака и одна кошка. Собаку зовут Сиро, он белый и большой. Он всегда бодро бегает по саду. Кошка Тора маленькая, часто спит на диване в теплой комнате. Оба питомца очень милые и являются моей семьей.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1395,75 +1395,75 @@
         "slug": "n5-medium-006-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "犬の「シロ」はどんな犬ですか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 описано: белый, большой и бодро бегает по саду.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "体が白くて大きくて元気な犬",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Описание Сиро из ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "黒くていつも寝ている犬",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "explanation_ru": "Неверно. Он белый и активный."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "小さくてソファーの上にいる犬",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. На диване спит кошка Тора."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "外に出たがらない犬",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-006-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "猫の「トラ」はどこで何をしていますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 указано: спит на диване в теплой комнате.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "あたたかい部屋のソファーで寝ている",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Действие кошки Торы из ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "庭で犬と一緒に走っている",
+            "is_correct": false,
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно. Бегает собака Сиро."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "台所で魚を食べている",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "外の木の上に登っている",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1477,8 +1477,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「日本語のべんきょうと漢字」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 日本語のべんきょうと漢字. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は<ruby>毎日<rt>まいにち</rt></ruby>2<ruby>時間<rt>じかん</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>最初<rt>さいしょ</rt></ruby>は<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>覚<rt>おぼ</rt></ruby>えるのがとても<ruby>難<rt>むずか</rt></ruby>しかったですが、<ruby>今<rt>いま</rt></ruby>はとても<ruby>面白<rt>おもしろ</rt></ruby>いと<ruby>思<rt>おも</rt></ruby>っています。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>毎晩<rt>まいばん</rt></ruby>スマートフォンのアプリを<ruby>使<rt>つか</rt></ruby>って、<ruby>新<rt>あたら</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>と<ruby>漢字<rt>かんじ</rt></ruby>を5つずつ<ruby>練習<rt>れんしゅう</rt></ruby>しています。</span></p>\n<p><ruby>来月<rt>らいげつ</rt></ruby>のJLPTのテストに<ruby>合格<rt>ごうかく</rt></ruby>したいですから、これからもがんばります。</p>\n</div>",
+    "translation_ru": "Я занимаюсь японским языком по 2 часа каждый день. Сначала запоминать кандзи было очень трудно, но сейчас мне это кажется очень интересным. Каждый вечер с помощью приложения на смартфоне я практикую по 5 новых слов и кандзи. Я хочу сдать JLPT в следующем месяце, поэтому буду стараться и дальше.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1502,75 +1502,75 @@
         "slug": "n5-medium-007-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "「私」は漢字について今どう思っていますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 говорится: сначала было сложно, но сейчас это кажется очень интересным (面白い).",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "最初は難しかったが、今はとても面白い",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Прямое суждение автора из ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "難しすぎるので勉強をやめたい",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "explanation_ru": "Неверно. Наоборот, автор полон энтузиазма."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "簡単すぎて勉強する必要がない",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "ひらがなより覚えやすい",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-007-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "「私」は毎晩どうやって勉強していますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "Согласно предложению ev-q2: учит по 5 новых слов и иероглифов в приложении на телефоне.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "スマホのアプリで言葉と漢字を5つずつ練習する",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Ежевечерняя методика из ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "図書館で友達と話す",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "テレビのニュースを2時間見る",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "先生の家へ質問に行く",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверno."
           }
         ]
       }
@@ -1584,8 +1584,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「夏休みの海と山」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 夏休みの海と山. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>今年<rt>ことし</rt></ruby>の<ruby>夏休<rt>なつやす</rt></ruby>みは、とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>思<rt>おも</rt></ruby>い<ruby>出<rt>で</rt></ruby>がたくさんできました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">8<ruby>月<rt>がつ</rt></ruby>のはじめに<ruby>家族<rt>かぞく</rt></ruby>と<ruby>海<rt>うみ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>って、<ruby>青<rt>あお</rt></ruby>い<ruby>海<rt>うみ</rt></ruby>でたくさん<ruby>泳<rt>およ</rt></ruby>ぎました。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\">その<ruby>後<rt>あと</rt></ruby>、おじいさんの<ruby>家<rt>いえ</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くの<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>って、おいしい空気を<ruby>吸<rt>す</rt></ruby>いました。</span></p>\n<p><ruby>海<rt>うみ</rt></ruby>も<ruby>山<rt>やま</rt></ruby>もどちらもすばらしかったです。</p>\n</div>",
+    "translation_ru": "На этих летних каникулах у меня появилось много приятных воспоминаний. В начале августа я поехал с семьей на море и вдоволь накупался в синей воде. Затем я поднялся на гору около дома дедушки и подышал чистым воздухом. И море, и горы были великолепны.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1609,75 +1609,75 @@
         "slug": "n5-medium-008-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "8月のはじめに何をしましたか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указано: поехал с семьей на море и плавал.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "家族と海へ行ってたくさん泳いだ",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Поездка на море в начале августа (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "一人で山に登った",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно. На гору пошел позже."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "ずっと家で宿題をした",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "学校のプールへ行った",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "misinterpretation",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-008-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "山の近くにはだれの家がありましたか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 сказано: около дома дедушки (おじいさんの家の近くの山).",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "おじいさんの家",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Дом дедушки около горы (ev-q2)."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "学校の先生の家",
+            "is_correct": false,
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "友だちのリーさんの家",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "だれの家もなかった",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1691,8 +1691,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「おいしい日本のお茶とおかし」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: おいしい日本のお茶とおかし. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>の<ruby>緑茶<rt>りょくちゃ</rt></ruby>（りょくちゃ）がとても<ruby>好<rt>す</rt></ruby>きです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>少<rt>すこ</rt></ruby>し<ruby>苦<rt>にが</rt></ruby>いですが、<ruby>飲<rt>の</rt></ruby>むと<ruby>気持<rt>きも</rt></ruby>ちがすっきりしてリラックスできます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\">お<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>む<ruby>時<rt>とき</rt></ruby>は、あんこが<ruby>入<rt>はい</rt></ruby>った<ruby>甘<rt>あま</rt></ruby>い<ruby>和菓子<rt>わがし</rt></ruby>（わがし）を<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>食<rt>た</rt></ruby>べます。</span></p>\n<p><ruby>苦<rt>にが</rt></ruby>いお<ruby>茶<rt>ちゃ</rt></ruby>と<ruby>甘<rt>あま</rt></ruby>いお<ruby>菓子<rt>かし</rt></ruby>は、最高の組み合わせです。</p>\n</div>",
+    "translation_ru": "Я очень люблю японский зеленый чай (рёкутя). Он немного с горчинкой, но когда пьешь его, на душе становится свежо и спокойно. К чаю я ем сладкие японские сладости вагаси с пастой анко. Терпкий чай и сладкие сладости — превосходное сочетание.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1716,75 +1716,75 @@
         "slug": "n5-medium-009-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "緑茶を飲むとどうなりますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указано: на душе становится свежо и можно расслабиться.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "気持ちがすっきりしてリラックスできる",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Эффект зеленого чая из ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "お腹がとても痛くなる",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "すぐに眠ってしまう",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "のどが渇いて苦しくなる",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-009-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "お茶と一緒に何を食べますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 написано: сладкие традиционные сладости вагаси с анко.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "あんこが入った甘い和菓子",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Сладкие вагаси с фасолевой пастой (ev-q2)."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "辛いラーメン",
+            "is_correct": false,
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "塩辛いポテトチップス",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "パンとチーズ",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1798,8 +1798,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「毎日の散歩と写真」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 毎日の散歩と写真. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>の<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ることです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>毎朝<rt>まいあさ</rt></ruby>、<ruby>仕事<rt>しごと</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に30<ruby>分<rt>ぷん</rt></ruby>ほど<ruby>近<rt>ちか</rt></ruby>くの<ruby>川<rt>かわ</rt></ruby>の<ruby>道<rt>みち</rt></ruby>を<ruby>歩<rt>ある</rt></ruby>きます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>季節<rt>きせつ</rt></ruby>によって<ruby>色<rt>いろ</rt></ruby>々な<ruby>花<rt>はな</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>いていて、<ruby>川<rt>かわ</rt></ruby>には<ruby>小<rt>ちい</rt></ruby>さな<ruby>鳥<rt>とり</rt></ruby>がたくさんいます。</span></p>\n<p>きれいな<ruby>風景<rt>ふうけい</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってSNSに<ruby>載<rt>の</rt></ruby>せると、<ruby>世界<rt>せかい</rt></ruby>の<ruby>友<rt>とも</rt></ruby>だちが見てくれます。</p>\n</div>",
+    "translation_ru": "Мое хобби — фотография. Каждое утро перед работой я гуляю около 30 минут по дорожке вдоль реки. В зависимости от сезона цветут разные цветы, а на реке много птиц. Когда я выкладываю красивые пейзажи в соцсети, мои друзья по всему миру смотрят их.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1823,75 +1823,75 @@
         "slug": "n5-medium-010-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "「私」はいつ散歩をしますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указано: каждое утро перед работой по 30 минут.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "毎朝、仕事の前に30分ほど",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Время утренней прогулки (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "夜遅く仕事が終わってから",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "週末の昼ごはんの後",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "temporal_mismatch",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "雨が降っている時だけ",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-010-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "川の道には何がありますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 написано: цветут сезонные цветы и много маленьких птиц.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "季節の花やたくさんの小さな鳥",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Описание природы вдоль реки (ev-q2)."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "大きな車とトラックの渋滞",
+            "is_correct": false,
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "新しいデパートの工事現場",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "何もなくて暗い道",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -1905,8 +1905,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「学校の友だちと先生」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 学校の友だちと先生. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>の<ruby>通<rt>かよ</rt></ruby>っている<ruby>日本語<rt>にほんご</rt></ruby><ruby>学校<rt>がっこう</rt></ruby>には、いろいろな<ruby>国<rt>くに</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>がいます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\">クラスにはアメリカ、中国、ベトナムなどから<ruby>来<rt>き</rt></ruby>た<ruby>留学生<rt>りゅうがくせい</rt></ruby>がいて、みんなで仲良く<ruby>勉強<rt>べんきょう</rt></ruby>しています。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>先生<rt>せんせい</rt></ruby>はいつも<ruby>優<rt>やさ</rt></ruby>しくて、<ruby>分<rt>わ</rt></ruby>からない<ruby>言葉<rt>ことば</rt></ruby>がある時はゆっくり<ruby>教<rt>おし</rt></ruby>えてくれます。</span></p>\n<p><ruby>毎日本当<rt>まいにちほんとう</rt></ruby>に<ruby>楽<rt>たの</rt></ruby>しいです。</p>\n</div>",
+    "translation_ru": "В школе японского языка, куда я хожу, учатся люди из самых разных стран. В классе есть студенты из Америки, Китая, Вьетнама, и мы все дружно учимся. Учителя всегда добры к нам и медленно объясняют, если попадается непонятное слово. Каждый день проходит очень весело.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -1930,75 +1930,75 @@
         "slug": "n5-medium-011-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "クラスにはどんな人たちがいますか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 указано: иностранные студенты из разных стран (США, Китай, Вьетнам).",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "色々な国から来た留学生たち",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Состав класса из предложения ev-q1."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "日本人の高校生だけ",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "explanation_ru": "Неверно. Это школа для иностранцев."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "先生一人しかいない",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "英語を話す先生たちだけ",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-011-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "分からない言葉がある時、先生はどうしてくれますか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 написано: учитель всегда добр и объясняет непонятные слова медленно и терпеливо.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "優しくゆっくり教えてくれる",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Поведение учителя из предложения ev-q2."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "怒って教室を出ていく",
+            "is_correct": false,
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "宿題を10倍に増やす",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "何も言わずにテストをする",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }
@@ -2012,8 +2012,8 @@
     "source_type": "original",
     "source_note": null,
     "recommended_time_min": 3,
-    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>は「冬の雪とあたたかいスープ」について<ruby>書<rt>か</rt></ruby>きます。<ruby>毎朝<rt>まいあさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きて、あたたかいお<ruby>茶<rt>ちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>私<rt>わたし</rt></ruby>の<ruby>町<rt>まち</rt></ruby>はとても静（しず）かで、<ruby>広<rt>ひろ</rt></ruby>い<ruby>公園<rt>こうえん</rt></ruby>やきれいな<ruby>川<rt>かわ</rt></ruby>があります。</span><ruby>天<rt>てん</rt></ruby><ruby>気<rt>き</rt></ruby>がいい<ruby>日<rt>ひ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>散歩<rt>さんぽ</rt></ruby>をしています。</p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>私<rt>わたし</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>話<rt>はな</rt></ruby>しながら<ruby>歩<rt>ある</rt></ruby>くのが<ruby>大好<rt>だいす</rt></ruby>きです。</span>とても<ruby>楽<rt>たの</rt></ruby>しい<ruby>毎日<rt>まいにち</rt></ruby>です。</p>\n</div>",
-    "translation_ru": "Эссе: 冬の雪とあたたかいスープ. Я встаю в 7 утра и пью теплый чай. Мой город очень тихий, там есть просторный парк и красивая река (ev-q1). Я очень люблю гулять и разговаривать вместе с друзьями (ev-q2).",
+    "body_html": "<div class=\"passage-body\">\n<p><ruby>私<rt>わたし</rt></ruby>の<ruby>国<rt>くに</rt></ruby>は<ruby>一年中<rt>いちねんじゅう</rt></ruby><ruby>暑<rt>あつ</rt></ruby>いので、<ruby>日本<rt>にほん</rt></ruby>で<ruby>初<rt>はじ</rt></ruby>めて<ruby>雪<rt>ゆき</rt></ruby>を<ruby>見<rt>み</rt></ruby>ました。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>朝<rt>あさ</rt></ruby><ruby>起<rt>お</rt></ruby>きた時、<ruby>外<rt>そと</rt></ruby>が<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>白<rt>しろ</rt></ruby>くなっていて、まるで<ruby>絵<rt>え</rt></ruby>のようにきれいで<ruby>驚<rt>おどろ</rt></ruby>きました。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>外<rt>そと</rt></ruby>はとても<ruby>寒<rt>さむ</rt></ruby>かったので、<ruby>部屋<rt>へや</rt></ruby>に<ruby>戻<rt>もど</rt></ruby>ってから<ruby>温<rt>あたた</rt></ruby>かいトマトスープを<ruby>作<rt>つく</rt></ruby>って<ruby>飲<rt>の</rt></ruby>みました。</span></p>\n<p><ruby>冬<rt>ふゆ</rt></ruby>の<ruby>寒<rt>さむ</rt></ruby>さは<ruby>厳<rt>きび</rt></ruby>しいですが、<ruby>温<rt>あたた</rt></ruby>かいスープを飲む時間はとても幸せです。</p>\n</div>",
+    "translation_ru": "В моей родной стране тепло круглый год, поэтому в Японии я впервые увидел снег. Когда я проснулся утром, всё на улице было белым, как на картине, и это меня поразило. На улице было очень холодно, поэтому я вернулся в комнату и сварил горячий томатный суп. Зимний холод суров, но время за горячим супом приносит настоящее счастье.",
     "vocabulary": [
       {
         "word": "毎日",
@@ -2037,75 +2037,75 @@
         "slug": "n5-medium-012-q1",
         "question_number": 1,
         "type": "detail",
-        "prompt": "「私」の町はどんな町ですか。",
+        "prompt": "「私」は朝起きた時、どうして驚きましたか。",
         "evidence_span_id": "ev-q1",
-        "general_explanation": "В тексте прямо указано (ev-q1): город очень тихий, в нем есть просторный парк и река.",
+        "general_explanation": "В предложении ev-q1 написано: на улице всё стало белым от снега, как на картине.",
         "options": [
           {
             "option_number": 1,
-            "text": "静かで、広い公園やきれいな川がある町。",
+            "text": "外が全部白く雪で覆われていてきれいだったから",
             "is_correct": true,
             "trap_type": null,
-            "explanation_ru": "Верно! Прямой ответ из предложения ev-q1."
+            "explanation_ru": "Верно! Первый снег поразил автора (ev-q1)."
           },
           {
             "option_number": 2,
-            "text": "車が多くてとてもうるさい町。",
+            "text": "部屋の中に泥棒が入っていたから",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. В тексте сказано, что город тихий."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "公園も川も全くない町。",
+            "text": "時計が壊れて止まっていたから",
             "is_correct": false,
-            "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Есть и парк, и река."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "人が一人も住んでいない町。",
+            "text": "外がとても暑かったから",
             "is_correct": false,
-            "trap_type": "extreme_condition",
-            "explanation_ru": "Неверно. Там гуляет много людей."
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           }
         ]
       },
       {
         "slug": "n5-medium-012-q2",
         "question_number": 2,
-        "type": "claim",
-        "prompt": "「私」は何が好きですか。",
+        "type": "detail",
+        "prompt": "寒かったので、部屋に戻ってから何をしましたか。",
         "evidence_span_id": "ev-q2",
-        "general_explanation": "В предложении ev-q2 автор пишет: «私は友だちと一緒に話しながら歩くのが大好きです» (Я люблю гулять и общаться с друзьями).",
+        "general_explanation": "В предложении ev-q2 указано: сварил и выпил горячий томатный суп.",
         "options": [
           {
             "option_number": 1,
-            "text": "一人で一日中部屋で寝ること。",
-            "is_correct": false,
-            "trap_type": "not_mentioned",
-            "explanation_ru": "Неверно. Об этом речи нет."
+            "text": "温かいトマトスープを作って飲んだ",
+            "is_correct": true,
+            "trap_type": null,
+            "explanation_ru": "Верно! Горячий суп после улицы (ev-q2)."
           },
           {
             "option_number": 2,
-            "text": "友だちと一緒に話しながら歩くこと。",
-            "is_correct": true,
-            "trap_type": null,
-            "explanation_ru": "Верно! Точное совпадение с предложением ev-q2."
+            "text": "冷たいアイスクリームを食べた",
+            "is_correct": false,
+            "trap_type": "opposite_meaning",
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 3,
-            "text": "友だちとけんかをすること。",
+            "text": "窓を開けて風を入れた",
             "is_correct": false,
             "trap_type": "opposite_meaning",
-            "explanation_ru": "Неверно. Автор любит дружно общаться."
+            "explanation_ru": "Неверно."
           },
           {
             "option_number": 4,
-            "text": "朝早く起きて走ること。",
+            "text": "すぐに服を脱いで泳いだ",
             "is_correct": false,
-            "trap_type": "partial_match",
-            "explanation_ru": "Неверно. Автор любит гулять и разговаривать."
+            "trap_type": "not_mentioned",
+            "explanation_ru": "Неверно."
           }
         ]
       }

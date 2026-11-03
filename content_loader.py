@@ -28,7 +28,7 @@ CONTENT_DIR = BASE_DIR / "content"
 
 from database import SessionLocal, engine, Base
 import models
-from models import Text, Question, Option
+from models import Text, Question, Option, TaskSlot, UserTextState, Attempt
 from validate_content import validate_all_content
 
 def backup_database():
@@ -64,9 +64,20 @@ def load_content(levels_to_replace: list = None, force_replace_n3_n1: bool = Fal
     try:
         if levels_to_replace:
             print(f"Обновление текстов для уровней: {levels_to_replace} (каскадное удаление зависимостей)...")
-            deleted_q = db.query(Text).filter(Text.level.in_(levels_to_replace)).delete(synchronize_session="fetch")
-            db.commit()
-            print(f"✓ Очищено устаревших текстов: {deleted_q}")
+            text_ids = [t[0] for t in db.query(Text.id).filter(Text.level.in_(levels_to_replace)).all()]
+            if text_ids:
+                db.query(TaskSlot).filter(TaskSlot.text_id.in_(text_ids)).delete(synchronize_session=False)
+                db.query(UserTextState).filter(UserTextState.text_id.in_(text_ids)).delete(synchronize_session=False)
+                db.query(Attempt).filter(Attempt.text_id.in_(text_ids)).delete(synchronize_session=False)
+                q_ids = [q[0] for q in db.query(Question.id).filter(Question.text_id.in_(text_ids)).all()]
+                if q_ids:
+                    db.query(Option).filter(Option.question_id.in_(q_ids)).delete(synchronize_session=False)
+                db.query(Question).filter(Question.text_id.in_(text_ids)).delete(synchronize_session=False)
+                deleted_q = db.query(Text).filter(Text.id.in_(text_ids)).delete(synchronize_session=False)
+                db.commit()
+                print(f"✓ Очищено устаревших текстов: {deleted_q}")
+            else:
+                print("✓ Устаревших текстов для удаления не найдено.")
 
         # Загружаем все 5 файлов JSON
         json_files = ["n5.json", "n4.json", "n3.json", "n2.json", "n1.json"]

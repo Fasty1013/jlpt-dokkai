@@ -8,7 +8,7 @@ Implements atomic transactions, idempotency, Anti-Cheat isolation, and dynamic r
 from datetime import datetime
 from typing import List, Dict, Any, Optional, Tuple, Set
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, func
 
 from models import Text, Question, Option, TaskSlot, UserTextState, Attempt
 from tools.param_gen.generator import generate_parametric_text
@@ -174,7 +174,7 @@ def pick_next(
     if exclude_ids:
         query = query.filter(~Text.id.in_(exclude_ids))
 
-    candidate = query.order_by(Text.id.asc()).first()
+    candidate = query.order_by(func.random()).first()
     if candidate:
         return candidate
 
@@ -193,7 +193,7 @@ def pick_next(
         if exclude_ids:
             fallback_query = fallback_query.filter(~Text.id.in_(exclude_ids))
 
-        fallback_candidate = fallback_query.order_by(Text.id.asc()).first()
+        fallback_candidate = fallback_query.order_by(func.random()).first()
         if fallback_candidate:
             return fallback_candidate
 

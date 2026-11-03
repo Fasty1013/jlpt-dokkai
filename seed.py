@@ -289,9 +289,8 @@ def build_text_record(level: str, category: str, index: int) -> Text:
 
 def seed_database(force: bool = False):
     """
-    Main seeding routine: Guarantees 12 unique, high-quality texts for every combination
-    of 5 Levels x 5 Categories = 300 rich texts total.
-    If force=True, forces regeneration with updated authentic furigana.
+    Main seeding routine: Loads verified unique authentic content from content/*.json
+    into the database for all levels N5-N1.
     """
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
@@ -302,29 +301,12 @@ def seed_database(force: bool = False):
         db.close()
         return
 
-    print("Clearing database and starting large-scale generation (300 comprehensive JLPT texts)...")
-    db.query(Option).delete()
-    db.query(Question).delete()
-    db.query(Text).delete()
-    db.commit()
-
-    all_texts_batch = []
-    # 2 Levels (N5, N4) x 5 Categories x 12 unique texts = 120 baseline texts
-    for lvl in ["N5", "N4"]:
-        for cat in CATEGORIES:
-            for idx in range(1, 13):
-                text_item = build_text_record(level=lvl, category=cat, index=idx)
-                all_texts_batch.append(text_item)
-
-    print(f"Adding {len(all_texts_batch)} baseline texts for N5/N4 to database...")
-    db.add_all(all_texts_batch)
-    db.commit()
+    print("Populating database with authentic verified JLPT texts from content/*.json...")
     db.close()
 
-    # Load authentic exam materials for all levels N5-N1 from content/*.json
     from content_loader import load_content
-    load_content(force_replace_n3_n1=True)
-    print(f"Large-scale seeding completed successfully! Total 302 texts (N5-N4 baseline + N3-N1 authentic content).")
+    load_content(levels_to_replace=["N5", "N4", "N3", "N2", "N1"])
+    print("Large-scale seeding completed successfully! All levels populated with authentic unique content.")
 
 
 if __name__ == "__main__":
