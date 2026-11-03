@@ -1,0 +1,23 @@
+{
+  "name": "jlpt-dokkai-qa",
+  "version": "1.0.0",
+  "description": "Comprehensive, repeatable multi-platform QA test suite for JLPT Dokkai Master",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:local": "cross-env TARGET=local playwright test",
+    "test:prod": "cross-env TARGET=prod playwright test",
+    "test:fast": "playwright test --project=chromium_desktop_light --project=chromium_mobile_light",
+    "test:a11y": "playwright test specs/06_accessibility_axe.spec.ts",
+    "test:anti-cheat": "playwright test specs/04_anti_cheat_network.spec.ts",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.8.7",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.6.3"
+  }
+}
+

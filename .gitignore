@@ -49,6 +49,7 @@ Thumbs.db
 
 # QA Testing Evidence & Dependencies
 docs/qa/evidence/
+docs/qa/playwright_raw_results.json
 tests/qa/node_modules/
 tests/qa/playwright-report/
 tests/qa/test-results/

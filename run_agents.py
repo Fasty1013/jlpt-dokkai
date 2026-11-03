@@ -143,6 +143,21 @@ def run_project_diagnostics() -> bool:
 
     return all_ok
 
+
+def run_qa_suite(target: str = "local", quick: bool = False, prod_url: str = "") -> int:
+    print(f"\n{BOLD}{CYAN}--- [Запуск системы QA-тестирования (Playwright Matrix)] ---{RESET}")
+    script = BASE_DIR / "tests" / "qa" / "run_qa.py"
+    if not script.exists():
+        print(f"{RED}Скрипт QA-тестов не найден: {script}{RESET}")
+        return 1
+    cmd = [sys.executable, str(script), "--target", target]
+    if quick:
+        cmd.append("--quick")
+    if prod_url:
+        cmd.extend(["--prod-url", prod_url])
+    res = subprocess.run(cmd)
+    return res.returncode
+
 def run_jlpt_expert(task: str = ""):
     print(f"\n{MAGENTA}{BOLD}======================================================================{RESET}")
     print(f"{MAGENTA}{BOLD}🥋 АГЕНТ 1: @jlpt-expert (Методолог экзамена JLPT & Лингвист){RESET}")
@@ -220,9 +235,10 @@ def interactive_menu():
         print(f"  {BLUE}[2]{RESET} Запустить только {BOLD}@senior-dev{RESET} (Senior Software Engineer)")
         print(f"  {YELLOW}[3]{RESET} Запустить обоих агентов одновременно {BOLD}(Dual Orchestrator){RESET}")
         print(f"  {CYAN}[4]{RESET} Быстрая самодиагностика проекта и автотесты")
+        print(f"  {GREEN}[5]{RESET} Комплексные QA-тесты (Playwright Matrix: Web, Mobile, A11y)")
         print(f"  {RED}[0]{RESET} Выход")
         
-        choice = input(f"\n{BOLD}Введите номер действия [0-4]: {RESET}").strip()
+        choice = input(f"\n{BOLD}Введите номер действия [0-5]: {RESET}").strip()
         if choice == "1":
             t = input(f"{BOLD}Введите описание задачи (Enter для пропуска): {RESET}").strip()
             run_jlpt_expert(t)
@@ -238,11 +254,15 @@ def interactive_menu():
         elif choice == "4":
             run_project_diagnostics()
             break
+        elif choice == "5":
+            target = "prod" if input(f"{BOLD}Запустить на Prod (onrender.com)? [y/N]: {RESET}").strip().lower() == "y" else "local"
+            run_qa_suite(target=target)
+            break
         elif choice in ("0", "q", "exit"):
             print("Выход из системы.")
             break
         else:
-            print(f"{RED}Неверный ввод, выберите пункт от 0 до 4.{RESET}\n")
+            print(f"{RED}Неверный ввод, выберите пункт от 0 до 5.{RESET}\n")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -253,6 +273,10 @@ def main():
     parser.add_argument("-d", "--dev", action="store_true", help="Запустить только @senior-dev")
     parser.add_argument("-b", "--both", action="store_true", help="Запустить обоих агентов (Оркестратор)")
     parser.add_argument("-c", "--check", action="store_true", help="Выполнить диагностику и запустить автотесты")
+    parser.add_argument("--qa", action="store_true", help="Запустить Playwright QA матрицу тестов")
+    parser.add_argument("--prod", action="store_true", help="Целевое окружение для QA: Production")
+    parser.add_argument("--prod-url", type=str, default="", help="URL боевого сервера на Render")
+    parser.add_argument("--quick", action="store_true", help="Быстрый прогон QA (1 моб. + 1 десктоп)")
     parser.add_argument("-t", "--task", type=str, default="", help="Описание задачи для агента")
     parser.add_argument("-i", "--interactive", action="store_true", help="Открыть интерактивное меню")
 
@@ -273,6 +297,10 @@ def main():
     elif args.check:
         print_banner()
         run_project_diagnostics()
+    elif args.qa:
+        print_banner()
+        target = "prod" if args.prod else "local"
+        run_qa_suite(target=target, quick=args.quick, prod_url=args.prod_url)
     else:
         interactive_menu()
 
