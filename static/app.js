@@ -76,11 +76,11 @@ const state = {
     activeText: null,        // Loaded TextReadSchema or TextAnalysisSchema
     pendingTextId: null,     // Selected text awaiting modal confirmation
     pendingTextData: null,
-    
+
     // Step-by-Step Wizard State
     currentQuestionIndex: 0, // 0-based index of the active question
     userAnswers: {},         // questionId -> selectedOptionId
-    
+
     timer: {
         enabled: false,
         totalSeconds: 180,
@@ -103,8 +103,11 @@ const state = {
     // Interactive Dictionary & Notebook State
     popupDictEnabled: true,
     activePopupWord: null,
+    savedWords: [],
     notebookFilter: 'all', // 'all' | 'learning' | 'learned'
-    notebookSearchQuery: ''
+    notebookSearchQuery: '',
+    // Active session for auto-resume
+    activeSession: null
 };
 
 // ============================================================================
@@ -286,7 +289,43 @@ const elements = {
     tagTimer: document.getElementById('tag-timer'),
     modalBtnCancel: document.getElementById('modal-btn-cancel'),
     modalBtnClose: document.getElementById('modal-btn-close'),
-    modalBtnStart: document.getElementById('modal-btn-start')
+    modalBtnStart: document.getElementById('modal-btn-start'),
+
+    // Sync Status & Unfinished Test Banner
+    btnSyncStatus: document.getElementById('btn-sync-status'),
+    headerSyncDot: document.getElementById('header-sync-dot'),
+    headerSyncLabel: document.getElementById('header-sync-label'),
+    unfinishedTestBanner: document.getElementById('unfinished-test-banner'),
+    unfinishedTaskTitle: document.getElementById('unfinished-task-title'),
+    unfinishedTaskMeta: document.getElementById('unfinished-task-meta'),
+    btnResumeUnfinished: document.getElementById('btn-resume-unfinished'),
+    btnDismissUnfinished: document.getElementById('btn-dismiss-unfinished'),
+
+    // Cloud Sync Modal
+    syncModalBackdrop: document.getElementById('sync-modal-backdrop'),
+    btnCloseSyncModal: document.getElementById('btn-close-sync-modal'),
+    btnSyncModalDone: document.getElementById('btn-sync-modal-done'),
+    modalSyncDot: document.getElementById('modal-sync-dot'),
+    modalSyncTitle: document.getElementById('modal-sync-title'),
+    modalSyncDesc: document.getElementById('modal-sync-desc'),
+    syncUserInfo: document.getElementById('sync-user-info'),
+    syncUserAvatar: document.getElementById('sync-user-avatar'),
+    syncUserName: document.getElementById('sync-user-name'),
+    syncUserEmail: document.getElementById('sync-user-email'),
+    btnCloudSignout: document.getElementById('btn-cloud-signout'),
+    syncAuthActions: document.getElementById('sync-auth-actions'),
+    btnCloudSigninGoogle: document.getElementById('btn-cloud-signin-google'),
+    btnCloudSigninAnon: document.getElementById('btn-cloud-signin-anon'),
+    modalBtnExport: document.getElementById('modal-btn-export'),
+    modalBtnImportTrigger: document.getElementById('modal-btn-import-trigger'),
+    firebaseConfigInput: document.getElementById('firebase-config-input'),
+    btnSaveFirebaseConfig: document.getElementById('btn-save-firebase-config'),
+    btnClearFirebaseConfig: document.getElementById('btn-clear-firebase-config'),
+
+    // Notebook Backup
+    btnExportBackup: document.getElementById('btn-export-backup'),
+    btnImportBackupTrigger: document.getElementById('btn-import-backup-trigger'),
+    inputImportBackupFile: document.getElementById('input-import-backup-file')
 };
 
 // ============================================================================
@@ -455,6 +494,12 @@ function enableTimerAtRuntime() {
 // Reader Customization (Font Size & Typeface)
 // ============================================================================
 
+function saveUserSettings() {
+    if (window.DokkaiStorage) {
+        window.DokkaiStorage.saveSettings('user_settings', state.settings);
+    }
+}
+
 function setReaderFont(typeface) {
     state.settings.fontFamily = typeface;
     if (typeface === 'mincho') {
@@ -468,12 +513,14 @@ function setReaderFont(typeface) {
         elements.btnFontGothic.classList.add('active');
         elements.btnFontMincho.classList.remove('active');
     }
+    saveUserSettings();
 }
 
 function adjustFontSize(delta) {
     const newSize = Math.max(16, Math.min(28, state.settings.fontSizePx + delta));
     state.settings.fontSizePx = newSize;
     elements.passageContent.style.fontSize = `${newSize}px`;
+    saveUserSettings();
 }
 
 // ============================================================================
@@ -582,6 +629,16 @@ async function fetchAndRenderSlots() {
 async function fetchAndRenderSolvedTasks() {
     if (!elements.solvedTasksList) return;
 
+    // 1. First retrieve local solved tasks from DokkaiStorage
+    let localSolved = [];
+    if (window.DokkaiStorage) {
+        try {
+            localSolved = await window.DokkaiStorage.getSolvedTasks(state.streamProfile.level, state.solvedFilter);
+        } catch (e) {
+            console.warn('[Dokkai] Failed to read local solved tasks:', e);
+        }
+    }
+
     const userId = getUserId();
     const params = new URLSearchParams({
         user_id: userId,
@@ -596,46 +653,77 @@ async function fetchAndRenderSolvedTasks() {
 
     params.append('_t', Date.now().toString());
 
+    let items = localSolved;
+
     try {
         const response = await fetch(`/api/stream/solved?${params.toString()}`, {
             cache: 'no-store',
             headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
         });
-        if (!response.ok) throw new Error('Ошибка загрузки архива решённых заданий');
-        const data = await response.json();
-        const items = data.items || [];
-        state.cachedSolved = items;
-
-        if (elements.solvedArchiveTotal) {
-            elements.solvedArchiveTotal.textContent = data.total || 0;
+        if (response.ok) {
+            const data = await response.json();
+            const serverItems = data.items || [];
+            if (window.DokkaiStorage && serverItems.length > 0) {
+                for (const sTask of serverItems) {
+                    await window.DokkaiStorage.recordSolvedTask(sTask);
+                }
+                items = await window.DokkaiStorage.getSolvedTasks(state.streamProfile.level, state.solvedFilter);
+            }
         }
-        if (elements.mobileSolvedCount) {
-            elements.mobileSolvedCount.textContent = data.total || 0;
-        }
+    } catch (err) {
+        console.warn('Backend solved tasks fetch failed (using local offline storage):', err);
+    }
 
-        if (items.length === 0) {
-            elements.solvedTasksList.innerHTML = `
-                <div class="stream-empty-solved">
-                    <span class="empty-icon">📖</span>
-                    <p>Здесь будут сохраняться решённые вами задания.</p>
-                    <span class="empty-hint">Выберите любое задание из левой колонки «Задания», чтобы начать!</span>
+    state.cachedSolved = items;
+
+    if (elements.solvedArchiveTotal) {
+        elements.solvedArchiveTotal.textContent = items.length;
+    }
+    if (elements.mobileSolvedCount) {
+        elements.mobileSolvedCount.textContent = items.length;
+    }
+
+    if (items.length === 0) {
+        elements.solvedTasksList.innerHTML = `
+            <div class="stream-empty-solved">
+                <span class="empty-icon">📖</span>
+                <p>Здесь будут сохраняться решённые вами задания.</p>
+                <span class="empty-hint">Выберите любое задание из левой колонки «Задания», чтобы начать!</span>
+            </div>
+        `;
+        return;
+    }
+
+    elements.solvedTasksList.innerHTML = items.map(t => {
+        const isPerfect = (t.last_score === 100 || t.score === 100 || t.perfect);
+        const scoreBadgeClass = isPerfect ? 'score-perfect' : 'score-errors';
+        const displayScore = (t.last_score !== undefined) ? t.last_score : (t.score !== undefined ? t.score : 0);
+        const scoreBadgeText = isPerfect ? '100% ★ Идеально' : `${displayScore}% с ошибками`;
+        const dateStr = t.solved_at ? new Date(t.solved_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+        return `
+            <div class="stream-solved-card" data-text-id="${t.text_id}">
+                <div class="solved-card-header">
+                    <span class="solved-score-badge ${scoreBadgeClass}">${scoreBadgeText}</span>
+                    <span class="solved-card-date">${dateStr}</span>
                 </div>
-            `;
-            return;
-        }
-
-        elements.solvedTasksList.innerHTML = items.map(t => {
-            const isPerfect = (t.last_score === 100 || t.perfect);
-            const scoreBadgeClass = isPerfect ? 'score-perfect' : 'score-errors';
-            const scoreBadgeText = isPerfect ? '100% ★ Идеально' : `${t.last_score}% с ошибками`;
-            const dateStr = t.solved_at ? new Date(t.solved_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-
-            return `
-                <div class="stream-solved-card" data-text-id="${t.text_id}">
-                    <div class="solved-card-header">
-                        <span class="solved-score-badge ${scoreBadgeClass}">${scoreBadgeText}</span>
-                        <span class="solved-card-date">${dateStr}</span>
-                    </div>
+                <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
+                <div class="solved-card-actions">
+                    <button class="btn-solved-action btn-review" onclick="reviewSolvedTask(${t.text_id})">
+                        🔍 Обзор разбора
+                    </button>
+                    <button class="btn-solved-action" onclick="retrySolvedTask(${t.text_id})">
+                        🔁 Пройти заново
+                    </button>
+                    <button class="btn-solved-action" onclick="openReportModal(${t.text_id}, '${escapeHtml(t.title)}')">
+                        ⚠️ Сообщить об ошибке
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    <span class="solved-card-date">${dateStr}</span>
+                    </div >
                     <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
                     <div class="solved-card-actions">
                         <button class="btn-solved-action btn-review" onclick="reviewSolvedTask(${t.text_id})">
@@ -648,22 +736,22 @@ async function fetchAndRenderSolvedTasks() {
                             ⚠️ Сообщить об ошибке
                         </button>
                     </div>
-                </div>
-            `;
+                </div >
+        `;
         }).join('');
     } catch (err) {
         console.error(err);
         elements.solvedTasksList.innerHTML = `
-            <div style="text-align: center; padding: 1.5rem; color: var(--vermilion);">
-                Не удалось загрузить архив решённых заданий.
-            </div>
+        < div style = "text-align: center; padding: 1.5rem; color: var(--vermilion);" >
+            Не удалось загрузить архив решённых заданий.
+            </div >
         `;
     }
 }
 
 async function reviewSolvedTask(textId) {
     try {
-        const res = await fetch(`/api/stream/solved/${textId}?user_id=${getUserId()}`);
+        const res = await fetch(`/ api / stream / solved / ${ textId }?user_id = ${ getUserId() } `);
         if (res.status === 403) {
             alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
             return;
@@ -683,7 +771,7 @@ async function reviewSolvedTask(textId) {
 
 async function retrySolvedTask(textId) {
     try {
-        const res = await fetch(`/api/stream/retry/${textId}?user_id=${getUserId()}`, { method: 'POST' });
+        const res = await fetch(`/ api / stream / retry / ${ textId }?user_id = ${ getUserId() } `, { method: 'POST' });
         if (!res.ok) throw new Error('Ошибка запуска повтора');
         const data = await res.json();
         state.isRetryMode = true;
@@ -696,7 +784,7 @@ async function retrySolvedTask(textId) {
 }
 
 function handleSlotReplacement(solvedTextId, replacement) {
-    const card = document.querySelector(`.stream-slot-card[data-text-id="${solvedTextId}"]`);
+    const card = document.querySelector(`.stream - slot - card[data - text - id="${solvedTextId}"]`);
     if (card) {
         card.classList.add('slot-solving-out');
         setTimeout(() => {
@@ -711,7 +799,7 @@ function openReportModal(textId, title) {
     state.reportingTextId = textId;
     history.pushState({ modal: 'report', textId: textId }, '', '#report');
     if (elements.reportModalTaskTitle) {
-        elements.reportModalTaskTitle.textContent = title || `Задание #${textId}`;
+        elements.reportModalTaskTitle.textContent = title || `Задание #${ textId } `;
     }
     if (elements.reportDetailsTextarea) {
         elements.reportDetailsTextarea.value = '';
@@ -738,29 +826,29 @@ async function submitReportDefect() {
             elements.btnSubmitReport.disabled = true;
             elements.btnSubmitReport.textContent = 'Отправка...';
         }
-        const res = await fetch(`/api/texts/${state.reportingTextId}/report`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                reason: reason,
-                details: details,
-                user_id: getUserId()
-            })
-        });
-        if (!res.ok) throw new Error('Ошибка отправки замечания');
-        const resData = await res.json();
-        closeReportModal();
-        alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
-        fetchAndRenderSlots();
+        const res = await fetch(`/ api / texts / ${ state.reportingTextId }/report`, {
+    method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        reason: reason,
+        details: details,
+        user_id: getUserId()
+    })
+});
+if (!res.ok) throw new Error('Ошибка отправки замечания');
+const resData = await res.json();
+closeReportModal();
+alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
+fetchAndRenderSlots();
     } catch (e) {
-        console.error(e);
-        alert('Не удалось отправить замечание.');
-    } finally {
-        if (elements.btnSubmitReport) {
-            elements.btnSubmitReport.disabled = false;
-            elements.btnSubmitReport.textContent = 'Отправить замечание';
-        }
+    console.error(e);
+    alert('Не удалось отправить замечание.');
+} finally {
+    if (elements.btnSubmitReport) {
+        elements.btnSubmitReport.disabled = false;
+        elements.btnSubmitReport.textContent = 'Отправить замечание';
     }
+}
 }
 
 function switchMobileStreamCol(col) {
@@ -912,7 +1000,7 @@ async function startExercise(textId) {
         elements.headerLevelTag.textContent = textData.level;
         elements.headerLevelTag.setAttribute('data-lvl', textData.level);
         elements.headerCategoryTag.textContent = CATEGORY_NAMES[textData.category] || textData.category;
-        
+
         if (textData.source_exam) {
             elements.headerExamBadge.textContent = textData.source_exam;
             elements.headerExamBadge.classList.remove('hidden');
@@ -933,7 +1021,7 @@ async function startExercise(textId) {
         elements.passageLevel.textContent = textData.level;
         elements.passageLevel.setAttribute('data-lvl', textData.level);
         elements.passageCategory.textContent = CATEGORY_NAMES[textData.category] || textData.category;
-        
+
         if (textData.source_exam) {
             elements.passageExamBadge.textContent = textData.source_exam;
             elements.passageExamBadge.classList.remove('hidden');
@@ -971,6 +1059,10 @@ async function startExercise(textId) {
 
         // Render Wizard dots & active question
         renderWizard();
+        saveCurrentActiveSession();
+        if (elements.unfinishedTestBanner) {
+            elements.unfinishedTestBanner.classList.add('hidden');
+        }
 
     } catch (err) {
         console.error('Ошибка инициализации упражнения:', err);
@@ -1009,8 +1101,8 @@ function renderWizard() {
             </div>
             <div class="options-group">
                 ${currentQ.options.map(opt => {
-                    const isChecked = selectedOptId === opt.id;
-                    return `
+        const isChecked = selectedOptId === opt.id;
+        return `
                         <div class="option-item ${isChecked ? 'selected' : ''}" id="opt-item-${opt.id}">
                             <label class="option-label" for="radio-opt-${opt.id}">
                                 <input 
@@ -1026,7 +1118,7 @@ function renderWizard() {
                             </label>
                         </div>
                     `;
-                }).join('')}
+    }).join('')}
             </div>
         </div>
     `;
@@ -1056,6 +1148,25 @@ function renderWizard() {
     }
 }
 
+function saveCurrentActiveSession() {
+    if (state.currentView !== 'exercise' || !state.activeText) return;
+    if (window.DokkaiStorage) {
+        window.DokkaiStorage.saveActiveSession({
+            textId: state.activeText.id,
+            title: state.activeText.title,
+            level: state.activeText.level,
+            currentQuestionIndex: state.currentQuestionIndex,
+            userAnswers: state.userAnswers,
+            timer: {
+                totalSeconds: state.timer.totalSeconds,
+                remainingSeconds: state.timer.remainingSeconds,
+                secondsSpent: state.timer.secondsSpent,
+                enabled: state.timer.enabled
+            }
+        });
+    }
+}
+
 function handleOptionSelect(questionId, optionId) {
     state.userAnswers[questionId] = optionId;
 
@@ -1069,6 +1180,9 @@ function handleOptionSelect(questionId, optionId) {
 
     // Refresh Wizard status and next button availability
     renderWizard();
+
+    // Auto-save active test progress
+    saveCurrentActiveSession();
 }
 
 function wizardGoNext() {
@@ -1076,6 +1190,7 @@ function wizardGoNext() {
     if (state.currentQuestionIndex < totalQ - 1) {
         state.currentQuestionIndex += 1;
         renderWizard();
+        saveCurrentActiveSession();
     }
 }
 
@@ -1083,6 +1198,7 @@ function wizardGoPrev() {
     if (state.currentQuestionIndex > 0) {
         state.currentQuestionIndex -= 1;
         renderWizard();
+        saveCurrentActiveSession();
     } else {
         // На первом вопросе кнопка Назад возвращает на главную страницу
         returnToCatalog();
@@ -1158,6 +1274,29 @@ async function submitAnswers() {
         state.activeText = analysisData;
         state.currentView = 'analysis';
         state.analysisActiveTabIdx = 0;
+
+        // PERSISTENCE: Save to DokkaiStorage and clear active in-progress session
+        if (window.DokkaiStorage) {
+            try {
+                await window.DokkaiStorage.recordSolvedTask({
+                    text_id: state.activeText.id,
+                    title: state.activeText.title,
+                    level: state.activeText.level,
+                    category: state.activeText.category,
+                    score: analysisData.score_percent,
+                    score_percent: analysisData.score_percent,
+                    last_score: analysisData.score_percent,
+                    correct_count: analysisData.correct_count,
+                    total_questions: analysisData.total_questions,
+                    perfect: (analysisData.score_percent === 100),
+                    time_spent_sec: timeSpent,
+                    solved_at: new Date().toISOString()
+                });
+                await window.DokkaiStorage.clearActiveSession();
+            } catch (err) {
+                console.warn('[Dokkai] Failed to record solved task to local storage:', err);
+            }
+        }
 
         renderAnalysisView(analysisData);
 
@@ -1280,32 +1419,32 @@ function renderAnalysisActiveCard(q) {
 
             <div class="options-group">
                 ${q.options.map(opt => {
-                    let stateClass = '';
-                    let badgeHtml = '';
-                    let explanationBoxHtml = '';
+        let stateClass = '';
+        let badgeHtml = '';
+        let explanationBoxHtml = '';
 
-                    if (opt.is_correct) {
-                        stateClass = 'state-correct';
-                        badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
-                    } else if (opt.was_selected) {
-                        stateClass = 'state-wrong-selected';
-                        badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
-                    }
+        if (opt.is_correct) {
+            stateClass = 'state-correct';
+            badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
+        } else if (opt.was_selected) {
+            stateClass = 'state-wrong-selected';
+            badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
+        }
 
-                    if (allowHints && opt.option_explanation) {
-                        const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
-                        const trapBadge = (!opt.is_correct && opt.trap_type && TRAP_LABELS[opt.trap_type])
-                            ? `<div class="trap-type-pill">⚠️ ${escapeHtml(TRAP_LABELS[opt.trap_type])}</div>`
-                            : '';
-                        explanationBoxHtml = `
+        if (allowHints && opt.option_explanation) {
+            const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
+            const trapBadge = (!opt.is_correct && opt.trap_type && TRAP_LABELS[opt.trap_type])
+                ? `<div class="trap-type-pill">⚠️ ${escapeHtml(TRAP_LABELS[opt.trap_type])}</div>`
+                : '';
+            explanationBoxHtml = `
                             <div class="option-explanation-box ${expClass}">
                                 ${trapBadge}
                                 <div>${opt.option_explanation}</div>
                             </div>
                         `;
-                    }
+        }
 
-                    return `
+        return `
                         <div class="option-item ${stateClass}">
                             <div class="option-label">
                                 <input 
@@ -1320,7 +1459,7 @@ function renderAnalysisActiveCard(q) {
                             ${explanationBoxHtml}
                         </div>
                     `;
-                }).join('')}
+    }).join('')}
             </div>
 
             <!-- General question analysis & Evidence locator -->
@@ -1437,21 +1576,36 @@ function speakJapanese(text) {
 }
 
 function getSavedWords() {
+    if (Array.isArray(state.savedWords) && state.savedWords.length > 0) {
+        return state.savedWords;
+    }
     try {
         const stored = localStorage.getItem(NOTEBOOK_STORAGE_KEY);
-        if (!stored) return [];
-        const parsed = JSON.parse(stored);
-        return Array.isArray(parsed) ? parsed : [];
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                state.savedWords = parsed;
+                return state.savedWords;
+            }
+        }
     } catch (e) {
         console.warn('Failed to load saved words, using fallback []', e);
-        return [];
     }
+    return Array.isArray(state.savedWords) ? state.savedWords : [];
 }
 
-function saveWordsToStorage(words) {
+async function saveWordsToStorage(words) {
+    state.savedWords = words;
     try {
         localStorage.setItem(NOTEBOOK_STORAGE_KEY, JSON.stringify(words));
         updateNotebookBadge();
+        if (window.DokkaiStorage) {
+            for (const w of words) {
+                if (w && w.word) {
+                    await window.DokkaiStorage.saveWord(w, false);
+                }
+            }
+        }
     } catch (e) {
         console.warn('Failed to save words to storage', e);
     }
@@ -1470,20 +1624,23 @@ function isWordSaved(wordText) {
     return words.some(w => w.word === wordText);
 }
 
-function toggleSaveWord(wordData) {
+async function toggleSaveWord(wordData) {
     if (!wordData || !wordData.word) return;
     let words = getSavedWords();
     const existingIdx = words.findIndex(w => w.word === wordData.word);
 
     if (existingIdx >= 0) {
-        words.splice(existingIdx, 1);
+        const removed = words.splice(existingIdx, 1)[0];
         saveWordsToStorage(words);
+        if (window.DokkaiStorage) {
+            await window.DokkaiStorage.removeWord(wordData.word);
+        }
         if (elements.popupBtnSave) {
             elements.popupBtnSave.classList.remove('is-saved');
             elements.popupBtnSaveText.textContent = 'В мой словарь';
         }
     } else {
-        words.unshift({
+        const newWord = {
             id: Date.now(),
             word: wordData.word,
             reading: wordData.reading || '',
@@ -1491,8 +1648,12 @@ function toggleSaveWord(wordData) {
             level: wordData.level || 'JLPT',
             mastered: false,
             date: new Date().toLocaleDateString()
-        });
+        };
+        words.unshift(newWord);
         saveWordsToStorage(words);
+        if (window.DokkaiStorage) {
+            await window.DokkaiStorage.saveWord(newWord, true);
+        }
         if (elements.popupBtnSave) {
             elements.popupBtnSave.classList.add('is-saved');
             elements.popupBtnSaveText.textContent = '✓ В словаре';
@@ -1684,7 +1845,7 @@ function renderNotebookWords() {
     }
 
     if (query) {
-        filtered = filtered.filter(w => 
+        filtered = filtered.filter(w =>
             (w.word && w.word.toLowerCase().includes(query)) ||
             (w.reading && w.reading.toLowerCase().includes(query)) ||
             (w.meaning && w.meaning.toLowerCase().includes(query))
@@ -1771,6 +1932,7 @@ function returnToCatalog(pushState = true) {
     }
 
     fetchAndRenderCatalog();
+    checkAndPromptActiveSession();
 }
 
 // ============================================================================
@@ -2466,21 +2628,366 @@ function initEventListeners() {
         }
     });
 
+    // Sync Modal and Status triggers
+    if (elements.btnSyncStatus) {
+        elements.btnSyncStatus.addEventListener('click', openSyncModal);
+    }
+    if (elements.btnCloseSyncModal) {
+        elements.btnCloseSyncModal.addEventListener('click', closeSyncModal);
+    }
+    if (elements.btnSyncModalDone) {
+        elements.btnSyncModalDone.addEventListener('click', closeSyncModal);
+    }
+    if (elements.syncModalBackdrop) {
+        elements.syncModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === elements.syncModalBackdrop) closeSyncModal();
+        });
+    }
+
+    // Cloud Auth triggers
+    if (elements.btnCloudSigninGoogle) {
+        elements.btnCloudSigninGoogle.addEventListener('click', async () => {
+            if (!window.DokkaiCloudSync) return;
+            try {
+                await window.DokkaiCloudSync.signInGoogle();
+            } catch (err) {
+                alert('Не удалось войти через Google: ' + err.message);
+            }
+        });
+    }
+    if (elements.btnCloudSigninAnon) {
+        elements.btnCloudSigninAnon.addEventListener('click', async () => {
+            if (!window.DokkaiCloudSync) return;
+            try {
+                await window.DokkaiCloudSync.signInAnonymous();
+            } catch (err) {
+                alert('Ошибка создания профиля: ' + err.message);
+            }
+        });
+    }
+    if (elements.btnCloudSignout) {
+        elements.btnCloudSignout.addEventListener('click', async () => {
+            if (!window.DokkaiCloudSync) return;
+            if (confirm('Выйти из облачного аккаунта? Все локальные данные на этом устройстве сохранятся.')) {
+                await window.DokkaiCloudSync.signOut();
+            }
+        });
+    }
+
+    // Firebase Config custom save / clear
+    if (elements.btnSaveFirebaseConfig) {
+        elements.btnSaveFirebaseConfig.addEventListener('click', async () => {
+            if (!window.DokkaiCloudSync || !elements.firebaseConfigInput) return;
+            try {
+                const parsed = JSON.parse(elements.firebaseConfigInput.value.trim());
+                const res = await window.DokkaiCloudSync.saveFirebaseConfig(parsed);
+                if (res.success) {
+                    alert('Конфигурация Firebase успешно сохранена!');
+                    closeSyncModal();
+                } else {
+                    alert('Ошибка подключения: ' + res.error);
+                }
+            } catch (e) {
+                alert('Пожалуйста, вставьте корректный JSON объект конфигурации Firebase.');
+            }
+        });
+    }
+    if (elements.btnClearFirebaseConfig) {
+        elements.btnClearFirebaseConfig.addEventListener('click', () => {
+            if (!window.DokkaiCloudSync) return;
+            if (confirm('Сбросить конфигурацию Firebase? Приложение перейдёт в локальный режим.')) {
+                window.DokkaiCloudSync.clearFirebaseConfig();
+                if (elements.firebaseConfigInput) elements.firebaseConfigInput.value = '';
+                alert('Конфигурация сброшена.');
+            }
+        });
+    }
+
+    // Backup Export & Import triggers
+    if (elements.modalBtnExport) {
+        elements.modalBtnExport.addEventListener('click', exportProgressJson);
+    }
+    if (elements.btnExportBackup) {
+        elements.btnExportBackup.addEventListener('click', exportProgressJson);
+    }
+    if (elements.modalBtnImportTrigger) {
+        elements.modalBtnImportTrigger.addEventListener('click', () => {
+            if (elements.inputImportBackupFile) elements.inputImportBackupFile.click();
+        });
+    }
+    if (elements.btnImportBackupTrigger) {
+        elements.btnImportBackupTrigger.addEventListener('click', () => {
+            if (elements.inputImportBackupFile) elements.inputImportBackupFile.click();
+        });
+    }
+    if (elements.inputImportBackupFile) {
+        elements.inputImportBackupFile.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                handleImportJsonFile(e.target.files[0]);
+                e.target.value = '';
+            }
+        });
+    }
+
+    // Unfinished test banner triggers
+    if (elements.btnResumeUnfinished) {
+        elements.btnResumeUnfinished.addEventListener('click', async () => {
+            if (!state.activeSession) return;
+            const session = state.activeSession;
+            await resumeActiveExercise(session);
+        });
+    }
+    if (elements.btnDismissUnfinished) {
+        elements.btnDismissUnfinished.addEventListener('click', async () => {
+            if (elements.unfinishedTestBanner) {
+                elements.unfinishedTestBanner.classList.add('hidden');
+            }
+            state.activeSession = null;
+            if (window.DokkaiStorage) {
+                await window.DokkaiStorage.clearActiveSession();
+            }
+        });
+    }
+
     // Global keyboard shortcuts (Esc to close modals / popups)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             hidePopupDictionary();
             closeNotebookModal();
             closePretestModal();
+            closeSyncModal();
+            closeReportModal();
+        }
+    });
+}
+
+// ============================================================================
+// Cloud Sync & Backup UI & Handlers
+// ============================================================================
+
+function openSyncModal() {
+    if (elements.syncModalBackdrop) {
+        elements.syncModalBackdrop.classList.remove('hidden');
+        if (window.DokkaiCloudSync && elements.firebaseConfigInput) {
+            const cfg = window.DokkaiCloudSync.getStoredConfig();
+            if (cfg) elements.firebaseConfigInput.value = JSON.stringify(cfg, null, 2);
+        }
+    }
+}
+
+function closeSyncModal() {
+    if (elements.syncModalBackdrop) {
+        elements.syncModalBackdrop.classList.add('hidden');
+    }
+}
+
+function updateSyncStatusUI(status, extraInfo) {
+    if (!elements.headerSyncDot || !elements.headerSyncLabel) return;
+    const info = window.DokkaiCloudSync ? window.DokkaiCloudSync.getStatusInfo() : { text: 'На устройстве', class: 'status-local', icon: '📱' };
+
+    elements.headerSyncDot.className = `sync-dot ${info.class}`;
+    elements.headerSyncLabel.textContent = `${info.icon} ${info.text}`;
+
+    if (elements.modalSyncDot) {
+        elements.modalSyncDot.className = `sync-dot ${info.class}`;
+    }
+    if (elements.modalSyncTitle) {
+        elements.modalSyncTitle.textContent = info.text;
+    }
+    if (elements.modalSyncDesc) {
+        if (info.class === 'status-synced') {
+            elements.modalSyncDesc.textContent = 'Все решённые задания, личный словарь и настройки синхронизированы с Google Firebase ($0 бесплатно).';
+        } else if (info.class === 'status-syncing') {
+            elements.modalSyncDesc.textContent = 'Идёт синхронизация данных с облаком...';
+        } else if (info.class === 'status-offline') {
+            elements.modalSyncDesc.textContent = 'Сеть недоступна. Все данные сохраняются на вашем устройстве (IndexedDB) и синхронизируются при включении интернета.';
+        } else {
+            elements.modalSyncDesc.textContent = 'Все данные надёжно сохраняются на этом устройстве (IndexedDB). Они не пропадут при закрытии вкладки или перезапуске сервера Render.';
+        }
+    }
+}
+
+function updateSyncUserUI(user) {
+    if (!elements.syncUserInfo || !elements.syncAuthActions) return;
+    if (user) {
+        elements.syncUserInfo.classList.remove('hidden');
+        elements.syncAuthActions.classList.add('hidden');
+        if (elements.syncUserName) elements.syncUserName.textContent = user.displayName || (user.isAnonymous ? 'Анонимный профиль' : 'Пользователь');
+        if (elements.syncUserEmail) elements.syncUserEmail.textContent = user.email || (user.isAnonymous ? 'Облачный ID: ' + user.uid.slice(0, 8) : '');
+    } else {
+        elements.syncUserInfo.classList.add('hidden');
+        elements.syncAuthActions.classList.remove('hidden');
+    }
+}
+
+async function exportProgressJson() {
+    if (!window.DokkaiStorage) return;
+    try {
+        const jsonStr = await window.DokkaiStorage.exportAllData();
+        const dateStr = new Date().toISOString().slice(0, 10);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dokkai_master_progress_${dateStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        console.error('Export failed', e);
+        alert('Не удалось экспортировать файл: ' + e.message);
+    }
+}
+
+async function handleImportJsonFile(file) {
+    if (!file || !window.DokkaiStorage) return;
+    try {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const content = e.target.result;
+            const res = await window.DokkaiStorage.importAllData(content);
+            if (res.success) {
+                alert(`Успешно импортировано: ${res.solvedCount} решённых заданий, ${res.wordsCount} слов в словаре!`);
+                state.savedWords = await window.DokkaiStorage.getAllWords();
+                updateNotebookBadge();
+                renderNotebookWords();
+                fetchAndRenderSolvedTasks();
+                if (window.DokkaiCloudSync) window.DokkaiCloudSync.scheduleAutoSync();
+            } else {
+                alert('Ошибка при импорте файла: ' + (res.error || 'неверный формат'));
+            }
+        };
+        reader.readAsText(file);
+    } catch (err) {
+        console.error('Import error', err);
+        alert('Ошибка чтения файла: ' + err.message);
+    }
+}
+
+async function checkAndPromptActiveSession() {
+    if (!window.DokkaiStorage) return;
+    try {
+        const session = await window.DokkaiStorage.getActiveSession();
+        if (session && session.textId && session.title) {
+            state.activeSession = session;
+            if (elements.unfinishedTestBanner) {
+                if (elements.unfinishedTaskTitle) {
+                    elements.unfinishedTaskTitle.textContent = `Продолжить тест «${escapeHtml(session.title)}»?`;
+                }
+                if (elements.unfinishedTaskMeta) {
+                    const qNum = (session.currentQuestionIndex || 0) + 1;
+                    elements.unfinishedTaskMeta.textContent = `Вопрос ${qNum} • ${session.level || 'N5'}`;
+                }
+                elements.unfinishedTestBanner.classList.remove('hidden');
+            }
+        }
+    } catch (e) {
+        console.warn('[Dokkai] Active session check error:', e);
+    }
+}
+
+async function resumeActiveExercise(session) {
+    if (!session || !session.textId) return;
+    if (elements.unfinishedTestBanner) {
+        elements.unfinishedTestBanner.classList.add('hidden');
+    }
+    try {
+        await startExercise(session.textId);
+        state.userAnswers = session.userAnswers || {};
+        state.currentQuestionIndex = session.currentQuestionIndex || 0;
+        if (session.timer && session.timer.enabled) {
+            state.timer.enabled = true;
+            state.timer.totalSeconds = session.timer.totalSeconds || 180;
+            state.timer.remainingSeconds = session.timer.remainingSeconds || 180;
+            state.timer.secondsSpent = session.timer.secondsSpent || 0;
+            if (elements.timerBox) elements.timerBox.classList.remove('hidden');
+            if (elements.timerDisplay) elements.timerDisplay.textContent = formatTime(state.timer.remainingSeconds);
+            if (!state.timer.intervalId) {
+                startCountdownTimer(Math.ceil(state.timer.remainingSeconds / 60));
+            }
+        }
+        renderWizard();
+    } catch (err) {
+        console.error('Failed to resume exercise', err);
+        alert('Не удалось восстановить незавершённое задание.');
+    }
+}
+
+async function initPersistenceAndSync() {
+    if (!window.DokkaiStorage) return;
+
+    // 1. Wait for DokkaiStorage
+    await window.DokkaiStorage.initPromise;
+
+    // 2. Load stored settings
+    const storedUserSettings = await window.DokkaiStorage.getSettings('user_settings');
+    if (storedUserSettings) {
+        state.settings = { ...state.settings, ...storedUserSettings };
+        if (state.settings.fontFamily) setReaderFont(state.settings.fontFamily);
+        if (state.settings.fontSizePx) adjustFontSize(0);
+    }
+
+    const storedStreamProfile = await window.DokkaiStorage.getSettings('stream_profile');
+    if (storedStreamProfile) {
+        state.streamProfile = { ...state.streamProfile, ...storedStreamProfile };
+        if (elements.streamLevelPills) {
+            elements.streamLevelPills.querySelectorAll('.filter-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.level === state.streamProfile.level);
+            });
+        }
+        if (elements.streamCategoryPills) {
+            elements.streamCategoryPills.querySelectorAll('.filter-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.category === state.streamProfile.category);
+            });
+        }
+    }
+
+    const storedPretest = await window.DokkaiStorage.getSettings('pretest_config');
+    if (storedPretest) {
+        state.pretestConfig = { ...state.pretestConfig, ...storedPretest };
+    }
+
+    // 3. Load words into memory
+    state.savedWords = await window.DokkaiStorage.getAllWords();
+    updateNotebookBadge();
+
+    // 4. Setup Cloud Sync
+    if (window.DokkaiCloudSync) {
+        window.DokkaiStorage.onSyncNeeded(() => {
+            window.DokkaiCloudSync.scheduleAutoSync();
+        });
+
+        window.DokkaiCloudSync.onStatusChange((status, extra) => {
+            updateSyncStatusUI(status, extra);
+        });
+
+        window.DokkaiCloudSync.onUserChange((user) => {
+            updateSyncUserUI(user);
+        });
+
+        await window.DokkaiCloudSync.init();
+        updateSyncStatusUI();
+    }
+
+    // 5. Check if there is an in-progress test to recover
+    await checkAndPromptActiveSession();
+
+    // 6. Flush active session on page unload
+    window.addEventListener('pagehide', () => saveCurrentActiveSession());
+    window.addEventListener('beforeunload', () => saveCurrentActiveSession());
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            saveCurrentActiveSession();
         }
     });
 }
 
 // Startup
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     history.replaceState({ view: 'catalog' }, '', window.location.pathname);
     initEventListeners();
-    updateNotebookBadge();
+    await initPersistenceAndSync();
     fetchAndRenderCatalog();
     fetchAndRenderDrafts();
 });

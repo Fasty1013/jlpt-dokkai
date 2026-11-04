@@ -78,8 +78,32 @@
                     <span class="nav-label">Импорт PDF</span>
                     <span class="notebook-badge hidden" id="header-drafts-count">0</span>
                 </button>
+                <button type="button" class="nav-tab sync-status-tab" id="btn-sync-status"
+                    title="Статус синхронизации и бэкап прогресса">
+                    <span class="sync-dot status-local" id="header-sync-dot"></span>
+                    <span class="nav-label" id="header-sync-label">📱 На устройстве</span>
+                </button>
             </nav>
         </header>
+
+        <!-- UNFINISHED TEST RESUME BANNER -->
+        <div id="unfinished-test-banner" class="unfinished-test-banner hidden">
+            <div class="unfinished-test-content">
+                <span class="unfinished-icon">⏳</span>
+                <div class="unfinished-text">
+                    <strong class="unfinished-title" id="unfinished-task-title">Продолжить незавершённое задание?</strong>
+                    <span class="unfinished-desc" id="unfinished-task-meta">Вопрос 1 из 3 • N5</span>
+                </div>
+            </div>
+            <div class="unfinished-actions">
+                <button type="button" class="btn btn-primary btn-sm" id="btn-resume-unfinished">
+                    ▶ Продолжить
+                </button>
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-dismiss-unfinished" title="Закрыть и сбросить">
+                    ✕
+                </button>
+            </div>
+        </div>
 
         <!-- Main Body -->
         <main class="app-main">
@@ -373,6 +397,17 @@
                                         id="notebook-count-learned">0</span>)</button>
                             </div>
                         </div>
+                        <div class="notebook-backup-actions">
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-export-backup"
+                                title="Скачать резервную копию прогресса и словаря в .json">
+                                📥 Экспорт прогресса (.json)
+                            </button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-import-backup-trigger"
+                                title="Загрузить прогресс из файла .json">
+                                📤 Импорт (.json)
+                            </button>
+                            <input type="file" id="input-import-backup-file" accept=".json" class="hidden">
+                        </div>
                         <div class="notebook-body" id="notebook-words-list">
                             <!-- Dynamically populated word items -->
                         </div>
@@ -620,6 +655,89 @@
             </div>
         </div>
 
+        <!-- CLOUD SYNC & BACKUP MODAL -->
+        <div id="sync-modal-backdrop" class="modal-backdrop hidden">
+            <div class="modal-card modal-card-md">
+                <div class="modal-header">
+                    <div class="modal-icon">☁️</div>
+                    <div class="modal-header-text">
+                        <h3 class="modal-title">Синхронизация и сохранность данных</h3>
+                        <p class="modal-subtitle">Ваш прогресс сохраняется автоматически и бесплатно</p>
+                    </div>
+                    <button class="modal-close" id="btn-close-sync-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Current Sync Status Overview -->
+                    <div class="sync-status-card">
+                        <div class="sync-status-header">
+                            <span class="sync-dot status-local" id="modal-sync-dot"></span>
+                            <div>
+                                <h4 id="modal-sync-title">Сохранение на этом устройстве</h4>
+                                <p id="modal-sync-desc" class="sync-desc">
+                                    Все решённые тексты, словарь и настройки надёжно сохраняются в памяти браузера (IndexedDB). Данные не пропадут при закрытии вкладки или перезапуске сервера.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cloud Account Options -->
+                    <div class="sync-account-section">
+                        <h4 class="sync-section-title">Облачная синхронизация между устройствами</h4>
+                        <div id="sync-user-info" class="sync-user-info hidden">
+                            <span class="user-avatar" id="sync-user-avatar">👤</span>
+                            <div class="user-details">
+                                <strong id="sync-user-name">Пользователь</strong>
+                                <span id="sync-user-email">email@example.com</span>
+                            </div>
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signout">Выйти</button>
+                        </div>
+                        <div id="sync-auth-actions" class="sync-auth-actions">
+                            <button type="button" class="btn btn-google-auth" id="btn-cloud-signin-google">
+                                <span class="google-icon">G</span> Войти через Google
+                            </button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signin-anon" title="Создать анонимный облачный профиль в 1 клик">
+                                Анонимная облачная привязка
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Manual Backup & Restore -->
+                    <div class="sync-backup-section">
+                        <h4 class="sync-section-title">Резервная копия (бэкап)</h4>
+                        <p class="sync-section-sub">
+                            Скачайте файл с вашими ответами и словарём для переноса на другое устройство или защиты от очистки браузера.
+                        </p>
+                        <div class="backup-btn-row">
+                            <button type="button" class="btn btn-secondary btn-sm" id="modal-btn-export">
+                                📥 Скачать прогресс (.json)
+                            </button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="modal-btn-import-trigger">
+                                📤 Загрузить из файла
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Firebase Configuration (Optional) -->
+                    <details class="sync-advanced-details">
+                        <summary>⚙️ Настройка своего Firebase (необязательно, $0 бесплатно)</summary>
+                        <div class="sync-firebase-config-form">
+                            <p class="config-help">
+                                Вы можете подключить собственный бесплатный проект Firebase Spark (Firestore + Auth). Вставьте JSON-конфигурацию из консоли Firebase:
+                            </p>
+                            <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "AIza...", "projectId": "my-dokkai", ...}'></textarea>
+                            <div class="config-actions">
+                                <button type="button" class="btn btn-primary btn-sm" id="btn-save-firebase-config">Сохранить конфигурацию</button>
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-firebase-config">Сбросить</button>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-sync-modal-done">Готово</button>
+                </div>
+            </div>
+        </div>
+
         <!-- YOMICHAN-STYLE POPUP DICTIONARY -->
         <div id="popup-dictionary-card" class="popup-dict-card hidden">
             <div class="popup-dict-header">
@@ -644,7 +762,10 @@
         </div>
     </div>
 
-    <script src="/static/app.js?v=2.2"></script>
+    <!-- Dokkai Persistence Architecture (Offline-First Storage -> Cloud Sync -> Application Logic) -->
+    <script src="/static/storage.js?v=1.0"></script>
+    <script src="/static/cloud_sync.js?v=1.0"></script>
+    <script src="/static/app.js?v=2.3"></script>
 </body>
 
 </html>
