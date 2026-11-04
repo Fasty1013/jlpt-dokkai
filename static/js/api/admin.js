@@ -67,3 +67,4 @@ export async function deleteDraft(slug) {
     method: 'DELETE'
   });
 }
+

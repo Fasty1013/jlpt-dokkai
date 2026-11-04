@@ -46,3 +46,4 @@ export async function reportTextIssue(textId, payload) {
     body: JSON.stringify(payload)
   });
 }
+

@@ -13,3 +13,4 @@ export async function lookupWord(query) {
   const cleanQuery = query.trim();
   return request(`/api/dictionary/lookup?q=${encodeURIComponent(cleanQuery)}`);
 }
+

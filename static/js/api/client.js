@@ -69,3 +69,4 @@ export async function request(url, options = {}) {
     throw new ApiError(err.message || 'Ошибка сети. Проверьте подключение к интернету.', 0);
   }
 }
+
