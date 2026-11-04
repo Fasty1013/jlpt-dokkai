@@ -591,3 +591,15 @@ def serve_index():
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return {"message": "JLPT Dokkai API running. Frontend static/index.html not found."}
+
+
+@app.get("/sw.js")
+def serve_service_worker():
+    sw_path = os.path.join(STATIC_DIR, "sw.js")
+    if os.path.exists(sw_path):
+        return FileResponse(
+            sw_path,
+            media_type="application/javascript",
+            headers={"Service-Worker-Allowed": "/"}
+        )
+    raise HTTPException(status_code=404, detail="Service worker not found")
