@@ -32,7 +32,13 @@ const PRECACHE_ASSETS = [
   '/static/js/utils/dom.js?v=2.1.0',
   '/static/js/utils/time.js?v=2.1.0',
   '/static/js/utils/math.js?v=2.1.0',
-  '/static/js/utils/index.js?v=2.1.0'
+  '/static/js/utils/index.js?v=2.1.0',
+  '/static/js/api/client.js?v=2.1.0',
+  '/static/js/api/stream.js?v=2.1.0',
+  '/static/js/api/texts.js?v=2.1.0',
+  '/static/js/api/dictionary.js?v=2.1.0',
+  '/static/js/api/admin.js?v=2.1.0',
+  '/static/js/api/index.js?v=2.1.0'
 ];
 
 self.addEventListener('install', (event) => {

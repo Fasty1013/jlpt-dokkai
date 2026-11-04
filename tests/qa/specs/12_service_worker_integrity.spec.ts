@@ -111,8 +111,15 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
       return allUrls;
     });
 
-    // Verify ZERO /api/ requests in cache
-    const apiLeaks = cachedUrls.filter(u => u.includes('/api/'));
+    // Verify ZERO backend /api/ requests in cache (distinguishing from static /static/js/api/)
+    const apiLeaks = cachedUrls.filter(u => {
+      try {
+        const pathname = new URL(u).pathname;
+        return pathname.startsWith('/api/') || pathname === '/api';
+      } catch {
+        return false;
+      }
+    });
     expect(apiLeaks, 'Backend /api/ endpoints must NEVER be stored in Service Worker cache').toHaveLength(0);
 
     // Verify ZERO Firebase / Google cross-origin requests in cache
@@ -142,19 +149,10 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
       await navigator.serviceWorker.register('/sw.js?version=2.2.0-test', { scope: '/' });
     });
 
-    // 3. Wait for new version to activate and purge old caches
-    await page.waitForFunction(() => {
-      return caches.keys().then(keys => keys.includes('dokkai-v2.2.0-test') && !keys.includes('dokkai-v2.1.0'));
-    }, { timeout: 15000 });
-
-    // 4. Reload page online to confirm active state and persistence
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(1000);
-
-    // 5. Verify final caches: Version B active, Version A purged
-    const cacheKeys = await page.evaluate(async () => await caches.keys());
-    expect(cacheKeys).toContain('dokkai-v2.2.0-test');
-    expect(cacheKeys).not.toContain('dokkai-v2.1.0');
+    // 3. Poll cache storage until Version B is active and old Version A is purged
+    await expect.poll(async () => {
+      return await page.evaluate(async () => await caches.keys());
+    }, { timeout: 15000, intervals: [200, 500, 1000] }).toEqual(['dokkai-v2.2.0-test']);
 
     await context.close();
   });

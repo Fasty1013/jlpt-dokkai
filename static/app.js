@@ -543,7 +543,7 @@ async function fetchAndRenderStream() {
     ]);
 }
 
-async function fetchAndRenderSlots() {
+async function fetchAndRenderSlots(isExplicitRefresh = false) {
     if (!elements.activeSlotsList) return;
     elements.activeSlotsList.innerHTML = '<div class="loading-spinner">Загрузка слотов заданий...</div>';
 
@@ -557,12 +557,22 @@ async function fetchAndRenderSlots() {
     params.append('_t', Date.now().toString());
 
     try {
-        const response = await fetch(`/api/stream/slots?${params.toString()}`, {
-            cache: 'no-store',
-            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-        });
-        if (!response.ok) throw new Error('Ошибка загрузки слотов');
-        const data = await response.json();
+        let data;
+        if (window.DokkaiApi && window.DokkaiApi.fetchStreamSlots) {
+            data = await window.DokkaiApi.fetchStreamSlots({
+                userId: getUserId(),
+                level: state.streamProfile.level,
+                category: state.streamProfile.category,
+                refresh: Boolean(isExplicitRefresh)
+            });
+        } else {
+            const response = await fetch(`/api/stream/slots?${params.toString()}`, {
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+            });
+            if (!response.ok) throw new Error('Ошибка загрузки слотов');
+            data = await response.json();
+        }
         const slots = data.slots || [];
         state.cachedSlots = slots;
 
@@ -662,19 +672,29 @@ async function fetchAndRenderSolvedTasks() {
     let items = localSolved;
 
     try {
-        const response = await fetch(`/api/stream/solved?${params.toString()}`, {
-            cache: 'no-store',
-            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-        });
-        if (response.ok) {
-            const data = await response.json();
-            const serverItems = data.items || [];
-            if (window.DokkaiStorage && serverItems.length > 0) {
-                for (const sTask of serverItems) {
-                    await window.DokkaiStorage.recordSolvedTask(sTask);
-                }
-                items = await window.DokkaiStorage.getSolvedTasks(state.streamProfile.level, state.solvedFilter);
+        let serverItems = [];
+        if (window.DokkaiApi && window.DokkaiApi.fetchSolvedTasks) {
+            const data = await window.DokkaiApi.fetchSolvedTasks({
+                userId: getUserId(),
+                level: state.streamProfile.level,
+                filter: state.solvedFilter
+            });
+            serverItems = data?.items || [];
+        } else {
+            const response = await fetch(`/api/stream/solved?${params.toString()}`, {
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                serverItems = data.items || [];
             }
+        }
+        if (window.DokkaiStorage && serverItems.length > 0) {
+            for (const sTask of serverItems) {
+                await window.DokkaiStorage.recordSolvedTask(sTask);
+            }
+            items = await window.DokkaiStorage.getSolvedTasks(state.streamProfile.level, state.solvedFilter);
         }
     } catch (err) {
         console.warn('Backend solved tasks fetch failed (using local offline storage):', err);
@@ -740,13 +760,26 @@ async function fetchAndRenderSolvedTasks() {
 
 async function reviewSolvedTask(textId) {
     try {
-        const res = await fetch(`/api/stream/solved/${textId}?user_id=${getUserId()}`);
-        if (res.status === 403) {
-            alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
-            return;
+        let data;
+        if (window.DokkaiApi && window.DokkaiApi.fetchSolvedDetail) {
+            try {
+                data = await window.DokkaiApi.fetchSolvedDetail(textId, getUserId());
+            } catch (err) {
+                if (err.status === 403) {
+                    alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
+                    return;
+                }
+                throw err;
+            }
+        } else {
+            const res = await fetch(`/api/stream/solved/${textId}?user_id=${getUserId()}`);
+            if (res.status === 403) {
+                alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
+                return;
+            }
+            if (!res.ok) throw new Error('Ошибка загрузки разбора');
+            data = await res.json();
         }
-        if (!res.ok) throw new Error('Ошибка загрузки разбора');
-        const data = await res.json();
         state.activeText = data;
         state.currentView = 'analysis';
         state.analysisActiveTabIdx = 0;
@@ -760,9 +793,14 @@ async function reviewSolvedTask(textId) {
 
 async function retrySolvedTask(textId) {
     try {
-        const res = await fetch(`/api/stream/retry/${textId}?user_id=${getUserId()}`, { method: 'POST' });
-        if (!res.ok) throw new Error('Ошибка запуска повтора');
-        const data = await res.json();
+        let data;
+        if (window.DokkaiApi && window.DokkaiApi.retrySolvedTask) {
+            data = await window.DokkaiApi.retrySolvedTask(textId, getUserId());
+        } else {
+            const res = await fetch(`/api/stream/retry/${textId}?user_id=${getUserId()}`, { method: 'POST' });
+            if (!res.ok) throw new Error('Ошибка запуска повтора');
+            data = await res.json();
+        }
         state.isRetryMode = true;
         state.pendingTextData = data;
         openPretestModal(textId);
@@ -815,17 +853,26 @@ async function submitReportDefect() {
             elements.btnSubmitReport.disabled = true;
             elements.btnSubmitReport.textContent = 'Отправка...';
         }
-        const res = await fetch(`/api/texts/${state.reportingTextId}/report`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        let resData;
+        if (window.DokkaiApi && window.DokkaiApi.reportTextIssue) {
+            resData = await window.DokkaiApi.reportTextIssue(state.reportingTextId, {
                 reason: reason,
                 details: details,
                 user_id: getUserId()
-            })
-        });
-        if (!res.ok) throw new Error('Ошибка отправки замечания');
-        const resData = await res.json();
+            });
+        } else {
+            const res = await fetch(`/api/texts/${state.reportingTextId}/report`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    reason: reason,
+                    details: details,
+                    user_id: getUserId()
+                })
+            });
+            if (!res.ok) throw new Error('Ошибка отправки замечания');
+            resData = await res.json();
+        }
         closeReportModal();
         alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
         fetchAndRenderSlots();
@@ -957,13 +1004,17 @@ function confirmPretestSettingsAndStart() {
 
 async function startExercise(textId) {
     try {
-        const response = await fetch(`/api/texts/${textId}?_t=${Date.now()}`, {
-            cache: 'no-store',
-            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-        });
-        if (!response.ok) throw new Error('Не удалось загрузить задание');
-
-        const textData = await response.json();
+        let textData;
+        if (window.DokkaiApi && window.DokkaiApi.fetchTextDetail) {
+            textData = await window.DokkaiApi.fetchTextDetail(textId);
+        } else {
+            const response = await fetch(`/api/texts/${textId}?_t=${Date.now()}`, {
+                cache: 'no-store',
+                headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+            });
+            if (!response.ok) throw new Error('Не удалось загрузить задание');
+            textData = await response.json();
+        }
         state.activeText = textData;
         state.userAnswers = {};
         state.currentQuestionIndex = 0;
@@ -1222,23 +1273,28 @@ async function submitAnswers() {
         const idempotencyKey = 'idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         const solvedWhen = state.streamProfile.solvedWhen || 'all_questions_answered';
 
-        const response = await fetch('/api/stream/complete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user_id: getUserId(),
-                text_id: state.activeText.id,
-                answers: answersPayload,
-                idempotency_key: idempotencyKey,
-                mode: state.isRetryMode ? 'retry' : 'first',
-                solved_when: solvedWhen,
-                all_correct_max_attempts: 2
-            })
-        });
+        let streamResult;
+        const payload = {
+            user_id: getUserId(),
+            text_id: state.activeText.id,
+            answers: answersPayload,
+            idempotency_key: idempotencyKey,
+            mode: state.isRetryMode ? 'retry' : 'first',
+            solved_when: solvedWhen,
+            all_correct_max_attempts: 2
+        };
 
-        if (!response.ok) throw new Error('Ошибка сервера при проверке ответов');
-
-        const streamResult = await response.json();
+        if (window.DokkaiApi && window.DokkaiApi.completeStreamTask) {
+            streamResult = await window.DokkaiApi.completeStreamTask(payload);
+        } else {
+            const response = await fetch('/api/stream/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error('Ошибка сервера при проверке ответов');
+            streamResult = await response.json();
+        }
 
         // Если режим "all_correct" и есть ошибки (задание еще не решено)
         if (!streamResult.is_solved) {
@@ -1720,11 +1776,14 @@ function lookupAndShowWord(query, clientX, clientY) {
     }
 
     // 2. Fetch from backend dictionary API
-    fetch(`/api/dictionary/lookup?q=${encodeURIComponent(cleanQuery)}`)
-        .then(res => {
+    const lookupPromise = (window.DokkaiApi && window.DokkaiApi.lookupWord)
+        ? window.DokkaiApi.lookupWord(cleanQuery)
+        : fetch(`/api/dictionary/lookup?q=${encodeURIComponent(cleanQuery)}`).then(res => {
             if (res.ok) return res.json();
             throw new Error('Not found');
-        })
+        });
+
+    lookupPromise
         .then(data => {
             showPopupDictionary({
                 word: data.word,
