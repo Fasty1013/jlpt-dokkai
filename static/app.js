@@ -620,7 +620,10 @@ async function fetchAndRenderSlots() {
         console.error(err);
         elements.activeSlotsList.innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--vermilion);">
-                Не удалось загрузить активные задания. Пожалуйста, обновите страницу.
+                <p>Не удалось загрузить активные задания.</p>
+                <button class="btn btn-secondary btn-sm" onclick="fetchAndRenderSlots()" style="margin-top: 0.5rem;">
+                    🔄 Повторить попытку
+                </button>
             </div>
         `;
     }
@@ -629,7 +632,8 @@ async function fetchAndRenderSlots() {
 async function fetchAndRenderSolvedTasks() {
     if (!elements.solvedTasksList) return;
 
-    // 1. First retrieve local solved tasks from DokkaiStorage
+    try {
+        // 1. First retrieve local solved tasks from DokkaiStorage
     let localSolved = [];
     if (window.DokkaiStorage) {
         try {
@@ -722,36 +726,19 @@ async function fetchAndRenderSolvedTasks() {
             </div>
         `;
     }).join('');
-    <span class="solved-card-date">${dateStr}</span>
-                    </div >
-                    <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
-                    <div class="solved-card-actions">
-                        <button class="btn-solved-action btn-review" onclick="reviewSolvedTask(${t.text_id})">
-                            🔍 Обзор разбора
-                        </button>
-                        <button class="btn-solved-action" onclick="retrySolvedTask(${t.text_id})">
-                            🔁 Пройти заново
-                        </button>
-                        <button class="btn-solved-action" onclick="openReportModal(${t.text_id}, '${escapeHtml(t.title)}')">
-                            ⚠️ Сообщить об ошибке
-                        </button>
-                    </div>
-                </div >
-        `;
-        }).join('');
     } catch (err) {
         console.error(err);
         elements.solvedTasksList.innerHTML = `
-        < div style = "text-align: center; padding: 1.5rem; color: var(--vermilion);" >
-            Не удалось загрузить архив решённых заданий.
-            </div >
+            <div style="text-align: center; padding: 1.5rem; color: var(--vermilion);">
+                Не удалось загрузить архив решённых заданий.
+            </div>
         `;
     }
 }
 
 async function reviewSolvedTask(textId) {
     try {
-        const res = await fetch(`/ api / stream / solved / ${ textId }?user_id = ${ getUserId() } `);
+        const res = await fetch(`/api/stream/solved/${textId}?user_id=${getUserId()}`);
         if (res.status === 403) {
             alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
             return;
@@ -771,7 +758,7 @@ async function reviewSolvedTask(textId) {
 
 async function retrySolvedTask(textId) {
     try {
-        const res = await fetch(`/ api / stream / retry / ${ textId }?user_id = ${ getUserId() } `, { method: 'POST' });
+        const res = await fetch(`/api/stream/retry/${textId}?user_id=${getUserId()}`, { method: 'POST' });
         if (!res.ok) throw new Error('Ошибка запуска повтора');
         const data = await res.json();
         state.isRetryMode = true;
@@ -784,7 +771,7 @@ async function retrySolvedTask(textId) {
 }
 
 function handleSlotReplacement(solvedTextId, replacement) {
-    const card = document.querySelector(`.stream - slot - card[data - text - id="${solvedTextId}"]`);
+    const card = document.querySelector(`.stream-slot-card[data-text-id="${solvedTextId}"]`);
     if (card) {
         card.classList.add('slot-solving-out');
         setTimeout(() => {
@@ -799,7 +786,7 @@ function openReportModal(textId, title) {
     state.reportingTextId = textId;
     history.pushState({ modal: 'report', textId: textId }, '', '#report');
     if (elements.reportModalTaskTitle) {
-        elements.reportModalTaskTitle.textContent = title || `Задание #${ textId } `;
+        elements.reportModalTaskTitle.textContent = title || `Задание #${textId}`;
     }
     if (elements.reportDetailsTextarea) {
         elements.reportDetailsTextarea.value = '';
@@ -826,29 +813,29 @@ async function submitReportDefect() {
             elements.btnSubmitReport.disabled = true;
             elements.btnSubmitReport.textContent = 'Отправка...';
         }
-        const res = await fetch(`/ api / texts / ${ state.reportingTextId }/report`, {
-    method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        reason: reason,
-        details: details,
-        user_id: getUserId()
-    })
-});
-if (!res.ok) throw new Error('Ошибка отправки замечания');
-const resData = await res.json();
-closeReportModal();
-alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
-fetchAndRenderSlots();
+        const res = await fetch(`/api/texts/${state.reportingTextId}/report`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reason: reason,
+                details: details,
+                user_id: getUserId()
+            })
+        });
+        if (!res.ok) throw new Error('Ошибка отправки замечания');
+        const resData = await res.json();
+        closeReportModal();
+        alert(resData.message || 'Жалоба принята. Спасибо за помощь!');
+        fetchAndRenderSlots();
     } catch (e) {
-    console.error(e);
-    alert('Не удалось отправить замечание.');
-} finally {
-    if (elements.btnSubmitReport) {
-        elements.btnSubmitReport.disabled = false;
-        elements.btnSubmitReport.textContent = 'Отправить замечание';
+        console.error(e);
+        alert('Не удалось отправить замечание.');
+    } finally {
+        if (elements.btnSubmitReport) {
+            elements.btnSubmitReport.disabled = false;
+            elements.btnSubmitReport.textContent = 'Отправить замечание';
+        }
     }
-}
 }
 
 function switchMobileStreamCol(col) {
@@ -2987,7 +2974,14 @@ async function initPersistenceAndSync() {
 document.addEventListener('DOMContentLoaded', async () => {
     history.replaceState({ view: 'catalog' }, '', window.location.pathname);
     initEventListeners();
-    await initPersistenceAndSync();
+    try {
+        await Promise.race([
+            initPersistenceAndSync(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Persistence init timeout')), 2000))
+        ]);
+    } catch (err) {
+        console.warn('[Dokkai] Persistence/Sync init non-blocking warning:', err);
+    }
     fetchAndRenderCatalog();
     fetchAndRenderDrafts();
 });
