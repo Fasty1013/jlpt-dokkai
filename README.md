@@ -118,10 +118,38 @@ python run_agents.py --check
 ├── requirements.txt         # Список зависимостей
 ├── static/
 │   ├── index.html           # Интерфейс (Split-Screen, Noto Sans JP)
-│   ├── styles.css           # CSS Variables, оформление кандзи и подсветка
+│   ├── css/                 # Модульная CSS-архитектура (11 специализированных стилей)
 │   └── app.js               # Пошаговый мастер вопросов (Wizard), таймер, словарь
 └── .gitignore               # Исключение локальных БД и кэша
 ```
+
+---
+
+## ⚙️ Управление Service Worker и очистка кэша
+
+В приложении работает легковесный Service Worker (`/sw.js`), обеспечивающий автономную работу (PWA) и кэширование статических файлов (CSS/JS) по стратегии **Network-First** (свежая версия всегда запрашивается из сети).
+
+### Как отключить Service Worker или сбросить застрявший кэш
+Если требуется принудительно отключить Service Worker или очистить локальный кэш браузера, выполните в DevTools Console (F12):
+
+```javascript
+// 1. Отмена регистрации всех активных Service Workers
+navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (const reg of registrations) {
+        reg.unregister();
+        console.log('[PWA] Service Worker unregistered:', reg.scope);
+    }
+});
+
+// 2. Очистка хранилища Cache Storage
+caches.keys().then(cacheNames => {
+    for (const name of cacheNames) {
+        caches.delete(name);
+        console.log('[PWA] Cache deleted:', name);
+    }
+});
+```
+После выполнения обновите страницу с жестким сбросом: `Ctrl + F5` (или `Cmd + Shift + R`).
 
 ---
 
