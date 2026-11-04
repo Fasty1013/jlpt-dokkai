@@ -3831,4 +3831,52 @@ input:checked + .slider:before {
     gap: 0.5rem;
 }
 
+/* In-Modal Notification Alert (Replaces native alerts) */
+.sync-modal-alert {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm, 6px);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+    line-height: 1.45;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.sync-modal-alert.alert-success {
+    background: #ecfdf5;
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+}
+
+.sync-modal-alert.alert-warning {
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    color: #92400e;
+}
+
+.sync-modal-alert.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+.sync-modal-alert.alert-info {
+    background: #eff6ff;
+    border: 1px solid #93c5fd;
+    color: #1e40af;
+}
+
+.sync-link-hint {
+    margin-top: 0.75rem;
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.82rem;
+    color: #92400e;
+}
+
+.sync-link-hint p {
+    margin: 0;
+}
+
 

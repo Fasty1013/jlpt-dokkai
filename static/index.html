@@ -667,6 +667,9 @@
                     <button class="modal-close" id="btn-close-sync-modal">✕</button>
                 </div>
                 <div class="modal-body">
+                    <!-- Dynamic In-Modal Notification Alert (Replaces native alerts) -->
+                    <div id="sync-modal-alert" class="sync-modal-alert hidden"></div>
+
                     <!-- Current Sync Status Overview -->
                     <div class="sync-status-card">
                         <div class="sync-status-header">
@@ -689,7 +692,9 @@
                                 <strong id="sync-user-name">Пользователь</strong>
                                 <span id="sync-user-email">email@example.com</span>
                             </div>
-                            <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signout">Выйти</button>
+                            <div class="user-actions">
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signout">Выйти</button>
+                            </div>
                         </div>
                         <div id="sync-auth-actions" class="sync-auth-actions">
                             <button type="button" class="btn btn-google-auth" id="btn-cloud-signin-google">
@@ -698,6 +703,9 @@
                             <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signin-anon" title="Создать анонимный облачный профиль в 1 клик">
                                 Анонимная облачная привязка
                             </button>
+                        </div>
+                        <div id="sync-link-google-hint" class="sync-link-hint hidden">
+                            <p>💡 Вы используете анонимный профиль. Нажмите <strong>«Войти через Google»</strong>, чтобы сохранить данные навсегда и перенести на другие устройства.</p>
                         </div>
                     </div>
 
@@ -717,17 +725,17 @@
                         </div>
                     </div>
 
-                    <!-- Advanced Firebase Configuration (Optional) -->
+                    <!-- Advanced Firebase Configuration (For Developers) -->
                     <details class="sync-advanced-details">
-                        <summary>⚙️ Настройка своего Firebase (необязательно, $0 бесплатно)</summary>
+                        <summary>🛠️ Для разработчиков (пользовательский Firebase)</summary>
                         <div class="sync-firebase-config-form">
                             <p class="config-help">
-                                Вы можете подключить собственный бесплатный проект Firebase Spark (Firestore + Auth). Вставьте JSON-конфигурацию из консоли Firebase:
+                                По умолчанию подключён официальный проект Firebase Spark ($0). При необходимости вы можете подключить собственный проект:
                             </p>
                             <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "AIza...", "projectId": "my-dokkai", ...}'></textarea>
                             <div class="config-actions">
                                 <button type="button" class="btn btn-primary btn-sm" id="btn-save-firebase-config">Сохранить конфигурацию</button>
-                                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-firebase-config">Сбросить</button>
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-firebase-config">Сбросить к умолчанию</button>
                             </div>
                         </div>
                     </details>
@@ -763,9 +771,10 @@
     </div>
 
     <!-- Dokkai Persistence Architecture (Offline-First Storage -> Cloud Sync -> Application Logic) -->
-    <script src="/static/storage.js?v=1.0"></script>
-    <script src="/static/cloud_sync.js?v=1.0"></script>
-    <script src="/static/app.js?v=2.3"></script>
+    <script src="/static/storage.js?v=2.0.4"></script>
+    <script src="/static/firebase-config.js?v=2.0.4"></script>
+    <script src="/static/cloud_sync.js?v=2.0.4"></script>
+    <script src="/static/app.js?v=2.0.4"></script>
 </body>
 
 </html>

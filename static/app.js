@@ -303,6 +303,7 @@ const elements = {
 
     // Cloud Sync Modal
     syncModalBackdrop: document.getElementById('sync-modal-backdrop'),
+    syncModalAlert: document.getElementById('sync-modal-alert'),
     btnCloseSyncModal: document.getElementById('btn-close-sync-modal'),
     btnSyncModalDone: document.getElementById('btn-sync-modal-done'),
     modalSyncDot: document.getElementById('modal-sync-dot'),
@@ -312,6 +313,7 @@ const elements = {
     syncUserAvatar: document.getElementById('sync-user-avatar'),
     syncUserName: document.getElementById('sync-user-name'),
     syncUserEmail: document.getElementById('sync-user-email'),
+    syncLinkGoogleHint: document.getElementById('sync-link-google-hint'),
     btnCloudSignout: document.getElementById('btn-cloud-signout'),
     syncAuthActions: document.getElementById('sync-auth-actions'),
     btnCloudSigninGoogle: document.getElementById('btn-cloud-signin-google'),
@@ -2636,9 +2638,10 @@ function initEventListeners() {
         elements.btnCloudSigninGoogle.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
             try {
+                showSyncModalAlert('info', 'Подключение к Google...');
                 await window.DokkaiCloudSync.signInGoogle();
             } catch (err) {
-                alert('Не удалось войти через Google: ' + err.message);
+                showSyncModalAlert('error', err.message);
             }
         });
     }
@@ -2646,18 +2649,18 @@ function initEventListeners() {
         elements.btnCloudSigninAnon.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
             try {
+                showSyncModalAlert('info', 'Создание анонимного облачного профиля...');
                 await window.DokkaiCloudSync.signInAnonymous();
             } catch (err) {
-                alert('Ошибка создания профиля: ' + err.message);
+                showSyncModalAlert('error', err.message);
             }
         });
     }
     if (elements.btnCloudSignout) {
         elements.btnCloudSignout.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
-            if (confirm('Выйти из облачного аккаунта? Все локальные данные на этом устройстве сохранятся.')) {
-                await window.DokkaiCloudSync.signOut();
-            }
+            await window.DokkaiCloudSync.signOut();
+            showSyncModalAlert('info', 'Вы вышли из облачного аккаунта. Локальные данные сохранены.');
         });
     }
 
@@ -2669,24 +2672,21 @@ function initEventListeners() {
                 const parsed = JSON.parse(elements.firebaseConfigInput.value.trim());
                 const res = await window.DokkaiCloudSync.saveFirebaseConfig(parsed);
                 if (res.success) {
-                    alert('Конфигурация Firebase успешно сохранена!');
-                    closeSyncModal();
+                    showSyncModalAlert('success', 'Конфигурация Firebase успешно сохранена!');
                 } else {
-                    alert('Ошибка подключения: ' + res.error);
+                    showSyncModalAlert('error', 'Ошибка подключения: ' + res.error);
                 }
             } catch (e) {
-                alert('Пожалуйста, вставьте корректный JSON объект конфигурации Firebase.');
+                showSyncModalAlert('error', 'Пожалуйста, вставьте корректный JSON объект конфигурации Firebase.');
             }
         });
     }
     if (elements.btnClearFirebaseConfig) {
         elements.btnClearFirebaseConfig.addEventListener('click', () => {
             if (!window.DokkaiCloudSync) return;
-            if (confirm('Сбросить конфигурацию Firebase? Приложение перейдёт в локальный режим.')) {
-                window.DokkaiCloudSync.clearFirebaseConfig();
-                if (elements.firebaseConfigInput) elements.firebaseConfigInput.value = '';
-                alert('Конфигурация сброшена.');
-            }
+            window.DokkaiCloudSync.clearFirebaseConfig();
+            if (elements.firebaseConfigInput) elements.firebaseConfigInput.value = '';
+            showSyncModalAlert('info', 'Конфигурация сброшена к настройкам по умолчанию.');
         });
     }
 
@@ -2752,9 +2752,23 @@ function initEventListeners() {
 // Cloud Sync & Backup UI & Handlers
 // ============================================================================
 
+function showSyncModalAlert(type, message) {
+    if (!elements.syncModalAlert) return;
+    elements.syncModalAlert.className = `sync-modal-alert alert-${type}`;
+    elements.syncModalAlert.textContent = message;
+    elements.syncModalAlert.classList.remove('hidden');
+
+    if (type === 'success' || type === 'info') {
+        setTimeout(() => {
+            if (elements.syncModalAlert) elements.syncModalAlert.classList.add('hidden');
+        }, 5000);
+    }
+}
+
 function openSyncModal() {
     if (elements.syncModalBackdrop) {
         elements.syncModalBackdrop.classList.remove('hidden');
+        if (elements.syncModalAlert) elements.syncModalAlert.classList.add('hidden');
         if (window.DokkaiCloudSync && elements.firebaseConfigInput) {
             const cfg = window.DokkaiCloudSync.getStoredConfig();
             if (cfg) elements.firebaseConfigInput.value = JSON.stringify(cfg, null, 2);
@@ -2788,6 +2802,8 @@ function updateSyncStatusUI(status, extraInfo) {
             elements.modalSyncDesc.textContent = 'Идёт синхронизация данных с облаком...';
         } else if (info.class === 'status-offline') {
             elements.modalSyncDesc.textContent = 'Сеть недоступна. Все данные сохраняются на вашем устройстве (IndexedDB) и синхронизируются при включении интернета.';
+        } else if (info.class === 'status-error') {
+            elements.modalSyncDesc.textContent = extraInfo ? `Ошибка синхронизации: ${extraInfo}` : 'Ошибка соединения с облаком. Данные надёжно сохранены на устройстве.';
         } else {
             elements.modalSyncDesc.textContent = 'Все данные надёжно сохраняются на этом устройстве (IndexedDB). Они не пропадут при закрытии вкладки или перезапуске сервера Render.';
         }
@@ -2798,12 +2814,24 @@ function updateSyncUserUI(user) {
     if (!elements.syncUserInfo || !elements.syncAuthActions) return;
     if (user) {
         elements.syncUserInfo.classList.remove('hidden');
-        elements.syncAuthActions.classList.add('hidden');
-        if (elements.syncUserName) elements.syncUserName.textContent = user.displayName || (user.isAnonymous ? 'Анонимный профиль' : 'Пользователь');
-        if (elements.syncUserEmail) elements.syncUserEmail.textContent = user.email || (user.isAnonymous ? 'Облачный ID: ' + user.uid.slice(0, 8) : '');
+        if (user.isAnonymous) {
+            // Keep Google auth button visible so anonymous user can upgrade account
+            elements.syncAuthActions.classList.remove('hidden');
+            if (elements.btnCloudSigninAnon) elements.btnCloudSigninAnon.classList.add('hidden');
+            if (elements.syncLinkGoogleHint) elements.syncLinkGoogleHint.classList.remove('hidden');
+            if (elements.syncUserName) elements.syncUserName.textContent = 'Анонимный профиль';
+            if (elements.syncUserEmail) elements.syncUserEmail.textContent = 'Облачный ID: ' + user.uid.slice(0, 10);
+        } else {
+            elements.syncAuthActions.classList.add('hidden');
+            if (elements.syncLinkGoogleHint) elements.syncLinkGoogleHint.classList.add('hidden');
+            if (elements.syncUserName) elements.syncUserName.textContent = user.displayName || 'Пользователь Google';
+            if (elements.syncUserEmail) elements.syncUserEmail.textContent = user.email || '';
+        }
     } else {
         elements.syncUserInfo.classList.add('hidden');
         elements.syncAuthActions.classList.remove('hidden');
+        if (elements.btnCloudSigninAnon) elements.btnCloudSigninAnon.classList.remove('hidden');
+        if (elements.syncLinkGoogleHint) elements.syncLinkGoogleHint.classList.add('hidden');
     }
 }
 
@@ -2823,7 +2851,7 @@ async function exportProgressJson() {
         URL.revokeObjectURL(url);
     } catch (e) {
         console.error('Export failed', e);
-        alert('Не удалось экспортировать файл: ' + e.message);
+        showSyncModalAlert('error', 'Не удалось экспортировать файл: ' + e.message);
     }
 }
 
@@ -2835,20 +2863,20 @@ async function handleImportJsonFile(file) {
             const content = e.target.result;
             const res = await window.DokkaiStorage.importAllData(content);
             if (res.success) {
-                alert(`Успешно импортировано: ${res.solvedCount} решённых заданий, ${res.wordsCount} слов в словаре!`);
+                showSyncModalAlert('success', `Успешно импортировано: ${res.solvedCount} решённых заданий, ${res.wordsCount} слов в словаре!`);
                 state.savedWords = await window.DokkaiStorage.getAllWords();
                 updateNotebookBadge();
                 renderNotebookWords();
                 fetchAndRenderSolvedTasks();
                 if (window.DokkaiCloudSync) window.DokkaiCloudSync.scheduleAutoSync();
             } else {
-                alert('Ошибка при импорте файла: ' + (res.error || 'неверный формат'));
+                showSyncModalAlert('error', 'Ошибка при импорте файла: ' + (res.error || 'неверный формат'));
             }
         };
         reader.readAsText(file);
     } catch (err) {
         console.error('Import error', err);
-        alert('Ошибка чтения файла: ' + err.message);
+        showSyncModalAlert('error', 'Ошибка чтения файла: ' + err.message);
     }
 }
 
@@ -2953,7 +2981,12 @@ async function initPersistenceAndSync() {
             updateSyncUserUI(user);
         });
 
-        await window.DokkaiCloudSync.init();
+        window.DokkaiCloudSync.onFeedback((type, message) => {
+            showSyncModalAlert(type, message);
+        });
+
+        // Initialize Firebase asynchronously in background
+        window.DokkaiCloudSync.init().catch(err => console.warn('[CloudSync] Init error:', err));
         updateSyncStatusUI();
     }
 
