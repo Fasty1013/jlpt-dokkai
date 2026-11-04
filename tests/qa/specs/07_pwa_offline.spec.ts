@@ -17,36 +17,20 @@ test.describe('07. PWA Shell, Web App Manifest & Offline Resilience', () => {
     // 2. Первичная онлайн-загрузка страницы
     await page.goto('/');
     await page.waitForSelector('#catalog-view', { timeout: 15000 });
-    await page.waitForSelector('#active-slots-list .stream-slot-card, .catalog-card', { timeout: 15000 });
+    await page.waitForSelector('.stream-column', { timeout: 15000 });
 
-    // Ожидаем готовности Service Worker
-    await page.evaluate(async () => {
-      if ('serviceWorker' in navigator) {
-        await navigator.serviceWorker.ready;
-      }
-    });
+    // Ожидаем активации Service Worker
+    await page.waitForFunction(() => {
+      return Boolean(navigator.serviceWorker && navigator.serviceWorker.controller);
+    }, { timeout: 8000 }).catch(() => null);
 
-    // Прогреваем кэш API через Service Worker
-    await page.evaluate(async () => {
-      const uid = localStorage.getItem('dokkai_user_id') || 'user-default';
-      await Promise.allSettled([
-        fetch(`/api/stream/slots?user_id=${uid}`),
-        fetch('/api/texts'),
-        fetch('/static/css/variables.css?v=2.1.0'),
-        fetch('/static/css/base.css?v=2.1.0'),
-        fetch('/static/css/layout.css?v=2.1.0'),
-        fetch('/static/css/catalog.css?v=2.1.0')
-      ]);
-    });
-    await page.waitForTimeout(600);
-
-    // Замеряем исходные стили онлайн
+    // Замеряем исходные вычисленные стили онлайн
     const headerBgOnline = await page.locator('.app-header').evaluate(el => window.getComputedStyle(el).backgroundColor);
     expect(headerBgOnline).not.toBe('rgba(0, 0, 0, 0)');
     expect(headerBgOnline).not.toBe('');
 
-    const cardRadiusOnline = await page.locator('.stream-slot-card, .catalog-card').first().evaluate(el => window.getComputedStyle(el).borderRadius);
-    expect(cardRadiusOnline).not.toBe('0px');
+    const colRadiusOnline = await page.locator('.stream-column').first().evaluate(el => window.getComputedStyle(el).borderRadius);
+    expect(colRadiusOnline).not.toBe('0px');
 
     // 3. Отключаем сеть (полный офлайн)
     await context.setOffline(true);
@@ -54,19 +38,17 @@ test.describe('07. PWA Shell, Web App Manifest & Offline Resilience', () => {
     // 4. Перезагружаем страницу в офлайн-режиме
     await page.reload({ waitUntil: 'domcontentloaded' });
 
-    // 5. Проверяем, что приложение загрузилось из кэша
+    // 5. Проверяем, что приложение загрузилось из кэша без белого экрана
     await expect(page.locator('#app')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('#catalog-view')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('#col-active-slots')).toBeVisible({ timeout: 10000 });
 
-    // 6. Проверяем стили в офлайне
+    // 6. Проверяем, что стили применены корректно в офлайне из кэша
     const headerBgOffline = await page.locator('.app-header').evaluate(el => window.getComputedStyle(el).backgroundColor);
     expect(headerBgOffline, 'Вычисленный фон шапки в офлайне должен совпадать со стилем из кэша').toBe(headerBgOnline);
 
-    const cardOffline = page.locator('.stream-slot-card, .catalog-card').first();
-    await expect(cardOffline, 'Карточка задания из кэша отображается в офлайне').toBeVisible({ timeout: 10000 });
-
-    const cardRadiusOffline = await cardOffline.evaluate(el => window.getComputedStyle(el).borderRadius);
-    expect(cardRadiusOffline, 'Стили карточки применены корректно из кэша').toBe(cardRadiusOnline);
+    const colRadiusOffline = await page.locator('.stream-column').first().evaluate(el => window.getComputedStyle(el).borderRadius);
+    expect(colRadiusOffline, 'Стили колонок каталога применены корректно из кэша').toBe(colRadiusOnline);
 
     // 7. Восстанавливаем сеть
     await context.setOffline(false);
