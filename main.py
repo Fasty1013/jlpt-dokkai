@@ -61,7 +61,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="JLPT Dokkai Master (読解トレーナー)",
     description="Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
-    version="1.0.0",
+    version="2.1.0",
     lifespan=lifespan
 )
 
@@ -97,7 +97,7 @@ def version_info():
             commit_sha = "unknown"
 
     return {
-        "version": "2.0.2",
+        "version": "2.1.0",
         "commit": commit_sha,
         "env": os.getenv("ENV", os.getenv("APP_ENV", "development")),
         "database_backend": "postgresql" if os.getenv("DATABASE_URL", "").startswith("postgres") else "sqlite"

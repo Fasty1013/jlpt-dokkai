@@ -11,3 +11,4 @@ window.DOKKAI_FIREBASE_CONFIG = {
     messagingSenderId: "680848691230",
     appId: "1:680848691230:web:9c2b606830edbe0c081e0f"
 };
+
