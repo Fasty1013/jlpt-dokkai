@@ -1,10 +1,14 @@
-// JLPT Dokkai Master - Service Worker (Offline-First App Shell & Granular Asset Cache)
-const CACHE_NAME = 'dokkai-v2.1.0';
+// JLPT Dokkai Master - Service Worker
+// Scope: Same-origin static assets ONLY (/ and /static/*)
+// Strategy: Network-First with Offline Cache Fallback (Zero Cache-First staleness)
 
+const CACHE_VERSION = '2.1.0';
+const CACHE_NAME = `dokkai-v${CACHE_VERSION}`;
+
+// Static resources precached for offline resilience
 const PRECACHE_ASSETS = [
   '/',
   '/static/manifest.json',
-  '/static/styles.css?v=2.1.0',
   '/static/css/variables.css?v=2.1.0',
   '/static/css/base.css?v=2.1.0',
   '/static/css/layout.css?v=2.1.0',
@@ -16,10 +20,10 @@ const PRECACHE_ASSETS = [
   '/static/css/pdf_import.css?v=2.1.0',
   '/static/css/modals.css?v=2.1.0',
   '/static/css/responsive.css?v=2.1.0',
-  '/static/app.js?v=2.1.0',
   '/static/storage.js?v=2.1.0',
-  '/static/cloud_sync.js?v=2.1.0',
   '/static/firebase-config.js?v=2.1.0',
+  '/static/cloud_sync.js?v=2.1.0',
+  '/static/app.js?v=2.1.0',
   '/static/js/constants/settings.js?v=2.1.0',
   '/static/js/constants/labels.js?v=2.1.0',
   '/static/js/content/texts/ru.js?v=2.1.0',
@@ -52,50 +56,50 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET and browser extensions
-  if (request.method !== 'GET' || !url.protocol.startsWith('http')) {
+  // 1. Strict same-origin isolation: NEVER intercept cross-origin (Firebase, Firestore, Google Auth, gstatic, fonts)
+  if (url.origin !== self.location.origin) {
     return;
   }
 
-  // API endpoints: Stale-While-Revalidate with offline fallback
+  // 2. Strict method isolation: NEVER intercept non-GET (POST, PUT, DELETE)
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  // 3. Strict API isolation: NEVER intercept backend REST endpoints (/api/*)
   if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then(async (cache) => {
-        try {
-          const networkResponse = await fetch(request);
-          if (networkResponse.status === 200) {
-            cache.put(request, networkResponse.clone());
-            cache.put(url.pathname, networkResponse.clone());
-          }
-          return networkResponse;
-        } catch (err) {
-          const cachedResponse = (await cache.match(request)) || (await cache.match(url.pathname));
-          if (cachedResponse) return cachedResponse;
-          throw err;
-        }
-      })
-    );
     return;
   }
 
-  // Static assets and App Shell: Cache-First
+  // 4. Strict scope: Only handle HTML App Shell ('/' or '/index.html') and static assets ('/static/*')
+  const isStaticAsset = url.pathname === '/' || url.pathname === '/index.html' || url.pathname.startsWith('/static/');
+  if (!isStaticAsset) {
+    return;
+  }
+
+  // 5. Network-First Strategy with Offline Cache Fallback (Ensures deployments take effect immediately)
   event.respondWith(
-    caches.match(request, { ignoreSearch: true }).then(async (cached) => {
-      if (cached) return cached;
-      try {
-        const response = await fetch(request);
-        if (response.status === 200) {
-          const cache = await caches.open(CACHE_NAME);
-          cache.put(request, response.clone());
+    fetch(request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
         }
-        return response;
-      } catch (err) {
+        return networkResponse;
+      })
+      .catch(async () => {
+        // Network failed (device is offline): fall back to cached version
+        const cached = await caches.match(request, { ignoreSearch: true });
+        if (cached) {
+          return cached;
+        }
         if (request.mode === 'navigate') {
           const rootCached = await caches.match('/');
           if (rootCached) return rootCached;
         }
-        throw err;
-      }
-    })
+        throw new Error(`[ServiceWorker] Offline and asset not in cache: ${url.pathname}`);
+      })
   );
 });
