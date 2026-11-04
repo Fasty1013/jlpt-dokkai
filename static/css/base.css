@@ -1,0 +1,106 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body {
+    font-family: var(--font-ui);
+    background-color: var(--washi-bg);
+    color: var(--sumi-800);
+    line-height: 1.6;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+/* Universal protection against word and text overflow */
+h1, h2, h3, h4, h5, h6, p, span, a, label, button, li, td, th {
+    overflow-wrap: break-word;
+}
+
+
+
+/* ==========================================================================
+   Buttons & General Components
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--sumi-900);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #000000;
+    transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+    background: var(--sumi-300);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--sumi-600);
+    border: 1px solid var(--washi-border);
+}
+
+.btn-ghost:hover {
+    background: var(--washi-accent);
+    color: var(--sumi-900);
+}
+
+.btn-outline-light {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-lg {
+    padding: 0.85rem 2.25rem;
+    font-size: 1.05rem;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
