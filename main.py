@@ -594,12 +594,26 @@ def serve_index():
 
 
 @app.get("/sw.js")
-def serve_service_worker():
+def serve_service_worker(version: Optional[str] = None):
     sw_path = os.path.join(STATIC_DIR, "sw.js")
-    if os.path.exists(sw_path):
-        return FileResponse(
-            sw_path,
+    if not os.path.exists(sw_path):
+        raise HTTPException(status_code=404, detail="Service worker not found")
+    if version:
+        import re
+        with open(sw_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        content = re.sub(r"const CACHE_VERSION = '[^']+';", f"const CACHE_VERSION = '{version}';", content)
+        from fastapi import Response
+        return Response(
+            content=content,
             media_type="application/javascript",
-            headers={"Service-Worker-Allowed": "/"}
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Service-Worker-Allowed": "/"
+            }
         )
-    raise HTTPException(status_code=404, detail="Service worker not found")
+    return FileResponse(
+        sw_path,
+        media_type="application/javascript",
+        headers={"Service-Worker-Allowed": "/"}
+    )

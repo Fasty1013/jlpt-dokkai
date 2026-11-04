@@ -3,32 +3,67 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integrity', () => {
+  test.describe.configure({ mode: 'serial' });
 
-  test('01. Automated Asset Parity: All index.html <link> and <script> tags are precached in sw.js', async () => {
-    const indexPath = path.resolve(__dirname, '../../../static/index.html');
-    const swPath = path.resolve(__dirname, '../../../static/sw.js');
+  test('01. Recursive Import Graph: All index.html assets and transitively imported ES modules are precached in sw.js', async () => {
+    const staticDir = path.resolve(__dirname, '../../../static');
+    const indexPath = path.join(staticDir, 'index.html');
+    const swPath = path.join(staticDir, 'sw.js');
 
     const indexHtml = fs.readFileSync(indexPath, 'utf-8');
     const swJs = fs.readFileSync(swPath, 'utf-8');
 
-    // Extract all local css links
+    // 1. Extract links and scripts from index.html
     const linkMatches = [...indexHtml.matchAll(/<link\s+[^>]*href="(\/static\/css\/[^"]+)"/g)].map(m => m[1]);
-    // Extract all local script src
     const scriptMatches = [...indexHtml.matchAll(/<script\s+[^>]*src="(\/static\/[^"]+)"/g)].map(m => m[1]);
 
-    const requiredAssets = [...linkMatches, ...scriptMatches];
-    expect(requiredAssets.length).toBeGreaterThan(0);
+    // 2. Recursive ES Module import graph crawler
+    const visitedFiles = new Set<string>();
+    const discoveredJsModules = new Set<string>();
 
-    // Extract PRECACHE_ASSETS from sw.js
+    function crawlModuleImports(filePath: string) {
+      if (visitedFiles.has(filePath) || !fs.existsSync(filePath)) return;
+      visitedFiles.add(filePath);
+
+      const content = fs.readFileSync(filePath, 'utf-8');
+      // Match static import ... from '...' and dynamic import('...')
+      const importRegex = /(?:import\s+.*?from\s+['"]([^'"]+)['"]|import\s*\(\s*['"]([^'"]+)['"]\s*\))/g;
+      let match;
+      while ((match = importRegex.exec(content)) !== null) {
+        const importSpecifier = match[1] || match[2];
+        if (importSpecifier && importSpecifier.startsWith('.')) {
+          const resolvedPath = path.resolve(path.dirname(filePath), importSpecifier);
+          const fullPath = resolvedPath.endsWith('.js') ? resolvedPath : resolvedPath + '.js';
+          if (fs.existsSync(fullPath)) {
+            // Convert to web-relative /static/... path
+            const relativeToStatic = path.relative(staticDir, fullPath).replace(/\\/g, '/');
+            const webPath = `/static/${relativeToStatic}`;
+            discoveredJsModules.add(webPath);
+            crawlModuleImports(fullPath);
+          }
+        }
+      }
+    }
+
+    // Crawl all entry scripts
+    for (const script of scriptMatches) {
+      const cleanPath = script.split('?')[0].replace(/^\/static\//, '');
+      const fullPath = path.join(staticDir, cleanPath);
+      crawlModuleImports(fullPath);
+    }
+
+    const allRequiredAssets = Array.from(new Set([...linkMatches, ...scriptMatches, ...discoveredJsModules]));
+    expect(allRequiredAssets.length).toBeGreaterThanOrEqual(15);
+
+    // 3. Extract PRECACHE_ASSETS from sw.js
     const precacheMatch = swJs.match(/const\s+PRECACHE_ASSETS\s*=\s*\[([\s\S]*?)\];/);
     expect(precacheMatch).not.toBeNull();
     const precacheListRaw = precacheMatch![1];
 
-    for (const asset of requiredAssets) {
-      // Normalize asset path (with or without ?v= query)
+    for (const asset of allRequiredAssets) {
       const assetClean = asset.split('?')[0];
       const isPrecached = precacheListRaw.includes(asset) || precacheListRaw.includes(assetClean);
-      expect(isPrecached, `Asset '${asset}' from index.html must be declared in PRECACHE_ASSETS of sw.js`).toBe(true);
+      expect(isPrecached, `Asset '${asset}' (transitively imported) must be declared in PRECACHE_ASSETS of sw.js`).toBe(true);
     }
   });
 
@@ -86,5 +121,41 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
       return u.includes('googleapis.com') || u.includes('gstatic.com') || u.includes('firebase') || u.includes('identitytoolkit');
     });
     expect(crossOriginLeaks, 'Cross-origin Firebase/Google auth requests must NEVER be stored in Service Worker cache').toHaveLength(0);
+  });
+
+  test('04. New Version Deployment: Upgrading cache version purges old caches automatically', async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await page.waitForSelector('#catalog-view', { timeout: 15000 });
+
+    // 1. Ensure initial Service Worker is active and cached
+    await page.waitForFunction(() => {
+      return caches.keys().then(keys => keys.includes('dokkai-v2.1.0'));
+    }, { timeout: 10000 });
+
+    // 2. Deploy Version B (simulated via updated sw.js?version=2.2.0-test)
+    await page.evaluate(async () => {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for (const r of regs) await r.unregister();
+      await navigator.serviceWorker.register('/sw.js?version=2.2.0-test', { scope: '/' });
+    });
+
+    // 3. Wait for new version to activate and purge old caches
+    await page.waitForFunction(() => {
+      return caches.keys().then(keys => keys.includes('dokkai-v2.2.0-test') && !keys.includes('dokkai-v2.1.0'));
+    }, { timeout: 15000 });
+
+    // 4. Reload page online to confirm active state and persistence
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
+
+    // 5. Verify final caches: Version B active, Version A purged
+    const cacheKeys = await page.evaluate(async () => await caches.keys());
+    expect(cacheKeys).toContain('dokkai-v2.2.0-test');
+    expect(cacheKeys).not.toContain('dokkai-v2.1.0');
+
+    await context.close();
   });
 });

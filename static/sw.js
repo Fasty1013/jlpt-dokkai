@@ -1,9 +1,10 @@
 // JLPT Dokkai Master - Service Worker
 // Scope: Same-origin static assets ONLY (/ and /static/*)
-// Strategy: Network-First with Offline Cache Fallback (Zero Cache-First staleness)
+// Strategy: Network-First with 3.5s Timeout & Offline Cache Fallback
 
 const CACHE_VERSION = '2.1.0';
 const CACHE_NAME = `dokkai-v${CACHE_VERSION}`;
+const NETWORK_TIMEOUT_MS = 3500;
 
 // Static resources precached for offline resilience
 const PRECACHE_ASSETS = [
@@ -36,8 +37,15 @@ const PRECACHE_ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Resilient precaching: individual failures won't break service worker install
+      await Promise.allSettled(
+        PRECACHE_ASSETS.map((asset) =>
+          cache.add(asset).catch((err) => {
+            console.warn(`[ServiceWorker] Failed to precache ${asset}:`, err);
+          })
+        )
+      );
     }).then(() => self.skipWaiting())
   );
 });
@@ -51,6 +59,26 @@ self.addEventListener('activate', (event) => {
     }).then(() => self.clients.claim())
   );
 });
+
+function fetchWithTimeout(request, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      controller.abort();
+      reject(new Error(`Network timeout after ${timeoutMs}ms`));
+    }, timeoutMs);
+
+    fetch(request, { signal: controller.signal })
+      .then((res) => {
+        clearTimeout(timer);
+        resolve(res);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -77,9 +105,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 5. Network-First Strategy with Offline Cache Fallback (Ensures deployments take effect immediately)
+  // 5. Network-First Strategy with 3.5s Timeout & Offline Cache Fallback
   event.respondWith(
-    fetch(request)
+    fetchWithTimeout(request, NETWORK_TIMEOUT_MS)
       .then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200) {
           const responseClone = networkResponse.clone();
@@ -89,8 +117,8 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       })
-      .catch(async () => {
-        // Network failed (device is offline): fall back to cached version
+      .catch(async (err) => {
+        // Network failed or timed out: fall back to cached version
         const cached = await caches.match(request, { ignoreSearch: true });
         if (cached) {
           return cached;
@@ -99,7 +127,7 @@ self.addEventListener('fetch', (event) => {
           const rootCached = await caches.match('/');
           if (rootCached) return rootCached;
         }
-        throw new Error(`[ServiceWorker] Offline and asset not in cache: ${url.pathname}`);
+        throw new Error(`[ServiceWorker] Asset unavailable (${err.message}): ${url.pathname}`);
       })
   );
 });
