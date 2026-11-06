@@ -69,6 +69,8 @@ def main():
         ('mobile_pretest', 'main_mobile_pretest.png', 'refactor_mobile_pretest.png'),
         ('mobile_report', 'main_mobile_report.png', 'refactor_mobile_report.png'),
         ('mobile_solved_col', 'main_mobile_solved_col.png', 'refactor_mobile_solved_col.png'),
+        ('desktop_exercise', 'main_desktop_exercise.png', 'refactor_desktop_exercise.png'),
+        ('mobile_exercise', 'main_mobile_exercise.png', 'refactor_mobile_exercise.png'),
     ]
 
     print('| Экран / Виджет | Разрешение | Всего пикселей | Отличающихся пикселей | % расхождения | Область различий (BBox) |')
@@ -92,3 +94,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

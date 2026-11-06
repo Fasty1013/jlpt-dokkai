@@ -13,7 +13,7 @@ export default defineConfig({
     timeout: 10000,
   },
   fullyParallel: !isProd, // Strict 1 worker on prod to respect free tier limits
-  workers: isProd ? 1 : undefined,
+  workers: isProd ? 1 : 4,
   forbidOnly: !!process.env.CI,
   retries: 1, // Double-run verification
   reporter: [

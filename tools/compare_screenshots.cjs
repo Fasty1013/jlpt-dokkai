@@ -162,6 +162,29 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
       }
     }
 
+    // 5. Exercise Reading View & Question Wizard
+    await page.evaluate(async () => {
+      const reportModal = document.getElementById('report-modal-backdrop');
+      if (reportModal) reportModal.classList.add('hidden');
+      const pretestModal = document.getElementById('pretest-modal-backdrop');
+      if (pretestModal) pretestModal.classList.add('hidden');
+
+      if (window.startExercise) {
+        await window.startExercise(1);
+      }
+      if (window.state && window.state.timer) {
+        if (window.state.timer.intervalId) clearInterval(window.state.timer.intervalId);
+        window.state.timer.remainingSeconds = 180;
+      }
+      const timerDisplay = document.getElementById('timer-display');
+      if (timerDisplay) timerDisplay.textContent = '03:00';
+    });
+    await page.waitForSelector('#exercise-view:not(.hidden)', { timeout: 10000 });
+    await page.waitForSelector('#wizard-card-area .option-item', { timeout: 10000 });
+    await page.waitForTimeout(500);
+    const exercisePath = path.join(outDir, `${targetName}_${vp.name}_exercise.png`);
+    await page.screenshot({ path: exercisePath, fullPage: false });
+
     await context.close();
   }
 
@@ -185,3 +208,4 @@ main().catch(err => {
   console.error(err);
   process.exit(1);
 });
+

@@ -94,6 +94,11 @@ from app.stream.service import complete_task, get_or_create_slots
 from models import Attempt, UserTextState, TaskSlot
 
 test_user = "test-user-idempotency"
+db.query(Attempt).filter(Attempt.user_id == test_user).delete()
+db.query(UserTextState).filter(UserTextState.user_id == test_user).delete()
+db.query(TaskSlot).filter(TaskSlot.user_id == test_user).delete()
+db.commit()
+
 slots = get_or_create_slots(db, user_id=test_user, profile_key="N5:short")
 first_slot = [s for s in slots if s["state"] == "active"][0]
 target_text_id = first_slot["text"]["id"]
