@@ -330,6 +330,11 @@ const elements = {
     inputImportBackupFile: document.getElementById('input-import-backup-file')
 };
 
+if (typeof window !== 'undefined') {
+    window.state = state;
+    window.elements = elements;
+}
+
 // ============================================================================
 // Translations & Label Helpers
 // ============================================================================
@@ -361,135 +366,63 @@ function formatTime(totalSeconds) {
 }
 
 // ============================================================================
-// Timer Functions (Optional Countdown / Free Reading Mode)
+// Timer Functions (Delegated to static/js/features/timer/ with fallback)
 // ============================================================================
 
 function stopTimer() {
-    if (state.timer.intervalId) {
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.stopTimer(state.timer);
+    } else if (state.timer.intervalId) {
         clearInterval(state.timer.intervalId);
         state.timer.intervalId = null;
     }
 }
 
 function startUntimedMode() {
-    stopTimer();
-    state.timer.enabled = false;
-    state.timer.secondsSpent = 0;
-    state.timer.isPaused = false;
-
-    if (elements.timerBox) elements.timerBox.classList.add('hidden');
-    if (elements.btnEnableTimerRuntime) elements.btnEnableTimerRuntime.classList.remove('hidden');
-    if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
-
-    state.timer.intervalId = setInterval(() => {
-        if (!state.timer.isPaused) {
-            state.timer.secondsSpent += 1;
-        }
-    }, 1000);
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.startUntimedMode(state.timer, elements);
+    } else {
+        stopTimer();
+        state.timer.enabled = false;
+        state.timer.secondsSpent = 0;
+        state.timer.isPaused = false;
+        if (elements.timerBox) elements.timerBox.classList.add('hidden');
+        if (elements.btnEnableTimerRuntime) elements.btnEnableTimerRuntime.classList.remove('hidden');
+        if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
+    }
 }
 
 function startCountdownTimer(minutes) {
-    stopTimer();
-    const durMins = Math.max(1, parseInt(minutes, 10) || 3);
-    const totalSec = durMins * 60;
-
-    state.timer.enabled = true;
-    state.timer.totalSeconds = totalSec;
-    state.timer.remainingSeconds = totalSec;
-    state.timer.secondsSpent = 0;
-    state.timer.isPaused = false;
-
-    if (elements.timerBox) {
-        elements.timerBox.classList.remove('hidden', 'timer-warning', 'timer-expired', 'is-paused');
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.startCountdownTimer(minutes, state.timer, elements);
     }
-    if (elements.btnEnableTimerRuntime) {
-        elements.btnEnableTimerRuntime.classList.add('hidden');
-    }
-    if (elements.timerAlertBanner) {
-        elements.timerAlertBanner.classList.add('hidden');
-    }
-    if (elements.timerDisplay) {
-        elements.timerDisplay.textContent = formatTime(totalSec);
-    }
-    if (elements.btnTimerTogglePause) {
-        elements.btnTimerTogglePause.textContent = '⏸️';
-    }
-
-    state.timer.intervalId = setInterval(() => {
-        if (state.timer.isPaused) return;
-
-        state.timer.secondsSpent += 1;
-        state.timer.remainingSeconds -= 1;
-
-        if (elements.timerDisplay) {
-            elements.timerDisplay.textContent = formatTime(Math.max(0, state.timer.remainingSeconds));
-        }
-
-        if (state.timer.remainingSeconds <= 60 && state.timer.remainingSeconds > 0) {
-            if (elements.timerBox) elements.timerBox.classList.add('timer-warning');
-        }
-
-        if (state.timer.remainingSeconds <= 0) {
-            state.timer.remainingSeconds = 0;
-            stopTimer();
-
-            if (elements.timerBox) {
-                elements.timerBox.classList.remove('timer-warning');
-                elements.timerBox.classList.add('timer-expired');
-            }
-            if (elements.timerAlertBanner) {
-                elements.timerAlertBanner.classList.remove('hidden');
-            }
-        }
-    }, 1000);
 }
 
 function toggleTimerPause() {
-    if (!state.timer.enabled) return;
-    state.timer.isPaused = !state.timer.isPaused;
-
-    if (elements.timerBox) {
-        elements.timerBox.classList.toggle('is-paused', state.timer.isPaused);
-    }
-    if (elements.btnTimerTogglePause) {
-        elements.btnTimerTogglePause.textContent = state.timer.isPaused ? '▶️' : '⏸️';
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.toggleTimerPause(state.timer, elements);
     }
 }
 
 function addTimerMinute() {
-    if (!state.timer.enabled) {
-        startCountdownTimer(3);
-        return;
-    }
-    state.timer.remainingSeconds += 60;
-    state.timer.totalSeconds += 60;
-
-    if (elements.timerDisplay) {
-        elements.timerDisplay.textContent = formatTime(state.timer.remainingSeconds);
-    }
-    if (elements.timerBox) {
-        elements.timerBox.classList.remove('timer-expired');
-        if (state.timer.remainingSeconds > 60) {
-            elements.timerBox.classList.remove('timer-warning');
-        }
-    }
-    if (elements.timerAlertBanner) {
-        elements.timerAlertBanner.classList.add('hidden');
-    }
-    if (!state.timer.intervalId && !state.timer.isPaused) {
-        startCountdownTimer(Math.ceil(state.timer.remainingSeconds / 60));
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.addTimerMinute(state.timer, elements);
     }
 }
 
 function dismissTimer() {
-    if (confirm('Выключить таймер и продолжить решать в спокойном темпе?')) {
-        startUntimedMode();
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.dismissTimer(state.timer, elements);
     }
 }
 
 function enableTimerAtRuntime() {
     const recMin = (state.activeText && state.activeText.recommended_time_min) ? state.activeText.recommended_time_min : 3;
-    startCountdownTimer(recMin);
+    if (window.DokkaiTimer) {
+        window.DokkaiTimer.enableTimerAtRuntime(recMin, state.timer, elements);
+    } else {
+        startCountdownTimer(recMin);
+    }
 }
 
 // ============================================================================
