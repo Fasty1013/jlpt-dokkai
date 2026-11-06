@@ -84,8 +84,9 @@ export async function request(url, options = {}) {
 
   try {
     const isFormData = fetchOptions.body instanceof FormData;
+    const hasBody = fetchOptions.body !== undefined && fetchOptions.body !== null;
     const finalHeaders = {
-      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+      ...(hasBody && !isFormData ? { 'Content-Type': 'application/json' } : {}),
       ...headers
     };
 

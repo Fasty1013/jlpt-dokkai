@@ -1,0 +1,121 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/stream/slots",
+    "query": {
+      "user_id": "<USER_ID>",
+      "level": "N5",
+      "category": "short",
+      "_t": "<TIMESTAMP>"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/drafts",
+    "query": {},
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/stream/solved",
+    "query": {
+      "user_id": "<USER_ID>",
+      "level": "N5",
+      "_t": "<TIMESTAMP>"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/texts/<TEXT_ID>",
+    "query": {
+      "_t": "<TIMESTAMP>"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/stream/solved",
+    "query": {
+      "user_id": "<USER_ID>",
+      "level": "N5"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/dictionary/lookup",
+    "query": {},
+    "body": {
+      "word": "持続可能"
+    },
+    "key_headers": {
+      "content-type": "application/json",
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/stream/slots",
+    "query": {
+      "user_id": "<USER_ID>",
+      "level": "N5",
+      "category": "short",
+      "_t": "<TIMESTAMP>"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/stream/solved",
+    "query": {
+      "user_id": "<USER_ID>",
+      "level": "N5",
+      "_t": "<TIMESTAMP>"
+    },
+    "body": null,
+    "key_headers": {
+      "content-type": null,
+      "accept": null
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/texts/<TEXT_ID>/report",
+    "query": {},
+    "body": {
+      "user_id": "<USER_ID>",
+      "reason": "typo",
+      "details": "Тестовая жалоба для аудита сетевых логов"
+    },
+    "key_headers": {
+      "content-type": "application/json",
+      "accept": null
+    }
+  }
+]
