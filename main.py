@@ -599,12 +599,11 @@ def serve_service_worker(request: Request, version: Optional[str] = None):
     if not os.path.exists(sw_path):
         raise HTTPException(status_code=404, detail="Service worker not found")
 
-    # In production, version parameter is strictly ignored; CACHE_VERSION is fixed
-    client_host = request.client.host if request.client else ""
-    is_local_test = client_host in ("127.0.0.1", "localhost", "::1", "testclient")
-    is_dev_env = os.environ.get("ENV") != "production"
+    # In production and normal operation, version query override is strictly disabled.
+    # It is ONLY permitted during automated tests when DOKKAI_TEST_MODE=1 is explicitly set.
+    is_test_mode = os.environ.get("DOKKAI_TEST_MODE") == "1"
 
-    if version and is_local_test and is_dev_env:
+    if version and is_test_mode:
         import re
         safe_version = re.sub(r"[^a-zA-Z0-9.-]", "", version)[:30]
         with open(sw_path, "r", encoding="utf-8") as f:
