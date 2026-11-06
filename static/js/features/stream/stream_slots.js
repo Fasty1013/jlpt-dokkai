@@ -6,6 +6,7 @@ import { fetchStreamSlots } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { getUserId } from '../../utils/user.js';
 import { CATEGORY_NAMES } from '../../constants/labels.js';
+import { UI_TEXTS } from '../../content/texts/ru.js';
 
 /**
  * Generate HTML markup for a single slot card.
@@ -100,9 +101,9 @@ export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {
     console.error(err);
     elements.activeSlotsList.innerHTML = `
       <div style="text-align: center; padding: 2rem; color: var(--vermilion);">
-          <p>Не удалось загрузить активные задания.</p>
+          <p>${UI_TEXTS.catalog.loadSlotsError}</p>
           <button class="btn btn-secondary btn-sm" onclick="fetchAndRenderSlots()" style="margin-top: 0.5rem;">
-              🔄 Повторить попытку
+              ${UI_TEXTS.catalog.retryCatalog}
           </button>
       </div>
     `;

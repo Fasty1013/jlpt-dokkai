@@ -9,12 +9,14 @@ export const UI_TEXTS = {
         error: 'Произошла ошибка',
         close: 'Закрыть',
         done: 'Готово',
-        cancel: 'Отмена'
+        cancel: 'Отмена',
+        serverWaking: 'Сервер просыпается, подождите до минуты…'
     },
     catalog: {
         slotTitlePlaceholder: 'Готовится новое задание...',
         slotDescPlaceholder: (profileKey) => `Для профиля ${profileKey} генерируется или подбирается оригинальный учебный материал.`,
         loadSlotsError: 'Не удалось загрузить активные задания.',
+        retryCatalog: '🔄 Повторить попытку',
         startSolving: 'Начать решение →',
         minutesShort: (min) => `${min} мин`,
         questionsShort: (count) => `${count} вопр.`,

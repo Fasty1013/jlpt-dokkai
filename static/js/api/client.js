@@ -4,6 +4,8 @@
  * cold-start friendly progress notification (>5s), uniform headers and standardized ApiError.
  */
 
+import { UI_TEXTS } from '../content/texts/ru.js';
+
 export class ApiError extends Error {
   constructor(message, status = 0, data = null) {
     super(message);
@@ -32,7 +34,7 @@ function showServerWakingNotice() {
     wakingNoticeEl.innerHTML = `
       <div class="server-waking-content">
         <span class="server-waking-icon">⏳</span>
-        <span class="server-waking-text">Сервер просыпается, подождите до минуты…</span>
+        <span class="server-waking-text">${UI_TEXTS.common.serverWaking}</span>
       </div>
     `;
     document.body.appendChild(wakingNoticeEl);
