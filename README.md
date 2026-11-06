@@ -125,6 +125,23 @@ python run_agents.py --check
 
 ---
 
+## 🧪 Автотесты и тестовый режим (DOKKAI_TEST_MODE)
+
+В проекте настроен полный сьют интеграционных и E2E тестов:
+- **Backend / Anti-Cheat тесты:** `python test_api.py` (или `python run_agents.py --check`)
+- **E2E Playwright тесты:** `cd tests/qa && npx playwright test`
+
+### Переменная окружения `DOKKAI_TEST_MODE`:
+Для безопасного тестирования динамического обновления версий Service Worker (тест деплоя новой версии) бэкенд проверяет флаг `DOKKAI_TEST_MODE=1`.
+- **В локальных тестах:** Playwright автоматически передаёт `DOKKAI_TEST_MODE=1` в `webServer` конфига (`tests/qa/playwright.config.ts`).
+  При ручном запуске сервера для тестов выполните:
+  ```powershell
+  $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8000
+  ```
+- **На проде (Production):** Переменная `DOKKAI_TEST_MODE` не задана. Любые запросы с параметром `?version=...` к `/sw.js` строго игнорируются, исключая подделку версий извне.
+
+---
+
 ## ⚙️ Управление Service Worker и очистка кэша
 
 В приложении работает легковесный Service Worker (`/sw.js`), обеспечивающий автономную работу (PWA) и кэширование статических файлов (CSS/JS) по стратегии **Network-First** (свежая версия всегда запрашивается из сети).

@@ -1899,12 +1899,27 @@ function initEventListeners() {
     }
 
     if (elements.streamModePills) {
+        try {
+            const savedSolvedWhen = localStorage.getItem('dokkai_stream_solved_when');
+            if (savedSolvedWhen) {
+                state.streamProfile.solvedWhen = savedSolvedWhen;
+                const targetPill = elements.streamModePills.querySelector(`[data-solved-when="${savedSolvedWhen}"]`);
+                if (targetPill) {
+                    elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                    targetPill.classList.add('active');
+                }
+            }
+        } catch (err) {}
+
         elements.streamModePills.addEventListener('click', (e) => {
             const pill = e.target.closest('.filter-pill');
             if (!pill) return;
             elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
             pill.classList.add('active');
             state.streamProfile.solvedWhen = pill.dataset.solvedWhen || 'all_questions_answered';
+            try {
+                localStorage.setItem('dokkai_stream_solved_when', state.streamProfile.solvedWhen);
+            } catch (err) {}
         });
     }
 
