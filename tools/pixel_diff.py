@@ -38,8 +38,8 @@ def compare_images(img1_path, img2_path, diff_out_path):
     h_data = []
 
     for pixel in diff_data:
-        # Check if R, G, B, or A differ significantly (> 2 threshold to filter micro subpixel anti-aliasing)
-        if pixel[0] > 2 or pixel[1] > 2 or pixel[2] > 2:
+        # Strict zero tolerance: any non-zero delta in RGB is counted as mismatched
+        if pixel[0] > 0 or pixel[1] > 0 or pixel[2] > 0:
             mismatched += 1
             h_data.append((255, 0, 0, 255))
         else:
@@ -51,7 +51,7 @@ def compare_images(img1_path, img2_path, diff_out_path):
     im_base.paste(highlight, (0, 0), highlight)
     im_base.save(diff_out_path)
 
-    percent = round((mismatched / total_pixels) * 100, 3)
+    percent = round((mismatched / total_pixels) * 100, 4)
     return {
         'total_pixels': total_pixels,
         'diff_pixels': mismatched,
@@ -91,8 +91,12 @@ def main():
         res = compare_images(p_main, p_ref, p_diff)
         w, h = Image.open(p_main).size
         print(f"| `{name}` | {w}x{h} | {res['total_pixels']:,} | {res['diff_pixels']:,} | **{res['diff_percent']}%** | {res['bbox']} |")
-        if res['diff_percent'] > 0.05:
+        if res['diff_pixels'] > 0:
             all_passed = False
+
+    if not all_passed:
+        sys.exit(1)
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
