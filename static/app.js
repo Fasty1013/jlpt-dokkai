@@ -11,10 +11,37 @@
 // Core Utility Delegates (Single Source of Truth: static/js/utils/)
 // ============================================================================
 
-const escapeHtml = (str) => (window.DokkaiUtils ? window.DokkaiUtils.escapeHtml(str) : (window.escapeHtml ? window.escapeHtml(str) : ''));
-const getUserId = () => (window.DokkaiUtils ? window.DokkaiUtils.getUserId() : (window.getUserId ? window.getUserId() : ''));
-const formatTime = (totalSeconds) => (window.DokkaiUtils ? window.DokkaiUtils.formatTime(totalSeconds) : (window.formatTime ? window.formatTime(totalSeconds) : ''));
-const formatFileSize = (bytes) => (window.DokkaiUtils ? window.DokkaiUtils.formatFileSize(bytes) : (window.formatFileSize ? window.formatFileSize(bytes) : '0 B'));
+if (typeof window !== 'undefined' && (!window.DokkaiUtils || !window.DokkaiUtils.getUserId)) {
+    console.error('[Dokkai] Критическая ошибка: модуль DokkaiUtils не загружен.');
+    if (typeof document !== 'undefined' && document.body) {
+        const errBanner = document.createElement('div');
+        errBanner.className = 'module-load-error-banner';
+        errBanner.style.cssText = 'background: #fee2e2; color: #991b1b; padding: 12px 16px; margin: 12px; border: 1px solid #f87171; border-radius: 8px; font-weight: 600; text-align: center;';
+        errBanner.textContent = 'Ошибка: компонент DokkaiUtils не загрузился. Пожалуйста, обновите страницу.';
+        document.body.prepend(errBanner);
+    }
+}
+
+const escapeHtml = (str) => {
+    if (window.DokkaiUtils?.escapeHtml) return window.DokkaiUtils.escapeHtml(str);
+    console.error('[Dokkai] DokkaiUtils.escapeHtml недоступен');
+    throw new Error('[Dokkai] DokkaiUtils.escapeHtml недоступен');
+};
+const getUserId = () => {
+    if (window.DokkaiUtils?.getUserId) return window.DokkaiUtils.getUserId();
+    console.error('[Dokkai] DokkaiUtils.getUserId недоступен');
+    throw new Error('[Dokkai] DokkaiUtils.getUserId недоступен');
+};
+const formatTime = (totalSeconds) => {
+    if (window.DokkaiUtils?.formatTime) return window.DokkaiUtils.formatTime(totalSeconds);
+    console.error('[Dokkai] DokkaiUtils.formatTime недоступен');
+    throw new Error('[Dokkai] DokkaiUtils.formatTime недоступен');
+};
+const formatFileSize = (bytes) => {
+    if (window.DokkaiUtils?.formatFileSize) return window.DokkaiUtils.formatFileSize(bytes);
+    console.error('[Dokkai] DokkaiUtils.formatFileSize недоступен');
+    throw new Error('[Dokkai] DokkaiUtils.formatFileSize недоступен');
+};
 
 const CONFIG_STORAGE_KEY = 'dokkai_pretest_config';
 

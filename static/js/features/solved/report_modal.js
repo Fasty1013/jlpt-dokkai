@@ -3,6 +3,7 @@
  */
 
 import { reportTextIssue } from '../../api/texts.js';
+import { getUserId } from '../../utils/user.js';
 
 /**
  * Open report defect modal for a specific text.
@@ -51,7 +52,7 @@ export function closeReportModal(context = {}) {
 export async function submitReportDefect(context = {}) {
   const state = context.state || (typeof window !== 'undefined' ? window.state : null);
   const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
-  const getUserId = context.getUserId || (typeof window !== 'undefined' ? window.getUserId : () => 'guest');
+  const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   if (!state?.reportingTextId) return;
   const reason = elements?.reportReasonSelect ? elements.reportReasonSelect.value : 'Опечатка';
@@ -66,7 +67,7 @@ export async function submitReportDefect(context = {}) {
     const resData = await reportTextIssue(state.reportingTextId, {
       reason,
       details,
-      user_id: getUserId()
+      user_id: userId
     });
 
     closeReportModal(context);

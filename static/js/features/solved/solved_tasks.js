@@ -4,6 +4,7 @@
 
 import { fetchSolvedTasks, fetchSolvedDetail, retrySolvedTask as apiRetrySolvedTask } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
+import { getUserId } from '../../utils/user.js';
 
 /**
  * Generate HTML markup for a single solved task card.
@@ -48,7 +49,7 @@ export function renderSolvedCardHtml(t) {
 export async function fetchAndRenderSolvedTasks(context = {}) {
   const state = context.state || (typeof window !== 'undefined' ? window.state : null);
   const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
-  const getUserId = context.getUserId || (typeof window !== 'undefined' ? window.getUserId : () => 'guest');
+  const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   if (!elements?.solvedTasksList) return;
 
@@ -62,7 +63,6 @@ export async function fetchAndRenderSolvedTasks(context = {}) {
       }
     }
 
-    const userId = getUserId();
     const profileLevel = state?.streamProfile?.level || 'N5';
     const solvedFilter = state?.solvedFilter || 'all';
 
@@ -122,12 +122,12 @@ export async function fetchAndRenderSolvedTasks(context = {}) {
  */
 export async function reviewSolvedTask(textId, context = {}) {
   const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const getUserId = context.getUserId || (typeof window !== 'undefined' ? window.getUserId : () => 'guest');
+  const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   try {
     let data;
     try {
-      data = await fetchSolvedDetail(textId, getUserId());
+      data = await fetchSolvedDetail(textId, userId);
     } catch (err) {
       if (err.status === 403) {
         alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
@@ -163,10 +163,10 @@ export async function reviewSolvedTask(textId, context = {}) {
  */
 export async function retrySolvedTask(textId, context = {}) {
   const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const getUserId = context.getUserId || (typeof window !== 'undefined' ? window.getUserId : () => 'guest');
+  const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   try {
-    const data = await apiRetrySolvedTask(textId, getUserId());
+    const data = await apiRetrySolvedTask(textId, userId);
     if (state) {
       state.isRetryMode = true;
       state.pendingTextData = data;

@@ -4,6 +4,7 @@
 
 import { fetchStreamSlots } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
+import { getUserId } from '../../utils/user.js';
 import { CATEGORY_NAMES } from '../../constants/labels.js';
 
 /**
@@ -65,12 +66,10 @@ export function renderSlotCardHtml(slot, profileKey = '') {
 export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {}) {
   const state = context.state || (typeof window !== 'undefined' ? window.state : null);
   const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
-  const getUserId = context.getUserId || (typeof window !== 'undefined' ? window.getUserId : () => 'guest');
-
   if (!elements || !elements.activeSlotsList) return;
   elements.activeSlotsList.innerHTML = '<div class="loading-spinner">Загрузка слотов заданий...</div>';
 
-  const userId = getUserId();
+  const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
   const profileLevel = state?.streamProfile?.level || 'N5';
   const profileCategory = state?.streamProfile?.category || '';
 
