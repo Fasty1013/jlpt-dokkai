@@ -40,7 +40,9 @@ const PRECACHE_ASSETS = [
   '/static/js/api/admin.js?v=2.1.0',
   '/static/js/api/index.js?v=2.1.0',
   '/static/js/features/timer/timer.js?v=2.1.0',
-  '/static/js/features/timer/index.js?v=2.1.0'
+  '/static/js/features/timer/index.js?v=2.1.0',
+  '/static/js/features/settings/reader_settings.js?v=2.1.0',
+  '/static/js/features/settings/index.js?v=2.1.0'
 ];
 
 self.addEventListener('install', (event) => {

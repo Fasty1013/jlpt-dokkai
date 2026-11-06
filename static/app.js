@@ -426,36 +426,47 @@ function enableTimerAtRuntime() {
 }
 
 // ============================================================================
-// Reader Customization (Font Size & Typeface)
+// Reader Customization (Delegated to static/js/features/settings/ with fallback)
 // ============================================================================
 
 function saveUserSettings() {
-    if (window.DokkaiStorage) {
+    if (window.DokkaiSettings) {
+        window.DokkaiSettings.saveUserSettings(state.settings);
+    } else if (window.DokkaiStorage) {
         window.DokkaiStorage.saveSettings('user_settings', state.settings);
     }
 }
 
 function setReaderFont(typeface) {
-    state.settings.fontFamily = typeface;
-    if (typeface === 'mincho') {
-        elements.passageContent.classList.remove('font-gothic');
-        elements.passageContent.classList.add('font-mincho');
-        elements.btnFontMincho.classList.add('active');
-        elements.btnFontGothic.classList.remove('active');
+    if (window.DokkaiSettings) {
+        window.DokkaiSettings.setReaderFont(typeface, state.settings, elements);
     } else {
-        elements.passageContent.classList.remove('font-mincho');
-        elements.passageContent.classList.add('font-gothic');
-        elements.btnFontGothic.classList.add('active');
-        elements.btnFontMincho.classList.remove('active');
+        state.settings.fontFamily = typeface;
+        if (typeface === 'mincho') {
+            elements.passageContent.classList.remove('font-gothic');
+            elements.passageContent.classList.add('font-mincho');
+            elements.btnFontMincho.classList.add('active');
+            elements.btnFontGothic.classList.remove('active');
+        } else {
+            elements.passageContent.classList.remove('font-mincho');
+            elements.passageContent.classList.add('font-gothic');
+            elements.btnFontGothic.classList.add('active');
+            elements.btnFontMincho.classList.remove('active');
+        }
+        saveUserSettings();
     }
-    saveUserSettings();
 }
 
 function adjustFontSize(delta) {
-    const newSize = Math.max(16, Math.min(28, state.settings.fontSizePx + delta));
-    state.settings.fontSizePx = newSize;
-    elements.passageContent.style.fontSize = `${newSize}px`;
-    saveUserSettings();
+    if (window.DokkaiSettings) {
+        return window.DokkaiSettings.adjustFontSize(delta, state.settings, elements);
+    } else {
+        const newSize = Math.max(16, Math.min(28, state.settings.fontSizePx + delta));
+        state.settings.fontSizePx = newSize;
+        elements.passageContent.style.fontSize = `${newSize}px`;
+        saveUserSettings();
+        return newSize;
+    }
 }
 
 // ============================================================================
