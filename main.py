@@ -9,7 +9,7 @@ from typing import List, Optional, Dict, Any
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-from fastapi import FastAPI, Depends, HTTPException, Query, status, UploadFile, File, Form, Response
+from fastapi import FastAPI, Depends, HTTPException, Query, status, UploadFile, File, Form, Response, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session, joinedload
@@ -594,16 +594,22 @@ def serve_index():
 
 
 @app.get("/sw.js")
-def serve_service_worker(version: Optional[str] = None):
+def serve_service_worker(request: Request, version: Optional[str] = None):
     sw_path = os.path.join(STATIC_DIR, "sw.js")
     if not os.path.exists(sw_path):
         raise HTTPException(status_code=404, detail="Service worker not found")
-    if version:
+
+    # In production, version parameter is strictly ignored; CACHE_VERSION is fixed
+    client_host = request.client.host if request.client else ""
+    is_local_test = client_host in ("127.0.0.1", "localhost", "::1", "testclient")
+    is_dev_env = os.environ.get("ENV") != "production"
+
+    if version and is_local_test and is_dev_env:
         import re
+        safe_version = re.sub(r"[^a-zA-Z0-9.-]", "", version)[:30]
         with open(sw_path, "r", encoding="utf-8") as f:
             content = f.read()
-        content = re.sub(r"const CACHE_VERSION = '[^']+';", f"const CACHE_VERSION = '{version}';", content)
-        from fastapi import Response
+        content = re.sub(r"const CACHE_VERSION = '[^']+';", f"const CACHE_VERSION = '{safe_version}';", content)
         return Response(
             content=content,
             media_type="application/javascript",
@@ -612,8 +618,12 @@ def serve_service_worker(version: Optional[str] = None):
                 "Service-Worker-Allowed": "/"
             }
         )
+
     return FileResponse(
         sw_path,
         media_type="application/javascript",
-        headers={"Service-Worker-Allowed": "/"}
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Service-Worker-Allowed": "/"
+        }
     )
