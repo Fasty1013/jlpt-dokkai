@@ -142,6 +142,16 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
       return caches.keys().then(keys => keys.includes('dokkai-v2.1.0'));
     }, { timeout: 10000 });
 
+    // 1.1 Preflight diagnostic: Verify DOKKAI_TEST_MODE is active on the server
+    const probeContent = await page.evaluate(async () => {
+      const resp = await fetch('/sw.js?version=dokkai-test-probe');
+      return await resp.text();
+    });
+    expect(
+      probeContent.includes('dokkai-test-probe'),
+      'CRITICAL: DOKKAI_TEST_MODE=1 is not active on the running backend server! If reusing an existing server process, restart it with `$env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8000`.'
+    ).toBe(true);
+
     // 2. Deploy Version B (simulated via updated sw.js?version=2.2.0-test)
     await page.evaluate(async () => {
       const regs = await navigator.serviceWorker.getRegistrations();
