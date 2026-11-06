@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('14. Timer Clock Mechanics & Lifecycle (page.clock)', () => {
   test('01. Complete Timer Lifecycle: Countdown, Pause/Resume, +1 Min, 60s Warning, Expiration & Dismiss', async ({ page }) => {
-    // 1. Install fake timers before navigation
+    // 1. Install fake timers and pause clock so time only advances via runFor
     await page.clock.install();
+    await page.clock.pauseAt(new Date('2026-11-06T12:00:00Z'));
 
     await page.goto('/');
     await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
@@ -54,12 +55,12 @@ test.describe('14. Timer Clock Mechanics & Lifecycle (page.clock)', () => {
     // C. +1 Minute Verification
     const btnAddMin = page.locator('#btn-timer-add-min');
     await btnAddMin.click();
-    await expect(timerDisplay).toHaveText(/03:(49|50)/);
+    await expect(timerDisplay).toHaveText('03:50');
 
     // D. 60 Seconds Warning Verification
-    // Advance 170s -> remaining reaches 60s or below
+    // Current remaining is 230s (3m 50s). Advance 170s -> remaining is 60s
     await page.clock.runFor(170000);
-    await expect(timerDisplay).toHaveText(/00:59|01:00/);
+    await expect(timerDisplay).toHaveText('01:00');
     await expect(timerBox).toHaveClass(/timer-warning/);
 
     // E. Timer Expiration Verification

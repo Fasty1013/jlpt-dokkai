@@ -109,7 +109,8 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     await page.addStyleTag({
       content: `*, *::before, *::after { transition: none !important; animation: none !important; }`
     });
-    await page.waitForTimeout(600);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
     const catalogPath = path.join(outDir, `${targetName}_${vp.name}_catalog.png`);
     await page.screenshot({ path: catalogPath, fullPage: false });
 
@@ -118,18 +119,16 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     if (await slotBtn.isVisible()) {
       await slotBtn.click();
       await page.waitForSelector('#pretest-modal-backdrop:not(.hidden)', { timeout: 10000 });
+      await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(500);
       const pretestPath = path.join(outDir, `${targetName}_${vp.name}_pretest.png`);
       await page.screenshot({ path: pretestPath, fullPage: false });
 
-      // Close modal
-      const closeBtn = page.locator('#btn-modal-cancel');
+      // Close modal cleanly via real close button
+      const closeBtn = page.locator('#modal-btn-close');
       if (await closeBtn.isVisible()) {
         await closeBtn.click();
-      } else {
-        await page.click('#modal-btn-start');
-        await page.goto(baseUrl);
-        await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
+        await page.waitForSelector('#pretest-modal-backdrop', { state: 'hidden', timeout: 10000 });
       }
     }
 

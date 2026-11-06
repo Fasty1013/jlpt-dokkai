@@ -146,5 +146,62 @@ assert user_state_rec.attempts_count == 1, f"Idempotency failed: attempts_count 
 
 print("Stream Complete Idempotency PASSED: Repeated submission with same idempotency_key returns identical analysis without duplicate records or slot corruption.")
 
+# 6. Test Idempotency with Unsolved Task (Anti-Cheat Leak Protection)
+# Submit wrong answer in all_correct mode: task remains unsolved (status = in_progress)
+test_user_leak = "test-user-anti-cheat-idempotency"
+db.query(Attempt).filter(Attempt.user_id == test_user_leak).delete()
+db.query(UserTextState).filter(UserTextState.user_id == test_user_leak).delete()
+db.query(TaskSlot).filter(TaskSlot.user_id == test_user_leak).delete()
+db.commit()
+
+slots_leak = get_or_create_slots(db, user_id=test_user_leak, profile_key="N5:short")
+slot_leak = [s for s in slots_leak if s["state"] == "active"][0]
+leak_text_id = slot_leak["text"]["id"]
+leak_read = get_text_for_reading(leak_text_id, db)
+
+# Choose deliberately wrong option (option_id that is NOT correct)
+first_q = leak_read.questions[0]
+wrong_option_id = -99999  # Non-existent or invalid option ensures zero score
+wrong_answers = [{"question_id": first_q.id, "selected_option_id": wrong_option_id}]
+leak_idem_key = "leak-idem-test-key-555"
+
+# First attempt with wrong answer in all_correct mode
+sub1 = complete_task(
+    db=db,
+    user_id=test_user_leak,
+    text_id=leak_text_id,
+    answers=wrong_answers,
+    idempotency_key=leak_idem_key,
+    mode="first",
+    solved_when="all_correct",
+    all_correct_max_attempts=2
+)
+assert sub1["is_solved"] is False, "Task should NOT be solved on wrong answer in all_correct mode"
+assert "error_question_ids" in sub1
+assert "analysis" not in sub1, "Anti-Cheat leak: full analysis found in unsolved submission!"
+
+# Second attempt with the SAME idempotency key (simulating network duplicate on failed attempt)
+sub2 = complete_task(
+    db=db,
+    user_id=test_user_leak,
+    text_id=leak_text_id,
+    answers=wrong_answers,
+    idempotency_key=leak_idem_key,
+    mode="first",
+    solved_when="all_correct",
+    all_correct_max_attempts=2
+)
+# Branch behavior: strictly preserves is_solved: False without leaking get_solved_task_details!
+assert sub2["is_solved"] is False, "Anti-Cheat violation: idempotency replay marked unsolved task as solved!"
+assert "error_question_ids" in sub2
+assert "questions" not in sub2, "Anti-Cheat violation: answers leaked on idempotent replay of unsolved task!"
+print("Anti-Cheat Idempotency PASSED: Replay of unsolved attempt strictly blocks answer key leakage.")
+
+# Clean up synthetic test user
+db.query(Attempt).filter(Attempt.user_id == test_user_leak).delete()
+db.query(UserTextState).filter(UserTextState.user_id == test_user_leak).delete()
+db.query(TaskSlot).filter(TaskSlot.user_id == test_user_leak).delete()
+db.commit()
+
 db.close()
 print("ALL BACKEND & ANTI-CHEAT TESTS PASSED!")
