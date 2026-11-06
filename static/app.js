@@ -763,7 +763,8 @@ async function submitAnswers() {
         elements.btnWizardSubmit.disabled = true;
         elements.btnWizardSubmit.textContent = 'Проверка ответов...';
 
-        const idempotencyKey = 'idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        state.currentSubmitIdempotencyKey = state.currentSubmitIdempotencyKey || ('idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
+        const idempotencyKey = state.currentSubmitIdempotencyKey;
         const solvedWhen = state.streamProfile.solvedWhen || 'all_questions_answered';
 
         let streamResult;
@@ -802,12 +803,14 @@ async function submitAnswers() {
             }
             elements.btnWizardSubmit.disabled = false;
             elements.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
+            state.currentSubmitIdempotencyKey = null; // Reset key for next trial
             // Перерисовываем Wizard для исправления ошибок
             renderWizard();
             return;
         }
 
         // Задание успешно завершено (solved)
+        state.currentSubmitIdempotencyKey = null; // Submission succeeded, clear key
         const analysisData = streamResult;
         state.activeText = analysisData;
         state.currentView = 'analysis';

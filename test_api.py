@@ -89,5 +89,57 @@ assert dict_res["word"] == "持続可能"
 assert dict_res["level"] == "N2"
 print("Dictionary Lookup PASSED:", dict_res["word"], "->", dict_res["reading"])
 
+# 5. Test Stream Complete Idempotency
+from app.stream.service import complete_task, get_or_create_slots
+from models import Attempt, UserTextState, TaskSlot
+
+test_user = "test-user-idempotency"
+slots = get_or_create_slots(db, user_id=test_user, profile_key="N5:short")
+first_slot = [s for s in slots if s["state"] == "active"][0]
+target_text_id = first_slot["text"]["id"]
+target_read = get_text_for_reading(target_text_id, db)
+sample_answers = [{"question_id": q.id, "selected_option_id": q.options[0].id} for q in target_read.questions]
+idem_key = "test-idem-key-duplicate-check-999"
+
+# First submission
+res1 = complete_task(
+    db=db,
+    user_id=test_user,
+    text_id=target_text_id,
+    answers=sample_answers,
+    idempotency_key=idem_key,
+    mode="first",
+    solved_when="all_questions_answered"
+)
+assert res1["is_solved"] is True
+attempt_count_1 = db.query(Attempt).filter(Attempt.user_id == test_user, Attempt.text_id == target_text_id).count()
+assert attempt_count_1 == 1
+
+# Second submission with the IDENTICAL idempotency key (simulating network retry)
+res2 = complete_task(
+    db=db,
+    user_id=test_user,
+    text_id=target_text_id,
+    answers=sample_answers,
+    idempotency_key=idem_key,
+    mode="first",
+    solved_when="all_questions_answered"
+)
+assert res2["is_solved"] is True
+assert res2["text_id"] == target_text_id
+assert res2["score_percent"] == res1["score_percent"]
+
+# Verify strict idempotency: no duplicate attempts, no duplicate UserTextState
+attempt_count_2 = db.query(Attempt).filter(Attempt.user_id == test_user, Attempt.text_id == target_text_id).count()
+assert attempt_count_2 == 1, f"Idempotency failed: expected 1 attempt, found {attempt_count_2}"
+
+state_count = db.query(UserTextState).filter(UserTextState.user_id == test_user, UserTextState.text_id == target_text_id).count()
+assert state_count == 1, f"Idempotency failed: duplicate UserTextState created ({state_count})"
+
+user_state_rec = db.query(UserTextState).filter(UserTextState.user_id == test_user, UserTextState.text_id == target_text_id).first()
+assert user_state_rec.attempts_count == 1, f"Idempotency failed: attempts_count incremented to {user_state_rec.attempts_count}"
+
+print("Stream Complete Idempotency PASSED: Repeated submission with same idempotency_key returns identical analysis without duplicate records or slot corruption.")
+
 db.close()
 print("ALL BACKEND & ANTI-CHEAT TESTS PASSED!")

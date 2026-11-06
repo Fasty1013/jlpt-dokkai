@@ -226,6 +226,19 @@ def complete_task(
     # 1. Проверка идемпотентности: если попытка с таким ключом уже была, возвращаем сохраненный ответ
     existing_attempt = db.query(Attempt).filter(Attempt.idempotency_key == idempotency_key).first()
     if existing_attempt:
+        user_state = (
+            db.query(UserTextState)
+            .filter(UserTextState.user_id == user_id, UserTextState.text_id == text_id)
+            .first()
+        )
+        if user_state and user_state.status != "solved":
+            return {
+                "is_solved": False,
+                "error_question_ids": user_state.error_question_ids or [],
+                "attempts_used": user_state.attempts_count,
+                "attempts_max": all_correct_max_attempts,
+                "message": "Допущены ошибки в вопросах. Перепроверьте текст."
+            }
         return get_solved_task_details(db, user_id, text_id, existing_attempt.score, is_retry=(existing_attempt.mode != "first"))
 
     text = (
