@@ -59,6 +59,9 @@
 | 27 | **`window.wizardGoNext`**, `wizardGoPrev`, `renderWizard`, `startExercise` | `static/js/features/exercise/index.js` | Кнопки навигации визарда, `submitAnswers`, восстановление сессии | Обратная совместимость с глобальными вызовами из монолита | **Шаг 6** |
 | 28 | **`window.DokkaiAnalysis`** | `static/js/features/analysis/index.js` | `app.js:545-585` (обёртки сабмита и анализа) | Пространство имён экрана анализа и сабмита | **Шаг 9** (замена на прямой `import` в точку входа) |
 | 29 | **`window.submitAnswers`**, `renderAnalysisView`, `renderAnalysisTabs`, `toggleEvidence`, `toggleFurigana`, `toggleSupplementaryDrawer` | `static/js/features/analysis/index.js` | Кнопка сабмита, переключатели фуриганы/evidence/drawer | Обратная совместимость с глобальными вызовами из монолита | **Шаг 6** |
+| 30 | **`window.DokkaiSpeech`**, `window.speakJapanese` | `static/js/features/speech/index.js` | `app.js:615`, кнопки `btn-speak-saved`, карточка popup | Озвучка японского текста (Web Speech API) | **Шаг 6** / **Шаг 9** |
+| 31 | **`window.DokkaiNotebook`**, `window.getSavedWords`, `saveWordsToStorage`, `updateNotebookBadge`, `isWordSaved`, `toggleSaveWord`, `clearAllSavedWords`, `renderNotebookWords` | `static/js/features/notebook/index.js` | `app.js:630-662`, переключение табов, сохранение слов | Управление персональным блокнотом слов и статистика | **Шаг 6** / **Шаг 7** |
+| 32 | **`window.DokkaiDictionary`**, `window.showPopupDictionary`, `hidePopupDictionary`, `lookupAndShowWord`, `togglePopupDictStatus` | `static/js/features/dictionary/index.js` | `app.js:664-690`, клики по руби/тексту, ховер | Интерактивный всплывающий словарь Yomichan | **Шаг 6** |
 
 ---
 
