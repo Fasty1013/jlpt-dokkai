@@ -34,6 +34,7 @@ async function runScenario(baseUrl, outputFilename) {
           const parsed = JSON.parse(raw);
           if (parsed.user_id) parsed.user_id = '<USER_ID>';
           if (parsed.time_spent_sec !== undefined) parsed.time_spent_sec = '<TIME_SPENT>';
+          if (parsed.idempotency_key) parsed.idempotency_key = '<IDEMPOTENCY_KEY>';
           postData = parsed;
         }
       } catch {
@@ -42,6 +43,7 @@ async function runScenario(baseUrl, outputFilename) {
 
       // Extract normalized path (e.g. /api/texts/123 -> /api/texts/<TEXT_ID>)
       const normalizedPath = parsedUrl.pathname
+        .replace(/\/api\/texts\/\d+\/report/, '/api/texts/<TEXT_ID>/report')
         .replace(/\/api\/texts\/\d+/, '/api/texts/<TEXT_ID>')
         .replace(/\/api\/stream\/tasks\/\d+\/complete/, '/api/stream/tasks/<TEXT_ID>/complete')
         .replace(/\/api\/stream\/solved\/\d+/, '/api/stream/solved/<SOLVED_ID>');
@@ -59,38 +61,77 @@ async function runScenario(baseUrl, outputFilename) {
     }
   });
 
-  // 1. Каталог
+  // 1. Каталог (начальная загрузка)
   await page.goto(baseUrl);
-  await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
+  await page.waitForSelector('#active-slots-list .stream-slot-card, #active-slots-list .stream-slot-placeholder', { timeout: 15000 });
   await page.waitForTimeout(500);
 
-  // 2. Открыть задание
-  const firstSlotBtn = page.locator('#active-slots-list .stream-slot-card button').first();
-  await firstSlotBtn.click();
-  await page.waitForSelector('#pretest-modal-backdrop', { timeout: 10000 });
-  await page.click('#modal-btn-start');
-  await page.waitForSelector('#exercise-view', { timeout: 10000 });
-  await page.waitForTimeout(500);
+  // 2. Переключение уровней N5 -> N4 -> N3 -> N2 -> N1 -> N5
+  for (const lvl of ['N4', 'N3', 'N2', 'N1', 'N5']) {
+    const lvlBtn = page.locator(`#stream-level-pills .filter-pill[data-level="${lvl}"]`);
+    if (await lvlBtn.isVisible()) {
+      await lvlBtn.click();
+      await page.waitForTimeout(400);
+    }
+  }
 
-  // 3. Ответить
-  const option = page.locator('.option-item').first();
-  await option.click();
-  await page.waitForTimeout(300);
+  // 3. Смена формата: medium -> long -> info_search -> short
+  for (const cat of ['medium', 'long', 'info_search', 'short']) {
+    const catBtn = page.locator(`#stream-category-pills .filter-pill[data-category="${cat}"]`);
+    if (await catBtn.isVisible()) {
+      await catBtn.click();
+      await page.waitForTimeout(400);
+    }
+  }
 
-  while (await page.locator('#wizard-btn-next:visible').count() > 0) {
-    await page.click('#wizard-btn-next');
+  // 4. «Условие сдачи»
+  const modeCorrect = page.locator('#stream-mode-pills .filter-pill[data-solved-when="all_correct"]');
+  if (await modeCorrect.isVisible()) {
+    await modeCorrect.click();
     await page.waitForTimeout(300);
-    const nextOpt = page.locator('.option-item').first();
-    if (await nextOpt.isVisible()) await nextOpt.click();
+  }
+  const modeAll = page.locator('#stream-mode-pills .filter-pill[data-solved-when="all_questions_answered"]');
+  if (await modeAll.isVisible()) {
+    await modeAll.click();
+    await page.waitForTimeout(300);
   }
 
-  const submitBtn = page.locator('#wizard-btn-submit');
-  if (await submitBtn.isVisible()) {
-    await submitBtn.click();
+  // 5. Обновление слотов
+  const btnRefresh = page.locator('#btn-refresh-slots');
+  if (await btnRefresh.isVisible()) {
+    await btnRefresh.click();
+    await page.waitForTimeout(500);
   }
-  await page.waitForTimeout(1000);
 
-  // 4. Разбор и обращение к решённому заданию
+  // 6. Открыть задание (через предстартовое окно)
+  const firstSlotBtn = page.locator('#active-slots-list .stream-slot-card button').first();
+  if (await firstSlotBtn.isVisible()) {
+    await firstSlotBtn.click();
+    await page.waitForSelector('#pretest-modal-backdrop', { timeout: 10000 });
+    await page.click('#modal-btn-start');
+    await page.waitForSelector('#exercise-view', { timeout: 10000 });
+    await page.waitForTimeout(500);
+
+    // 7. Ответить
+    const option = page.locator('.option-item').first();
+    if (await option.isVisible()) await option.click();
+    await page.waitForTimeout(300);
+
+    while (await page.locator('#wizard-btn-next:visible').count() > 0) {
+      await page.click('#wizard-btn-next');
+      await page.waitForTimeout(300);
+      const nextOpt = page.locator('.option-item').first();
+      if (await nextOpt.isVisible()) await nextOpt.click();
+    }
+
+    const submitBtn = page.locator('#wizard-btn-submit');
+    if (await submitBtn.isVisible()) {
+      await submitBtn.click();
+      await page.waitForTimeout(1000);
+    }
+  }
+
+  // 8. Разбор и обращение к решённому заданию
   await page.evaluate(async () => {
     try {
       const res = await fetch('/api/stream/solved?user_id=test-compare-user&level=N5');
@@ -100,9 +141,9 @@ async function runScenario(baseUrl, outputFilename) {
       }
     } catch (e) {}
   });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
-  // 5. Словарь
+  // 9. Словарь
   await page.evaluate(async () => {
     try {
       await fetch('/api/dictionary/lookup', {
@@ -112,19 +153,40 @@ async function runScenario(baseUrl, outputFilename) {
       });
     } catch (e) {}
   });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
-  // 6. Решённые (возврат в каталог)
-  const backBtn = page.locator('#btn-abort-exercise, #btn-back-to-catalog, button:has-text("На главную")').first();
-  if (await backBtn.isVisible()) {
-    await backBtn.click();
+  // 10. «Решённые» с фильтрами («Все / 100% / С ошибками»)
+  const btnHome = page.locator('#btn-home');
+  if (await btnHome.isVisible()) {
+    await btnHome.click();
   } else {
     await page.goto(baseUrl);
   }
   await page.waitForSelector('#active-slots-list', { timeout: 15000 });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
-  // 7. Жалоба
+  // Filter 100%
+  const filterPerfect = page.locator('#solved-filter-pills button[data-solved-filter="perfect"]');
+  if (await filterPerfect.isVisible()) {
+    await filterPerfect.click();
+    await page.waitForTimeout(400);
+  }
+
+  // Filter С ошибками
+  const filterErrors = page.locator('#solved-filter-pills button[data-solved-filter="errors"]');
+  if (await filterErrors.isVisible()) {
+    await filterErrors.click();
+    await page.waitForTimeout(400);
+  }
+
+  // Filter Все
+  const filterAll = page.locator('#solved-filter-pills button[data-solved-filter="all"]');
+  if (await filterAll.isVisible()) {
+    await filterAll.click();
+    await page.waitForTimeout(400);
+  }
+
+  // 11. Жалоба
   await page.evaluate(async () => {
     try {
       await fetch('/api/texts/1/report', {
@@ -132,13 +194,13 @@ async function runScenario(baseUrl, outputFilename) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           user_id: 'test-compare-user',
-          reason: 'typo',
+          reason: 'Опечатка в тексте или вопросе',
           details: 'Тестовая жалоба для аудита сетевых логов'
         })
       });
     } catch (e) {}
   });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
   await browser.close();
 

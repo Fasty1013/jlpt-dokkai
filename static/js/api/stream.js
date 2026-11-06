@@ -46,8 +46,10 @@ export async function fetchSolvedTasks({ userId, level = '', filter = 'all' }) {
   if (level) {
     query.append('level', level);
   }
-  if (filter && filter !== 'all') {
-    query.append('filter', filter);
+  if (filter === 'perfect') {
+    query.append('only_perfect', 'true');
+  } else if (filter === 'errors') {
+    query.append('only_errors', 'true');
   }
   query.append('_t', Date.now().toString());
 
