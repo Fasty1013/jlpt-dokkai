@@ -127,9 +127,15 @@ python run_agents.py --check
 
 ## 🧪 Автотесты и тестовый режим (DOKKAI_TEST_MODE)
 
-В проекте настроен полный сьют интеграционных и E2E тестов:
+В проекте настроен полный сьют интеграционных, E2E и визуальных тестов:
 - **Backend / Anti-Cheat тесты:** `python test_api.py` (или `python run_agents.py --check`)
 - **E2E Playwright тесты:** `cd tests/qa && npx playwright test`
+- **Пиксельное сравнение экранов (Pixel Diff):** `python tools/pixel_diff.py`
+- **Проверка вычисленных стилей (Style Protection, обязательный Pre-Merge Check):**
+  ```bash
+  node tools/compare_computed_styles.cjs
+  ```
+  *Скрипт автоматически сравнивает вычисленные стили (`getComputedStyle` по 38 свойствам, включая `:hover` и `:focus`) между `main` (порт 8001) и веткой (порт 8000) по 9 ключевым экранам. Допуск: строго 0 расхождений.*
 
 ### Переменная окружения `DOKKAI_TEST_MODE`:
 Для безопасного тестирования динамического обновления версий Service Worker (тест деплоя новой версии) бэкенд проверяет флаг `DOKKAI_TEST_MODE=1`.

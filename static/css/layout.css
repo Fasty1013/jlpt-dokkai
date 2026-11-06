@@ -163,18 +163,10 @@
 }
 
 .btn-add-timer {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
     background: #fffdf5;
-    border: none;
     color: #92400e;
     padding: 0.35rem 0.85rem;
-    border-radius: var(--radius-md);
     font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .btn-add-timer:hover {
