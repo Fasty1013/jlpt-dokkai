@@ -2,9 +2,6 @@
  * JLPT Dokkai Master - Formatting Utilities
  */
 
-import { formatTime } from '../../utils/time.js';
-import { escapeHtml } from '../../utils/dom.js';
-
 /**
  * Format bytes into human-readable file size (e.g. "1.2 MB").
  * @param {number} bytes
@@ -17,5 +14,3 @@ export function formatFileSize(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
-
-export { formatTime, escapeHtml };

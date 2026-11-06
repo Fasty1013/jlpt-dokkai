@@ -32,6 +32,7 @@ const PRECACHE_ASSETS = [
   '/static/js/utils/dom.js?v=2.1.0',
   '/static/js/utils/time.js?v=2.1.0',
   '/static/js/utils/math.js?v=2.1.0',
+  '/static/js/utils/format.js?v=2.1.0',
   '/static/js/utils/index.js?v=2.1.0',
   '/static/js/api/client.js?v=2.1.0',
   '/static/js/api/stream.js?v=2.1.0',
@@ -43,7 +44,6 @@ const PRECACHE_ASSETS = [
   '/static/js/features/timer/index.js?v=2.1.0',
   '/static/js/features/settings/reader_settings.js?v=2.1.0',
   '/static/js/features/settings/index.js?v=2.1.0',
-  '/static/js/features/formatting/formatters.js?v=2.1.0',
   '/static/js/features/formatting/config.js?v=2.1.0',
   '/static/js/features/formatting/index.js?v=2.1.0'
 ];

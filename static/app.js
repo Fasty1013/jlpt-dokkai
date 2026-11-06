@@ -8,12 +8,13 @@
 // ============================================================================
 
 // ============================================================================
-// Core Utility & Configuration Delegates (Source of truth: static/js/utils/ & formatting/)
+// Core Utility Delegates (Single Source of Truth: static/js/utils/)
 // ============================================================================
 
-function escapeHtml(str) {
-    return window.DokkaiUtils ? window.DokkaiUtils.escapeHtml(str) : (window.escapeHtml ? window.escapeHtml(str) : '');
-}
+const escapeHtml = (str) => (window.DokkaiUtils ? window.DokkaiUtils.escapeHtml(str) : (window.escapeHtml ? window.escapeHtml(str) : ''));
+const getUserId = () => (window.DokkaiUtils ? window.DokkaiUtils.getUserId() : (window.getUserId ? window.getUserId() : ''));
+const formatTime = (totalSeconds) => (window.DokkaiUtils ? window.DokkaiUtils.formatTime(totalSeconds) : (window.formatTime ? window.formatTime(totalSeconds) : ''));
+const formatFileSize = (bytes) => (window.DokkaiUtils ? window.DokkaiUtils.formatFileSize(bytes) : (window.formatFileSize ? window.formatFileSize(bytes) : '0 B'));
 
 const CONFIG_STORAGE_KEY = 'dokkai_pretest_config';
 
@@ -23,10 +24,6 @@ function loadStoredConfig() {
 
 function saveStoredConfig(config) {
     return window.DokkaiFormatting.saveStoredConfig(config);
-}
-
-function getUserId() {
-    return window.DokkaiUtils.getUserId();
 }
 
 const state = {
@@ -334,10 +331,6 @@ const CATEGORY_NAMES = {
     'info_search': '情報検索 (Поиск инфо)',
     'article': '記事・論説 (Статьи)'
 };
-
-function formatTime(totalSeconds) {
-    return window.DokkaiUtils ? window.DokkaiUtils.formatTime(totalSeconds) : (window.formatTime ? window.formatTime(totalSeconds) : '');
-}
 
 // ============================================================================
 // Timer Functions (Delegated to static/js/features/timer/)
@@ -1851,10 +1844,6 @@ function returnToCatalog(pushState = true) {
 // ============================================================================
 
 let currentDraftsCache = [];
-
-function formatFileSize(bytes) {
-    return window.DokkaiFormatting.formatFileSize(bytes);
-}
 
 function handlePdfFileSelected(file) {
     if (!file) return;

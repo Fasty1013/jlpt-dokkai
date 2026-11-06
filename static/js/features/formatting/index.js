@@ -1,11 +1,10 @@
 /**
- * JLPT Dokkai Master - Formatting & Pure Helpers Barrel Export
+ * JLPT Dokkai Master - Formatting & Pretest Config Barrel Export
  * Exposes ES modules and window.DokkaiFormatting bridge.
  */
 
-import { formatFileSize, formatTime, escapeHtml } from './formatters.js';
 import { CONFIG_STORAGE_KEY, loadStoredConfig, saveStoredConfig } from './config.js';
-import { getUserId } from '../../utils/user.js';
+import { formatFileSize, formatTime, escapeHtml, getUserId } from '../../utils/index.js';
 
 export {
   formatFileSize,
@@ -29,8 +28,6 @@ if (typeof window !== 'undefined') {
   };
 
   // Direct function bridges on window for compatibility
-  window.formatFileSize = formatFileSize;
-  window.escapeHtml = escapeHtml;
   window.loadStoredConfig = loadStoredConfig;
   window.saveStoredConfig = saveStoredConfig;
 }

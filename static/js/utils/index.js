@@ -7,13 +7,15 @@ import { getUserId } from './user.js';
 import { escapeHtml } from './dom.js';
 import { formatTime, formatLocaleDate } from './time.js';
 import { calculateScorePercent } from './math.js';
+import { formatFileSize } from './format.js';
 
 export {
   getUserId,
   escapeHtml,
   formatTime,
   formatLocaleDate,
-  calculateScorePercent
+  calculateScorePercent,
+  formatFileSize
 };
 
 if (typeof window !== 'undefined') {
@@ -22,7 +24,8 @@ if (typeof window !== 'undefined') {
     escapeHtml,
     formatTime,
     formatLocaleDate,
-    calculateScorePercent
+    calculateScorePercent,
+    formatFileSize
   };
 
   // Direct function bridges on window
@@ -31,4 +34,5 @@ if (typeof window !== 'undefined') {
   window.formatTime = formatTime;
   window.formatLocaleDate = formatLocaleDate;
   window.calculateScorePercent = calculateScorePercent;
+  window.formatFileSize = formatFileSize;
 }
