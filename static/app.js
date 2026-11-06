@@ -543,357 +543,66 @@ function wizardGoPrev() {
 // ============================================================================
 
 async function submitAnswers() {
-    const totalQuestions = state.activeText.questions.length;
-    const answeredCount = Object.keys(state.userAnswers).length;
-
-    if (answeredCount < totalQuestions) {
-        alert('Пожалуйста, ответьте на все вопросы перед отправкой!');
-        return;
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.submitAnswers) {
+        return window.DokkaiAnalysis.submitAnswers({
+            state,
+            elements,
+            handleSlotReplacement,
+            fetchAndRenderSlots,
+            fetchAndRenderSolvedTasks,
+            stopTimer,
+            getUserId,
+            renderWizard
+        });
     }
-
-    stopTimer();
-    const timeSpent = state.timer.secondsSpent;
-
-    const answersPayload = Object.entries(state.userAnswers).map(([qId, optId]) => ({
-        question_id: parseInt(qId, 10),
-        selected_option_id: parseInt(optId, 10)
-    }));
-
-    try {
-        elements.btnWizardSubmit.disabled = true;
-        elements.btnWizardSubmit.textContent = 'Проверка ответов...';
-
-        state.currentSubmitIdempotencyKey = state.currentSubmitIdempotencyKey || ('idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
-        const idempotencyKey = state.currentSubmitIdempotencyKey;
-        const solvedWhen = state.streamProfile.solvedWhen || 'all_questions_answered';
-
-        let streamResult;
-        const payload = {
-            user_id: getUserId(),
-            text_id: state.activeText.id,
-            answers: answersPayload,
-            idempotency_key: idempotencyKey,
-            mode: state.isRetryMode ? 'retry' : 'first',
-            solved_when: solvedWhen,
-            all_correct_max_attempts: 2
-        };
-
-        if (window.DokkaiApi && window.DokkaiApi.completeStreamTask) {
-            streamResult = await window.DokkaiApi.completeStreamTask(payload);
-        } else {
-            const response = await fetch('/api/stream/complete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) throw new Error('Ошибка сервера при проверке ответов');
-            streamResult = await response.json();
-        }
-
-        // Если режим "all_correct" и есть ошибки (задание еще не решено)
-        if (!streamResult.is_solved) {
-            const errCount = streamResult.error_question_ids ? streamResult.error_question_ids.length : 1;
-            alert(`Внимательно перепроверьте свои ответы! В ${errCount} вопросах допущены ошибки. Попытка ${streamResult.attempts_used} из ${streamResult.attempts_max}.`);
-
-            // Сбрасываем выбор только в ошибочных вопросах, не сливая правильные ответы!
-            if (streamResult.error_question_ids) {
-                streamResult.error_question_ids.forEach(qid => {
-                    delete state.userAnswers[qid];
-                });
-            }
-            elements.btnWizardSubmit.disabled = false;
-            elements.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
-            state.currentSubmitIdempotencyKey = null; // Reset key for next trial
-            // Перерисовываем Wizard для исправления ошибок
-            renderWizard();
-            return;
-        }
-
-        // Задание успешно завершено (solved)
-        state.currentSubmitIdempotencyKey = null; // Submission succeeded, clear key
-        const analysisData = streamResult;
-        state.activeText = analysisData;
-        state.currentView = 'analysis';
-        state.analysisActiveTabIdx = 0;
-
-        // PERSISTENCE: Save to DokkaiStorage and clear active in-progress session
-        if (window.DokkaiStorage) {
-            try {
-                await window.DokkaiStorage.recordSolvedTask({
-                    text_id: state.activeText.id,
-                    title: state.activeText.title,
-                    level: state.activeText.level,
-                    category: state.activeText.category,
-                    score: analysisData.score_percent,
-                    score_percent: analysisData.score_percent,
-                    last_score: analysisData.score_percent,
-                    correct_count: analysisData.correct_count,
-                    total_questions: analysisData.total_questions,
-                    perfect: (analysisData.score_percent === 100),
-                    time_spent_sec: timeSpent,
-                    solved_at: new Date().toISOString()
-                });
-                await window.DokkaiStorage.clearActiveSession();
-            } catch (err) {
-                console.warn('[Dokkai] Failed to record solved task to local storage:', err);
-            }
-        }
-
-        renderAnalysisView(analysisData);
-
-        // Атомарно передаем замену слота для плавной анимации
-        if (analysisData.replacement) {
-            handleSlotReplacement(analysisData.text_id, analysisData.replacement);
-        } else {
-            fetchAndRenderSlots();
-        }
-        fetchAndRenderSolvedTasks();
-
-    } catch (err) {
-        console.error(err);
-        alert(err.message || 'Не удалось отправить ответы на проверку. Ваши ответы сохранены.');
-        elements.btnWizardSubmit.disabled = false;
-        elements.btnWizardSubmit.textContent = 'Повторить отправку ответов ↻';
-    }
+    throw new Error('DokkaiAnalysis feature module is not loaded');
 }
 
 function renderAnalysisView(data) {
-    // Hide Wizard Controls
-    elements.wizardHeader.classList.add('hidden');
-    elements.wizardCardArea.classList.add('hidden');
-    elements.wizardNavBar.classList.add('hidden');
-
-    // Show Analysis Banner & Tabbed Area
-    elements.analysisBanner.classList.remove('hidden');
-    elements.analysisQAContainer.classList.remove('hidden');
-
-    elements.scoreText.textContent = `${data.correct_count} / ${data.total_questions}`;
-    elements.scorePercent.textContent = `${data.score_percent}% ВЕРНО`;
-
-    if (data.score_percent === 100) {
-        elements.bannerResultTitle.textContent = '🎉 Великолепно! Все ответы верны!';
-    } else if (data.score_percent >= 50) {
-        elements.bannerResultTitle.textContent = '👍 Хорошая работа!';
-    } else {
-        elements.bannerResultTitle.textContent = '💪 Требуется практика.';
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.renderAnalysisView) {
+        return window.DokkaiAnalysis.renderAnalysisView(data, state, elements);
     }
-
-    const spentTimeFormatted = formatTime(data.time_spent_sec || 0);
-    if (state.timer.enabled) {
-        const targetFormatted = formatTime(state.timer.totalSeconds);
-        const inLimit = (data.time_spent_sec || 0) <= state.timer.totalSeconds;
-        elements.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} из ${targetFormatted} (${inLimit ? 'Уложились в лимит ✅' : 'Лимит превышен ⏱️'})`;
-    } else {
-        elements.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} | Режим: Свободное чтение без таймера`;
-    }
-
-    const allowHints = state.pretestConfig.showHintsAndAnalysis;
-
-    if (allowHints) {
-        state.settings.evidenceVisible = true;
-        elements.passageContent.classList.add('show-evidence');
-        elements.evidenceStatus.textContent = 'ВКЛ';
-        elements.btnToggleEvidence.classList.remove('hidden');
-        elements.btnToggleTranslation.classList.remove('hidden');
-        elements.btnToggleVocab.classList.remove('hidden');
-        elements.vocabCountBadge.textContent = data.vocabulary ? data.vocabulary.length : 0;
-
-        // Prepare Russian Translation & Vocabulary
-        elements.translationText.textContent = data.translation_ru || 'Перевод недоступен.';
-        elements.vocabList.innerHTML = (data.vocabulary && data.vocabulary.length > 0)
-            ? data.vocabulary.map(v => `
-                <div class="vocab-row">
-                    <span class="vocab-word">${v.word}</span>
-                    <span class="vocab-furigana">[${v.furigana}]</span>
-                    <span class="vocab-trans">${v.translation}</span>
-                </div>
-            `).join('')
-            : '<p style="color: var(--sumi-500);">Словарь пуст.</p>';
-    } else {
-        state.settings.evidenceVisible = false;
-        elements.passageContent.classList.remove('show-evidence');
-        elements.btnToggleEvidence.classList.add('hidden');
-        elements.btnToggleTranslation.classList.add('hidden');
-        elements.btnToggleVocab.classList.add('hidden');
-        elements.supplementaryDrawer.classList.add('hidden');
-    }
-
-    // Render Analysis Tabs
-    renderAnalysisTabs();
 }
 
 function renderAnalysisTabs() {
-    const questions = state.activeText.questions;
-    const activeIdx = state.analysisActiveTabIdx;
-
-    elements.analysisTabs.innerHTML = questions.map((q, idx) => {
-        const isActive = idx === activeIdx;
-        const isCorrect = q.is_user_correct;
-        return `
-            <button class="analysis-tab-btn ${isActive ? 'active' : ''}" onclick="switchAnalysisTab(${idx})">
-                <span class="analysis-tab-status ${isCorrect ? 'correct' : 'wrong'}"></span>
-                Вопрос №${q.question_number}
-            </button>
-        `;
-    }).join('');
-
-    renderAnalysisActiveCard(questions[activeIdx]);
-}
-
-function switchAnalysisTab(idx) {
-    state.analysisActiveTabIdx = idx;
-    renderAnalysisTabs();
-}
-
-function renderAnalysisActiveCard(q) {
-    const allowHints = state.pretestConfig.showHintsAndAnalysis;
-
-    elements.analysisActiveCard.innerHTML = `
-        <div class="question-card" id="card-q-${q.id}">
-            <div class="question-top">
-                <span class="question-num-badge">№${q.question_number}</span>
-                <p class="question-prompt">${q.question_text}</p>
-                <span class="option-status-badge ${q.is_user_correct ? 'badge-correct' : 'badge-user-wrong'}">
-                    ${q.is_user_correct ? '✓ Верно' : '✗ Ошибка'}
-                </span>
-            </div>
-
-            <div class="options-group">
-                ${q.options.map(opt => {
-        let stateClass = '';
-        let badgeHtml = '';
-        let explanationBoxHtml = '';
-
-        if (opt.is_correct) {
-            stateClass = 'state-correct';
-            badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
-        } else if (opt.was_selected) {
-            stateClass = 'state-wrong-selected';
-            badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
-        }
-
-        if (allowHints && opt.option_explanation) {
-            const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
-            const trapBadge = (!opt.is_correct && opt.trap_type && TRAP_LABELS[opt.trap_type])
-                ? `<div class="trap-type-pill">⚠️ ${escapeHtml(TRAP_LABELS[opt.trap_type])}</div>`
-                : '';
-            explanationBoxHtml = `
-                            <div class="option-explanation-box ${expClass}">
-                                ${trapBadge}
-                                <div>${opt.option_explanation}</div>
-                            </div>
-                        `;
-        }
-
-        return `
-                        <div class="option-item ${stateClass}">
-                            <div class="option-label">
-                                <input 
-                                    type="radio" 
-                                    disabled 
-                                    ${opt.was_selected ? 'checked' : ''} 
-                                    class="option-radio"
-                                >
-                                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
-                                ${badgeHtml}
-                            </div>
-                            ${explanationBoxHtml}
-                        </div>
-                    `;
-    }).join('')}
-            </div>
-
-            <!-- General question analysis & Evidence locator -->
-            ${allowHints ? `
-                <div class="question-general-explanation">
-                    <strong>💡 Разбор вопроса:</strong>
-                    <p style="margin-top: 0.35rem;">${q.general_explanation}</p>
-                    ${q.evidence_span_id ? `
-                        <button type="button" class="btn-locate-evidence" onclick="locateEvidenceInText('${q.evidence_span_id}')">
-                            📍 Показать доказательство в тексте
-                        </button>
-                    ` : ''}
-                </div>
-            ` : `
-                <div class="question-general-explanation" style="background: #fafaf9; border-left-color: var(--sumi-400); color: var(--sumi-500); font-style: italic;">
-                    Разбор и подсказки скрыты в соответствии с вашими предварительными настройками.
-                </div>
-            `}
-        </div>
-    `;
-
-    // Automatically highlight the evidence for this question if hints are enabled
-    if (allowHints && q.evidence_span_id) {
-        locateEvidenceInText(q.evidence_span_id);
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.renderAnalysisTabs) {
+        return window.DokkaiAnalysis.renderAnalysisTabs(state, elements);
     }
 }
 
-// ============================================================================
-// Interactive Study Tools
-// ============================================================================
+function switchAnalysisTab(idx) {
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.switchAnalysisTab) {
+        return window.DokkaiAnalysis.switchAnalysisTab(idx, state, elements);
+    }
+}
+
+function renderAnalysisActiveCard(q) {
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.renderAnalysisActiveCard) {
+        return window.DokkaiAnalysis.renderAnalysisActiveCard(q, state, elements);
+    }
+}
 
 function toggleFurigana() {
-    state.settings.furiganaVisible = !state.settings.furiganaVisible;
-    if (state.settings.furiganaVisible) {
-        elements.passageContent.classList.remove('hide-furigana');
-        elements.furiganaStatus.textContent = 'ВКЛ';
-        elements.btnToggleFurigana.classList.add('active');
-    } else {
-        elements.passageContent.classList.add('hide-furigana');
-        elements.furiganaStatus.textContent = 'ВЫКЛ';
-        elements.btnToggleFurigana.classList.remove('active');
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.toggleFurigana) {
+        return window.DokkaiAnalysis.toggleFurigana(state, elements);
     }
 }
 
 function toggleEvidence() {
-    if (!state.pretestConfig.showHintsAndAnalysis) return;
-
-    state.settings.evidenceVisible = !state.settings.evidenceVisible;
-    if (state.settings.evidenceVisible) {
-        elements.passageContent.classList.add('show-evidence');
-        elements.evidenceStatus.textContent = 'ВКЛ';
-        elements.btnToggleEvidence.classList.add('active');
-    } else {
-        elements.passageContent.classList.remove('show-evidence');
-        elements.evidenceStatus.textContent = 'ВЫКЛ';
-        elements.btnToggleEvidence.classList.remove('active');
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.toggleEvidence) {
+        return window.DokkaiAnalysis.toggleEvidence(state, elements);
     }
 }
 
 function locateEvidenceInText(spanId) {
-    if (!state.pretestConfig.showHintsAndAnalysis) return;
-
-    if (!state.settings.evidenceVisible) {
-        toggleEvidence();
-    }
-
-    document.querySelectorAll('.evidence-active-pulse').forEach(el => {
-        el.classList.remove('evidence-active-pulse');
-    });
-
-    const targetEl = document.getElementById(spanId);
-    if (targetEl) {
-        targetEl.classList.add('evidence-active-pulse');
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.locateEvidenceInText) {
+        return window.DokkaiAnalysis.locateEvidenceInText(spanId, state, elements);
     }
 }
 
 function toggleSupplementaryDrawer(type) {
-    if (!state.pretestConfig.showHintsAndAnalysis) return;
-
-    const isHidden = elements.supplementaryDrawer.classList.contains('hidden');
-    const transSec = document.getElementById('drawer-translation-section');
-    const vocabSec = document.getElementById('drawer-vocab-section');
-
-    if (isHidden) {
-        elements.supplementaryDrawer.classList.remove('hidden');
-        if (type === 'translation') {
-            transSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else if (type === 'vocab') {
-            vocabSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    } else {
-        elements.supplementaryDrawer.classList.add('hidden');
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.toggleSupplementaryDrawer) {
+        return window.DokkaiAnalysis.toggleSupplementaryDrawer(type, state, elements);
     }
 }
 

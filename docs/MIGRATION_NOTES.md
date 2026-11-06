@@ -57,6 +57,8 @@
 | 25 | **`window.DokkaiExercise`** | `static/js/features/exercise/index.js` | `app.js:498-535` (обёртки чтения и визарда вопросов) | Пространство имён режима чтения и визарда | **Шаг 9** (замена на прямой `import` в точку входа) |
 | 26 | **`window.handleOptionSelect`** | `static/js/features/exercise/index.js` | Инлайн `onchange="handleOptionSelect(...)"` в карточках опций (`wizard.js:106`) | Выбор варианта ответа в визарде через HTML-строку карточки | **Шаг 6** (перевод на `data-action="select-option"`) |
 | 27 | **`window.wizardGoNext`**, `wizardGoPrev`, `renderWizard`, `startExercise` | `static/js/features/exercise/index.js` | Кнопки навигации визарда, `submitAnswers`, восстановление сессии | Обратная совместимость с глобальными вызовами из монолита | **Шаг 6** |
+| 28 | **`window.DokkaiAnalysis`** | `static/js/features/analysis/index.js` | `app.js:545-585` (обёртки сабмита и анализа) | Пространство имён экрана анализа и сабмита | **Шаг 9** (замена на прямой `import` в точку входа) |
+| 29 | **`window.submitAnswers`**, `renderAnalysisView`, `renderAnalysisTabs`, `toggleEvidence`, `toggleFurigana`, `toggleSupplementaryDrawer` | `static/js/features/analysis/index.js` | Кнопка сабмита, переключатели фуриганы/evidence/drawer | Обратная совместимость с глобальными вызовами из монолита | **Шаг 6** |
 
 ---
 
