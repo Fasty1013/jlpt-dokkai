@@ -629,90 +629,36 @@ function speakJapanese(text) {
 }
 
 function getSavedWords() {
-    if (Array.isArray(state.savedWords) && state.savedWords.length > 0) {
-        return state.savedWords;
-    }
-    try {
-        const stored = localStorage.getItem(NOTEBOOK_STORAGE_KEY);
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                state.savedWords = parsed;
-                return state.savedWords;
-            }
-        }
-    } catch (e) {
-        console.warn('Failed to load saved words, using fallback []', e);
+    if (window.DokkaiNotebook && window.DokkaiNotebook.getSavedWords) {
+        return window.DokkaiNotebook.getSavedWords(state);
     }
     return Array.isArray(state.savedWords) ? state.savedWords : [];
 }
 
 async function saveWordsToStorage(words) {
-    state.savedWords = words;
-    try {
-        localStorage.setItem(NOTEBOOK_STORAGE_KEY, JSON.stringify(words));
-        updateNotebookBadge();
-        if (window.DokkaiStorage) {
-            for (const w of words) {
-                if (w && w.word) {
-                    await window.DokkaiStorage.saveWord(w, false);
-                }
-            }
-        }
-    } catch (e) {
-        console.warn('Failed to save words to storage', e);
+    if (window.DokkaiNotebook && window.DokkaiNotebook.saveWordsToStorage) {
+        return window.DokkaiNotebook.saveWordsToStorage(words, state, elements);
     }
+    state.savedWords = words;
 }
 
 function updateNotebookBadge() {
-    const words = getSavedWords();
-    const count = words.length;
-    if (elements.headerSavedCount) {
-        elements.headerSavedCount.textContent = count;
+    if (window.DokkaiNotebook && window.DokkaiNotebook.updateNotebookBadge) {
+        return window.DokkaiNotebook.updateNotebookBadge(elements, state);
     }
 }
 
 function isWordSaved(wordText) {
-    const words = getSavedWords();
-    return words.some(w => w.word === wordText);
+    if (window.DokkaiNotebook && window.DokkaiNotebook.isWordSaved) {
+        return window.DokkaiNotebook.isWordSaved(wordText, state);
+    }
+    return false;
 }
 
 async function toggleSaveWord(wordData) {
-    if (!wordData || !wordData.word) return;
-    let words = getSavedWords();
-    const existingIdx = words.findIndex(w => w.word === wordData.word);
-
-    if (existingIdx >= 0) {
-        const removed = words.splice(existingIdx, 1)[0];
-        saveWordsToStorage(words);
-        if (window.DokkaiStorage) {
-            await window.DokkaiStorage.removeWord(wordData.word);
-        }
-        if (elements.popupBtnSave) {
-            elements.popupBtnSave.classList.remove('is-saved');
-            elements.popupBtnSaveText.textContent = 'В мой словарь';
-        }
-    } else {
-        const newWord = {
-            id: Date.now(),
-            word: wordData.word,
-            reading: wordData.reading || '',
-            meaning: wordData.meaning || '',
-            level: wordData.level || 'JLPT',
-            mastered: false,
-            date: new Date().toLocaleDateString()
-        };
-        words.unshift(newWord);
-        saveWordsToStorage(words);
-        if (window.DokkaiStorage) {
-            await window.DokkaiStorage.saveWord(newWord, true);
-        }
-        if (elements.popupBtnSave) {
-            elements.popupBtnSave.classList.add('is-saved');
-            elements.popupBtnSaveText.textContent = '✓ В словаре';
-        }
+    if (window.DokkaiNotebook && window.DokkaiNotebook.toggleSaveWord) {
+        return window.DokkaiNotebook.toggleSaveWord(wordData, state, elements, renderNotebookWords);
     }
-    renderNotebookWords();
 }
 
 function showPopupDictionary(wordData, clientX, clientY) {
@@ -877,85 +823,14 @@ function switchMainTab(tabName, pushState = true) {
 }
 
 function renderNotebookWords() {
-    const allWords = getSavedWords();
-    const safeWords = Array.isArray(allWords) ? allWords : [];
-    const filter = state.notebookFilter || 'all';
-    const query = (state.notebookSearchQuery || '').toLowerCase().trim();
-
-    const countAll = safeWords.length;
-    const countLearned = safeWords.filter(w => w && w.mastered).length;
-    const countLearning = countAll - countLearned;
-
-    if (elements.notebookCountAll) elements.notebookCountAll.textContent = countAll;
-    if (elements.notebookCountLearning) elements.notebookCountLearning.textContent = countLearning;
-    if (elements.notebookCountLearned) elements.notebookCountLearned.textContent = countLearned;
-    if (elements.headerSavedCount) elements.headerSavedCount.textContent = countAll;
-    if (elements.notebookStatsText) elements.notebookStatsText.textContent = `Всего сохранённых слов: ${countAll}`;
-
-    // Filter words safely
-    let filtered = safeWords;
-    if (filter === 'learning') {
-        filtered = filtered.filter(w => w && !w.mastered);
-    } else if (filter === 'learned') {
-        filtered = filtered.filter(w => w && w.mastered);
+    if (window.DokkaiNotebook && window.DokkaiNotebook.renderNotebookWords) {
+        return window.DokkaiNotebook.renderNotebookWords(elements, state);
     }
-
-    if (query) {
-        filtered = filtered.filter(w =>
-            (w.word && w.word.toLowerCase().includes(query)) ||
-            (w.reading && w.reading.toLowerCase().includes(query)) ||
-            (w.meaning && w.meaning.toLowerCase().includes(query))
-        );
-    }
-
-    const container = elements.notebookWordsList;
-    if (!container) return;
-
-    if (!filtered || filtered.length === 0) {
-        container.innerHTML = `
-            <div class="notebook-empty-state">
-                <div class="notebook-empty-icon">📖</div>
-                <p>В словаре пока нет сохранённых слов.</p>
-                <small>Выделяйте или кликайте на любые японские слова в текстах, чтобы посмотреть перевод и добавить их в свой персональный словарь.</small>
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = filtered.map(w => {
-        const wordText = escapeHtml(w.word || '');
-        const readingText = escapeHtml(w.reading || '');
-        const levelText = escapeHtml(w.level || 'JLPT');
-        const meaningText = escapeHtml(w.meaning || '');
-        const isMastered = Boolean(w.mastered);
-
-        return `
-        <div class="notebook-word-card ${isMastered ? 'is-mastered' : ''}" data-word="${wordText}">
-            <div class="notebook-word-info">
-                <div class="notebook-word-top">
-                    <span class="notebook-word-jp">${wordText}</span>
-                    ${readingText ? `<span class="notebook-word-reading">${readingText}</span>` : ''}
-                    <span class="popup-level-tag">${levelText}</span>
-                </div>
-                <div class="notebook-word-meaning">${meaningText}</div>
-            </div>
-            <div class="notebook-word-actions">
-                <button type="button" class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-speak="${wordText}">🔊</button>
-                <label class="switch" title="${isMastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
-                    <input type="checkbox" class="cb-toggle-mastered" data-word="${wordText}" ${isMastered ? 'checked' : ''}>
-                    <span class="slider round"></span>
-                </label>
-                <button type="button" class="notebook-btn-icon btn-delete-saved" title="Удалить" data-delete="${wordText}">🗑️</button>
-            </div>
-        </div>
-        `;
-    }).join('');
 }
 
 function clearAllSavedWords() {
-    if (confirm('Вы уверены, что хотите полностью очистить свой словарь?')) {
-        saveWordsToStorage([]);
-        renderNotebookWords();
+    if (window.DokkaiNotebook && window.DokkaiNotebook.clearAllSavedWords) {
+        return window.DokkaiNotebook.clearAllSavedWords(state, elements, renderNotebookWords);
     }
 }
 

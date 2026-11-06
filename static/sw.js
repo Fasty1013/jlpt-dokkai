@@ -61,7 +61,10 @@ const PRECACHE_ASSETS = [
   '/static/js/features/analysis/submit_flow.js',
   '/static/js/features/analysis/index.js',
   '/static/js/features/speech/speech.js',
-  '/static/js/features/speech/index.js'
+  '/static/js/features/speech/index.js',
+  '/static/js/features/notebook/notebook_storage.js',
+  '/static/js/features/notebook/notebook_view.js',
+  '/static/js/features/notebook/index.js'
 ];
 
 self.addEventListener('install', (event) => {
