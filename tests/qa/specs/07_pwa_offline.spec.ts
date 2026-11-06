@@ -6,9 +6,9 @@ test.describe('07. PWA Shell, Web App Manifest & Offline Resilience', () => {
     const manifestRes = await page.request.get(`${baseURL}/static/manifest.json`);
     if (manifestRes.status() === 200) {
       const manifest = await manifestRes.json();
-      expect(manifest).toHaveProperty('name');
-      expect(manifest).toHaveProperty('short_name');
-      expect(manifest).toHaveProperty('start_url');
+      expect(manifest.name).toContain('JLPT Dokkai Master');
+      expect(manifest.short_name).toBeDefined();
+      expect(manifest.start_url).toBe('/');
       expect(manifest.display).toBe('standalone');
       expect(Array.isArray(manifest.icons)).toBeTruthy();
       console.log(`[PWA] Manifest проверен: '${manifest.name}' (display: ${manifest.display})`);
@@ -18,6 +18,8 @@ test.describe('07. PWA Shell, Web App Manifest & Offline Resilience', () => {
     await page.goto('/');
     await page.waitForSelector('#catalog-view', { timeout: 15000 });
     await page.waitForSelector('.stream-column', { timeout: 15000 });
+    const firstCard = page.locator('#active-slots-list .stream-slot-card').first();
+    await expect(firstCard).toBeVisible({ timeout: 15000 });
 
     // Ожидаем активации Service Worker
     await page.waitForFunction(() => {
@@ -32,13 +34,17 @@ test.describe('07. PWA Shell, Web App Manifest & Offline Resilience', () => {
     const colRadiusOnline = await page.locator('.stream-column').first().evaluate(el => window.getComputedStyle(el).borderRadius);
     expect(colRadiusOnline).not.toBe('0px');
 
-    // 3. Отключаем сеть (полный офлайн)
+    // 3. Отключаем сеть (симуляция отключения, как в оригинальном тесте main)
     await context.setOffline(true);
 
-    // 4. Перезагружаем страницу в офлайн-режиме
+    // Внезапный офлайн: уже отрендеренное приложение и карточки не крашатся и остаются видимыми
+    await expect(page.locator('#app'), 'Приложение остаётся видимым при внезапном отключении сети').toBeVisible();
+    await expect(firstCard, 'Уже загруженные карточки заданий остаются на экране при потере сети').toBeVisible();
+
+    // 4. Перезагружаем страницу в офлайн-режиме (проверка устойчивости PWA App Shell)
     await page.reload({ waitUntil: 'domcontentloaded' });
 
-    // 5. Проверяем, что приложение загрузилось из кэша без белого экрана
+    // 5. Проверяем, что каркас приложения загрузился из кэша воркера без белого экрана
     await expect(page.locator('#app')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('#catalog-view')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('#col-active-slots')).toBeVisible({ timeout: 10000 });
