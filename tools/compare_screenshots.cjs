@@ -163,15 +163,18 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     }
 
     // 5. Exercise Reading View & Question Wizard
-    await page.evaluate(async () => {
+    await page.evaluate(() => {
       const reportModal = document.getElementById('report-modal-backdrop');
       if (reportModal) reportModal.classList.add('hidden');
-      const pretestModal = document.getElementById('pretest-modal-backdrop');
-      if (pretestModal) pretestModal.classList.add('hidden');
-
-      if (window.startExercise) {
-        await window.startExercise(1);
+      if (window.openPretestModal) {
+        window.openPretestModal(1);
       }
+    });
+    await page.waitForSelector('#pretest-modal-backdrop:not(.hidden)', { timeout: 10000 });
+    await page.click('#modal-btn-start');
+    await page.waitForSelector('#exercise-view:not(.hidden)', { timeout: 10000 });
+    await page.waitForSelector('#wizard-card-area .option-item', { timeout: 10000 });
+    await page.evaluate(() => {
       if (window.state && window.state.timer) {
         if (window.state.timer.intervalId) clearInterval(window.state.timer.intervalId);
         window.state.timer.remainingSeconds = 180;
@@ -179,11 +182,25 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
       const timerDisplay = document.getElementById('timer-display');
       if (timerDisplay) timerDisplay.textContent = '03:00';
     });
-    await page.waitForSelector('#exercise-view:not(.hidden)', { timeout: 10000 });
-    await page.waitForSelector('#wizard-card-area .option-item', { timeout: 10000 });
     await page.waitForTimeout(500);
     const exercisePath = path.join(outDir, `${targetName}_${vp.name}_exercise.png`);
     await page.screenshot({ path: exercisePath, fullPage: false });
+
+    // 6. Analysis Post-Submit View
+    const optItem = page.locator('#wizard-card-area .option-item').first();
+    if (await optItem.isVisible()) {
+      await optItem.click();
+      await page.waitForTimeout(400);
+      const submitBtn = page.locator('#btn-wizard-submit');
+      if (await submitBtn.isVisible()) {
+        await submitBtn.click();
+        await page.waitForSelector('#analysis-banner:not(.hidden)', { timeout: 15000 });
+        await page.waitForSelector('#analysis-tabs .analysis-tab-btn', { timeout: 10000 });
+        await page.waitForTimeout(500);
+        const analysisPath = path.join(outDir, `${targetName}_${vp.name}_analysis.png`);
+        await page.screenshot({ path: analysisPath, fullPage: false });
+      }
+    }
 
     await context.close();
   }

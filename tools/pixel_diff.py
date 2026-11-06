@@ -3,8 +3,8 @@ import sys
 from PIL import Image, ImageChops
 
 def compare_images(img1_path, img2_path, diff_out_path):
-    im1 = Image.open(img1_path).convert('RGBA')
-    im2 = Image.open(img2_path).convert('RGBA')
+    im1 = Image.open(img1_path).convert('RGB')
+    im2 = Image.open(img2_path).convert('RGB')
 
     if im1.size != im2.size:
         return {
@@ -71,6 +71,8 @@ def main():
         ('mobile_solved_col', 'main_mobile_solved_col.png', 'refactor_mobile_solved_col.png'),
         ('desktop_exercise', 'main_desktop_exercise.png', 'refactor_desktop_exercise.png'),
         ('mobile_exercise', 'main_mobile_exercise.png', 'refactor_mobile_exercise.png'),
+        ('desktop_analysis', 'main_desktop_analysis.png', 'refactor_desktop_analysis.png'),
+        ('mobile_analysis', 'main_mobile_analysis.png', 'refactor_mobile_analysis.png'),
     ]
 
     print('| Экран / Виджет | Разрешение | Всего пикселей | Отличающихся пикселей | % расхождения | Область различий (BBox) |')
