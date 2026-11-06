@@ -613,6 +613,9 @@ function toggleSupplementaryDrawer(type) {
 const NOTEBOOK_STORAGE_KEY = 'dokkai_saved_words';
 
 function speakJapanese(text) {
+    if (window.DokkaiSpeech && window.DokkaiSpeech.speakJapanese) {
+        return window.DokkaiSpeech.speakJapanese(text);
+    }
     if (!('speechSynthesis' in window)) return;
     try {
         window.speechSynthesis.cancel();
