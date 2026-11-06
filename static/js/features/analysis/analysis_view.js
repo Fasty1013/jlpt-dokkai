@@ -56,11 +56,14 @@ export function renderAnalysisView(data, state, elements) {
     }
   }
 
-  const spentTimeFormatted = formatTime(data.time_spent_sec || 0);
+  const spentSeconds = (typeof data.time_spent_sec === 'number')
+    ? data.time_spent_sec
+    : ((s.timer && typeof s.timer.secondsSpent === 'number') ? s.timer.secondsSpent : 0);
+  const spentTimeFormatted = formatTime(spentSeconds);
   if (els.bannerResultMeta) {
     if (s.timer && s.timer.enabled) {
       const targetFormatted = formatTime(s.timer.totalSeconds);
-      const inLimit = (data.time_spent_sec || 0) <= s.timer.totalSeconds;
+      const inLimit = spentSeconds <= s.timer.totalSeconds;
       els.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} из ${targetFormatted} (${inLimit ? 'Уложились в лимит ✅' : 'Лимит превышен ⏱️'})`;
     } else {
       els.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} | Режим: Свободное чтение без таймера`;
@@ -304,7 +307,7 @@ export function locateEvidenceInText(spanId, state, elements) {
   const els = resolveElements(elements);
   if (s && s.pretestConfig && !s.pretestConfig.showHintsAndAnalysis) return;
 
-  if (s && s.settings && !s.settings.evidenceVisible) {
+  if (s && (!s.settings || !s.settings.evidenceVisible)) {
     toggleEvidence(s, els);
   }
 
@@ -346,3 +349,4 @@ export function toggleSupplementaryDrawer(type, state, elements) {
     els.supplementaryDrawer.classList.add('hidden');
   }
 }
+

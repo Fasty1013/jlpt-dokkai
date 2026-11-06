@@ -130,6 +130,9 @@ export async function submitAnswers(options = {}) {
     // Submission succeeded, clear key
     s.currentSubmitIdempotencyKey = null;
     const analysisData = streamResult;
+    if (typeof analysisData.time_spent_sec !== 'number') {
+      analysisData.time_spent_sec = timeSpent;
+    }
     s.activeText = analysisData;
     s.currentView = 'analysis';
     s.analysisActiveTabIdx = 0;
@@ -204,3 +207,4 @@ export async function submitAnswers(options = {}) {
     throw err;
   }
 }
+
