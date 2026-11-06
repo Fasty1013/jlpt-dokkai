@@ -3,8 +3,9 @@ import { test, expect } from '@playwright/test';
 test.describe('14. Timer Clock Mechanics & Lifecycle (page.clock)', () => {
   test('01. Complete Timer Lifecycle: Countdown, Pause/Resume, +1 Min, 60s Warning, Expiration & Dismiss', async ({ page }) => {
     // 1. Install fake timers and pause clock so time only advances via runFor
-    await page.clock.install();
-    await page.clock.pauseAt(new Date('2026-11-06T12:00:00Z'));
+    const fixedTime = new Date('2026-11-06T12:00:00Z');
+    await page.clock.install({ time: fixedTime });
+    await page.clock.pauseAt(fixedTime);
 
     await page.goto('/');
     await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });

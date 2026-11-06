@@ -202,6 +202,13 @@ async function runScenario(baseUrl, outputFilename) {
   });
   await page.waitForTimeout(400);
 
+  // 12. Вкладка импорта PDF (запрос списка черновиков)
+  await page.evaluate(() => {
+    const btn = document.getElementById('btn-tab-import');
+    if (btn) btn.click();
+  });
+  await page.waitForTimeout(500);
+
   await browser.close();
 
   const formatted = JSON.stringify(recordedRequests, null, 2);

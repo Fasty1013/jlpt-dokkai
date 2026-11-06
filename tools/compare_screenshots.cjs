@@ -146,6 +146,52 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     const reportPath = path.join(outDir, `${targetName}_${vp.name}_report.png`);
     await page.screenshot({ path: reportPath, fullPage: false });
 
+    // Cleanly close report modal
+    await page.evaluate(() => {
+      const modal = document.getElementById('report-modal-backdrop');
+      if (modal) modal.classList.add('hidden');
+    });
+
+    // 3b. Sync Modal (via DOM click to avoid unintended scroll container displacement on mobile)
+    await page.evaluate(() => {
+      const btn = document.getElementById('btn-sync-status');
+      if (btn) btn.click();
+    });
+    await page.waitForSelector('#sync-modal-backdrop:not(.hidden)', { timeout: 10000 });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
+    const syncPath = path.join(outDir, `${targetName}_${vp.name}_sync_modal.png`);
+    await page.screenshot({ path: syncPath, fullPage: false });
+
+    // Close sync modal
+    await page.evaluate(() => {
+      const btn = document.getElementById('btn-close-sync-modal');
+      if (btn) btn.click();
+    });
+    await page.waitForSelector('#sync-modal-backdrop', { state: 'hidden', timeout: 10000 });
+
+    // 3c. PDF Import Screen
+    await page.evaluate(() => {
+      const btn = document.getElementById('btn-tab-import');
+      if (btn) btn.click();
+    });
+    await page.waitForSelector('#import-view:not(.hidden)', { timeout: 10000 });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
+    const pdfImportPath = path.join(outDir, `${targetName}_${vp.name}_pdf_import.png`);
+    await page.screenshot({ path: pdfImportPath, fullPage: false });
+
+    // Return to catalog view cleanly
+    await page.evaluate(() => {
+      const btn = document.getElementById('btn-tab-catalog');
+      if (btn) btn.click();
+      window.scrollTo(0, 0);
+      const nav = document.getElementById('header-nav');
+      if (nav) nav.scrollLeft = 0;
+    });
+    await page.waitForSelector('#catalog-view:not(.hidden)', { timeout: 10000 });
+    await page.waitForTimeout(300);
+
     // 4. Mobile Column Switch (Mobile only)
     if (vp.isMobile) {
       await page.evaluate(() => {

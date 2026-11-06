@@ -66,7 +66,11 @@ const PRECACHE_ASSETS = [
   '/static/js/features/notebook/notebook_view.js',
   '/static/js/features/notebook/index.js',
   '/static/js/features/dictionary/popup_dict.js',
-  '/static/js/features/dictionary/index.js'
+  '/static/js/features/dictionary/index.js',
+  '/static/js/features/sync_ui/sync_modal.js',
+  '/static/js/features/sync_ui/index.js',
+  '/static/js/features/pdf_import/pdf_staging.js',
+  '/static/js/features/pdf_import/index.js'
 ];
 
 self.addEventListener('install', (event) => {
