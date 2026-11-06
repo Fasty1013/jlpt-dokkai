@@ -156,4 +156,27 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
 
     await context.close();
   });
+
+  test('05. Zero Module Duplication: Every ES module URL is fetched at most once without URL query fragmentation', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
+
+    // Collect all JS resource requests via Performance API
+    const moduleCounts: Record<string, number> = await page.evaluate(() => {
+      const entries = performance.getEntriesByType('resource');
+      const counts: Record<string, number> = {};
+      for (const entry of entries) {
+        if (entry.name.includes('/static/js/')) {
+          const pathname = new URL(entry.name).pathname;
+          counts[pathname] = (counts[pathname] || 0) + 1;
+        }
+      }
+      return counts;
+    });
+
+    expect(Object.keys(moduleCounts).length).toBeGreaterThanOrEqual(10);
+    for (const [modPath, count] of Object.entries(moduleCounts)) {
+      expect(count, `Module '${modPath}' must be fetched exactly once, but was fetched ${count} times`).toBe(1);
+    }
+  });
 });

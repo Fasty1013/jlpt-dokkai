@@ -66,6 +66,16 @@ app = FastAPI(
 )
 
 
+@app.middleware("http")
+async def add_static_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path.startswith("/static/") or path in ("/", "/sw.js"):
+        if "Cache-Control" not in response.headers:
+            response.headers["Cache-Control"] = "no-cache, must-revalidate"
+    return response
+
+
 # =============================================================================
 # API Endpoints
 # =============================================================================
