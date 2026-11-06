@@ -763,95 +763,27 @@ window.retrySolvedTask = retrySolvedTask;
 window.openReportModal = openReportModal;
 
 // ============================================================================
-// Pre-Test Settings Modal Logic
+// Pre-Test Settings Modal Logic (Delegated to static/js/features/pretest/)
 // ============================================================================
 
 function openPretestModal(textId) {
-    const targetId = Number(textId);
-    state.pendingTextId = targetId;
-    history.pushState({ modal: 'pretest', textId: targetId }, '', '#pretest');
-    const textInfo = cachedCatalogTexts.find(t => String(t.id) === String(targetId));
-
-    const recMin = textInfo ? textInfo.recommended_time_min : 3;
-    if (textInfo) {
-        elements.modalTextTitle.textContent = textInfo.title;
-        elements.modalTimeEstimate.textContent = recMin;
-    } else {
-        elements.modalTextTitle.textContent = 'Текст задания';
-        elements.modalTimeEstimate.textContent = recMin;
-    }
-
-    elements.pretestToggleFurigana.checked = state.pretestConfig.showFurigana;
-    elements.pretestToggleHints.checked = state.pretestConfig.showHintsAndAnalysis;
-
-    // Timer preferences
-    if (elements.pretestToggleTimer) {
-        elements.pretestToggleTimer.checked = Boolean(state.pretestConfig.enableTimer);
-    }
-    if (elements.modalTimerMinutes) {
-        elements.modalTimerMinutes.textContent = state.pretestConfig.timerMinutes || recMin;
-    }
-
-    updateModalSettingTags();
-    if (elements.modalBody) elements.modalBody.scrollTop = 0;
-    elements.pretestModalBackdrop.classList.remove('hidden');
+    window.DokkaiPretest.openPretestModal(textId, {
+        state,
+        elements,
+        getTextInfo: id => cachedCatalogTexts.find(t => String(t.id) === String(id))
+    });
 }
 
 function closePretestModal() {
-    elements.pretestModalBackdrop.classList.add('hidden');
-    state.pendingTextId = null;
+    window.DokkaiPretest.closePretestModal({ state, elements });
 }
 
 function updateModalSettingTags() {
-    if (elements.pretestToggleFurigana.checked) {
-        elements.tagFurigana.textContent = 'Обучающий режим';
-        elements.tagFurigana.className = 'setting-tag';
-    } else {
-        elements.tagFurigana.textContent = 'Экзамен (Без фуриганы)';
-        elements.tagFurigana.className = 'setting-tag tag-warning';
-    }
-
-    if (elements.pretestToggleHints.checked) {
-        elements.tagHints.textContent = 'Полный разбор';
-        elements.tagHints.className = 'setting-tag';
-    } else {
-        elements.tagHints.textContent = 'Хардкор (Без подсказок)';
-        elements.tagHints.className = 'setting-tag tag-warning';
-    }
-
-    if (elements.pretestToggleTimer && elements.tagTimer) {
-        const timerActive = elements.pretestToggleTimer.checked;
-        const mins = elements.modalTimerMinutes ? elements.modalTimerMinutes.textContent : '3';
-        if (timerActive) {
-            elements.tagTimer.textContent = `ВКЛ: ${mins} мин`;
-            elements.tagTimer.className = 'setting-tag tag-warning';
-            if (elements.timerDurationSelector) elements.timerDurationSelector.classList.remove('hidden');
-        } else {
-            elements.tagTimer.textContent = 'ВЫКЛ: Без таймера';
-            elements.tagTimer.className = 'setting-tag';
-            if (elements.timerDurationSelector) elements.timerDurationSelector.classList.add('hidden');
-        }
-    }
+    window.DokkaiPretest.updateModalSettingTags(elements);
 }
 
 function confirmPretestSettingsAndStart() {
-    const showFurigana = elements.pretestToggleFurigana.checked;
-    const showHints = elements.pretestToggleHints.checked;
-    const enableTimer = elements.pretestToggleTimer ? elements.pretestToggleTimer.checked : false;
-    const timerMins = elements.modalTimerMinutes ? parseInt(elements.modalTimerMinutes.textContent, 10) : 3;
-
-    state.pretestConfig.showFurigana = showFurigana;
-    state.pretestConfig.showHintsAndAnalysis = showHints;
-    state.pretestConfig.enableTimer = enableTimer;
-    state.pretestConfig.timerMinutes = timerMins;
-    saveStoredConfig(state.pretestConfig);
-
-    const textId = state.pendingTextId;
-    closePretestModal();
-
-    if (textId) {
-        startExercise(textId);
-    }
+    window.DokkaiPretest.confirmPretestSettingsAndStart({ state, elements, onStart: startExercise });
 }
 
 // ============================================================================
