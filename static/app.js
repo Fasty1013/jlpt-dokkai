@@ -1211,9 +1211,9 @@ async function submitAnswers() {
 
     } catch (err) {
         console.error(err);
-        alert('Не удалось отправить ответы на проверку.');
+        alert(err.message || 'Не удалось отправить ответы на проверку. Ваши ответы сохранены.');
         elements.btnWizardSubmit.disabled = false;
-        elements.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
+        elements.btnWizardSubmit.textContent = 'Повторить отправку ответов ↻';
     }
 }
 

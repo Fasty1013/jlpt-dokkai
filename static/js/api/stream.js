@@ -2,7 +2,7 @@
  * JLPT Dokkai Master - Stream & Tasks API Module
  */
 
-import { request } from './client.js';
+import { request, COLD_START_TIMEOUT_MS } from './client.js';
 
 /**
  * Fetch active stream slots for current profile and filters.
@@ -27,7 +27,8 @@ export async function fetchStreamSlots({ userId, level, category = '', refresh =
 
   return request(`/api/stream/slots?${query.toString()}`, {
     cache: 'no-store',
-    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+    headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
+    timeoutMs: COLD_START_TIMEOUT_MS
   });
 }
 

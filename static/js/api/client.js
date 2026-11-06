@@ -13,7 +13,8 @@ export class ApiError extends Error {
   }
 }
 
-export const DEFAULT_TIMEOUT_MS = 80000;
+export const DEFAULT_TIMEOUT_MS = 20000;
+export const COLD_START_TIMEOUT_MS = 80000;
 export const SLOW_REQUEST_THRESHOLD_MS = 5000;
 
 let activeSlowRequests = 0;
@@ -129,7 +130,8 @@ export async function request(url, options = {}) {
     }
 
     if (err.name === 'AbortError') {
-      throw new ApiError('Таймаут соединения с сервером (80 с). Пожалуйста, повторите попытку.', 408);
+      const sec = Math.round(timeoutMs / 1000);
+      throw new ApiError(`Таймаут соединения с сервером (${sec} с). Пожалуйста, повторите попытку.`, 408);
     }
     if (err instanceof ApiError) {
       throw err;
