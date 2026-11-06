@@ -662,43 +662,15 @@ async function toggleSaveWord(wordData) {
 }
 
 function showPopupDictionary(wordData, clientX, clientY) {
-    state.activePopupWord = wordData;
-    elements.popupWord.textContent = wordData.word;
-    elements.popupReading.textContent = wordData.reading || '';
-    elements.popupLevel.textContent = wordData.level || 'JLPT';
-    elements.popupMeaning.textContent = wordData.meaning || 'Перевод не найден';
-
-    const saved = isWordSaved(wordData.word);
-    if (saved) {
-        elements.popupBtnSave.classList.add('is-saved');
-        elements.popupBtnSaveText.textContent = '✓ В словаре';
-    } else {
-        elements.popupBtnSave.classList.remove('is-saved');
-        elements.popupBtnSaveText.textContent = 'В мой словарь';
+    if (window.DokkaiDictionary && window.DokkaiDictionary.showPopupDictionary) {
+        return window.DokkaiDictionary.showPopupDictionary(wordData, clientX, clientY, elements, state);
     }
-
-    elements.popupDictionaryCard.classList.remove('hidden');
-
-    // Intelligent positioning
-    const cardRect = elements.popupDictionaryCard.getBoundingClientRect();
-    let top = clientY - cardRect.height - 12;
-    let left = clientX - cardRect.width / 2;
-
-    if (top < 10) {
-        top = clientY + 24;
-    }
-    if (left < 10) {
-        left = 10;
-    }
-    if (left + cardRect.width > window.innerWidth - 10) {
-        left = window.innerWidth - cardRect.width - 10;
-    }
-
-    elements.popupDictionaryCard.style.top = `${top}px`;
-    elements.popupDictionaryCard.style.left = `${left}px`;
 }
 
 function hidePopupDictionary() {
+    if (window.DokkaiDictionary && window.DokkaiDictionary.hidePopupDictionary) {
+        return window.DokkaiDictionary.hidePopupDictionary(elements, state);
+    }
     if (elements.popupDictionaryCard) {
         elements.popupDictionaryCard.classList.add('hidden');
     }
@@ -706,69 +678,14 @@ function hidePopupDictionary() {
 }
 
 function lookupAndShowWord(query, clientX, clientY) {
-    if (!state.popupDictEnabled) return;
-    if (!query) return;
-
-    // Clean word from rubies and punctuation
-    let cleanQuery = query.replace(/[、。！？\s\t\n・「」『』（）]/g, '').trim();
-    if (!cleanQuery || cleanQuery.length > 20) return;
-
-    // 1. Check local text vocabulary if active
-    if (state.activeText && state.activeText.vocabulary) {
-        const localMatch = state.activeText.vocabulary.find(
-            v => v.word === cleanQuery || cleanQuery.includes(v.word) || v.word.includes(cleanQuery)
-        );
-        if (localMatch) {
-            showPopupDictionary({
-                word: localMatch.word,
-                reading: localMatch.furigana ? `[${localMatch.furigana}]` : '',
-                meaning: localMatch.translation,
-                level: state.activeText.level || 'JLPT'
-            }, clientX, clientY);
-            return;
-        }
+    if (window.DokkaiDictionary && window.DokkaiDictionary.lookupAndShowWord) {
+        return window.DokkaiDictionary.lookupAndShowWord(query, clientX, clientY, elements, state);
     }
-
-    // 2. Fetch from backend dictionary API
-    const lookupPromise = (window.DokkaiApi && window.DokkaiApi.lookupWord)
-        ? window.DokkaiApi.lookupWord(cleanQuery)
-        : fetch(`/api/dictionary/lookup?q=${encodeURIComponent(cleanQuery)}`).then(res => {
-            if (res.ok) return res.json();
-            throw new Error('Not found');
-        });
-
-    lookupPromise
-        .then(data => {
-            showPopupDictionary({
-                word: data.word,
-                reading: data.reading ? `[${data.reading}]` : '',
-                meaning: data.meaning,
-                level: data.level || 'JLPT'
-            }, clientX, clientY);
-        })
-        .catch(() => {
-            // If unknown word, still allow saving or show kanji
-            if (cleanQuery.length >= 1 && cleanQuery.length <= 8) {
-                showPopupDictionary({
-                    word: cleanQuery,
-                    reading: '',
-                    meaning: 'Слово из текста (сохраните для разбора)',
-                    level: state.activeText ? state.activeText.level : 'JLPT'
-                }, clientX, clientY);
-            }
-        });
 }
 
 function togglePopupDictStatus() {
-    state.popupDictEnabled = !state.popupDictEnabled;
-    if (elements.popupDictStatus) {
-        elements.popupDictStatus.textContent = state.popupDictEnabled ? 'ВКЛ' : 'ВЫКЛ';
-    }
-    if (elements.btnTogglePopupDict) {
-        elements.btnTogglePopupDict.classList.toggle('active', state.popupDictEnabled);
-    }
-    if (!state.popupDictEnabled) {
-        hidePopupDictionary();
+    if (window.DokkaiDictionary && window.DokkaiDictionary.togglePopupDictStatus) {
+        return window.DokkaiDictionary.togglePopupDictStatus(elements, state);
     }
 }
 
