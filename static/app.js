@@ -7,62 +7,26 @@
 // Application State & LocalStorage Configuration
 // ============================================================================
 
+// ============================================================================
+// Core Utility & Configuration Delegates (Source of truth: static/js/utils/ & formatting/)
+// ============================================================================
+
 function escapeHtml(str) {
-    if (window.DokkaiFormatting) {
-        return window.DokkaiFormatting.escapeHtml(str);
-    }
-    if (str === null || str === undefined) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    return window.DokkaiUtils ? window.DokkaiUtils.escapeHtml(str) : (window.escapeHtml ? window.escapeHtml(str) : '');
 }
 
 const CONFIG_STORAGE_KEY = 'dokkai_pretest_config';
 
 function loadStoredConfig() {
-    if (window.DokkaiFormatting) {
-        return window.DokkaiFormatting.loadStoredConfig();
-    }
-    try {
-        const stored = localStorage.getItem(CONFIG_STORAGE_KEY);
-        if (stored) {
-            return JSON.parse(stored);
-        }
-    } catch (e) {
-        console.warn('Failed to load pretest config from localStorage', e);
-    }
-    return {
-        showFurigana: true,
-        showHintsAndAnalysis: true,
-        enableTimer: false,
-        timerMinutes: 3
-    };
+    return window.DokkaiFormatting.loadStoredConfig();
 }
 
 function saveStoredConfig(config) {
-    if (window.DokkaiFormatting) {
-        return window.DokkaiFormatting.saveStoredConfig(config);
-    }
-    try {
-        localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
-    } catch (e) {
-        console.warn('Failed to save pretest config to localStorage', e);
-    }
+    return window.DokkaiFormatting.saveStoredConfig(config);
 }
 
 function getUserId() {
-    if (window.DokkaiUtils && window.DokkaiUtils.getUserId) {
-        return window.DokkaiUtils.getUserId();
-    }
-    let uid = localStorage.getItem('dokkai_user_id');
-    if (!uid) {
-        uid = 'user-' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
-        localStorage.setItem('dokkai_user_id', uid);
-    }
-    return uid;
+    return window.DokkaiUtils.getUserId();
 }
 
 const state = {
@@ -372,116 +336,56 @@ const CATEGORY_NAMES = {
 };
 
 function formatTime(totalSeconds) {
-    if (window.DokkaiFormatting) {
-        return window.DokkaiFormatting.formatTime(totalSeconds);
-    }
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    return window.DokkaiUtils ? window.DokkaiUtils.formatTime(totalSeconds) : (window.formatTime ? window.formatTime(totalSeconds) : '');
 }
 
 // ============================================================================
-// Timer Functions (Delegated to static/js/features/timer/ with fallback)
+// Timer Functions (Delegated to static/js/features/timer/)
 // ============================================================================
 
 function stopTimer() {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.stopTimer(state.timer);
-    } else if (state.timer.intervalId) {
-        clearInterval(state.timer.intervalId);
-        state.timer.intervalId = null;
-    }
+    window.DokkaiTimer.stopTimer(state.timer);
 }
 
 function startUntimedMode() {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.startUntimedMode(state.timer, elements);
-    } else {
-        stopTimer();
-        state.timer.enabled = false;
-        state.timer.secondsSpent = 0;
-        state.timer.isPaused = false;
-        if (elements.timerBox) elements.timerBox.classList.add('hidden');
-        if (elements.btnEnableTimerRuntime) elements.btnEnableTimerRuntime.classList.remove('hidden');
-        if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
-    }
+    window.DokkaiTimer.startUntimedMode(state.timer, elements);
 }
 
 function startCountdownTimer(minutes) {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.startCountdownTimer(minutes, state.timer, elements);
-    }
+    window.DokkaiTimer.startCountdownTimer(minutes, state.timer, elements);
 }
 
 function toggleTimerPause() {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.toggleTimerPause(state.timer, elements);
-    }
+    window.DokkaiTimer.toggleTimerPause(state.timer, elements);
 }
 
 function addTimerMinute() {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.addTimerMinute(state.timer, elements);
-    }
+    window.DokkaiTimer.addTimerMinute(state.timer, elements);
 }
 
 function dismissTimer() {
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.dismissTimer(state.timer, elements);
-    }
+    window.DokkaiTimer.dismissTimer(state.timer, elements);
 }
 
 function enableTimerAtRuntime() {
     const recMin = (state.activeText && state.activeText.recommended_time_min) ? state.activeText.recommended_time_min : 3;
-    if (window.DokkaiTimer) {
-        window.DokkaiTimer.enableTimerAtRuntime(recMin, state.timer, elements);
-    } else {
-        startCountdownTimer(recMin);
-    }
+    window.DokkaiTimer.enableTimerAtRuntime(recMin, state.timer, elements);
 }
 
 // ============================================================================
-// Reader Customization (Delegated to static/js/features/settings/ with fallback)
+// Reader Customization (Delegated to static/js/features/settings/)
 // ============================================================================
 
 function saveUserSettings() {
-    if (window.DokkaiSettings) {
-        window.DokkaiSettings.saveUserSettings(state.settings);
-    } else if (window.DokkaiStorage) {
-        window.DokkaiStorage.saveSettings('user_settings', state.settings);
-    }
+    window.DokkaiSettings.saveUserSettings(state.settings);
 }
 
 function setReaderFont(typeface) {
-    if (window.DokkaiSettings) {
-        window.DokkaiSettings.setReaderFont(typeface, state.settings, elements);
-    } else {
-        state.settings.fontFamily = typeface;
-        if (typeface === 'mincho') {
-            elements.passageContent.classList.remove('font-gothic');
-            elements.passageContent.classList.add('font-mincho');
-            elements.btnFontMincho.classList.add('active');
-            elements.btnFontGothic.classList.remove('active');
-        } else {
-            elements.passageContent.classList.remove('font-mincho');
-            elements.passageContent.classList.add('font-gothic');
-            elements.btnFontGothic.classList.add('active');
-            elements.btnFontMincho.classList.remove('active');
-        }
-        saveUserSettings();
-    }
+    window.DokkaiSettings.setReaderFont(typeface, state.settings, elements);
 }
 
 function adjustFontSize(delta) {
-    if (window.DokkaiSettings) {
-        return window.DokkaiSettings.adjustFontSize(delta, state.settings, elements);
-    } else {
-        const newSize = Math.max(16, Math.min(28, state.settings.fontSizePx + delta));
-        state.settings.fontSizePx = newSize;
-        elements.passageContent.style.fontSize = `${newSize}px`;
-        saveUserSettings();
-        return newSize;
-    }
+    return window.DokkaiSettings.adjustFontSize(delta, state.settings, elements);
 }
 
 // ============================================================================
@@ -1949,14 +1853,7 @@ function returnToCatalog(pushState = true) {
 let currentDraftsCache = [];
 
 function formatFileSize(bytes) {
-    if (window.DokkaiFormatting) {
-        return window.DokkaiFormatting.formatFileSize(bytes);
-    }
-    if (!bytes || bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    return window.DokkaiFormatting.formatFileSize(bytes);
 }
 
 function handlePdfFileSelected(file) {

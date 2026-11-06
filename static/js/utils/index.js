@@ -1,8 +1,34 @@
 /**
  * JLPT Dokkai Master - Utilities Barrel Export
+ * Single source of truth for pure utility functions across the application.
  */
 
-export { getUserId } from './user.js';
-export { escapeHtml } from './dom.js';
-export { formatTime, formatLocaleDate } from './time.js';
-export { calculateScorePercent } from './math.js';
+import { getUserId } from './user.js';
+import { escapeHtml } from './dom.js';
+import { formatTime, formatLocaleDate } from './time.js';
+import { calculateScorePercent } from './math.js';
+
+export {
+  getUserId,
+  escapeHtml,
+  formatTime,
+  formatLocaleDate,
+  calculateScorePercent
+};
+
+if (typeof window !== 'undefined') {
+  window.DokkaiUtils = {
+    getUserId,
+    escapeHtml,
+    formatTime,
+    formatLocaleDate,
+    calculateScorePercent
+  };
+
+  // Direct function bridges on window
+  window.getUserId = getUserId;
+  window.escapeHtml = escapeHtml;
+  window.formatTime = formatTime;
+  window.formatLocaleDate = formatLocaleDate;
+  window.calculateScorePercent = calculateScorePercent;
+}
