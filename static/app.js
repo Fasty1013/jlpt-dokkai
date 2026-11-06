@@ -8,6 +8,9 @@
 // ============================================================================
 
 function escapeHtml(str) {
+    if (window.DokkaiFormatting) {
+        return window.DokkaiFormatting.escapeHtml(str);
+    }
     if (str === null || str === undefined) return '';
     return String(str)
         .replace(/&/g, '&amp;')
@@ -20,6 +23,9 @@ function escapeHtml(str) {
 const CONFIG_STORAGE_KEY = 'dokkai_pretest_config';
 
 function loadStoredConfig() {
+    if (window.DokkaiFormatting) {
+        return window.DokkaiFormatting.loadStoredConfig();
+    }
     try {
         const stored = localStorage.getItem(CONFIG_STORAGE_KEY);
         if (stored) {
@@ -37,6 +43,9 @@ function loadStoredConfig() {
 }
 
 function saveStoredConfig(config) {
+    if (window.DokkaiFormatting) {
+        return window.DokkaiFormatting.saveStoredConfig(config);
+    }
     try {
         localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
     } catch (e) {
@@ -45,6 +54,9 @@ function saveStoredConfig(config) {
 }
 
 function getUserId() {
+    if (window.DokkaiUtils && window.DokkaiUtils.getUserId) {
+        return window.DokkaiUtils.getUserId();
+    }
     let uid = localStorage.getItem('dokkai_user_id');
     if (!uid) {
         uid = 'user-' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
@@ -360,6 +372,9 @@ const CATEGORY_NAMES = {
 };
 
 function formatTime(totalSeconds) {
+    if (window.DokkaiFormatting) {
+        return window.DokkaiFormatting.formatTime(totalSeconds);
+    }
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
@@ -1934,6 +1949,9 @@ function returnToCatalog(pushState = true) {
 let currentDraftsCache = [];
 
 function formatFileSize(bytes) {
+    if (window.DokkaiFormatting) {
+        return window.DokkaiFormatting.formatFileSize(bytes);
+    }
     if (!bytes || bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
