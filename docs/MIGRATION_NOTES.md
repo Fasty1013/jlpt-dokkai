@@ -54,6 +54,9 @@
 | 22 | **`window.deleteDraft`** | `app.js:2049` | `renderDrafts()` (`app.js:2051`) | Вызов из инлайн `onclick="deleteDraft(...)"` | **Шаг 6** (перевод на `data-action="delete-draft"`) |
 | 23 | **`window.publishDraft`** | `app.js:2053` | `renderDrafts()` (`app.js:2055`) | Вызов из инлайн `onclick="publishDraft(...)"` | **Шаг 6** (перевод на `data-action="publish-draft"`) |
 | 24 | **`window.markDraftCorrectOption`** | `app.js:2140` | `renderDraftQuestions()` (`app.js:2143`) | Вызов из инлайн `onclick="markDraftCorrectOption(...)"` | **Шаг 6** (перевод на `data-action="mark-option"`) |
+| 25 | **`window.DokkaiExercise`** | `static/js/features/exercise/index.js` | `app.js:498-535` (обёртки чтения и визарда вопросов) | Пространство имён режима чтения и визарда | **Шаг 9** (замена на прямой `import` в точку входа) |
+| 26 | **`window.handleOptionSelect`** | `static/js/features/exercise/index.js` | Инлайн `onchange="handleOptionSelect(...)"` в карточках опций (`wizard.js:106`) | Выбор варианта ответа в визарде через HTML-строку карточки | **Шаг 6** (перевод на `data-action="select-option"`) |
+| 27 | **`window.wizardGoNext`**, `wizardGoPrev`, `renderWizard`, `startExercise` | `static/js/features/exercise/index.js` | Кнопки навигации визарда, `submitAnswers`, восстановление сессии | Обратная совместимость с глобальными вызовами из монолита | **Шаг 6** |
 
 ---
 

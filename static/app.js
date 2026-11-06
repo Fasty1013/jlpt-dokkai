@@ -496,245 +496,45 @@ function confirmPretestSettingsAndStart() {
 // ============================================================================
 
 async function startExercise(textId) {
-    try {
-        let textData;
-        if (window.DokkaiApi && window.DokkaiApi.fetchTextDetail) {
-            textData = await window.DokkaiApi.fetchTextDetail(textId);
-        } else {
-            const response = await fetch(`/api/texts/${textId}?_t=${Date.now()}`, {
-                cache: 'no-store',
-                headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-            });
-            if (!response.ok) throw new Error('Не удалось загрузить задание');
-            textData = await response.json();
-        }
-        state.activeText = textData;
-        state.userAnswers = {};
-        state.currentQuestionIndex = 0;
-        state.currentView = 'exercise';
-
-        // History state for phone / browser Back button
-        history.pushState({ view: 'exercise', textId: textId }, '', '#exercise');
-
-        // Switch Views
-        elements.catalogView.classList.add('hidden');
-        elements.exerciseView.classList.remove('hidden');
-        elements.exerciseHeaderControls.classList.remove('hidden');
-        elements.analysisBanner.classList.add('hidden');
-        elements.analysisQAContainer.classList.add('hidden');
-        elements.supplementaryDrawer.classList.add('hidden');
-
-        // Show Wizard UI
-        elements.wizardHeader.classList.remove('hidden');
-        elements.wizardCardArea.classList.remove('hidden');
-        elements.wizardNavBar.classList.remove('hidden');
-
-        // Header tags
-        elements.headerLevelTag.textContent = textData.level;
-        elements.headerLevelTag.setAttribute('data-lvl', textData.level);
-        elements.headerCategoryTag.textContent = CATEGORY_NAMES[textData.category] || textData.category;
-
-        if (textData.source_exam) {
-            elements.headerExamBadge.textContent = textData.source_exam;
-            elements.headerExamBadge.classList.remove('hidden');
-        } else {
-            elements.headerExamBadge.classList.add('hidden');
-        }
-
-        // Initialize Timer Mode (Countdown if chosen, otherwise untimed free reading)
-        if (state.pretestConfig.enableTimer) {
-            const chosenMinutes = state.pretestConfig.timerMinutes || textData.recommended_time_min;
-            startCountdownTimer(chosenMinutes);
-        } else {
-            startUntimedMode();
-        }
-
-        // Passage Left Pane
-        elements.passageTitle.textContent = textData.title;
-        elements.passageLevel.textContent = textData.level;
-        elements.passageLevel.setAttribute('data-lvl', textData.level);
-        elements.passageCategory.textContent = CATEGORY_NAMES[textData.category] || textData.category;
-
-        if (textData.source_exam) {
-            elements.passageExamBadge.textContent = textData.source_exam;
-            elements.passageExamBadge.classList.remove('hidden');
-        } else {
-            elements.passageExamBadge.classList.add('hidden');
-        }
-
-        elements.passageTime.textContent = `${textData.recommended_time_min} мин`;
-
-        // Render Japanese HTML
-        elements.passageContent.innerHTML = textData.content_html;
-        elements.passageContent.style.fontSize = `${state.settings.fontSizePx}px`;
-
-        // Apply Furigana setting
-        if (state.pretestConfig.showFurigana) {
-            state.settings.furiganaVisible = true;
-            elements.passageContent.classList.remove('hide-furigana');
-            elements.furiganaStatus.textContent = 'ВКЛ';
-            elements.btnToggleFurigana.classList.add('active');
-        } else {
-            state.settings.furiganaVisible = false;
-            elements.passageContent.classList.add('hide-furigana');
-            elements.furiganaStatus.textContent = 'ВЫКЛ';
-            elements.btnToggleFurigana.classList.remove('active');
-        }
-
-        elements.passageContent.classList.remove('show-evidence');
-
-        // Hardcore Mode Notice
-        if (!state.pretestConfig.showHintsAndAnalysis) {
-            elements.hardcoreNotice.classList.remove('hidden');
-        } else {
-            elements.hardcoreNotice.classList.add('hidden');
-        }
-
-        // Render Wizard dots & active question
-        renderWizard();
-        saveCurrentActiveSession();
-        if (elements.unfinishedTestBanner) {
-            elements.unfinishedTestBanner.classList.add('hidden');
-        }
-
-    } catch (err) {
-        console.error('Ошибка инициализации упражнения:', err);
+    if (window.DokkaiExercise && window.DokkaiExercise.startExercise) {
+        return window.DokkaiExercise.startExercise(textId, {
+            state,
+            elements,
+            startCountdownTimer,
+            startUntimedMode,
+            returnToCatalog
+        });
     }
+    throw new Error('DokkaiExercise feature module is not loaded');
 }
 
 function renderWizard() {
-    const questions = state.activeText.questions;
-    const totalQ = questions.length;
-    const currentQIdx = state.currentQuestionIndex;
-    const currentQ = questions[currentQIdx];
-
-    // Status label & progress
-    elements.wizardStepLabel.textContent = `Вопрос ${currentQIdx + 1} из ${totalQ}`;
-    elements.totalQuestionsCount.textContent = totalQ;
-    elements.answeredCount.textContent = Object.keys(state.userAnswers).length;
-
-    // Track dots
-    elements.wizardTrack.innerHTML = questions.map((q, idx) => {
-        const isAnswered = state.userAnswers[q.id] !== undefined;
-        const isActive = idx === currentQIdx;
-        let dotClass = 'wizard-dot';
-        if (isActive) dotClass += ' active';
-        else if (isAnswered) dotClass += ' answered';
-        return `<span class="${dotClass}" title="Вопрос ${idx + 1}"></span>`;
-    }).join('');
-
-    // Render single active question card
-    const selectedOptId = state.userAnswers[currentQ.id];
-
-    elements.wizardCardArea.innerHTML = `
-        <div class="question-card" id="card-q-${currentQ.id}">
-            <div class="question-top">
-                <span class="question-num-badge">№${currentQ.question_number}</span>
-                <p class="question-prompt">${currentQ.question_text}</p>
-            </div>
-            <div class="options-group">
-                ${currentQ.options.map(opt => {
-        const isChecked = selectedOptId === opt.id;
-        return `
-                        <div class="option-item ${isChecked ? 'selected' : ''}" id="opt-item-${opt.id}">
-                            <label class="option-label" for="radio-opt-${opt.id}">
-                                <input 
-                                    type="radio" 
-                                    id="radio-opt-${opt.id}" 
-                                    name="question_${currentQ.id}" 
-                                    value="${opt.id}" 
-                                    class="option-radio"
-                                    ${isChecked ? 'checked' : ''}
-                                    onchange="handleOptionSelect(${currentQ.id}, ${opt.id})"
-                                >
-                                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
-                            </label>
-                        </div>
-                    `;
-    }).join('')}
-            </div>
-        </div>
-    `;
-
-    // Navigation buttons state: "Назад" на первом вопросе возвращает на главную
-    elements.btnWizardPrev.disabled = false;
-    if (currentQIdx === 0) {
-        elements.btnWizardPrev.textContent = '← На главную';
-        elements.btnWizardPrev.title = 'Вернуться на главную страницу каталога';
-    } else {
-        elements.btnWizardPrev.textContent = '← Назад';
-        elements.btnWizardPrev.title = 'Вернуться к предыдущему вопросу';
-    }
-
-    const isCurrentAnswered = selectedOptId !== undefined;
-    const isLastQuestion = (currentQIdx === totalQ - 1);
-    const allAnswered = Object.keys(state.userAnswers).length === totalQ;
-
-    if (isLastQuestion) {
-        elements.btnWizardNext.classList.add('hidden');
-        elements.btnWizardSubmit.classList.remove('hidden');
-        elements.btnWizardSubmit.disabled = !allAnswered;
-    } else {
-        elements.btnWizardNext.classList.remove('hidden');
-        elements.btnWizardSubmit.classList.add('hidden');
-        elements.btnWizardNext.disabled = !isCurrentAnswered;
+    if (window.DokkaiExercise && window.DokkaiExercise.renderWizard) {
+        return window.DokkaiExercise.renderWizard(state, elements);
     }
 }
 
 function saveCurrentActiveSession() {
-    if (state.currentView !== 'exercise' || !state.activeText) return;
-    if (window.DokkaiStorage) {
-        window.DokkaiStorage.saveActiveSession({
-            textId: state.activeText.id,
-            title: state.activeText.title,
-            level: state.activeText.level,
-            currentQuestionIndex: state.currentQuestionIndex,
-            userAnswers: state.userAnswers,
-            timer: {
-                totalSeconds: state.timer.totalSeconds,
-                remainingSeconds: state.timer.remainingSeconds,
-                secondsSpent: state.timer.secondsSpent,
-                enabled: state.timer.enabled
-            }
-        });
+    if (window.DokkaiExercise && window.DokkaiExercise.saveCurrentActiveSession) {
+        return window.DokkaiExercise.saveCurrentActiveSession(state);
     }
 }
 
 function handleOptionSelect(questionId, optionId) {
-    state.userAnswers[questionId] = optionId;
-
-    // Highlight selected visually
-    const card = document.getElementById(`card-q-${questionId}`);
-    if (card) {
-        card.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
-        const optItem = document.getElementById(`opt-item-${optionId}`);
-        if (optItem) optItem.classList.add('selected');
+    if (window.DokkaiExercise && window.DokkaiExercise.handleOptionSelect) {
+        return window.DokkaiExercise.handleOptionSelect(questionId, optionId, state, elements);
     }
-
-    // Refresh Wizard status and next button availability
-    renderWizard();
-
-    // Auto-save active test progress
-    saveCurrentActiveSession();
 }
 
 function wizardGoNext() {
-    const totalQ = state.activeText.questions.length;
-    if (state.currentQuestionIndex < totalQ - 1) {
-        state.currentQuestionIndex += 1;
-        renderWizard();
-        saveCurrentActiveSession();
+    if (window.DokkaiExercise && window.DokkaiExercise.wizardGoNext) {
+        return window.DokkaiExercise.wizardGoNext(state, elements);
     }
 }
 
 function wizardGoPrev() {
-    if (state.currentQuestionIndex > 0) {
-        state.currentQuestionIndex -= 1;
-        renderWizard();
-        saveCurrentActiveSession();
-    } else {
-        // На первом вопросе кнопка Назад возвращает на главную страницу
-        returnToCatalog();
+    if (window.DokkaiExercise && window.DokkaiExercise.wizardGoPrev) {
+        return window.DokkaiExercise.wizardGoPrev(state, elements, returnToCatalog);
     }
 }
 

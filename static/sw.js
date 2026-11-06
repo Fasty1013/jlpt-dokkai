@@ -53,7 +53,10 @@ const PRECACHE_ASSETS = [
   '/static/js/features/stream/index.js',
   '/static/js/features/solved/solved_tasks.js',
   '/static/js/features/solved/report_modal.js',
-  '/static/js/features/solved/index.js'
+  '/static/js/features/solved/index.js',
+  '/static/js/features/exercise/wizard.js',
+  '/static/js/features/exercise/exercise_view.js',
+  '/static/js/features/exercise/index.js'
 ];
 
 self.addEventListener('install', (event) => {
