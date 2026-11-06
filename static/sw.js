@@ -50,7 +50,10 @@ const PRECACHE_ASSETS = [
   '/static/js/features/pretest/pretest_modal.js?v=2.1.0',
   '/static/js/features/pretest/index.js?v=2.1.0',
   '/static/js/features/stream/stream_slots.js?v=2.1.0',
-  '/static/js/features/stream/index.js?v=2.1.0'
+  '/static/js/features/stream/index.js?v=2.1.0',
+  '/static/js/features/solved/solved_tasks.js?v=2.1.0',
+  '/static/js/features/solved/report_modal.js?v=2.1.0',
+  '/static/js/features/solved/index.js?v=2.1.0'
 ];
 
 self.addEventListener('install', (event) => {
