@@ -977,6 +977,90 @@ function initEventListeners() {
                 closePretestModal();
                 closeSyncModal();
                 closeReportModal();
+            },
+
+            // Dynamic Stream & Slot Actions (Step 6b)
+            'open-pretest': (el, e, ds) => {
+                if (e && e.stopPropagation) e.stopPropagation();
+                const textId = Number(ds.textId || el.dataset.textId);
+                if (textId) openPretestModal(textId);
+            },
+            'review-solved': (el, e, ds) => {
+                const textId = Number(ds.textId || el.dataset.textId);
+                if (textId) reviewSolvedTask(textId);
+            },
+            'retry-solved': (el, e, ds) => {
+                const textId = Number(ds.textId || el.dataset.textId);
+                if (textId) retrySolvedTask(textId);
+            },
+            'open-report': (el, e, ds) => {
+                const textId = Number(ds.textId || el.dataset.textId);
+                const title = ds.taskTitle || el.dataset.taskTitle || '';
+                if (textId) openReportModal(textId, title);
+            },
+
+            // Dynamic Wizard & Analysis Actions (Step 6b)
+            'select-option': (el, e, ds) => {
+                const qId = Number(ds.questionId || el.dataset.questionId);
+                const optId = Number(ds.optionId || el.dataset.optionId);
+                if (qId && optId) handleOptionSelect(qId, optId);
+            },
+            'switch-analysis-tab': (el, e, ds) => {
+                const idx = Number(ds.tabIndex || el.dataset.tabIndex);
+                if (!isNaN(idx)) switchAnalysisTab(idx);
+            },
+            'locate-evidence': (el, e, ds) => {
+                const spanId = ds.spanId || el.dataset.spanId;
+                if (spanId) locateEvidenceInText(spanId);
+            },
+
+            // Dynamic PDF Staging Actions (Step 6b)
+            'save-draft': (el, e, ds) => {
+                const slug = ds.slug || el.dataset.slug;
+                if (slug && window.saveDraft) window.saveDraft(slug);
+            },
+            'delete-draft': (el, e, ds) => {
+                const slug = ds.slug || el.dataset.slug;
+                if (slug && window.deleteDraft) window.deleteDraft(slug);
+            },
+            'publish-draft': (el, e, ds) => {
+                const slug = ds.slug || el.dataset.slug;
+                if (slug && window.publishDraft) window.publishDraft(slug);
+            },
+            'mark-draft-option': (el, e, ds) => {
+                const slug = ds.slug || el.dataset.slug;
+                const qIdx = Number(ds.questionIndex || el.dataset.questionIndex);
+                const optNum = Number(ds.optionNumber || el.dataset.optionNumber);
+                if (slug && !isNaN(qIdx) && !isNaN(optNum) && window.markDraftCorrectOption) {
+                    window.markDraftCorrectOption(slug, qIdx, optNum);
+                }
+            },
+
+            // Dynamic Notebook Word Actions (Step 6b)
+            'notebook-speak-word': (el, e, ds) => {
+                const word = ds.word || el.dataset.word;
+                if (word) speakJapanese(word);
+            },
+            'notebook-delete-word': (el, e, ds) => {
+                const wordToDelete = ds.word || el.dataset.word;
+                if (wordToDelete) {
+                    let words = getSavedWords();
+                    words = words.filter(w => w.word !== wordToDelete);
+                    saveWordsToStorage(words);
+                    renderNotebookWords();
+                }
+            },
+            'notebook-toggle-mastered': (el, e, ds) => {
+                const wordText = ds.word || el.dataset.word;
+                if (wordText) {
+                    let words = getSavedWords();
+                    const target = words.find(w => w.word === wordText);
+                    if (target) {
+                        target.mastered = el.checked;
+                        saveWordsToStorage(words);
+                        renderNotebookWords();
+                    }
+                }
             }
         });
 
@@ -1064,40 +1148,6 @@ function initEventListeners() {
         elements.notebookSearchInput.addEventListener('input', (e) => {
             state.notebookSearchQuery = e.target.value;
             renderNotebookWords();
-        });
-    }
-
-    // Delegation for actions in saved words list
-    if (elements.notebookWordsList) {
-        elements.notebookWordsList.addEventListener('click', (e) => {
-            const speakBtn = e.target.closest('.btn-speak-saved');
-            if (speakBtn) {
-                speakJapanese(speakBtn.dataset.speak);
-                return;
-            }
-            const deleteBtn = e.target.closest('.btn-delete-saved');
-            if (deleteBtn) {
-                const wordToDelete = deleteBtn.dataset.delete;
-                let words = getSavedWords();
-                words = words.filter(w => w.word !== wordToDelete);
-                saveWordsToStorage(words);
-                renderNotebookWords();
-                return;
-            }
-        });
-
-        elements.notebookWordsList.addEventListener('change', (e) => {
-            const cb = e.target.closest('.cb-toggle-mastered');
-            if (cb) {
-                const wordText = cb.dataset.word;
-                let words = getSavedWords();
-                const target = words.find(w => w.word === wordText);
-                if (target) {
-                    target.mastered = cb.checked;
-                    saveWordsToStorage(words);
-                    renderNotebookWords();
-                }
-            }
         });
     }
 

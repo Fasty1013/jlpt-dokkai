@@ -184,7 +184,10 @@ export function renderDraftsList(drafts) {
                     <label class="draft-option-row">
                         <input type="radio" name="opt-correct-${draft.slug}-${qIdx}" 
                             value="${opt.option_number}" ${isChecked}
-                            onchange="markDraftCorrectOption('${draft.slug}', ${qIdx}, ${opt.option_number})">
+                            data-action="mark-draft-option"
+                            data-slug="${escapeHtml(draft.slug)}"
+                            data-question-index="${qIdx}"
+                            data-option-number="${opt.option_number}">
                         <span class="draft-opt-num">${opt.option_number}.</span>
                         <span class="draft-opt-text">${opt.text}</span>
                     </label>
@@ -241,14 +244,14 @@ export function renderDraftsList(drafts) {
                 <!-- Actions Footer -->
                 <div class="staging-actions-footer">
                     <div class="draft-footer-left">
-                        <button type="button" class="btn btn-ghost btn-sm" onclick="saveDraft('${draft.slug}')">
+                        <button type="button" class="btn btn-ghost btn-sm" data-action="save-draft" data-slug="${escapeHtml(draft.slug)}">
                             💾 Сохранить изменения
                         </button>
-                        <button type="button" class="btn btn-ghost btn-sm text-danger" onclick="deleteDraft('${draft.slug}')">
+                        <button type="button" class="btn btn-ghost btn-sm text-danger" data-action="delete-draft" data-slug="${escapeHtml(draft.slug)}">
                             🗑 Удалить
                         </button>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="publishDraft('${draft.slug}')">
+                    <button type="button" class="btn btn-primary" data-action="publish-draft" data-slug="${escapeHtml(draft.slug)}">
                         🚀 Опубликовать в тренажёр →
                     </button>
                 </div>

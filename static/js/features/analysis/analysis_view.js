@@ -128,7 +128,7 @@ export function renderAnalysisTabs(state, elements) {
     const isActive = idx === activeIdx;
     const isCorrect = q.is_user_correct;
     return `
-      <button type="button" class="analysis-tab-btn ${isActive ? 'active' : ''}" onclick="switchAnalysisTab(${idx})">
+      <button type="button" class="analysis-tab-btn ${isActive ? 'active' : ''}" data-action="switch-analysis-tab" data-tab-index="${idx}">
         <span class="analysis-tab-status ${isCorrect ? 'correct' : 'wrong'}"></span>
         Вопрос №${q.question_number}
       </button>
@@ -228,7 +228,7 @@ export function renderAnalysisActiveCard(q, state, elements) {
           <strong>💡 Разбор вопроса:</strong>
           <p style="margin-top: 0.35rem;">${q.general_explanation || ''}</p>
           ${q.evidence_span_id ? `
-            <button type="button" class="btn-locate-evidence" onclick="locateEvidenceInText('${q.evidence_span_id}')">
+            <button type="button" class="btn-locate-evidence" data-action="locate-evidence" data-span-id="${q.evidence_span_id}">
               📍 Показать доказательство в тексте
             </button>
           ` : ''}

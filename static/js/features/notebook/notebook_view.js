@@ -74,12 +74,12 @@ export function renderNotebookWords(elements, state) {
                 <div class="notebook-word-meaning">${meaningText}</div>
             </div>
             <div class="notebook-word-actions">
-                <button type="button" class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-speak="${wordText}">🔊</button>
+                <button type="button" class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-action="notebook-speak-word" data-word="${wordText}">🔊</button>
                 <label class="switch" title="${isMastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
-                    <input type="checkbox" class="cb-toggle-mastered" data-word="${wordText}" ${isMastered ? 'checked' : ''}>
+                    <input type="checkbox" class="cb-toggle-mastered" data-action="notebook-toggle-mastered" data-word="${wordText}" ${isMastered ? 'checked' : ''}>
                     <span class="slider round"></span>
                 </label>
-                <button type="button" class="notebook-btn-icon btn-delete-saved" title="Удалить" data-delete="${wordText}">🗑️</button>
+                <button type="button" class="notebook-btn-icon btn-delete-saved" title="Удалить" data-action="notebook-delete-word" data-word="${wordText}">🗑️</button>
             </div>
         </div>
         `;

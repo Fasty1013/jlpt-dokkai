@@ -101,7 +101,9 @@ export function renderWizard(state, elements) {
                                     value="${opt.id}" 
                                     class="option-radio"
                                     ${isChecked ? 'checked' : ''}
-                                    onchange="handleOptionSelect(${currentQ.id}, ${opt.id})"
+                                    data-action="select-option"
+                                    data-question-id="${currentQ.id}"
+                                    data-option-id="${opt.id}"
                                 >
                                 <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
                             </label>

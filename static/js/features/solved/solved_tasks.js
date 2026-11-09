@@ -28,13 +28,13 @@ export function renderSolvedCardHtml(t) {
         </div>
         <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
         <div class="solved-card-actions">
-            <button class="btn-solved-action btn-review" onclick="reviewSolvedTask(${t.text_id})">
+            <button type="button" class="btn-solved-action btn-review" data-action="review-solved" data-text-id="${t.text_id}">
                 🔍 Обзор разбора
             </button>
-            <button class="btn-solved-action" onclick="retrySolvedTask(${t.text_id})">
+            <button type="button" class="btn-solved-action" data-action="retry-solved" data-text-id="${t.text_id}">
                 🔁 Пройти заново
             </button>
-            <button class="btn-solved-action" onclick="openReportModal(${t.text_id}, '${escapeHtml(t.title)}')">
+            <button type="button" class="btn-solved-action" data-action="open-report" data-text-id="${t.text_id}" data-task-title="${escapeHtml(t.title)}">
                 ⚠️ Сообщить об ошибке
             </button>
         </div>

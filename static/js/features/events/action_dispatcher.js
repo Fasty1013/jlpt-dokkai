@@ -87,6 +87,25 @@ export function initActionDelegation(rootEl = document) {
     }
   });
 
+  // Root change delegation (for radios, checkboxes, selects with data-action)
+  rootEl.addEventListener('change', (event) => {
+    const actionEl = event.target.closest('[data-action]');
+    if (!actionEl) return;
+
+    if (actionEl.disabled || actionEl.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      return;
+    }
+
+    const action = actionEl.dataset.action;
+    if (!action) return;
+
+    const handler = actionHandlers.get(action);
+    if (handler) {
+      handler(actionEl, event, actionEl.dataset);
+    }
+  });
+
   // Keyboard navigation & accessibility delegation
   rootEl.addEventListener('keydown', (event) => {
     // Escape key: global dismissal of open modals/drawers

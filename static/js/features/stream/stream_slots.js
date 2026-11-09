@@ -38,7 +38,7 @@ export function renderSlotCardHtml(slot, profileKey = '') {
   }
 
   return `
-    <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}" onclick="openPretestModal(${t.id})" style="cursor: pointer;">
+    <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}" data-action="open-pretest" role="button" tabindex="0" style="cursor: pointer;">
         <div class="slot-position-badge">Слот #${slot.position}</div>
         <div class="slot-meta-row">
             <span class="level-tag" data-lvl="${t.level}">${t.level}</span>
@@ -51,7 +51,7 @@ export function renderSlotCardHtml(slot, profileKey = '') {
                 <span>⏱️ ${t.recommended_time_min} мин</span>
                 <span>❓ ${t.question_count} вопр.</span>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openPretestModal(${t.id})">
+            <button type="button" class="btn btn-primary btn-sm" data-action="open-pretest" data-text-id="${t.id}">
                 Начать решение →
             </button>
         </div>
@@ -102,7 +102,7 @@ export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {
     elements.activeSlotsList.innerHTML = `
       <div style="text-align: center; padding: 2rem; color: var(--vermilion);">
           <p>${UI_TEXTS.catalog.loadSlotsError}</p>
-          <button class="btn btn-secondary btn-sm" onclick="fetchAndRenderSlots()" style="margin-top: 0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" data-action="refresh-slots" style="margin-top: 0.5rem;">
               ${UI_TEXTS.catalog.retryCatalog}
           </button>
       </div>
