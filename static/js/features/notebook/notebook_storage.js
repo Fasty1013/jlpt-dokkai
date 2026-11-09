@@ -3,10 +3,13 @@
  * Manages saving, deleting, and syncing notebook words between LocalStorage and DokkaiStorage (IndexedDB).
  */
 
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
+
 export const NOTEBOOK_STORAGE_KEY = 'dokkai_saved_words';
 
-export function getSavedWords(state) {
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+export function getSavedWords(state = storeState) {
+    const currentState = state;
     if (currentState && Array.isArray(currentState.savedWords) && currentState.savedWords.length > 0) {
         return currentState.savedWords;
     }
@@ -29,9 +32,9 @@ export function getSavedWords(state) {
     return (currentState && Array.isArray(currentState.savedWords)) ? currentState.savedWords : [];
 }
 
-export async function saveWordsToStorage(words, state, elements) {
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
+export async function saveWordsToStorage(words, state = storeState, elements = domElements) {
+    const currentState = state;
+    const currentElements = elements;
 
     if (currentState) {
         currentState.savedWords = words;
@@ -53,8 +56,8 @@ export async function saveWordsToStorage(words, state, elements) {
     }
 }
 
-export function updateNotebookBadge(elements, state) {
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
+export function updateNotebookBadge(elements = domElements, state = storeState) {
+    const currentElements = elements;
     const words = getSavedWords(state);
     const count = words.length;
     if (currentElements && currentElements.headerSavedCount) {
@@ -62,15 +65,15 @@ export function updateNotebookBadge(elements, state) {
     }
 }
 
-export function isWordSaved(wordText, state) {
+export function isWordSaved(wordText, state = storeState) {
     const words = getSavedWords(state);
     return words.some(w => w && w.word === wordText);
 }
 
-export async function toggleSaveWord(wordData, state, elements, onUpdate) {
+export async function toggleSaveWord(wordData, state = storeState, elements = domElements, onUpdate) {
     if (!wordData || !wordData.word) return;
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
+    const currentState = state;
+    const currentElements = elements;
 
     let words = getSavedWords(currentState);
     const existingIdx = words.findIndex(w => w && w.word === wordData.word);
@@ -117,9 +120,9 @@ export async function toggleSaveWord(wordData, state, elements, onUpdate) {
     }
 }
 
-export async function clearAllSavedWords(state, elements, onUpdate) {
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
+export async function clearAllSavedWords(state = storeState, elements = domElements, onUpdate) {
+    const currentState = state;
+    const currentElements = elements;
 
     if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
         if (!window.confirm('Вы уверены, что хотите полностью очистить свой словарь?')) {

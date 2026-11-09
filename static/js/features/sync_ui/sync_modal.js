@@ -4,8 +4,11 @@
  * Note: Pure data storage and sync logic are encapsulated in DokkaiStorage and DokkaiCloudSync.
  */
 
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
+
 function getElements() {
-    return (typeof window !== 'undefined' && window.elements) ? window.elements : {};
+    return domElements || {};
 }
 
 /**
@@ -152,8 +155,8 @@ export async function handleImportJsonFile(file) {
             const res = await window.DokkaiStorage.importAllData(content);
             if (res.success) {
                 showSyncModalAlert('success', `Успешно импортировано: ${res.solvedCount} решённых заданий, ${res.wordsCount} слов в словаре!`);
-                if (window.state) {
-                    window.state.savedWords = await window.DokkaiStorage.getAllWords();
+                if (storeState) {
+                    storeState.savedWords = await window.DokkaiStorage.getAllWords();
                 }
                 if (window.updateNotebookBadge) window.updateNotebookBadge();
                 if (window.renderNotebookWords) window.renderNotebookWords();

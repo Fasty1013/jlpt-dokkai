@@ -7,6 +7,8 @@ import { escapeHtml } from '../../utils/dom.js';
 import { getUserId } from '../../utils/user.js';
 import { CATEGORY_NAMES } from '../../constants/labels.js';
 import { UI_TEXTS } from '../../content/texts/ru.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Generate HTML markup for a single slot card.
@@ -65,8 +67,8 @@ export function renderSlotCardHtml(slot, profileKey = '') {
  * @param {Object} context - { state, elements, getUserId }
  */
 export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
   if (!elements || !elements.activeSlotsList) return;
   elements.activeSlotsList.innerHTML = '<div class="loading-spinner">Загрузка слотов заданий...</div>';
 

@@ -4,10 +4,12 @@
  */
 import { escapeHtml } from '../../utils/dom.js';
 import { getSavedWords } from './notebook_storage.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
-export function renderNotebookWords(elements, state) {
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+export function renderNotebookWords(elements = domElements, state = storeState) {
+    const currentElements = elements;
+    const currentState = state;
 
     const allWords = getSavedWords(currentState);
     const safeWords = Array.isArray(allWords) ? allWords : [];

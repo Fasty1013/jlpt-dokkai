@@ -38,10 +38,10 @@ if (typeof window !== 'undefined') {
         initEvents: initNotebookEvents
     };
 
-    window.getSavedWords = () => getSavedWords(window.state);
-    window.saveWordsToStorage = (words) => saveWordsToStorage(words, window.state, window.elements);
-    window.updateNotebookBadge = () => updateNotebookBadge(window.elements, window.state);
-    window.isWordSaved = (wordText) => isWordSaved(wordText, window.state);
-    window.renderNotebookWords = () => renderNotebookWords(window.elements, window.state);
+    window.getSavedWords = () => getSavedWords();
+    window.saveWordsToStorage = (words) => saveWordsToStorage(words);
+    window.updateNotebookBadge = () => updateNotebookBadge();
+    window.isWordSaved = (wordText) => isWordSaved(wordText);
+    window.renderNotebookWords = () => renderNotebookWords();
 }
 

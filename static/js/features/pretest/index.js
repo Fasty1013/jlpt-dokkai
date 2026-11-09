@@ -43,7 +43,7 @@ if (typeof window !== 'undefined') {
   // Direct bridges for backward compatibility until Step 6 event delegation
   window.openPretestModal = (textId) => openPretestModal(textId);
   window.closePretestModal = () => closePretestModal();
-  window.updateModalSettingTags = () => updateModalSettingTags(window.elements);
+  window.updateModalSettingTags = (els) => updateModalSettingTags(els || (window.DokkaiElements ? window.DokkaiElements.elements : null));
   window.confirmPretestSettingsAndStart = () => confirmPretestSettingsAndStart();
   window.loadStoredConfig = loadStoredConfig;
   window.saveStoredConfig = saveStoredConfig;

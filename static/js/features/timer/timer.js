@@ -4,29 +4,15 @@
  */
 
 import { formatTime } from '../../utils/time.js';
-
-function resolveTimerState(timerState) {
-  if (timerState) return timerState;
-  if (typeof window !== 'undefined' && window.state && window.state.timer) {
-    return window.state.timer;
-  }
-  return null;
-}
-
-function resolveElements(elements) {
-  if (elements) return elements;
-  if (typeof window !== 'undefined' && window.elements) {
-    return window.elements;
-  }
-  return {};
-}
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Stop active timer interval without resetting state.
  * @param {Object} [timerState]
  */
-export function stopTimer(timerState) {
-  const state = resolveTimerState(timerState);
+export function stopTimer(timerState = (storeState ? storeState.timer : null)) {
+  const state = timerState;
   if (state && state.intervalId) {
     clearInterval(state.intervalId);
     state.intervalId = null;
@@ -38,9 +24,9 @@ export function stopTimer(timerState) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function startUntimedMode(timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function startUntimedMode(timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   if (!state) return;
 
   stopTimer(state);
@@ -65,9 +51,9 @@ export function startUntimedMode(timerState, elements) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function startCountdownTimer(minutes, timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function startCountdownTimer(minutes, timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   if (!state) return;
 
   stopTimer(state);
@@ -130,9 +116,9 @@ export function startCountdownTimer(minutes, timerState, elements) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function toggleTimerPause(timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function toggleTimerPause(timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   if (!state || !state.enabled) return;
 
   state.isPaused = !state.isPaused;
@@ -150,9 +136,9 @@ export function toggleTimerPause(timerState, elements) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function addTimerMinute(timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function addTimerMinute(timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   if (!state) return;
 
   if (!state.enabled) {
@@ -184,9 +170,9 @@ export function addTimerMinute(timerState, elements) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function dismissTimer(timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function dismissTimer(timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   if (confirm('Выключить таймер и продолжить решать в спокойном темпе?')) {
     startUntimedMode(state, els);
   }
@@ -198,9 +184,9 @@ export function dismissTimer(timerState, elements) {
  * @param {Object} [timerState]
  * @param {Object} [elements]
  */
-export function enableTimerAtRuntime(recMin, timerState, elements) {
-  const state = resolveTimerState(timerState);
-  const els = resolveElements(elements);
+export function enableTimerAtRuntime(recMin, timerState = (storeState ? storeState.timer : null), elements = domElements) {
+  const state = timerState;
+  const els = elements || {};
   const mins = recMin || 3;
   startCountdownTimer(mins, state, els);
 }

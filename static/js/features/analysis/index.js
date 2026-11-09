@@ -45,9 +45,9 @@ const DokkaiAnalysis = {
 if (typeof window !== 'undefined') {
   window.DokkaiAnalysis = DokkaiAnalysis;
   // Rendering utilities for view lifecycle
-  window.renderAnalysisView = (data) => renderAnalysisView(data, window.state, window.elements);
-  window.renderAnalysisTabs = () => renderAnalysisTabs(window.state, window.elements);
-  window.renderAnalysisActiveCard = (q) => renderAnalysisActiveCard(q, window.state, window.elements);
+  window.renderAnalysisView = (data) => renderAnalysisView(data);
+  window.renderAnalysisTabs = () => renderAnalysisTabs();
+  window.renderAnalysisActiveCard = (q) => renderAnalysisActiveCard(q);
 }
 
 export default DokkaiAnalysis;

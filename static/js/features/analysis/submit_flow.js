@@ -9,18 +9,8 @@ import { stopTimer } from '../timer/timer.js';
 import { renderWizard } from '../exercise/wizard.js';
 import { completeStreamTask } from '../../api/stream.js';
 import { renderAnalysisView } from './analysis_view.js';
-
-function resolveState(state) {
-  if (state) return state;
-  if (typeof window !== 'undefined' && window.state) return window.state;
-  return null;
-}
-
-function resolveElements(elements) {
-  if (elements) return elements;
-  if (typeof window !== 'undefined' && window.elements) return window.elements;
-  return {};
-}
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Submit answered exercise questions for verification.
@@ -28,8 +18,8 @@ function resolveElements(elements) {
  * @returns {Promise<Object>} Stream submission result
  */
 export async function submitAnswers(options = {}) {
-  const s = resolveState(options.state);
-  const els = resolveElements(options.elements);
+  const s = options.state || storeState;
+  const els = options.elements || domElements;
   if (!s || !s.activeText || !s.activeText.questions) {
     throw new Error('No active exercise session found to submit');
   }

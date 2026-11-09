@@ -31,5 +31,5 @@ if (typeof window !== 'undefined') {
   // Direct bridges for backward compatibility until Step 6 event delegation
   window.fetchAndRenderSlots = (isExplicitRefresh) => fetchAndRenderSlots(isExplicitRefresh);
   window.handleSlotReplacement = (solvedTextId, replacement) => handleSlotReplacement(solvedTextId, replacement);
-  window.switchMobileStreamCol = (col) => switchMobileStreamCol(col, window.elements);
+  window.switchMobileStreamCol = (col, els) => switchMobileStreamCol(col, els || (window.DokkaiElements ? window.DokkaiElements.elements : null));
 }

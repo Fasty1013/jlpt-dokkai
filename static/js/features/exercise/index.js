@@ -36,10 +36,10 @@ const DokkaiExercise = {
 if (typeof window !== 'undefined') {
   window.DokkaiExercise = DokkaiExercise;
   // Shorthand bridges for inline event handlers and legacy calls during Step 5
-  window.handleOptionSelect = (qid, oid) => handleOptionSelect(qid, oid, window.state, window.elements);
-  window.wizardGoNext = () => wizardGoNext(window.state, window.elements);
-  window.wizardGoPrev = () => wizardGoPrev(window.state, window.elements, window.returnToCatalog);
-  window.renderWizard = () => renderWizard(window.state, window.elements);
+  window.handleOptionSelect = (qid, oid) => handleOptionSelect(qid, oid);
+  window.wizardGoNext = () => wizardGoNext();
+  window.wizardGoPrev = () => wizardGoPrev();
+  window.renderWizard = () => renderWizard();
   window.startExercise = (textId, opts) => startExercise(textId, opts);
 }
 

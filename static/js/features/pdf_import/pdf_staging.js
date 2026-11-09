@@ -7,15 +7,17 @@
 
 import { CATEGORY_NAMES } from '../../constants/labels.js';
 import { formatFileSize } from '../../utils/index.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 let currentDraftsCache = [];
 
 function getElements() {
-    return (typeof window !== 'undefined' && window.elements) ? window.elements : {};
+    return domElements || {};
 }
 
 function getState() {
-    return (typeof window !== 'undefined' && window.state) ? window.state : {};
+    return storeState || {};
 }
 
 export function getCurrentDraftsCache() {

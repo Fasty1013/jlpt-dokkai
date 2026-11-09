@@ -6,18 +6,8 @@
 import { formatTime } from '../../utils/time.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { TRAP_LABELS } from '../../constants/labels.js';
-
-function resolveState(state) {
-  if (state) return state;
-  if (typeof window !== 'undefined' && window.state) return window.state;
-  return null;
-}
-
-function resolveElements(elements) {
-  if (elements) return elements;
-  if (typeof window !== 'undefined' && window.elements) return window.elements;
-  return {};
-}
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Render complete post-submission analysis view.
@@ -25,9 +15,9 @@ function resolveElements(elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function renderAnalysisView(data, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function renderAnalysisView(data, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !els || !data) return;
 
   // Hide Wizard Controls
@@ -116,9 +106,9 @@ export function renderAnalysisView(data, state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function renderAnalysisTabs(state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function renderAnalysisTabs(state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !s.activeText || !s.activeText.questions || !els.analysisTabs) return;
 
   const questions = s.activeText.questions;
@@ -144,9 +134,9 @@ export function renderAnalysisTabs(state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function switchAnalysisTab(idx, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function switchAnalysisTab(idx, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s) return;
   s.analysisActiveTabIdx = idx;
   renderAnalysisTabs(s, els);
@@ -158,9 +148,9 @@ export function switchAnalysisTab(idx, state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function renderAnalysisActiveCard(q, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function renderAnalysisActiveCard(q, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!q || !els.analysisActiveCard) return;
 
   const allowHints = (s && s.pretestConfig && typeof s.pretestConfig.showHintsAndAnalysis === 'boolean')
@@ -252,9 +242,9 @@ export function renderAnalysisActiveCard(q, state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function toggleFurigana(state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function toggleFurigana(state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !els) return;
 
   if (!s.settings) s.settings = {};
@@ -276,9 +266,9 @@ export function toggleFurigana(state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function toggleEvidence(state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function toggleEvidence(state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !els) return;
   if (s.pretestConfig && !s.pretestConfig.showHintsAndAnalysis) return;
 
@@ -302,9 +292,9 @@ export function toggleEvidence(state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function locateEvidenceInText(spanId, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function locateEvidenceInText(spanId, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (s && s.pretestConfig && !s.pretestConfig.showHintsAndAnalysis) return;
 
   if (s && (!s.settings || !s.settings.evidenceVisible)) {
@@ -328,9 +318,9 @@ export function locateEvidenceInText(spanId, state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function toggleSupplementaryDrawer(type, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function toggleSupplementaryDrawer(type, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!els || !els.supplementaryDrawer) return;
   if (s && s.pretestConfig && !s.pretestConfig.showHintsAndAnalysis) return;
 

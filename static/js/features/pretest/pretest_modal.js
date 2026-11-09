@@ -3,6 +3,8 @@
  */
 
 import { saveStoredConfig } from './config.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Update UI tags reflecting current modal settings.
@@ -52,8 +54,8 @@ export function updateModalSettingTags(elements) {
  * @param {Object} context - { state, elements, getTextInfo }
  */
 export function openPretestModal(textId, context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
   if (!state || !elements) return;
 
   const targetId = Number(textId);
@@ -103,8 +105,8 @@ export function openPretestModal(textId, context = {}) {
  * @param {Object} context - { state, elements }
  */
 export function closePretestModal(context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
 
   if (elements && elements.pretestModalBackdrop) {
     elements.pretestModalBackdrop.classList.add('hidden');
@@ -119,8 +121,8 @@ export function closePretestModal(context = {}) {
  * @param {Object} context - { state, elements, onStart }
  */
 export function confirmPretestSettingsAndStart(context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
   if (!state || !elements) return;
 
   const showFurigana = elements.pretestToggleFurigana ? elements.pretestToggleFurigana.checked : true;

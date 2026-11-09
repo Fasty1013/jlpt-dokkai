@@ -5,6 +5,8 @@
 import { fetchSolvedTasks, fetchSolvedDetail, retrySolvedTask as apiRetrySolvedTask } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { getUserId } from '../../utils/user.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Generate HTML markup for a single solved task card.
@@ -47,8 +49,8 @@ export function renderSolvedCardHtml(t) {
  * @param {Object} context - { state, elements, getUserId }
  */
 export async function fetchAndRenderSolvedTasks(context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
   const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   if (!elements?.solvedTasksList) return;
@@ -121,7 +123,7 @@ export async function fetchAndRenderSolvedTasks(context = {}) {
  * @param {Object} context - { state, getUserId, onRenderAnalysis }
  */
 export async function reviewSolvedTask(textId, context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
+  const state = context.state || storeState;
   const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   try {
@@ -162,7 +164,7 @@ export async function reviewSolvedTask(textId, context = {}) {
  * @param {Object} context - { state, getUserId, onOpenPretest }
  */
 export async function retrySolvedTask(textId, context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
+  const state = context.state || storeState;
   const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   try {

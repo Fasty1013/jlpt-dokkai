@@ -83,9 +83,9 @@ test.describe('13. API Timeout, Cold-start Resilience & Retry Strategy', () => {
       }
     }
 
-    // Verify answers are selected in state
-    const initialAnswersCount = await page.evaluate(() => Object.keys(window.state.userAnswers).length);
-    expect(initialAnswersCount).toBeGreaterThan(0);
+    // Verify answers are selected in public DOM
+    const initialAnswersCount = await page.locator('#answered-count').textContent();
+    expect(parseInt(initialAnswersCount || '0', 10)).toBeGreaterThan(0);
 
     // Intercept submit endpoint to simulate network/timeout failure on first attempt
     let failSubmit = true;
@@ -111,8 +111,8 @@ test.describe('13. API Timeout, Cold-start Resilience & Retry Strategy', () => {
     await expect(submitBtn).toBeEnabled({ timeout: 10000 });
     await expect(submitBtn).toHaveText(/Повторить|Завершить/);
 
-    // 3. User answers MUST NOT be lost from state
-    const answersAfterFailure = await page.evaluate(() => Object.keys(window.state.userAnswers).length);
+    // 3. User answers MUST NOT be lost from state / public UI
+    const answersAfterFailure = await page.locator('#answered-count').textContent();
     expect(answersAfterFailure).toBe(initialAnswersCount);
 
     // 4. Second attempt (succeeds)

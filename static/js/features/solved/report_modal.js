@@ -4,6 +4,8 @@
 
 import { reportTextIssue } from '../../api/texts.js';
 import { getUserId } from '../../utils/user.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Open report defect modal for a specific text.
@@ -12,8 +14,8 @@ import { getUserId } from '../../utils/user.js';
  * @param {Object} context - { state, elements }
  */
 export function openReportModal(textId, title, context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
 
   if (state) state.reportingTextId = textId;
   if (typeof history !== 'undefined' && history.pushState) {
@@ -36,8 +38,8 @@ export function openReportModal(textId, title, context = {}) {
  * @param {Object} context - { state, elements }
  */
 export function closeReportModal(context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
 
   if (state) state.reportingTextId = null;
   if (elements?.reportModalBackdrop) {
@@ -50,8 +52,8 @@ export function closeReportModal(context = {}) {
  * @param {Object} context - { state, elements, getUserId, onRefreshSlots }
  */
 export async function submitReportDefect(context = {}) {
-  const state = context.state || (typeof window !== 'undefined' ? window.state : null);
-  const elements = context.elements || (typeof window !== 'undefined' ? window.elements : null);
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
   const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
 
   if (!state?.reportingTextId) return;

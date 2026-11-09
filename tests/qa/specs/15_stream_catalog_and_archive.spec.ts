@@ -63,8 +63,11 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
   });
 
   test('04. Solved Archive: Filters "Все", "100%", "С ошибками" correctly partition results', async ({ page }) => {
+    // Wait for initial startup network request to settle before seeding test archive
+    const solvedInitialPromise = page.waitForResponse(resp => resp.url().includes('/api/stream/solved'), { timeout: 15000 }).catch(() => null);
     await page.goto('/');
     await page.waitForSelector('#solved-tasks-list', { timeout: 15000 });
+    await solvedInitialPromise;
 
     // Deterministically wait for DokkaiStorage initialization and render function
     await page.waitForFunction(async () => {

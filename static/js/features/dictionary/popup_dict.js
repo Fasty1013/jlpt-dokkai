@@ -3,11 +3,13 @@
  * Yomichan-style inline hover/selection/click dictionary with intelligent viewport positioning.
  */
 import { isWordSaved } from '../notebook/notebook_storage.js';
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
-export function showPopupDictionary(wordData, clientX, clientY, elements, state) {
+export function showPopupDictionary(wordData, clientX, clientY, elements = domElements, state = storeState) {
     if (!wordData || !wordData.word) return;
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+    const currentElements = elements;
+    const currentState = state;
 
     if (currentState) {
         currentState.activePopupWord = wordData;
@@ -53,9 +55,9 @@ export function showPopupDictionary(wordData, clientX, clientY, elements, state)
     currentElements.popupDictionaryCard.style.left = `${left}px`;
 }
 
-export function hidePopupDictionary(elements, state) {
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+export function hidePopupDictionary(elements = domElements, state = storeState) {
+    const currentElements = elements;
+    const currentState = state;
 
     if (currentElements && currentElements.popupDictionaryCard) {
         currentElements.popupDictionaryCard.classList.add('hidden');
@@ -65,9 +67,9 @@ export function hidePopupDictionary(elements, state) {
     }
 }
 
-export function lookupAndShowWord(query, clientX, clientY, elements, state) {
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+export function lookupAndShowWord(query, clientX, clientY, elements = domElements, state = storeState) {
+    const currentElements = elements;
+    const currentState = state;
 
     if (currentState && !currentState.popupDictEnabled) return;
     if (!query) return;
@@ -122,9 +124,9 @@ export function lookupAndShowWord(query, clientX, clientY, elements, state) {
         });
 }
 
-export function togglePopupDictStatus(elements, state) {
-    const currentElements = elements || (typeof window !== 'undefined' ? window.elements : null);
-    const currentState = state || (typeof window !== 'undefined' ? window.state : null);
+export function togglePopupDictStatus(elements = domElements, state = storeState) {
+    const currentElements = elements;
+    const currentState = state;
 
     if (currentState) {
         currentState.popupDictEnabled = !currentState.popupDictEnabled;

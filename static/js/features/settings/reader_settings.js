@@ -3,28 +3,15 @@
  * Handles font family (Mincho vs Gothic) and text size adjustments (16px..28px).
  */
 
-function resolveSettings(settings) {
-  if (settings) return settings;
-  if (typeof window !== 'undefined' && window.state && window.state.settings) {
-    return window.state.settings;
-  }
-  return null;
-}
-
-function resolveElements(elements) {
-  if (elements) return elements;
-  if (typeof window !== 'undefined' && window.elements) {
-    return window.elements;
-  }
-  return {};
-}
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Persist user settings to DokkaiStorage.
  * @param {Object} [settings]
  */
-export function saveUserSettings(settings) {
-  const currentSettings = resolveSettings(settings);
+export function saveUserSettings(settings = (storeState ? storeState.settings : null)) {
+  const currentSettings = settings;
   if (typeof window !== 'undefined' && window.DokkaiStorage && currentSettings) {
     window.DokkaiStorage.saveSettings('user_settings', currentSettings);
   }
@@ -36,9 +23,9 @@ export function saveUserSettings(settings) {
  * @param {Object} [settings]
  * @param {Object} [elements]
  */
-export function setReaderFont(typeface, settings, elements) {
-  const s = resolveSettings(settings);
-  const els = resolveElements(elements);
+export function setReaderFont(typeface, settings = (storeState ? storeState.settings : null), elements = domElements) {
+  const s = settings;
+  const els = elements || {};
 
   if (s) {
     s.fontFamily = typeface;
@@ -74,9 +61,9 @@ export function setReaderFont(typeface, settings, elements) {
  * @param {Object} [elements]
  * @returns {number}
  */
-export function adjustFontSize(delta, settings, elements) {
-  const s = resolveSettings(settings);
-  const els = resolveElements(elements);
+export function adjustFontSize(delta, settings = (storeState ? storeState.settings : null), elements = domElements) {
+  const s = settings;
+  const els = elements || {};
   const currentSize = (s && s.fontSizePx) ? s.fontSizePx : 20;
   const newSize = Math.max(16, Math.min(28, currentSize + delta));
 

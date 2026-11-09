@@ -3,24 +3,15 @@
  * Step-by-Step Question Wizard navigation, card rendering, and active session persistence.
  */
 
-function resolveState(state) {
-  if (state) return state;
-  if (typeof window !== 'undefined' && window.state) return window.state;
-  return null;
-}
-
-function resolveElements(elements) {
-  if (elements) return elements;
-  if (typeof window !== 'undefined' && window.elements) return window.elements;
-  return {};
-}
+import { state as storeState } from '../../state/store.js';
+import { elements as domElements } from '../../state/elements.js';
 
 /**
  * Persist active exercise session into DokkaiStorage.
  * @param {Object} [state]
  */
-export function saveCurrentActiveSession(state) {
-  const s = resolveState(state);
+export function saveCurrentActiveSession(state = storeState) {
+  const s = state;
   if (!s || s.currentView !== 'exercise' || !s.activeText) return;
 
   if (typeof window !== 'undefined' && window.DokkaiStorage && window.DokkaiStorage.saveActiveSession) {
@@ -45,9 +36,9 @@ export function saveCurrentActiveSession(state) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function renderWizard(state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function renderWizard(state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !s.activeText || !s.activeText.questions) return;
 
   const questions = s.activeText.questions;
@@ -151,9 +142,9 @@ export function renderWizard(state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function handleOptionSelect(questionId, optionId, state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function handleOptionSelect(questionId, optionId, state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s) return;
 
   if (!s.userAnswers) s.userAnswers = {};
@@ -179,9 +170,9 @@ export function handleOptionSelect(questionId, optionId, state, elements) {
  * @param {Object} [state]
  * @param {Object} [elements]
  */
-export function wizardGoNext(state, elements) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function wizardGoNext(state = storeState, elements = domElements) {
+  const s = state;
+  const els = elements || {};
   if (!s || !s.activeText || !s.activeText.questions) return;
 
   const totalQ = s.activeText.questions.length;
@@ -198,9 +189,9 @@ export function wizardGoNext(state, elements) {
  * @param {Object} [elements]
  * @param {Function} [onReturnToCatalog]
  */
-export function wizardGoPrev(state, elements, onReturnToCatalog) {
-  const s = resolveState(state);
-  const els = resolveElements(elements);
+export function wizardGoPrev(state = storeState, elements = domElements, onReturnToCatalog) {
+  const s = state;
+  const els = elements || {};
   if (!s) return;
 
   if (s.currentQuestionIndex > 0) {
