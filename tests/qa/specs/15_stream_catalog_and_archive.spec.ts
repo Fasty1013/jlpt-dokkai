@@ -66,10 +66,19 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
     await page.goto('/');
     await page.waitForSelector('#solved-tasks-list', { timeout: 15000 });
 
+    // Deterministically wait for DokkaiStorage initialization and render function
+    await page.waitForFunction(async () => {
+      const w = window as any;
+      if (!w.DokkaiStorage || !w.DokkaiStorage.initPromise) return false;
+      await w.DokkaiStorage.initPromise;
+      return Boolean(w.DokkaiStorage.isReady && typeof w.fetchAndRenderSolvedTasks === 'function');
+    }, { timeout: 15000 });
+
     // Seed test solved tasks in DokkaiStorage
     await page.evaluate(async () => {
-      if (window.DokkaiStorage) {
-        await window.DokkaiStorage.recordSolvedTask({
+      const w = window as any;
+      if (w.DokkaiStorage) {
+        await w.DokkaiStorage.recordSolvedTask({
           text_id: 991,
           title: 'Учебный текст 100% (Тест)',
           level: 'N5',
@@ -83,7 +92,7 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
           time_spent_sec: 45,
           solved_at: new Date().toISOString()
         });
-        await window.DokkaiStorage.recordSolvedTask({
+        await w.DokkaiStorage.recordSolvedTask({
           text_id: 992,
           title: 'Учебный текст с ошибками (Тест)',
           level: 'N5',
@@ -97,8 +106,8 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
           time_spent_sec: 90,
           solved_at: new Date().toISOString()
         });
-        if (window.fetchAndRenderSolvedTasks) {
-          await window.fetchAndRenderSolvedTasks();
+        if (w.fetchAndRenderSolvedTasks) {
+          await w.fetchAndRenderSolvedTasks();
         }
       }
     });
@@ -131,14 +140,54 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
     await page.goto('/');
     await page.waitForSelector('#active-slots-list', { timeout: 15000 });
 
-    // Open modal via helper
-    await page.evaluate(() => {
-      if (window.openReportModal) {
-        window.openReportModal(1, 'Библиотека (Тест)');
-      } else if (window.DokkaiSolved && window.DokkaiSolved.openReportModal) {
-        window.DokkaiSolved.openReportModal(1, 'Библиотека (Тест)', { state: window.state, elements: window.elements });
+    // Deterministically wait for DokkaiStorage and seed a solved task so the report button exists
+    await page.waitForFunction(async () => {
+      const w = window as any;
+      if (!w.DokkaiStorage || !w.DokkaiStorage.initPromise) return false;
+      await w.DokkaiStorage.initPromise;
+      return Boolean(w.DokkaiStorage.isReady && typeof w.fetchAndRenderSolvedTasks === 'function');
+    }, { timeout: 15000 });
+
+    await page.evaluate(async () => {
+      const w = window as any;
+      if (w.DokkaiStorage) {
+        await w.DokkaiStorage.recordSolvedTask({
+          text_id: 1,
+          title: 'Библиотека (Тест)',
+          level: 'N5',
+          category: 'short',
+          score: 100,
+          score_percent: 100,
+          last_score: 100,
+          correct_count: 1,
+          total_questions: 1,
+          perfect: true,
+          time_spent_sec: 45,
+          solved_at: new Date().toISOString()
+        });
+        if (w.fetchAndRenderSolvedTasks) {
+          await w.fetchAndRenderSolvedTasks();
+        }
       }
     });
+
+    // Real click on report button in UI chain: button -> open modal
+    const reportBtn = page.locator('#solved-tasks-list .btn-solved-action').filter({ hasText: /Заявить|ошибк/ }).first();
+    const hasReportBtn = await reportBtn.count() > 0;
+
+    if (hasReportBtn) {
+      await reportBtn.click();
+    } else {
+      // Fallback for main if solved card report button not rendered
+      await page.evaluate(() => {
+        const w = window as any;
+        if (w.openReportModal) {
+          w.openReportModal(1, 'Библиотека (Тест)');
+        } else if (w.DokkaiSolved && w.DokkaiSolved.openReportModal) {
+          w.DokkaiSolved.openReportModal(1, 'Библиотека (Тест)', { state: w.state, elements: w.elements });
+        }
+      });
+    }
 
     const modalBackdrop = page.locator('#report-modal-backdrop');
     await expect(modalBackdrop).toBeVisible();
