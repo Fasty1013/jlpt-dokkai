@@ -22,10 +22,5 @@ if (typeof window !== 'undefined') {
         lookupAndShowWord,
         togglePopupDictStatus
     };
-
-    window.showPopupDictionary = (wordData, clientX, clientY) => showPopupDictionary(wordData, clientX, clientY, window.elements, window.state);
-    window.hidePopupDictionary = () => hidePopupDictionary(window.elements, window.state);
-    window.lookupAndShowWord = (query, clientX, clientY) => lookupAndShowWord(query, clientX, clientY, window.elements, window.state);
-    window.togglePopupDictStatus = () => togglePopupDictStatus(window.elements, window.state);
 }
 

@@ -55,10 +55,6 @@ if (typeof window !== 'undefined') {
     window.handlePdfUpload = handlePdfUpload;
     window.fetchAndRenderDrafts = fetchAndRenderDrafts;
     window.renderDraftsList = renderDraftsList;
-    window.markDraftCorrectOption = markDraftCorrectOption;
-    window.saveDraft = saveDraft;
-    window.publishDraft = publishDraft;
-    window.deleteDraft = deleteDraft;
     window.initPdfImportUI = initPdfImportUI;
     window.DokkaiPdfImport = DokkaiPdfImport;
 }

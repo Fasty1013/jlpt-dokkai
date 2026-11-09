@@ -38,9 +38,6 @@ if (typeof window !== 'undefined') {
 
   // Direct bridges for backward compatibility until Step 6 event delegation
   window.fetchAndRenderSolvedTasks = () => fetchAndRenderSolvedTasks();
-  window.reviewSolvedTask = (textId) => reviewSolvedTask(textId);
-  window.retrySolvedTask = (textId) => retrySolvedTask(textId);
-  window.openReportModal = (textId, title) => openReportModal(textId, title);
   window.closeReportModal = () => closeReportModal();
   window.submitReportDefect = () => submitReportDefect();
 }

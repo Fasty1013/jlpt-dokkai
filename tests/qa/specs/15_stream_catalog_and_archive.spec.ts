@@ -135,6 +135,8 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
     await page.evaluate(() => {
       if (window.openReportModal) {
         window.openReportModal(1, 'Библиотека (Тест)');
+      } else if (window.DokkaiSolved && window.DokkaiSolved.openReportModal) {
+        window.DokkaiSolved.openReportModal(1, 'Библиотека (Тест)', { state: window.state, elements: window.elements });
       }
     });
 

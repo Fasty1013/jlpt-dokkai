@@ -39,8 +39,6 @@ if (typeof window !== 'undefined') {
     window.saveWordsToStorage = (words) => saveWordsToStorage(words, window.state, window.elements);
     window.updateNotebookBadge = () => updateNotebookBadge(window.elements, window.state);
     window.isWordSaved = (wordText) => isWordSaved(wordText, window.state);
-    window.toggleSaveWord = (wordData) => toggleSaveWord(wordData, window.state, window.elements, window.renderNotebookWords);
-    window.clearAllSavedWords = () => clearAllSavedWords(window.state, window.elements, window.renderNotebookWords);
     window.renderNotebookWords = () => renderNotebookWords(window.elements, window.state);
 }
 
