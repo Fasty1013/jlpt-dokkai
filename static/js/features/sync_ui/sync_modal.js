@@ -173,7 +173,12 @@ export async function handleImportJsonFile(file) {
 /**
  * Initialize event handlers for Sync Modal dialog and Cloud Auth triggers.
  */
+let isSyncModalUIInitialized = false;
+
 export function initSyncModalUI() {
+    if (isSyncModalUIInitialized) return;
+    isSyncModalUIInitialized = true;
+
     const els = getElements();
 
     if (els.btnSyncStatus) {

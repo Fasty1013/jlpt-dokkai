@@ -10,12 +10,15 @@ import {
   initActionDelegation
 } from './action_dispatcher.js';
 
+import { initNavigationEvents } from './navigation_events.js';
+
 export {
   registerAction,
   registerActions,
   dispatchAction,
   hasAction,
-  initActionDelegation
+  initActionDelegation,
+  initNavigationEvents
 };
 
 export const DokkaiEvents = {
@@ -23,7 +26,8 @@ export const DokkaiEvents = {
   registerActions,
   dispatchAction,
   hasAction,
-  initActionDelegation
+  initActionDelegation,
+  initNavigationEvents
 };
 
 // Global bridge for backward compatibility and classic scripts

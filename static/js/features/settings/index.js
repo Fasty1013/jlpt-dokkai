@@ -9,17 +9,21 @@ import {
   adjustFontSize
 } from './reader_settings.js';
 
+import { initReaderSettingsEvents } from './reader_settings_events.js';
+
 export {
   saveUserSettings,
   setReaderFont,
-  adjustFontSize
+  adjustFontSize,
+  initReaderSettingsEvents
 };
 
 if (typeof window !== 'undefined') {
   window.DokkaiSettings = {
     saveUserSettings,
     setReaderFont,
-    adjustFontSize
+    adjustFontSize,
+    initEvents: initReaderSettingsEvents
   };
 
   // Direct function bridges on window for compatibility

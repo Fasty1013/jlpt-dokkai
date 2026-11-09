@@ -15,6 +15,8 @@ import {
   submitReportDefect
 } from './report_modal.js';
 
+import { initReportEvents } from './report_events.js';
+
 export {
   renderSolvedCardHtml,
   fetchAndRenderSolvedTasks,
@@ -22,7 +24,8 @@ export {
   retrySolvedTask,
   openReportModal,
   closeReportModal,
-  submitReportDefect
+  submitReportDefect,
+  initReportEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -33,7 +36,8 @@ if (typeof window !== 'undefined') {
     retrySolvedTask,
     openReportModal,
     closeReportModal,
-    submitReportDefect
+    submitReportDefect,
+    initEvents: initReportEvents
   };
 
   // Direct bridges for backward compatibility until Step 6 event delegation

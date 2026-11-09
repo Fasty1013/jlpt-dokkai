@@ -15,6 +15,8 @@ import {
   confirmPretestSettingsAndStart
 } from './pretest_modal.js';
 
+import { initPretestEvents } from './pretest_events.js';
+
 export {
   CONFIG_STORAGE_KEY,
   loadStoredConfig,
@@ -22,7 +24,8 @@ export {
   openPretestModal,
   closePretestModal,
   updateModalSettingTags,
-  confirmPretestSettingsAndStart
+  confirmPretestSettingsAndStart,
+  initPretestEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -33,7 +36,8 @@ if (typeof window !== 'undefined') {
     openPretestModal,
     closePretestModal,
     updateModalSettingTags,
-    confirmPretestSettingsAndStart
+    confirmPretestSettingsAndStart,
+    initEvents: initPretestEvents
   };
 
   // Direct bridges for backward compatibility until Step 6 event delegation

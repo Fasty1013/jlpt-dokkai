@@ -361,7 +361,12 @@ export async function deleteDraft(slug) {
 /**
  * Bind event listeners for PDF Dropzone, file upload form and drafts refresh.
  */
+let isPdfImportUIInitialized = false;
+
 export function initPdfImportUI() {
+    if (isPdfImportUIInitialized) return;
+    isPdfImportUIInitialized = true;
+
     const els = getElements();
 
     if (els.btnRefreshDrafts) {

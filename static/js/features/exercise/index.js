@@ -11,6 +11,7 @@ import {
 } from './wizard.js';
 
 import { startExercise } from './exercise_view.js';
+import { initExerciseEvents } from './exercise_events.js';
 
 export {
   saveCurrentActiveSession,
@@ -18,7 +19,8 @@ export {
   handleOptionSelect,
   wizardGoNext,
   wizardGoPrev,
-  startExercise
+  startExercise,
+  initExerciseEvents
 };
 
 const DokkaiExercise = {
@@ -27,7 +29,8 @@ const DokkaiExercise = {
   handleOptionSelect,
   wizardGoNext,
   wizardGoPrev,
-  startExercise
+  startExercise,
+  initEvents: initExerciseEvents
 };
 
 if (typeof window !== 'undefined') {

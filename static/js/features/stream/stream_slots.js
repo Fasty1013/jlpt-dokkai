@@ -38,7 +38,7 @@ export function renderSlotCardHtml(slot, profileKey = '') {
   }
 
   return `
-    <div class="stream-slot-card" data-slot-id="${slot.id}" data-text-id="${t.id}" data-position="${slot.position}" data-action="open-pretest" role="button" tabindex="0" style="cursor: pointer;">
+    <div class="stream-slot-card" data-slot-id="${escapeHtml(slot.id)}" data-text-id="${escapeHtml(t.id)}" data-position="${escapeHtml(slot.position)}" data-action="open-pretest" role="button" tabindex="0" style="cursor: pointer;">
         <div class="slot-position-badge">Слот #${slot.position}</div>
         <div class="slot-meta-row">
             <span class="level-tag" data-lvl="${t.level}">${t.level}</span>

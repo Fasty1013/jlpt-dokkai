@@ -785,420 +785,174 @@ function returnToCatalog(pushState = true) {
 
 function initEventListeners() {
     // ------------------------------------------------------------------------
-    // Central Declarative Action Delegation (Step 6a)
+    // Feature Event Inits (Step 6d Modular Event Decomposition)
     // ------------------------------------------------------------------------
-    if (window.DokkaiEvents) {
-        window.DokkaiEvents.registerActions({
-            // Brand & Navigation
-            'return-to-catalog': () => returnToCatalog(true),
-            'switch-main-tab': (el, e, ds) => switchMainTab(ds.tab || 'catalog'),
-            'open-sync-modal': () => openSyncModal(),
-
-            // Reader tools (Font size & Typeface)
-            'set-reader-font': (el, e, ds) => setReaderFont(ds.font || el.dataset.font),
-            'adjust-font-size': (el, e, ds) => adjustFontSize(parseInt(ds.delta || el.dataset.delta, 10) || 0),
-            'toggle-popup-dict': () => togglePopupDictStatus(),
-
-            // Wizard navigation buttons
-            'wizard-prev': () => wizardGoPrev(),
-            'wizard-next': () => wizardGoNext(),
-            'wizard-submit': () => submitAnswers(),
-
-            // Pre-test modal events
-            'close-pretest-modal': () => closePretestModal(),
-            'start-exercise': () => confirmPretestSettingsAndStart(),
-            'timer-duration-minus': () => {
-                let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
-                if (cur > 1) {
-                    elements.modalTimerMinutes.textContent = cur - 1;
-                    updateModalSettingTags();
-                }
-            },
-            'timer-duration-plus': () => {
-                let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
-                if (cur < 20) {
-                    elements.modalTimerMinutes.textContent = cur + 1;
-                    updateModalSettingTags();
-                }
-            },
-
-            // Runtime Timer Buttons in Header & Alerts
-            'toggle-timer-pause': () => toggleTimerPause(),
-            'add-timer-minute': () => addTimerMinute(),
-            'dismiss-timer': () => dismissTimer(),
-            'enable-timer-runtime': () => enableTimerAtRuntime(),
-            'dismiss-timer-alert': () => {
-                if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
-            },
-
-            // Continuous Stream Controls (Level, Category, Mode)
-            'filter-level': (el, e, ds) => {
-                if (elements.streamLevelPills) {
-                    elements.streamLevelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-                }
-                el.classList.add('active');
-                state.streamProfile.level = ds.level || el.dataset.level;
-                fetchAndRenderStream();
-            },
-            'filter-category': (el, e, ds) => {
-                if (elements.streamCategoryPills) {
-                    elements.streamCategoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-                }
-                el.classList.add('active');
-                state.streamProfile.category = ds.category || el.dataset.category;
-                fetchAndRenderSlots();
-            },
-            'filter-solved-when': (el, e, ds) => {
-                if (elements.streamModePills) {
-                    elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-                }
-                el.classList.add('active');
-                state.streamProfile.solvedWhen = ds.solvedWhen || el.dataset.solvedWhen || 'all_questions_answered';
-                try {
-                    localStorage.setItem('dokkai_stream_solved_when', state.streamProfile.solvedWhen);
-                } catch (err) { }
-            },
-            'refresh-slots': () => fetchAndRenderSlots(),
-            'filter-solved': (el, e, ds) => {
-                if (elements.solvedFilterPills) {
-                    elements.solvedFilterPills.querySelectorAll('.mini-pill').forEach(p => p.classList.remove('active'));
-                }
-                el.classList.add('active');
-                state.solvedFilter = ds.solvedFilter || el.dataset.solvedFilter || 'all';
-                fetchAndRenderSolvedTasks();
-            },
-            'switch-mobile-stream-col': (el, e, ds) => {
-                switchMobileStreamCol(ds.col || el.dataset.col || 'active');
-            },
-
-            // Report Defect Modal Events
-            'close-report-modal': () => closeReportModal(),
-            'submit-report': () => submitReportDefect(),
-
-            // Analysis tools
-            'toggle-furigana': () => toggleFurigana(),
-            'toggle-evidence': () => toggleEvidence(),
-            'toggle-translation': () => toggleSupplementaryDrawer('translation'),
-            'toggle-vocab': () => toggleSupplementaryDrawer('vocab'),
-            'close-drawer': () => {
-                if (elements.supplementaryDrawer) elements.supplementaryDrawer.classList.add('hidden');
-            },
-
-            // Unfinished test banner triggers
-            'resume-unfinished': async () => {
-                if (!state.activeSession) return;
-                await resumeActiveExercise(state.activeSession);
-            },
-            'dismiss-unfinished': async () => {
-                if (elements.unfinishedTestBanner) {
-                    elements.unfinishedTestBanner.classList.add('hidden');
-                }
-                state.activeSession = null;
-                if (window.DokkaiStorage) {
-                    await window.DokkaiStorage.clearActiveSession();
-                }
-            },
-
-            // Notebook actions
-            'filter-notebook': (el, e, ds) => {
-                const notebookFilterPills = document.querySelectorAll('.notebook-filter-pill');
-                notebookFilterPills.forEach(p => p.classList.remove('active'));
-                el.classList.add('active');
-                state.notebookFilter = ds.filter || el.dataset.filter || 'all';
-                renderNotebookWords();
-            },
-            'export-notebook-backup': () => exportProgressJson(),
-            'import-notebook-backup-trigger': () => {
-                const fileInput = document.getElementById('input-import-backup-file');
-                if (fileInput) fileInput.click();
-            },
-            'clear-notebook': () => clearAllSavedWords(),
-
-            // PDF Import Actions
-            'clear-pdf-file': () => {
-                if (window.clearSelectedPdfFile) window.clearSelectedPdfFile();
-            },
-            'refresh-pdf-drafts': () => {
-                if (window.fetchAndRenderDrafts) window.fetchAndRenderDrafts();
-            },
-
-            // Floating Popup Dictionary Controls
-            'dict-close': () => hidePopupDictionary(),
-            'dict-play-audio': () => {
-                if (state.activePopupWord && state.activePopupWord.word) {
-                    speakJapanese(state.activePopupWord.word);
-                }
-            },
-            'dict-save-word': () => {
-                toggleSaveWord(state.activePopupWord);
-            },
-
-            // Cloud Sync Modal Actions
-            'close-sync-modal': () => closeSyncModal(),
-            'cloud-signout': () => {
-                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleCloudSignout) {
-                    window.DokkaiSyncUI.handleCloudSignout();
-                }
-            },
-            'cloud-signin-google': () => {
-                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleGoogleSignIn) {
-                    window.DokkaiSyncUI.handleGoogleSignIn();
-                }
-            },
-            'cloud-signin-anon': () => {
-                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleAnonymousSignIn) {
-                    window.DokkaiSyncUI.handleAnonymousSignIn();
-                }
-            },
-            'export-sync-backup': () => exportProgressJson(),
-            'import-sync-backup-trigger': () => {
-                const fileInput = document.getElementById('input-import-backup-file');
-                if (fileInput) fileInput.click();
-            },
-            'save-firebase-config': () => {
-                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleSaveCustomFirebaseConfig) {
-                    window.DokkaiSyncUI.handleSaveCustomFirebaseConfig();
-                }
-            },
-            'clear-firebase-config': () => {
-                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleClearCustomFirebaseConfig) {
-                    window.DokkaiSyncUI.handleClearCustomFirebaseConfig();
-                }
-            },
-
-            // Escape key
-            'escape': () => {
-                hidePopupDictionary();
-                closeNotebookModal();
-                closePretestModal();
-                closeSyncModal();
-                closeReportModal();
-            },
-
-            // Dynamic Stream & Slot Actions (Step 6b)
-            'open-pretest': (el, e, ds) => {
-                if (e && e.stopPropagation) e.stopPropagation();
-                const textId = Number(ds.textId || el.dataset.textId);
-                if (textId) openPretestModal(textId);
-            },
-            'review-solved': (el, e, ds) => {
-                const textId = Number(ds.textId || el.dataset.textId);
-                if (textId) reviewSolvedTask(textId);
-            },
-            'retry-solved': (el, e, ds) => {
-                const textId = Number(ds.textId || el.dataset.textId);
-                if (textId) retrySolvedTask(textId);
-            },
-            'open-report': (el, e, ds) => {
-                const textId = Number(ds.textId || el.dataset.textId);
-                const title = ds.taskTitle || el.dataset.taskTitle || '';
-                if (textId) openReportModal(textId, title);
-            },
-
-            // Dynamic Wizard & Analysis Actions (Step 6b)
-            'select-option': (el, e, ds) => {
-                const qId = Number(ds.questionId || el.dataset.questionId);
-                const optId = Number(ds.optionId || el.dataset.optionId);
-                if (qId && optId) handleOptionSelect(qId, optId);
-            },
-            'switch-analysis-tab': (el, e, ds) => {
-                const idx = Number(ds.tabIndex || el.dataset.tabIndex);
-                if (!isNaN(idx)) switchAnalysisTab(idx);
-            },
-            'locate-evidence': (el, e, ds) => {
-                const spanId = ds.spanId || el.dataset.spanId;
-                if (spanId) locateEvidenceInText(spanId);
-            },
-
-            // Dynamic PDF Staging Actions (Step 6b/6c)
-            'save-draft': (el, e, ds) => {
-                const slug = ds.slug || el.dataset.slug;
-                if (slug && window.DokkaiPdfImport && window.DokkaiPdfImport.saveDraft) {
-                    window.DokkaiPdfImport.saveDraft(slug);
-                }
-            },
-            'delete-draft': (el, e, ds) => {
-                const slug = ds.slug || el.dataset.slug;
-                if (slug && window.DokkaiPdfImport && window.DokkaiPdfImport.deleteDraft) {
-                    window.DokkaiPdfImport.deleteDraft(slug);
-                }
-            },
-            'publish-draft': (el, e, ds) => {
-                const slug = ds.slug || el.dataset.slug;
-                if (slug && window.DokkaiPdfImport && window.DokkaiPdfImport.publishDraft) {
-                    window.DokkaiPdfImport.publishDraft(slug);
-                }
-            },
-            'mark-draft-option': (el, e, ds) => {
-                const slug = ds.slug || el.dataset.slug;
-                const qIdx = Number(ds.questionIndex || el.dataset.questionIndex);
-                const optNum = Number(ds.optionNumber || el.dataset.optionNumber);
-                if (slug && !isNaN(qIdx) && !isNaN(optNum) && window.DokkaiPdfImport && window.DokkaiPdfImport.markCorrectOption) {
-                    window.DokkaiPdfImport.markCorrectOption(slug, qIdx, optNum);
-                }
-            },
-
-            // Dynamic Notebook Word Actions (Step 6b)
-            'notebook-speak-word': (el, e, ds) => {
-                const word = ds.word || el.dataset.word;
-                if (word) speakJapanese(word);
-            },
-            'notebook-delete-word': (el, e, ds) => {
-                const wordToDelete = ds.word || el.dataset.word;
-                if (wordToDelete) {
-                    let words = getSavedWords();
-                    words = words.filter(w => w.word !== wordToDelete);
-                    saveWordsToStorage(words);
-                    renderNotebookWords();
-                }
-            },
-            'notebook-toggle-mastered': (el, e, ds) => {
-                const wordText = ds.word || el.dataset.word;
-                if (wordText) {
-                    let words = getSavedWords();
-                    const target = words.find(w => w.word === wordText);
-                    if (target) {
-                        target.mastered = el.checked;
-                        saveWordsToStorage(words);
-                        renderNotebookWords();
-                    }
-                }
+    if (window.DokkaiEvents && window.DokkaiEvents.initNavigationEvents) {
+        window.DokkaiEvents.initNavigationEvents({
+            state,
+            elements,
+            actions: {
+                returnToCatalog,
+                switchMainTab,
+                openSyncModal,
+                hidePopupDictionary,
+                closeNotebookModal: () => {
+                    // Parity with main: on main, closeNotebookModal() was an undeclared reference that threw ReferenceError.
+                    // Scheduled for clean fix in Part III (Step 11).
+                    throw new ReferenceError('closeNotebookModal is not defined');
+                },
+                closePretestModal,
+                closeSyncModal,
+                closeReportModal
             }
         });
+    }
 
+    if (window.DokkaiStream && window.DokkaiStream.initEvents) {
+        window.DokkaiStream.initEvents({
+            state,
+            elements,
+            actions: {
+                fetchAndRenderStream,
+                fetchAndRenderSlots,
+                fetchAndRenderSolvedTasks,
+                openPretestModal,
+                reviewSolvedTask,
+                retrySolvedTask,
+                switchMobileStreamCol
+            }
+        });
+    }
+
+    if (window.DokkaiPretest && window.DokkaiPretest.initEvents) {
+        window.DokkaiPretest.initEvents({
+            state,
+            elements,
+            actions: {
+                closePretestModal,
+                confirmPretestSettingsAndStart,
+                updateModalSettingTags
+            }
+        });
+    }
+
+    if (window.DokkaiTimer && window.DokkaiTimer.initEvents) {
+        window.DokkaiTimer.initEvents({
+            state,
+            elements,
+            actions: {
+                toggleTimerPause,
+                addTimerMinute,
+                dismissTimer,
+                enableTimerAtRuntime
+            }
+        });
+    }
+
+    if (window.DokkaiSettings && window.DokkaiSettings.initEvents) {
+        window.DokkaiSettings.initEvents({
+            state,
+            elements,
+            actions: {
+                setReaderFont,
+                adjustFontSize,
+                togglePopupDictStatus
+            }
+        });
+    }
+
+    if (window.DokkaiExercise && window.DokkaiExercise.initEvents) {
+        window.DokkaiExercise.initEvents({
+            state,
+            elements,
+            actions: {
+                wizardGoPrev,
+                wizardGoNext,
+                submitAnswers,
+                handleOptionSelect,
+                resumeActiveExercise
+            }
+        });
+    }
+
+    if (window.DokkaiAnalysis && window.DokkaiAnalysis.initEvents) {
+        window.DokkaiAnalysis.initEvents({
+            state,
+            elements,
+            actions: {
+                toggleFurigana,
+                toggleEvidence,
+                toggleSupplementaryDrawer,
+                switchAnalysisTab,
+                locateEvidenceInText
+            }
+        });
+    }
+
+    if (window.DokkaiDictionary && window.DokkaiDictionary.initEvents) {
+        window.DokkaiDictionary.initEvents({
+            state,
+            elements,
+            actions: {
+                hidePopupDictionary,
+                speakJapanese,
+                toggleSaveWord,
+                lookupAndShowWord
+            }
+        });
+    }
+
+    if (window.DokkaiNotebook && window.DokkaiNotebook.initEvents) {
+        window.DokkaiNotebook.initEvents({
+            state,
+            elements,
+            actions: {
+                renderNotebookWords,
+                exportProgressJson,
+                clearAllSavedWords,
+                speakJapanese,
+                getSavedWords,
+                saveWordsToStorage
+            }
+        });
+    }
+
+    if (window.DokkaiPdfImport && window.DokkaiPdfImport.initEvents) {
+        window.DokkaiPdfImport.initEvents({
+            state,
+            elements,
+            actions: {
+                clearSelectedPdfFile: window.clearSelectedPdfFile,
+                fetchAndRenderDrafts: window.fetchAndRenderDrafts
+            }
+        });
+    }
+
+    if (window.DokkaiSyncUI && window.DokkaiSyncUI.initEvents) {
+        window.DokkaiSyncUI.initEvents({
+            state,
+            elements,
+            actions: {
+                closeSyncModal,
+                exportProgressJson
+            }
+        });
+    }
+
+    if (window.DokkaiSolved && window.DokkaiSolved.initEvents) {
+        window.DokkaiSolved.initEvents({
+            state,
+            elements,
+            actions: {
+                openReportModal,
+                closeReportModal,
+                submitReportDefect
+            }
+        });
+    }
+
+    if (window.DokkaiEvents && window.DokkaiEvents.initActionDelegation) {
         window.DokkaiEvents.initActionDelegation();
-    }
-
-    // Global Smartphone & Browser Back Button (popstate) Handler
-    window.addEventListener('popstate', (e) => {
-        // 1. If any modal is open, close it and stay on the current page
-        if (elements.pretestModalBackdrop && !elements.pretestModalBackdrop.classList.contains('hidden')) {
-            closePretestModal();
-            return;
-        }
-        if (elements.reportModalBackdrop && !elements.reportModalBackdrop.classList.contains('hidden')) {
-            closeReportModal();
-            return;
-        }
-        if (elements.supplementaryDrawer && !elements.supplementaryDrawer.classList.contains('hidden')) {
-            elements.supplementaryDrawer.classList.add('hidden');
-            return;
-        }
-
-        // 2. If in exercise mode or analysis view, return to catalog without throwing user out
-        if (state.currentView === 'exercise' || state.currentView === 'analysis') {
-            returnToCatalog(false);
-            return;
-        }
-
-        // 3. If in notebook or import view, return to catalog
-        if (state.activeTab !== 'catalog') {
-            switchMainTab('catalog', false);
-            return;
-        }
-
-        // 4. If already on catalog, keep user on catalog
-        history.pushState({ view: 'catalog' }, '', window.location.pathname);
-    });
-
-    // Pre-test modal setting change handlers
-    if (elements.pretestToggleFurigana) {
-        elements.pretestToggleFurigana.addEventListener('change', updateModalSettingTags);
-    }
-    if (elements.pretestToggleHints) {
-        elements.pretestToggleHints.addEventListener('change', updateModalSettingTags);
-    }
-    if (elements.pretestToggleTimer) {
-        elements.pretestToggleTimer.addEventListener('change', updateModalSettingTags);
-    }
-    if (elements.pretestModalBackdrop) {
-        elements.pretestModalBackdrop.addEventListener('click', (e) => {
-            if (e.target === elements.pretestModalBackdrop) {
-                closePretestModal();
-            }
-        });
-    }
-
-    if (elements.streamModePills) {
-        try {
-            const savedSolvedWhen = localStorage.getItem('dokkai_stream_solved_when');
-            if (savedSolvedWhen) {
-                state.streamProfile.solvedWhen = savedSolvedWhen;
-                const targetPill = elements.streamModePills.querySelector(`[data-solved-when="${savedSolvedWhen}"]`);
-                if (targetPill) {
-                    elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-                    targetPill.classList.add('active');
-                }
-            }
-        } catch (err) { }
-    }
-
-    if (elements.reportModalBackdrop) {
-        elements.reportModalBackdrop.addEventListener('click', (e) => {
-            if (e.target === elements.reportModalBackdrop) {
-                closeReportModal();
-            }
-        });
-    }
-
-    // PDF Import UI Events (delegated to features/pdf_import/)
-    if (window.initPdfImportUI) {
-        window.initPdfImportUI();
-    }
-
-    if (elements.notebookSearchInput) {
-        elements.notebookSearchInput.addEventListener('input', (e) => {
-            state.notebookSearchQuery = e.target.value;
-            renderNotebookWords();
-        });
-    }
-
-    // Selection & Click trigger on Passage text
-    if (elements.passageContent) {
-        elements.passageContent.addEventListener('mouseup', (e) => {
-            if (!state.popupDictEnabled) return;
-            const sel = window.getSelection();
-            const text = sel ? sel.toString().trim() : '';
-            if (text && text.length >= 1 && text.length <= 15) {
-                const range = sel.getRangeAt(0);
-                const rect = range.getBoundingClientRect();
-                lookupAndShowWord(text, rect.left + rect.width / 2, rect.top);
-            }
-        });
-
-        // Double click or click on Japanese words/rubies
-        elements.passageContent.addEventListener('click', (e) => {
-            if (!state.popupDictEnabled) return;
-            const target = e.target;
-            const rubyEl = target.closest('ruby');
-            if (rubyEl) {
-                let kanjiText = '';
-                rubyEl.childNodes.forEach(node => {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        kanjiText += node.textContent.trim();
-                    } else if (node.nodeName !== 'RT' && node.nodeName !== 'RP') {
-                        kanjiText += node.textContent.trim();
-                    }
-                });
-                if (kanjiText) {
-                    const rect = rubyEl.getBoundingClientRect();
-                    lookupAndShowWord(kanjiText, rect.left + rect.width / 2, rect.top);
-                }
-            }
-        });
-    }
-
-    // Close popup dictionary when clicking outside
-    document.addEventListener('mousedown', (e) => {
-        if (!elements.popupDictionaryCard || elements.popupDictionaryCard.classList.contains('hidden')) return;
-        if (!elements.popupDictionaryCard.contains(e.target) && !elements.passageContent.contains(e.target)) {
-            hidePopupDictionary();
-        }
-    });
-
-    // Sync Modal and Cloud Auth triggers (delegated to features/sync_ui/)
-    if (window.initSyncModalUI) {
-        window.initSyncModalUI();
     }
 }
 

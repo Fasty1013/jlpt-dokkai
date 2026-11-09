@@ -68,6 +68,12 @@ export function initActionDelegation(rootEl = document) {
     const actionEl = event.target.closest('[data-action]');
     if (!actionEl) return;
 
+    // Prevent duplicate dispatch when clicking a label containing an input:
+    // Browser fires click on label first, then a synthetic click on the nested input.
+    if (event.target.tagName === 'INPUT' && actionEl.tagName === 'LABEL') {
+      return;
+    }
+
     // Disabled elements cannot trigger actions
     if (actionEl.disabled || actionEl.getAttribute('aria-disabled') === 'true') {
       event.preventDefault();
@@ -89,7 +95,9 @@ export function initActionDelegation(rootEl = document) {
 
   // Root change delegation (for radios, checkboxes, selects with data-action)
   rootEl.addEventListener('change', (event) => {
-    const actionEl = event.target.closest('[data-action]');
+    // Only dispatch change if an input, select, or textarea element itself declared data-action
+    // Prevents parent labels with data-action (click handlers) from re-triggering on input change.
+    const actionEl = event.target.closest('input[data-action], select[data-action], textarea[data-action]');
     if (!actionEl) return;
 
     if (actionEl.disabled || actionEl.getAttribute('aria-disabled') === 'true') {
@@ -119,8 +127,9 @@ export function initActionDelegation(rootEl = document) {
 
     // Enter / Space activation for non-button interactive elements with [data-action]
     if (event.key === 'Enter' || event.key === ' ') {
-      const target = event.target;
-      if (target && target.matches && target.matches('[data-action]:not(button):not(input):not(select):not(textarea)')) {
+      const target = event.target && event.target.closest ? event.target.closest('[data-action]:not(button):not(input):not(select):not(textarea)') : null;
+      if (target) {
+        if (target.disabled || target.getAttribute('aria-disabled') === 'true') return;
         event.preventDefault();
         target.click();
       }

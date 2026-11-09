@@ -8,11 +8,14 @@ import {
     togglePopupDictStatus
 } from './popup_dict.js';
 
+import { initDictionaryEvents } from './dictionary_events.js';
+
 export {
     showPopupDictionary,
     hidePopupDictionary,
     lookupAndShowWord,
-    togglePopupDictStatus
+    togglePopupDictStatus,
+    initDictionaryEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -20,7 +23,8 @@ if (typeof window !== 'undefined') {
         showPopupDictionary,
         hidePopupDictionary,
         lookupAndShowWord,
-        togglePopupDictStatus
+        togglePopupDictStatus,
+        initEvents: initDictionaryEvents
     };
 }
 

@@ -11,6 +11,7 @@ import {
     clearAllSavedWords
 } from './notebook_storage.js';
 import { renderNotebookWords } from './notebook_view.js';
+import { initNotebookEvents } from './notebook_events.js';
 
 export {
     NOTEBOOK_STORAGE_KEY,
@@ -20,7 +21,8 @@ export {
     isWordSaved,
     toggleSaveWord,
     clearAllSavedWords,
-    renderNotebookWords
+    renderNotebookWords,
+    initNotebookEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -32,7 +34,8 @@ if (typeof window !== 'undefined') {
         isWordSaved,
         toggleSaveWord,
         clearAllSavedWords,
-        renderNotebookWords
+        renderNotebookWords,
+        initEvents: initNotebookEvents
     };
 
     window.getSavedWords = () => getSavedWords(window.state);

@@ -14,6 +14,8 @@ import {
     initSyncModalUI
 } from './sync_modal.js';
 
+import { initSyncEvents } from './sync_events.js';
+
 export {
     showSyncModalAlert,
     openSyncModal,
@@ -22,7 +24,8 @@ export {
     updateSyncUserUI,
     exportProgressJson,
     handleImportJsonFile,
-    initSyncModalUI
+    initSyncModalUI,
+    initSyncEvents
 };
 
 export const DokkaiSyncUI = {
@@ -33,7 +36,8 @@ export const DokkaiSyncUI = {
     updateUser: updateSyncUserUI,
     exportProgress: exportProgressJson,
     importProgress: handleImportJsonFile,
-    init: initSyncModalUI
+    init: initSyncModalUI,
+    initEvents: initSyncEvents
 };
 
 // Global backward-compatibility bridges for inline onclick attributes and classic scripts

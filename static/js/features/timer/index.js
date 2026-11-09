@@ -13,6 +13,8 @@ import {
   enableTimerAtRuntime
 } from './timer.js';
 
+import { initTimerEvents } from './timer_events.js';
+
 export {
   stopTimer,
   startUntimedMode,
@@ -20,7 +22,8 @@ export {
   toggleTimerPause,
   addTimerMinute,
   dismissTimer,
-  enableTimerAtRuntime
+  enableTimerAtRuntime,
+  initTimerEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -31,7 +34,8 @@ if (typeof window !== 'undefined') {
     toggleTimerPause,
     addTimerMinute,
     dismissTimer,
-    enableTimerAtRuntime
+    enableTimerAtRuntime,
+    initEvents: initTimerEvents
   };
 
   // Direct function bridges on window for compatibility

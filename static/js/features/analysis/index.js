@@ -14,6 +14,7 @@ import {
 } from './analysis_view.js';
 
 import { submitAnswers } from './submit_flow.js';
+import { initAnalysisEvents } from './analysis_events.js';
 
 export {
   renderAnalysisView,
@@ -24,7 +25,8 @@ export {
   toggleEvidence,
   locateEvidenceInText,
   toggleSupplementaryDrawer,
-  submitAnswers
+  submitAnswers,
+  initAnalysisEvents
 };
 
 const DokkaiAnalysis = {
@@ -36,7 +38,8 @@ const DokkaiAnalysis = {
   toggleEvidence,
   locateEvidenceInText,
   toggleSupplementaryDrawer,
-  submitAnswers
+  submitAnswers,
+  initEvents: initAnalysisEvents
 };
 
 if (typeof window !== 'undefined') {

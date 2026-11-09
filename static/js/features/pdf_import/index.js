@@ -18,6 +18,8 @@ import {
     setCurrentDraftsCache
 } from './pdf_staging.js';
 
+import { initPdfEvents } from './pdf_events.js';
+
 export {
     handlePdfFileSelected,
     clearSelectedPdfFile,
@@ -30,7 +32,8 @@ export {
     deleteDraft,
     initPdfImportUI,
     getCurrentDraftsCache,
-    setCurrentDraftsCache
+    setCurrentDraftsCache,
+    initPdfEvents
 };
 
 export const DokkaiPdfImport = {
@@ -44,6 +47,7 @@ export const DokkaiPdfImport = {
     publishDraft: publishDraft,
     deleteDraft: deleteDraft,
     init: initPdfImportUI,
+    initEvents: initPdfEvents,
     getCache: getCurrentDraftsCache,
     setCache: setCurrentDraftsCache
 };

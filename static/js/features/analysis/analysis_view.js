@@ -228,7 +228,7 @@ export function renderAnalysisActiveCard(q, state, elements) {
           <strong>💡 Разбор вопроса:</strong>
           <p style="margin-top: 0.35rem;">${q.general_explanation || ''}</p>
           ${q.evidence_span_id ? `
-            <button type="button" class="btn-locate-evidence" data-action="locate-evidence" data-span-id="${q.evidence_span_id}">
+            <button type="button" class="btn-locate-evidence" data-action="locate-evidence" data-span-id="${escapeHtml(q.evidence_span_id)}">
               📍 Показать доказательство в тексте
             </button>
           ` : ''}

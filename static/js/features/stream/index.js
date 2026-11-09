@@ -9,11 +9,14 @@ import {
   switchMobileStreamCol
 } from './stream_slots.js';
 
+import { initStreamEvents } from './stream_events.js';
+
 export {
   renderSlotCardHtml,
   fetchAndRenderSlots,
   handleSlotReplacement,
-  switchMobileStreamCol
+  switchMobileStreamCol,
+  initStreamEvents
 };
 
 if (typeof window !== 'undefined') {
@@ -21,7 +24,8 @@ if (typeof window !== 'undefined') {
     renderSlotCardHtml,
     fetchAndRenderSlots,
     handleSlotReplacement,
-    switchMobileStreamCol
+    switchMobileStreamCol,
+    initEvents: initStreamEvents
   };
 
   // Direct bridges for backward compatibility until Step 6 event delegation
