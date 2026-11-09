@@ -788,10 +788,200 @@ function returnToCatalog(pushState = true) {
 // ============================================================================
 
 function initEventListeners() {
-    // Brand & abort buttons -> always cleanly return to catalog without exiting site
-    elements.btnHome.addEventListener('click', () => returnToCatalog(true));
-    elements.btnAbortExercise.addEventListener('click', () => returnToCatalog(true));
-    elements.btnBackToCatalog.addEventListener('click', () => returnToCatalog(true));
+    // ------------------------------------------------------------------------
+    // Central Declarative Action Delegation (Step 6a)
+    // ------------------------------------------------------------------------
+    if (window.DokkaiEvents) {
+        window.DokkaiEvents.registerActions({
+            // Brand & Navigation
+            'return-to-catalog': () => returnToCatalog(true),
+            'switch-main-tab': (el, e, ds) => switchMainTab(ds.tab || 'catalog'),
+            'open-sync-modal': () => openSyncModal(),
+
+            // Reader tools (Font size & Typeface)
+            'set-reader-font': (el, e, ds) => setReaderFont(ds.font || el.dataset.font),
+            'adjust-font-size': (el, e, ds) => adjustFontSize(parseInt(ds.delta || el.dataset.delta, 10) || 0),
+            'toggle-popup-dict': () => togglePopupDictStatus(),
+
+            // Wizard navigation buttons
+            'wizard-prev': () => wizardGoPrev(),
+            'wizard-next': () => wizardGoNext(),
+            'wizard-submit': () => submitAnswers(),
+
+            // Pre-test modal events
+            'close-pretest-modal': () => closePretestModal(),
+            'start-exercise': () => confirmPretestSettingsAndStart(),
+            'timer-duration-minus': () => {
+                let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
+                if (cur > 1) {
+                    elements.modalTimerMinutes.textContent = cur - 1;
+                    updateModalSettingTags();
+                }
+            },
+            'timer-duration-plus': () => {
+                let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
+                if (cur < 20) {
+                    elements.modalTimerMinutes.textContent = cur + 1;
+                    updateModalSettingTags();
+                }
+            },
+
+            // Runtime Timer Buttons in Header & Alerts
+            'toggle-timer-pause': () => toggleTimerPause(),
+            'add-timer-minute': () => addTimerMinute(),
+            'dismiss-timer': () => dismissTimer(),
+            'enable-timer-runtime': () => enableTimerAtRuntime(),
+            'dismiss-timer-alert': () => {
+                if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
+            },
+
+            // Continuous Stream Controls (Level, Category, Mode)
+            'filter-level': (el, e, ds) => {
+                if (elements.streamLevelPills) {
+                    elements.streamLevelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                }
+                el.classList.add('active');
+                state.streamProfile.level = ds.level || el.dataset.level;
+                fetchAndRenderStream();
+            },
+            'filter-category': (el, e, ds) => {
+                if (elements.streamCategoryPills) {
+                    elements.streamCategoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                }
+                el.classList.add('active');
+                state.streamProfile.category = ds.category || el.dataset.category;
+                fetchAndRenderSlots();
+            },
+            'filter-solved-when': (el, e, ds) => {
+                if (elements.streamModePills) {
+                    elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                }
+                el.classList.add('active');
+                state.streamProfile.solvedWhen = ds.solvedWhen || el.dataset.solvedWhen || 'all_questions_answered';
+                try {
+                    localStorage.setItem('dokkai_stream_solved_when', state.streamProfile.solvedWhen);
+                } catch (err) { }
+            },
+            'refresh-slots': () => fetchAndRenderSlots(),
+            'filter-solved': (el, e, ds) => {
+                if (elements.solvedFilterPills) {
+                    elements.solvedFilterPills.querySelectorAll('.mini-pill').forEach(p => p.classList.remove('active'));
+                }
+                el.classList.add('active');
+                state.solvedFilter = ds.solvedFilter || el.dataset.solvedFilter || 'all';
+                fetchAndRenderSolvedTasks();
+            },
+            'switch-mobile-stream-col': (el, e, ds) => {
+                switchMobileStreamCol(ds.col || el.dataset.col || 'active');
+            },
+
+            // Report Defect Modal Events
+            'close-report-modal': () => closeReportModal(),
+            'submit-report': () => submitReportDefect(),
+
+            // Analysis tools
+            'toggle-furigana': () => toggleFurigana(),
+            'toggle-evidence': () => toggleEvidence(),
+            'toggle-translation': () => toggleSupplementaryDrawer('translation'),
+            'toggle-vocab': () => toggleSupplementaryDrawer('vocab'),
+            'close-drawer': () => {
+                if (elements.supplementaryDrawer) elements.supplementaryDrawer.classList.add('hidden');
+            },
+
+            // Unfinished test banner triggers
+            'resume-unfinished': async () => {
+                if (!state.activeSession) return;
+                await resumeActiveExercise(state.activeSession);
+            },
+            'dismiss-unfinished': async () => {
+                if (elements.unfinishedTestBanner) {
+                    elements.unfinishedTestBanner.classList.add('hidden');
+                }
+                state.activeSession = null;
+                if (window.DokkaiStorage) {
+                    await window.DokkaiStorage.clearActiveSession();
+                }
+            },
+
+            // Notebook actions
+            'filter-notebook': (el, e, ds) => {
+                const notebookFilterPills = document.querySelectorAll('.notebook-filter-pill');
+                notebookFilterPills.forEach(p => p.classList.remove('active'));
+                el.classList.add('active');
+                state.notebookFilter = ds.filter || el.dataset.filter || 'all';
+                renderNotebookWords();
+            },
+            'export-notebook-backup': () => exportProgressJson(),
+            'import-notebook-backup-trigger': () => {
+                const fileInput = document.getElementById('input-import-backup-file');
+                if (fileInput) fileInput.click();
+            },
+            'clear-notebook': () => clearAllSavedWords(),
+
+            // PDF Import Actions
+            'clear-pdf-file': () => {
+                if (window.clearSelectedPdfFile) window.clearSelectedPdfFile();
+            },
+            'refresh-pdf-drafts': () => {
+                if (window.fetchAndRenderDrafts) window.fetchAndRenderDrafts();
+            },
+
+            // Floating Popup Dictionary Controls
+            'dict-close': () => hidePopupDictionary(),
+            'dict-play-audio': () => {
+                if (state.activePopupWord && state.activePopupWord.word) {
+                    speakJapanese(state.activePopupWord.word);
+                }
+            },
+            'dict-save-word': () => {
+                toggleSaveWord(state.activePopupWord);
+            },
+
+            // Cloud Sync Modal Actions
+            'close-sync-modal': () => closeSyncModal(),
+            'cloud-signout': () => {
+                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleCloudSignout) {
+                    window.DokkaiSyncUI.handleCloudSignout();
+                }
+            },
+            'cloud-signin-google': () => {
+                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleGoogleSignIn) {
+                    window.DokkaiSyncUI.handleGoogleSignIn();
+                }
+            },
+            'cloud-signin-anon': () => {
+                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleAnonymousSignIn) {
+                    window.DokkaiSyncUI.handleAnonymousSignIn();
+                }
+            },
+            'export-sync-backup': () => exportProgressJson(),
+            'import-sync-backup-trigger': () => {
+                const fileInput = document.getElementById('input-import-backup-file');
+                if (fileInput) fileInput.click();
+            },
+            'save-firebase-config': () => {
+                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleSaveCustomFirebaseConfig) {
+                    window.DokkaiSyncUI.handleSaveCustomFirebaseConfig();
+                }
+            },
+            'clear-firebase-config': () => {
+                if (window.DokkaiSyncUI && window.DokkaiSyncUI.handleClearCustomFirebaseConfig) {
+                    window.DokkaiSyncUI.handleClearCustomFirebaseConfig();
+                }
+            },
+
+            // Escape key
+            'escape': () => {
+                hidePopupDictionary();
+                closeNotebookModal();
+                closePretestModal();
+                closeSyncModal();
+                closeReportModal();
+            }
+        });
+
+        window.DokkaiEvents.initActionDelegation();
+    }
 
     // Global Smartphone & Browser Back Button (popstate) Handler
     window.addEventListener('popstate', (e) => {
@@ -825,89 +1015,21 @@ function initEventListeners() {
         history.pushState({ view: 'catalog' }, '', window.location.pathname);
     });
 
-    // Reader tools (Font size & Typeface)
-    elements.btnFontGothic.addEventListener('click', () => setReaderFont('gothic'));
-    elements.btnFontMincho.addEventListener('click', () => setReaderFont('mincho'));
-    elements.btnFontIncrease.addEventListener('click', () => adjustFontSize(2));
-    elements.btnFontDecrease.addEventListener('click', () => adjustFontSize(-2));
-
-    // Wizard navigation buttons
-    elements.btnWizardNext.addEventListener('click', wizardGoNext);
-    elements.btnWizardPrev.addEventListener('click', wizardGoPrev);
-    elements.btnWizardSubmit.addEventListener('click', submitAnswers);
-
-    // Pre-test modal events
-    elements.modalBtnCancel.addEventListener('click', closePretestModal);
-    elements.modalBtnClose.addEventListener('click', closePretestModal);
-    elements.modalBtnStart.addEventListener('click', confirmPretestSettingsAndStart);
-    elements.pretestToggleFurigana.addEventListener('change', updateModalSettingTags);
-    elements.pretestToggleHints.addEventListener('change', updateModalSettingTags);
+    // Pre-test modal setting change handlers
+    if (elements.pretestToggleFurigana) {
+        elements.pretestToggleFurigana.addEventListener('change', updateModalSettingTags);
+    }
+    if (elements.pretestToggleHints) {
+        elements.pretestToggleHints.addEventListener('change', updateModalSettingTags);
+    }
     if (elements.pretestToggleTimer) {
         elements.pretestToggleTimer.addEventListener('change', updateModalSettingTags);
     }
-    if (elements.btnTimerMinus) {
-        elements.btnTimerMinus.addEventListener('click', () => {
-            let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
-            if (cur > 1) {
-                elements.modalTimerMinutes.textContent = cur - 1;
-                updateModalSettingTags();
+    if (elements.pretestModalBackdrop) {
+        elements.pretestModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === elements.pretestModalBackdrop) {
+                closePretestModal();
             }
-        });
-    }
-    if (elements.btnTimerPlus) {
-        elements.btnTimerPlus.addEventListener('click', () => {
-            let cur = parseInt(elements.modalTimerMinutes.textContent, 10) || 3;
-            if (cur < 20) {
-                elements.modalTimerMinutes.textContent = cur + 1;
-                updateModalSettingTags();
-            }
-        });
-    }
-    elements.pretestModalBackdrop.addEventListener('click', (e) => {
-        if (e.target === elements.pretestModalBackdrop) {
-            closePretestModal();
-        }
-    });
-
-    // Runtime Timer Buttons in Header & Alerts
-    if (elements.btnTimerTogglePause) {
-        elements.btnTimerTogglePause.addEventListener('click', toggleTimerPause);
-    }
-    if (elements.btnTimerAddMin) {
-        elements.btnTimerAddMin.addEventListener('click', addTimerMinute);
-    }
-    if (elements.btnTimerDismiss) {
-        elements.btnTimerDismiss.addEventListener('click', dismissTimer);
-    }
-    if (elements.btnEnableTimerRuntime) {
-        elements.btnEnableTimerRuntime.addEventListener('click', enableTimerAtRuntime);
-    }
-    if (elements.btnDismissTimerAlert) {
-        elements.btnDismissTimerAlert.addEventListener('click', () => {
-            if (elements.timerAlertBanner) elements.timerAlertBanner.classList.add('hidden');
-        });
-    }
-
-    // Continuous Stream Controls (Level, Category, Mode)
-    if (elements.streamLevelPills) {
-        elements.streamLevelPills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.streamLevelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.streamProfile.level = pill.dataset.level;
-            fetchAndRenderStream();
-        });
-    }
-
-    if (elements.streamCategoryPills) {
-        elements.streamCategoryPills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.streamCategoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.streamProfile.category = pill.dataset.category;
-            fetchAndRenderSlots();
         });
     }
 
@@ -922,113 +1044,15 @@ function initEventListeners() {
                     targetPill.classList.add('active');
                 }
             }
-        } catch (err) {}
-
-        elements.streamModePills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.streamModePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.streamProfile.solvedWhen = pill.dataset.solvedWhen || 'all_questions_answered';
-            try {
-                localStorage.setItem('dokkai_stream_solved_when', state.streamProfile.solvedWhen);
-            } catch (err) {}
-        });
+        } catch (err) { }
     }
 
-    if (elements.btnRefreshSlots) {
-        elements.btnRefreshSlots.addEventListener('click', () => {
-            fetchAndRenderSlots();
-        });
-    }
-
-    if (elements.solvedFilterPills) {
-        elements.solvedFilterPills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.mini-pill');
-            if (!pill) return;
-            elements.solvedFilterPills.querySelectorAll('.mini-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.solvedFilter = pill.dataset.solvedFilter || 'all';
-            fetchAndRenderSolvedTasks();
-        });
-    }
-
-    // Mobile Column Switcher
-    if (elements.tabColActive) {
-        elements.tabColActive.addEventListener('click', () => switchMobileStreamCol('active'));
-    }
-    if (elements.tabColSolved) {
-        elements.tabColSolved.addEventListener('click', () => switchMobileStreamCol('solved'));
-    }
-
-    // Report Defect Modal Events
-    if (elements.btnCloseReportModal) {
-        elements.btnCloseReportModal.addEventListener('click', closeReportModal);
-    }
-    if (elements.btnCancelReport) {
-        elements.btnCancelReport.addEventListener('click', closeReportModal);
-    }
-    if (elements.btnSubmitReport) {
-        elements.btnSubmitReport.addEventListener('click', submitReportDefect);
-    }
     if (elements.reportModalBackdrop) {
         elements.reportModalBackdrop.addEventListener('click', (e) => {
             if (e.target === elements.reportModalBackdrop) {
                 closeReportModal();
             }
         });
-    }
-
-    // Filter pills (Legacy fallback if elements exist)
-    if (elements.levelPills) {
-        elements.levelPills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.levelPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.filters.level = pill.dataset.level;
-            fetchAndRenderCatalog();
-        });
-    }
-
-    if (elements.categoryPills) {
-        elements.categoryPills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.categoryPills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.filters.category = pill.dataset.category;
-            fetchAndRenderCatalog();
-        });
-    }
-
-    if (elements.sourcePills) {
-        elements.sourcePills.addEventListener('click', (e) => {
-            const pill = e.target.closest('.filter-pill');
-            if (!pill) return;
-            elements.sourcePills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.filters.source = pill.dataset.source;
-            fetchAndRenderCatalog();
-        });
-    }
-
-    // Analysis tools
-    elements.btnToggleFurigana.addEventListener('click', toggleFurigana);
-    elements.btnToggleEvidence.addEventListener('click', toggleEvidence);
-    elements.btnToggleTranslation.addEventListener('click', () => toggleSupplementaryDrawer('translation'));
-    elements.btnToggleVocab.addEventListener('click', () => toggleSupplementaryDrawer('vocab'));
-    elements.btnCloseDrawer.addEventListener('click', () => elements.supplementaryDrawer.classList.add('hidden'));
-
-    // Top Navigation Tabs (Тексты и тесты vs Мой словарь vs Импорт PDF)
-    if (elements.btnTabCatalog) {
-        elements.btnTabCatalog.addEventListener('click', () => switchMainTab('catalog'));
-    }
-    if (elements.btnTabNotebook) {
-        elements.btnTabNotebook.addEventListener('click', () => switchMainTab('notebook'));
-    }
-    if (elements.btnTabImport) {
-        elements.btnTabImport.addEventListener('click', () => switchMainTab('import'));
     }
 
     // PDF Import UI Events (delegated to features/pdf_import/)
@@ -1042,17 +1066,6 @@ function initEventListeners() {
             renderNotebookWords();
         });
     }
-
-    // Filter pills in Notebook
-    const notebookFilterPills = document.querySelectorAll('.notebook-filter-pill');
-    notebookFilterPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-            notebookFilterPills.forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            state.notebookFilter = pill.dataset.filter || 'all';
-            renderNotebookWords();
-        });
-    });
 
     // Delegation for actions in saved words list
     if (elements.notebookWordsList) {
@@ -1088,32 +1101,6 @@ function initEventListeners() {
         });
     }
 
-    if (elements.btnClearNotebook) {
-        elements.btnClearNotebook.addEventListener('click', clearAllSavedWords);
-    }
-
-    // Reader Popup Dictionary Tool Button
-    if (elements.btnTogglePopupDict) {
-        elements.btnTogglePopupDict.addEventListener('click', togglePopupDictStatus);
-    }
-
-    // Floating Popup Controls
-    if (elements.popupBtnClose) {
-        elements.popupBtnClose.addEventListener('click', hidePopupDictionary);
-    }
-    if (elements.popupBtnAudio) {
-        elements.popupBtnAudio.addEventListener('click', () => {
-            if (state.activePopupWord && state.activePopupWord.word) {
-                speakJapanese(state.activePopupWord.word);
-            }
-        });
-    }
-    if (elements.popupBtnSave) {
-        elements.popupBtnSave.addEventListener('click', () => {
-            toggleSaveWord(state.activePopupWord);
-        });
-    }
-
     // Selection & Click trigger on Passage text
     if (elements.passageContent) {
         elements.passageContent.addEventListener('mouseup', (e) => {
@@ -1133,7 +1120,6 @@ function initEventListeners() {
             const target = e.target;
             const rubyEl = target.closest('ruby');
             if (rubyEl) {
-                // Get the kanji text without rt
                 let kanjiText = '';
                 rubyEl.childNodes.forEach(node => {
                     if (node.nodeType === Node.TEXT_NODE) {
@@ -1162,37 +1148,6 @@ function initEventListeners() {
     if (window.initSyncModalUI) {
         window.initSyncModalUI();
     }
-
-    // Unfinished test banner triggers
-    if (elements.btnResumeUnfinished) {
-        elements.btnResumeUnfinished.addEventListener('click', async () => {
-            if (!state.activeSession) return;
-            const session = state.activeSession;
-            await resumeActiveExercise(session);
-        });
-    }
-    if (elements.btnDismissUnfinished) {
-        elements.btnDismissUnfinished.addEventListener('click', async () => {
-            if (elements.unfinishedTestBanner) {
-                elements.unfinishedTestBanner.classList.add('hidden');
-            }
-            state.activeSession = null;
-            if (window.DokkaiStorage) {
-                await window.DokkaiStorage.clearActiveSession();
-            }
-        });
-    }
-
-    // Global keyboard shortcuts (Esc to close modals / popups)
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            hidePopupDictionary();
-            closeNotebookModal();
-            closePretestModal();
-            closeSyncModal();
-            closeReportModal();
-        }
-    });
 }
 
 // ============================================================================

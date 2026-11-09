@@ -180,6 +180,24 @@ function resolveElements(elements) {
 - Глобальные горячие клавиши (`Escape` для закрытия всех модальных окон).
 - *План для Шага 6:* полная замена прямых `addEventListener` и инлайн-атрибутов (`onclick`, `onchange`) на единый диспетчер событий на базе `document.addEventListener('click', ...)` с `data-action` и `data-id`.
 
+---
+
+## 7. Статус выполнения Шага 6 (Обработчики событий)
+
+### Подитерация 6a: Статические элементы `index.html` → `data-action` + делегирование (ВЫПОЛНЕНО)
+- Создан модуль `static/js/features/events/action_dispatcher.js` (`registerAction`, `registerActions`, `dispatchAction`, `initActionDelegation`).
+- Создан фасад `static/js/features/events/index.js` с публикацией `window.DokkaiEvents`.
+- Оба модуля добавлены в прекэш `static/sw.js` (проверено тестом рекурсивного графа импортов `12_service_worker_integrity.spec.ts`).
+- Все статические элементы управления в `index.html` (кнопки шапки, табы, пиллы фильтров уровней/категорий/режима, модальное окно предстарта, кнопки визарда, таймер рантайма, инструменты читалки, всплывающий словарь, модалка синхронизации, шторка перевода) снабжены атрибутами `data-action="..."` и вспомогательными `data-*`.
+- В `app.js:initEventListeners()` более 40 прямых `addEventListener('click')` заменены на декларативную регистрацию в `DokkaiEvents.registerActions({...})`.
+- Написан инструмент сквозного тестирования `tools/compare_interactive_walkthrough.cjs` (30 проверок интерактивных элементов на 9 экранах) — 30/30 совпадений с `main`, 0 ошибок консоли.
+- Проведены проверки:
+  - Computed styles: 0 расхождений.
+  - Network flow: 0 расхождений (28/28 запросов bit-for-bit match).
+  - Pixel diff: 0 расхождений (0.0% на всех 15 экранах и состояниях).
+  - Playwright test suite: 100 тестов пройдены успешно на профилях `desktop_hd_light` и `mobile_iphone_class_390`.
+
+
 ### 5. Жизненный цикл, восстановление сессий и точка входа (строки 1200–1339)
 - `checkAndPromptActiveSession()`, `resumeActiveExercise()`: проверка локального хранилища на незавершённый тест и запрос на продолжение.
 - `initPersistenceAndSync()`: инициализация хранилища IndexedDB (`DokkaiStorage`), загрузка настроек пользователя, привязка слушателей синхронизации `DokkaiCloudSync`.
