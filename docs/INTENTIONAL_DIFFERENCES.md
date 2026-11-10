@@ -42,3 +42,12 @@
 | :-: | :--- | :--- | :--- |
 | **O1** | Классические скрипты `app.js` создавали неявные глобальные функции. Для потребителей, которые ещё обращаются к ним через `window` (`pdf_staging`, `sync_modal`, Playwright и `tools/compare_*`), в `static/js/main.js` оставлены 11 временных мостов: `fetchAndRenderCatalog/Slots/SolvedTasks`, `renderNotebookWords`, `updateNotebookBadge`, `openPretestModal`, `openReportModal`, `switchMainTab`, `showPopupDictionary`, `hidePopupDictionary`, `initEventListeners`. | Поведение совпадает с `main`. | Удалить на шаге 9 вместе с переводом тестов и скриптов на публичный DOM. |
 | **O2** | Порядок выполнения ES-модулей теперь определяется графом импортов из `main.js`, а не порядком 16 тегов `<script type="module">`. Пространства имён `window.Dokkai*` по-прежнему создаются при загрузке соответствующих barrel-файлов. | Паритет подтверждён (92/92, 0 px, 28/28). | Удалить `window.Dokkai*` на шаге 9. |
+
+---
+
+## 🔎 Наблюдения шага 7a
+
+| № | Наблюдение | Влияние | Что дальше |
+| :-: | :--- | :--- | :--- |
+| **O3** | Файлы перенесены без правок логики: `static/storage.js` → `static/js/storage/storage.js`, `static/cloud_sync.js` → `static/js/sync/cloud_sync.js`, `static/firebase-config.js` → `static/js/config/firebase-config.js`. Обновлены `index.html`, `sw.js`, исключение в `tests/qa/specs/12_service_worker_integrity.spec.ts`. Они по-прежнему классические скрипты. | Паритет подтверждён (92/92, 0 расхождений стилей, 28/28, 0 px). | Преобразование в ES-модули — Шаг 7c. |
+| **O4** | В первом полном прогоне Playwright один раз отметился flaky тест `15 › 03. Slot Refresh` (desktop_hd_light). Восемь повторов подряд и повторный полный прогон — 99 passed, 0 flaky. Вероятная причина: тест кликает `#btn-refresh-slots` сразу после появления кнопки в DOM, возможно до подключения обработчиков в `boot()` при высокой нагрузке. Не исправлялось. | Нестабильность теста, не поведения приложения; гонка не подтверждена. | Проверить причину и стабилизировать тест (ожидание готовности приложения) отдельным шагом. |

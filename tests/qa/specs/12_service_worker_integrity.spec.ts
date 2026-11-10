@@ -124,7 +124,7 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
 
     // Verify ZERO Firebase / Google cross-origin requests in cache
     const crossOriginLeaks = cachedUrls.filter(u => {
-      if (u.includes('/static/firebase-config.js')) return false;
+      if (u.includes('/static/js/config/firebase-config.js')) return false;
       return u.includes('googleapis.com') || u.includes('gstatic.com') || u.includes('firebase') || u.includes('identitytoolkit');
     });
     expect(crossOriginLeaks, 'Cross-origin Firebase/Google auth requests must NEVER be stored in Service Worker cache').toHaveLength(0);
