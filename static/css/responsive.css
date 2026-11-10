@@ -623,3 +623,32 @@
         }
     }
 }
+
+/* --- Step 11a: narrow desktops / tablets (<=1100px), exercise-mode header ----
+   The header (brand + meta pill + timer + back + 4 nav tabs) does not fit on
+   ~770-1100px: badges wrapped, the brand text overflowed upwards out of the bar.
+   The passage block already shows level/category/exam badges, so the header
+   pill and the tab navigation are hidden while a task is open. */
+@media (max-width: 1100px) {
+    .app-header:has(#exercise-header-controls:not(.hidden)) .header-nav,
+    .app-header:has(#exercise-header-controls:not(.hidden)) #exercise-meta-pill {
+        display: none;
+    }
+
+    .brand-text,
+    .brand-title,
+    .brand-sub,
+    .level-tag,
+    .category-tag,
+    .exam-archive-badge,
+    .nav-tab,
+    .nav-label,
+    .btn-add-timer,
+    #btn-abort-exercise {
+        white-space: nowrap;
+    }
+
+    .app-header {
+        gap: 0.75rem;
+    }
+}
