@@ -149,7 +149,7 @@ class DokkaiStorage {
     // 1. Solved Tasks API
     // ====================================================================
 
-    async recordSolvedTask(taskData) {
+    async recordSolvedTask(taskData, triggerSync = true) {
         if (!taskData || !taskData.text_id) return null;
 
         const record = {
@@ -176,7 +176,9 @@ class DokkaiStorage {
             }
         });
 
-        this._notifyMutation('solved_task', record);
+        if (triggerSync) {
+            this._notifyMutation('solved_task', record);
+        }
         return record;
     }
 
