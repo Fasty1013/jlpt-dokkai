@@ -21,15 +21,3 @@ export const CATEGORY_NAMES = {
     'info_search': '情報検索 (Поиск инфо)',
     'article': '記事・論説 (Статьи)'
 };
-
-export const LEVEL_COLORS = {
-    'N5': '#10b981',
-    'N4': '#3b82f6',
-    'N3': '#8b5cf6',
-    'N2': '#f59e0b',
-    'N1': '#ef4444'
-};
-
-export const JLPT_LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1'];
-
-export const CATEGORY_KEYS = ['short', 'medium', 'long', 'info_search', 'article'];
