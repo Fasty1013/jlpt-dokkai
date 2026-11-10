@@ -6,11 +6,11 @@ Implements atomic transactions, idempotency, Anti-Cheat isolation, and dynamic r
 """
 
 from datetime import datetime
-from typing import List, Dict, Any, Optional, Tuple, Set
+from typing import List, Dict, Any, Optional, Set
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import and_, or_, func
+from sqlalchemy import func
 
-from app.models import Text, Question, Option, TaskSlot, UserTextState, Attempt
+from app.models import Text, Question, TaskSlot, UserTextState, Attempt
 from tools.param_gen.generator import generate_parametric_text
 
 ACTIVE_SLOTS_PER_PROFILE = 3

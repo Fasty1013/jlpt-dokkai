@@ -11,7 +11,7 @@ import hashlib
 from typing import Dict, Any, Optional
 from sqlalchemy.orm import Session
 
-from models import Text, Question, Option
+from app.models import Text, Question, Option
 from tools.glossary.tokenizer import add_furigana_to_japanese_text
 
 NAMES = ["田中さん", "佐藤さん", "鈴木さん", "高橋さん", "山田さん", "渡辺さん", "小林さん"]

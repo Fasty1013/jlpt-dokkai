@@ -2,9 +2,9 @@ import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-from database import SessionLocal
+from app.core.database import SessionLocal
 from main import list_texts, get_text_for_reading, submit_and_analyze
-from schemas import SubmitPayloadSchema, AnswerSubmissionSchema
+from app.schemas import SubmitPayloadSchema, AnswerSubmissionSchema
 
 db = SessionLocal()
 
@@ -53,7 +53,7 @@ print("Cross-Level Anti-Cheat Isolation PASSED: N3, N2, N1 fully verified.")
 
 # 3. Test Submit and Analyze endpoint function
 # Find correct options for all questions in this text to test 100% submission
-from models import Question as QModel
+from app.models import Question as QModel
 answers_payload = []
 for q_item in read_data.questions:
     q_db = db.query(QModel).filter(QModel.id == q_item.id).first()
@@ -91,7 +91,7 @@ print("Dictionary Lookup PASSED:", dict_res["word"], "->", dict_res["reading"])
 
 # 5. Test Stream Complete Idempotency
 from app.services.stream_service import complete_task, get_or_create_slots
-from models import Attempt, UserTextState, TaskSlot
+from app.models import Attempt, UserTextState, TaskSlot
 
 test_user = "test-user-idempotency"
 db.query(Attempt).filter(Attempt.user_id == test_user).delete()

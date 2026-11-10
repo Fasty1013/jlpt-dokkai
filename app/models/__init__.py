@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import (
     Column, Integer, String, Text as SqlText, Boolean,
-    ForeignKey, JSON, Float, DateTime, UniqueConstraint, func
+    ForeignKey, JSON, Float, DateTime, UniqueConstraint
 )
 from sqlalchemy.orm import relationship
 from app.core.database import Base

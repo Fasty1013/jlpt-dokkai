@@ -4,10 +4,10 @@ import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-from database import SessionLocal, engine, Base
-import models
-from models import Text, Question, Option
-from dictionary import get_authentic_hiragana, lookup_word
+from app.core.database import SessionLocal, engine, Base
+from app import models
+from app.models import Text, Question, Option
+from app.services.dictionary_service import get_authentic_hiragana, lookup_word
 
 
 # Matrix Themes Definition for High-Quality Procedural Generation (5 levels x 5 categories)

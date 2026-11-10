@@ -4,7 +4,6 @@ dictionary.py - Словарь JLPT (N5 - N1) для интерактивног�
 Все чтения строго на хирагане и соответствуют реальным японским чтениям в контексте.
 """
 from typing import Optional, List, Dict
-import re
 
 # Полная база лексики с точной хираганой и русским переводом
 JLPT_DICTIONARY: List[Dict[str, str]] = [
