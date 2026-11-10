@@ -54,12 +54,6 @@ export const DokkaiPdfImport = {
 
 // Global backward-compatibility bridges for inline onclick attributes and classic scripts
 if (typeof window !== 'undefined') {
-    window.handlePdfFileSelected = handlePdfFileSelected;
-    window.clearSelectedPdfFile = clearSelectedPdfFile;
-    window.handlePdfUpload = handlePdfUpload;
-    window.fetchAndRenderDrafts = fetchAndRenderDrafts;
-    window.renderDraftsList = renderDraftsList;
-    window.initPdfImportUI = initPdfImportUI;
     window.DokkaiPdfImport = DokkaiPdfImport;
 }
 

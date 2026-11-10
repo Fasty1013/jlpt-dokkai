@@ -461,7 +461,7 @@ function switchMainTab(tabName, pushState = true) {
         if (pushState) {
             history.pushState({ view: 'import' }, '', '#import');
         }
-        fetchAndRenderDrafts();
+        window.DokkaiPdfImport.fetchDrafts();
     } else {
         returnToCatalog(pushState);
     }
@@ -526,7 +526,7 @@ function initEventListeners() {
             actions: {
                 returnToCatalog,
                 switchMainTab,
-                openSyncModal,
+                openSyncModal: window.DokkaiSyncUI.open,
                 hidePopupDictionary,
                 closeNotebookModal: () => {
                     // Parity with main: on main, closeNotebookModal() was an undeclared reference that threw ReferenceError.
@@ -534,7 +534,7 @@ function initEventListeners() {
                     throw new ReferenceError('closeNotebookModal is not defined');
                 },
                 closePretestModal,
-                closeSyncModal,
+                closeSyncModal: window.DokkaiSyncUI.close,
                 closeReportModal
             }
         });
@@ -640,7 +640,7 @@ function initEventListeners() {
             elements,
             actions: {
                 renderNotebookWords,
-                exportProgressJson,
+                exportProgressJson: window.DokkaiSyncUI.exportProgress,
                 clearAllSavedWords,
                 speakJapanese,
                 getSavedWords,
@@ -654,8 +654,8 @@ function initEventListeners() {
             state,
             elements,
             actions: {
-                clearSelectedPdfFile: window.clearSelectedPdfFile,
-                fetchAndRenderDrafts: window.fetchAndRenderDrafts
+                clearSelectedPdfFile: window.DokkaiPdfImport.clearFile,
+                fetchAndRenderDrafts: window.DokkaiPdfImport.fetchDrafts
             }
         });
     }
@@ -665,8 +665,8 @@ function initEventListeners() {
             state,
             elements,
             actions: {
-                closeSyncModal,
-                exportProgressJson
+                closeSyncModal: window.DokkaiSyncUI.close,
+                exportProgressJson: window.DokkaiSyncUI.exportProgress
             }
         });
     }
@@ -786,20 +786,20 @@ async function initPersistenceAndSync() {
         });
 
         window.DokkaiCloudSync.onStatusChange((status, extra) => {
-            updateSyncStatusUI(status, extra);
+            window.DokkaiSyncUI.updateStatus(status, extra);
         });
 
         window.DokkaiCloudSync.onUserChange((user) => {
-            updateSyncUserUI(user);
+            window.DokkaiSyncUI.updateUser(user);
         });
 
         window.DokkaiCloudSync.onFeedback((type, message) => {
-            showSyncModalAlert(type, message);
+            window.DokkaiSyncUI.showAlert(type, message);
         });
 
         // Initialize Firebase asynchronously in background
         window.DokkaiCloudSync.init().catch(err => console.warn('[CloudSync] Init error:', err));
-        updateSyncStatusUI();
+        window.DokkaiSyncUI.updateStatus();
     }
 
     // 5. Check if there is an in-progress test to recover
@@ -828,5 +828,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.warn('[Dokkai] Persistence/Sync init non-blocking warning:', err);
     }
     fetchAndRenderCatalog();
-    fetchAndRenderDrafts();
+    window.DokkaiPdfImport.fetchDrafts();
 });

@@ -39,9 +39,4 @@ if (typeof window !== 'undefined') {
     submitReportDefect,
     initEvents: initReportEvents
   };
-
-  // Direct bridges for backward compatibility until Step 6 event delegation
-  window.fetchAndRenderSolvedTasks = () => fetchAndRenderSolvedTasks();
-  window.closeReportModal = () => closeReportModal();
-  window.submitReportDefect = () => submitReportDefect();
 }

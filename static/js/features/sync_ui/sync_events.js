@@ -2,6 +2,8 @@
  * JLPT Dokkai Master - Cloud Sync & Firebase Configuration Event Listeners
  */
 
+import { initSyncModalUI } from './sync_modal.js';
+
 export function initSyncEvents({ state, elements, actions }) {
   if (window.DokkaiEvents) {
     window.DokkaiEvents.registerActions({
@@ -40,7 +42,5 @@ export function initSyncEvents({ state, elements, actions }) {
   }
 
   // Initialize Sync Modal UI form controls
-  if (window.initSyncModalUI) {
-    window.initSyncModalUI();
-  }
+  initSyncModalUI();
 }

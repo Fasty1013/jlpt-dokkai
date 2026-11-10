@@ -42,14 +42,6 @@ export const DokkaiSyncUI = {
 
 // Global backward-compatibility bridges for inline onclick attributes and classic scripts
 if (typeof window !== 'undefined') {
-    window.showSyncModalAlert = showSyncModalAlert;
-    window.openSyncModal = openSyncModal;
-    window.closeSyncModal = closeSyncModal;
-    window.updateSyncStatusUI = updateSyncStatusUI;
-    window.updateSyncUserUI = updateSyncUserUI;
-    window.exportProgressJson = exportProgressJson;
-    window.handleImportJsonFile = handleImportJsonFile;
-    window.initSyncModalUI = initSyncModalUI;
     window.DokkaiSyncUI = DokkaiSyncUI;
 }
 

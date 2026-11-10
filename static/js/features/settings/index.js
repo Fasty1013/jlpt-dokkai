@@ -25,9 +25,4 @@ if (typeof window !== 'undefined') {
     adjustFontSize,
     initEvents: initReaderSettingsEvents
   };
-
-  // Direct function bridges on window for compatibility
-  window.saveUserSettings = saveUserSettings;
-  window.setReaderFont = setReaderFont;
-  window.adjustFontSize = adjustFontSize;
 }

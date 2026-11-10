@@ -27,12 +27,4 @@ if (typeof window !== 'undefined') {
     calculateScorePercent,
     formatFileSize
   };
-
-  // Direct function bridges on window
-  window.getUserId = getUserId;
-  window.escapeHtml = escapeHtml;
-  window.formatTime = formatTime;
-  window.formatLocaleDate = formatLocaleDate;
-  window.calculateScorePercent = calculateScorePercent;
-  window.formatFileSize = formatFileSize;
 }

@@ -26,8 +26,4 @@ if (typeof window !== 'undefined') {
     saveStoredConfig,
     getUserId
   };
-
-  // Direct function bridges on window for compatibility
-  window.loadStoredConfig = loadStoredConfig;
-  window.saveStoredConfig = saveStoredConfig;
 }

@@ -2,6 +2,8 @@
  * JLPT Dokkai Master - PDF Import & Staging Event Listeners
  */
 
+import { initPdfImportUI } from './pdf_staging.js';
+
 export function initPdfEvents({ state, elements, actions }) {
   if (window.DokkaiEvents) {
     window.DokkaiEvents.registerActions({
@@ -41,7 +43,5 @@ export function initPdfEvents({ state, elements, actions }) {
   }
 
   // Initialize PDF drag-and-drop & form change handlers
-  if (window.initPdfImportUI) {
-    window.initPdfImportUI();
-  }
+  initPdfImportUI();
 }

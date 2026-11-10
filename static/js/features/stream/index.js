@@ -27,9 +27,4 @@ if (typeof window !== 'undefined') {
     switchMobileStreamCol,
     initEvents: initStreamEvents
   };
-
-  // Direct bridges for backward compatibility until Step 6 event delegation
-  window.fetchAndRenderSlots = (isExplicitRefresh) => fetchAndRenderSlots(isExplicitRefresh);
-  window.handleSlotReplacement = (solvedTextId, replacement) => handleSlotReplacement(solvedTextId, replacement);
-  window.switchMobileStreamCol = (col, els) => switchMobileStreamCol(col, els || (window.DokkaiElements ? window.DokkaiElements.elements : null));
 }

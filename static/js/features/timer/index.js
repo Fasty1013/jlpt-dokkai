@@ -37,13 +37,4 @@ if (typeof window !== 'undefined') {
     enableTimerAtRuntime,
     initEvents: initTimerEvents
   };
-
-  // Direct function bridges on window for compatibility
-  window.stopTimer = stopTimer;
-  window.startUntimedMode = startUntimedMode;
-  window.startCountdownTimer = startCountdownTimer;
-  window.toggleTimerPause = toggleTimerPause;
-  window.addTimerMinute = addTimerMinute;
-  window.dismissTimer = dismissTimer;
-  window.enableTimerAtRuntime = enableTimerAtRuntime;
 }

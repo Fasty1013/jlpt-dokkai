@@ -13,8 +13,8 @@ test.describe('Dokkai Master - Unit Utilities & userId Stability Test', () => {
 
         // Call getUserId from page
         const retrievedId = await page.evaluate(() => {
-            if (typeof window.getUserId === 'function') {
-                return window.getUserId();
+            if (typeof window.DokkaiUtils?.getUserId === 'function') {
+                return window.DokkaiUtils.getUserId();
             }
             return localStorage.getItem('dokkai_user_id');
         });
@@ -32,8 +32,8 @@ test.describe('Dokkai Master - Unit Utilities & userId Stability Test', () => {
 
         // Generate ID
         const generatedId = await page.evaluate(() => {
-            if (typeof window.getUserId === 'function') {
-                return window.getUserId();
+            if (typeof window.DokkaiUtils?.getUserId === 'function') {
+                return window.DokkaiUtils.getUserId();
             }
             // fallback emulation
             let uid = localStorage.getItem('dokkai_user_id');
@@ -48,7 +48,7 @@ test.describe('Dokkai Master - Unit Utilities & userId Stability Test', () => {
 
         // Call again and verify persistence
         const secondCallId = await page.evaluate(() => {
-            if (typeof window.getUserId === 'function') return window.getUserId();
+            if (typeof window.DokkaiUtils?.getUserId === 'function') return window.DokkaiUtils.getUserId();
             return localStorage.getItem('dokkai_user_id');
         });
         expect(secondCallId).toBe(generatedId);

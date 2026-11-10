@@ -23,3 +23,13 @@
 | **12** | **Безопасное экранирование `evidence_span_id` и `slot.position` (main уязвим, исправлено в ветке)** | В ветке значения `q.evidence_span_id` и `slot.position` экранируются через `escapeHtml()` перед вставкой в HTML-разметку (`data-evidence`, `data-position`, `Слот #...`). В `main` значения конкатенировались напрямую в шаблон (`onclick="locateEvidenceInText('${q.evidence_span_id}')"` и `data-position="${slot.position}"`), создавая уязвимость для XSS и разрыва разметки при кавычках или спецсимволах. | Устранение риска внедрения скриптов (XSS) и обеспечение целостности DOM при враждебных или нестандартных входных данных. Подтверждено тестом `tests/test_hostile_data_security.cjs` (35 сценариев). | [`static/js/features/analysis/analysis_view.js:101-105`](file:///c:/Users/wawil/OneDrive/Рабочий%20стол/Dokkai/static/js/features/analysis/analysis_view.js#L101-L105)<br>[`static/js/features/stream/stream_slots.js:45-55`](file:///c:/Users/wawil/OneDrive/Рабочий%20стол/Dokkai/static/js/features/stream/stream_slots.js#L45-L55) |
 
 
+
+---
+
+## 🔎 Дефекты, обнаруженные на Шаге 6e-2 (не исправлены, вынесены на рассмотрение)
+
+| № | Дефект | Где | Влияние сейчас | Предложение |
+| :-: | :--- | :--- | :--- | :--- |
+| **D1** | Обработчики `cloud-signout`, `save-firebase-config`, `clear-firebase-config` вызывают `window.DokkaiSyncUI.handleCloudSignout / handleSaveCustomFirebaseConfig / handleClearCustomFirebaseConfig`, но этих методов нет в пространстве имён `DokkaiSyncUI` (и нигде в `static/` они не объявлены). Ветвь `if` никогда не выполняется. | `static/js/features/sync_ui/sync_events.js:12-13, 32-38` | Клик по этим кнопкам ничего не делает. Интерактивный обход (92/92) фиксирует идентичное поведение с `main`, паритет не нарушен. | Шаг 7c (слой `sync`) или Шаг 11b. |
+| **D2** | Резервная ветка в `submitAnswers` вызывает `stopTimer(s, els)` с полным объектом `state`, тогда как `timer.stopTimer(timerState)` ожидает `state.timer`. Таймер в этой ветке не остановился бы. | `static/js/features/analysis/submit_flow.js:45` | Ветка недостижима: `window.stopTimer` всегда объявлен `app.js` (обёртка передаёт `state.timer`). | Исправить на Шаге 6e-3 вместе с удалением `window.*`-обращений к функциям `app.js`. |
+| **D3** | `tools/summarize_window_bridges.cjs` занижает количество мостов: выводит 31 «функциональный мост», фактически их было 63 (не учитывались timer, settings, stream, solved, exercise, pretest, utils и др.). | `tools/summarize_window_bridges.cjs` | Только отчётность (цифра «31» в `CLAUDE.md`). | Переписать подсчёт на Шаге 9 или заменить grep-проверкой. |

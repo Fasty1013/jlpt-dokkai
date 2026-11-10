@@ -37,11 +37,5 @@ if (typeof window !== 'undefined') {
         renderNotebookWords,
         initEvents: initNotebookEvents
     };
-
-    window.getSavedWords = () => getSavedWords();
-    window.saveWordsToStorage = (words) => saveWordsToStorage(words);
-    window.updateNotebookBadge = () => updateNotebookBadge();
-    window.isWordSaved = (wordText) => isWordSaved(wordText);
-    window.renderNotebookWords = () => renderNotebookWords();
 }
 

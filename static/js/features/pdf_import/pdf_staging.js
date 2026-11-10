@@ -6,7 +6,7 @@
  */
 
 import { CATEGORY_NAMES } from '../../constants/labels.js';
-import { formatFileSize } from '../../utils/index.js';
+import { formatFileSize, escapeHtml } from '../../utils/index.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
