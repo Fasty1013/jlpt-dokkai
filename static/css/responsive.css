@@ -428,3 +428,198 @@
     }
 }
 
+
+/* ==========================================================================
+   Step 11a - Mobile UX (Part III). Desktop (>768px) is intentionally untouched.
+   ========================================================================== */
+
+/* --- Tablets & phones (<=768px): Japanese typography ---------------------- */
+@media (max-width: 768px) {
+    .passage-content.japanese-text,
+    .passage-title,
+    .question-prompt,
+    .option-text,
+    .translation-content {
+        line-break: strict;
+        text-wrap: pretty;
+        word-break: auto-phrase; /* unsupported browsers ignore it and keep break-word from the rules above */
+        overflow-wrap: break-word;
+    }
+
+    /* One-line, swipeable rows (no wrapping, snap to items) */
+    .header-nav,
+    .pill-selectors,
+    .study-tools-bar,
+    .reader-tools,
+    .analysis-tabs,
+    .exercise-header-controls {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--sumi-300) transparent;
+        padding-bottom: 4px;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Visible thin scrollbar so users can see there is more to scroll to */
+    .header-nav::-webkit-scrollbar,
+    .pill-selectors::-webkit-scrollbar,
+    .study-tools-bar::-webkit-scrollbar,
+    .reader-tools::-webkit-scrollbar,
+    .analysis-tabs::-webkit-scrollbar,
+    .exercise-header-controls::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .header-nav::-webkit-scrollbar-thumb,
+    .pill-selectors::-webkit-scrollbar-thumb,
+    .study-tools-bar::-webkit-scrollbar-thumb,
+    .reader-tools::-webkit-scrollbar-thumb,
+    .analysis-tabs::-webkit-scrollbar-thumb,
+    .exercise-header-controls::-webkit-scrollbar-thumb {
+        background: var(--sumi-300);
+        border-radius: 999px;
+    }
+
+    .header-nav > *,
+    .pill-selectors > *,
+    .study-tools-bar > *,
+    .reader-tools > *,
+    .analysis-tabs > *,
+    .exercise-header-controls > * {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        white-space: nowrap;
+    }
+
+    .app-header {
+        gap: 0.5rem;
+    }
+
+    .header-brand {
+        flex: 0 0 auto;
+    }
+
+    .header-nav {
+        flex: 1 1 auto;
+        justify-content: flex-start;
+    }
+
+    .exercise-header-controls {
+        flex: 1 1 auto;
+        justify-content: flex-start;
+    }
+
+    /* Badges never wrap, single fixed line box */
+    .level-tag,
+    .category-tag,
+    .exam-archive-badge,
+    .meta-tag,
+    .nhk-badge {
+        white-space: nowrap;
+        line-height: 1.4;
+    }
+
+    /* Reader panel: left-aligned, one row */
+    .passage-meta-bar {
+        flex-wrap: wrap;
+    }
+
+    .reader-tools {
+        width: 100%;
+        justify-content: flex-start;
+        padding-bottom: 2px;
+    }
+
+    /* Touch targets >= 44x44 */
+    .nav-tab,
+    .btn-add-timer,
+    #btn-abort-exercise,
+    .btn-timer-action,
+    .btn-tool-sm,
+    .filter-pill,
+    .tool-btn,
+    .analysis-tab-btn,
+    .wizard-nav-bar .btn {
+        min-height: 44px;
+    }
+
+    .btn-timer-action {
+        min-width: 44px;
+    }
+
+    .btn-tool-sm {
+        padding: 0.25rem 0.75rem;
+    }
+
+    /* The timer button joins the same visual row as the other header controls */
+    #btn-enable-timer-runtime {
+        height: 44px;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    /* Resume banner: content on top, buttons below, labels never wrap */
+    .unfinished-test-banner {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .unfinished-actions .btn {
+        white-space: nowrap;
+        min-height: 44px;
+    }
+
+    /* C1: no sub-pixel blur or ragged edges on the submit plate (DPR 2-3) */
+    .wizard-nav-bar {
+        flex-wrap: nowrap;
+    }
+
+    .wizard-nav-bar .btn {
+        padding: 0.7rem 1rem;
+        transform: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .wizard-nav-bar .btn-submit {
+        flex: 1 1 auto;
+        min-width: 0;
+        box-shadow: none;
+        backface-visibility: hidden;
+    }
+}
+
+/* --- Phones (<=480px) ----------------------------------------------------- */
+@media (max-width: 480px) {
+    /* In exercise mode the header keeps only brand + timer / back controls */
+    .app-header:has(#exercise-header-controls:not(.hidden)) .header-nav,
+    #exercise-meta-pill {
+        display: none;
+    }
+
+    .brand-text {
+        white-space: nowrap;
+    }
+}
+
+/* Safe areas & dynamic viewport */
+@supports (padding: max(0px)) {
+    @media (max-width: 768px) {
+        .app-header {
+            padding-left: max(0.75rem, env(safe-area-inset-left));
+            padding-right: max(0.75rem, env(safe-area-inset-right));
+        }
+
+        .catalog-view,
+        .notebook-page-container,
+        .import-page-container {
+            padding-bottom: max(2rem, env(safe-area-inset-bottom));
+        }
+    }
+}

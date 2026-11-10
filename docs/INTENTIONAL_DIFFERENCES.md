@@ -60,3 +60,20 @@
 | :-: | :--- | :--- | :--- |
 | **D4** | В `CLAUDE.md` имя БД IndexedDB было указано как `dokkai_storage_v1`, фактически в `storage.js` используется `dokkai_master_db` (версия 1, хранилища `solved_tasks`, `notebook`, `settings`, `active_session`). Исправлена только документация; код и формат хранилища не менялись. | Только описание. Формат хранилища не затронут. | Имя `dokkai_master_db` и ключи не менять на шаге 7c. |
 | **O5** | Добавлен `tools/compare_storage_snapshot.cjs` и эталон `tools/snapshots/storage_snapshot.main.json` (снят с `main`). Сравнивает 10 секций: IndexedDB (сырой дамп), localStorage, экспорт и импорт бэкапа, режим fallback без IndexedDB, миграцию legacy-ключей, payload `users/{uid}/sync/state` (Firebase замокан, сеть не используется). Часы и `Math.random` заморожены. Чувствительность проверена двумя мутациями (`storage.js`, `cloud_sync.js`): обе обнаружены, изменения откатаны. | Паритет `main` vs ветка: 10/10. | Запускать после каждой подитерации 7c. |
+
+---
+
+## 🔎 Шаг 11a — мобильный UX (ветка `fix/sync-speech-mobile-ui-shuffle`)
+
+Все правки — только в `@media (max-width: 768px / 480px)` в конце `static/css/responsive.css`; десктоп (>768px) не затронут, поэтому пиксельный diff с `main` на десктопе остаётся 0, а на мобильных профилях расхождения теперь **намеренные**.
+
+| № | Отличие | Причина |
+| :-: | :--- | :--- |
+| **13** | Ряды `#header-nav`, `.pill-selectors`, `.study-tools-bar`, `.reader-tools`, `.analysis-tabs`, `#exercise-header-controls` — одна строка без переноса, горизонтальный свайп (`scroll-snap`), тонкий видимый скроллбар. | Диагностика C2: обрезка кнопок на ~412px; пользователь попросил видимый ползунок. |
+| **14** | В режиме задания на ≤480px скрыты `#header-nav` и `#exercise-meta-pill` (через `:has(#exercise-header-controls:not(.hidden))`); в каталоге навигация остаётся. | Дублирование метаданных, освобождает место под таймер и «← На главную». |
+| **15** | Бейджи (`.level-tag`, `.category-tag`, `.exam-archive-badge`, `.meta-tag`) — `white-space: nowrap`, `line-height: 1.4`. | Перенос «JLPT N5 精選教材». |
+| **16** | `.reader-tools` выровнены по левому краю (`flex-start`, ранее `flex-end` на ≤480). | Диагностика C. |
+| **17** | Японская типографика на ≤768: `line-break: strict; text-wrap: pretty; word-break: auto-phrase` (fallback — прежний `break-word`). | Переносы по фразам. |
+| **18** | Минимальная высота интерактивных зон 44px; безопасные отступы `env(safe-area-inset-*)`. | Тач-стандарты. |
+| **19** | Кнопки `.wizard-nav-bar .btn` получили `padding: 0.7rem 1rem`, `transform: none`, `nowrap`; ряд без переноса. | **Дефект `main`:** у `#btn-wizard-prev/next/submit` нет базового padding (класс `.btn-secondary` не определён, `.btn` без padding) — красная плашка «Проверка ответов...» вплотную к тексту (замечание пользователя). На ширинах >768px дефект **остаётся** (десктоп не трогали) — на решение пользователя. |
+| **20** | Баннер «Продолжить незавершённое задание» на ≤768: перенос строк, `nowrap` на кнопках. | Кнопка «Продолжить» ломалась по строкам. |
