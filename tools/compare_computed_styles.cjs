@@ -412,6 +412,10 @@ async function runComparison() {
 
   await browser.close();
 
+  if (process.env.DISCREPANCIES_JSON) {
+    require('fs').writeFileSync(process.env.DISCREPANCIES_JSON, JSON.stringify(discrepancies, null, 1));
+  }
+
   // Report
   console.log('\n=============================================================');
   console.log('COMPUTED STYLES COMPARISON REPORT');
