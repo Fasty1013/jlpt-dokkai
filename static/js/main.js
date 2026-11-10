@@ -4,6 +4,7 @@
  * Orchestration only: wires events, restores persistence/sync, renders the first screen.
  */
 
+import './storage/storage.js'; // defines window.DokkaiStorage (Step 7c)
 import './state/index.js';
 import './utils/index.js';
 import './api/index.js';
