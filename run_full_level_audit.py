@@ -18,9 +18,9 @@ if sys.platform == "win32":
         pass
 
 BASE_DIR = Path(__file__).resolve().parent
-from database import SessionLocal
-import models
-from models import Text
+from app.core.database import SessionLocal
+from app import models
+from app.models import Text
 from tools.level_check.analyzer import analyze, check_corpus_monotonicity
 
 def run_audit():

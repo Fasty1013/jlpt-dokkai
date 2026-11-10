@@ -27,8 +27,8 @@ from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from fastapi.testclient import TestClient
 
 from main import app
-from database import SessionLocal
-from models import Text, Question, Option
+from app.core.database import SessionLocal
+from app.models import Text, Question, Option
 from tools.pdf_import.pipeline import run_pdf_import_pipeline, STAGING_DIR
 from tools.pdf_import.review import publish_draft, reject_draft, list_staging_drafts
 from tools.pdf_import.validator import validate_pdf_file

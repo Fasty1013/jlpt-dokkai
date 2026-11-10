@@ -1,0 +1,6120 @@
+{
+ "admin_draft_missing": {
+  "body": {
+   "detail": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 404,
+  "url": "/api/admin/drafts/does-not-exist"
+ },
+ "admin_drafts": {
+  "body": {
+   "__list__": 0,
+   "item": null
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/admin/drafts"
+ },
+ "complete_first": {
+  "body": {
+   "category": "str",
+   "content_html": "str",
+   "correct_count": "int",
+   "is_retry": "bool",
+   "is_solved": "bool",
+   "level": "str",
+   "perfect": "bool",
+   "questions": {
+    "__list__": 1,
+    "item": {
+     "correct_option_id": "int",
+     "evidence_span_id": "str",
+     "general_explanation": "str",
+     "id": "int",
+     "is_user_correct": "bool",
+     "options": {
+      "__list__": 4,
+      "item": {
+       "id": "int",
+       "is_correct": "bool",
+       "option_explanation": "str",
+       "option_number": "int",
+       "option_text": "str",
+       "trap_type": "null",
+       "was_selected": "bool"
+      }
+     },
+     "question_number": "int",
+     "question_text": "str",
+     "selected_option_id": "int"
+    }
+   },
+   "replacement": {
+    "position": "int",
+    "state": "str",
+    "text": {
+     "category": "str",
+     "content_html": "str",
+     "id": "int",
+     "level": "str",
+     "origin": "str",
+     "question_count": "int",
+     "questions": {
+      "__list__": 1,
+      "item": {
+       "id": "int",
+       "options": {
+        "__list__": 4,
+        "item": {
+         "id": "int",
+         "option_number": "int",
+         "option_text": "str"
+        }
+       },
+       "question_number": "int",
+       "question_text": "str"
+      }
+     },
+     "recommended_time_min": "int",
+     "slug": "str",
+     "title": "str"
+    }
+   },
+   "score_percent": "float",
+   "text_id": "int",
+   "title": "str",
+   "total_questions": "int",
+   "translation_ru": "str",
+   "vocabulary": {
+    "__list__": 3,
+    "item": {
+     "furigana": "str",
+     "translation": "str",
+     "word": "str"
+    }
+   }
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/complete"
+ },
+ "complete_idempotent": {
+  "body": {
+   "category": "str",
+   "content_html": "str",
+   "correct_count": "int",
+   "is_retry": "bool",
+   "is_solved": "bool",
+   "level": "str",
+   "perfect": "bool",
+   "questions": {
+    "__list__": 1,
+    "item": {
+     "correct_option_id": "int",
+     "evidence_span_id": "str",
+     "general_explanation": "str",
+     "id": "int",
+     "is_user_correct": "bool",
+     "options": {
+      "__list__": 4,
+      "item": {
+       "id": "int",
+       "is_correct": "bool",
+       "option_explanation": "str",
+       "option_number": "int",
+       "option_text": "str",
+       "trap_type": "null",
+       "was_selected": "bool"
+      }
+     },
+     "question_number": "int",
+     "question_text": "str",
+     "selected_option_id": "int"
+    }
+   },
+   "replacement": "null",
+   "score_percent": "float",
+   "text_id": "int",
+   "title": "str",
+   "total_questions": "int",
+   "translation_ru": "str",
+   "vocabulary": {
+    "__list__": 3,
+    "item": {
+     "furigana": "str",
+     "translation": "str",
+     "word": "str"
+    }
+   }
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/complete"
+ },
+ "complete_invalid": {
+  "body": {
+   "detail": [
+    {
+     "input": {
+      "user_id": "snap-user"
+     },
+     "loc": [
+      "body",
+      "text_id"
+     ],
+     "msg": "Field required",
+     "type": "missing"
+    },
+    {
+     "input": {
+      "user_id": "snap-user"
+     },
+     "loc": [
+      "body",
+      "answers"
+     ],
+     "msg": "Field required",
+     "type": "missing"
+    },
+    {
+     "input": {
+      "user_id": "snap-user"
+     },
+     "loc": [
+      "body",
+      "idempotency_key"
+     ],
+     "msg": "Field required",
+     "type": "missing"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/stream/complete"
+ },
+ "complete_missing_text": {
+  "body": {
+   "detail": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 404,
+  "url": "/api/stream/complete"
+ },
+ "dict_lookup": {
+  "body": {
+   "level": "N5",
+   "meaning": "книга, основа",
+   "reading": "ほん",
+   "word": "本"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/dictionary/lookup?q=%E6%97%A5%E6%9C%AC"
+ },
+ "dict_lookup_empty": {
+  "body": {
+   "detail": [
+    {
+     "ctx": {
+      "min_length": 1
+     },
+     "input": "",
+     "loc": [
+      "query",
+      "q"
+     ],
+     "msg": "String should have at least 1 character",
+     "type": "string_too_short"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/dictionary/lookup?q="
+ },
+ "dict_lookup_unknown": {
+  "body": {
+   "detail": "Word not found"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 404,
+  "url": "/api/dictionary/lookup?q=zzzqqq"
+ },
+ "health": {
+  "body": {
+   "database": "connected",
+   "status": "ok",
+   "texts_count": 314
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/health"
+ },
+ "index_headers": {
+  "headers": {
+   "cache-control": "no-cache, must-revalidate",
+   "content-type": "text/html; charset=utf-8",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "headers-only",
+  "status": 200,
+  "url": "/"
+ },
+ "openapi": {
+  "body": {
+   "components": {
+    "schemas": {
+     "AnswerSubmissionSchema": {
+      "properties": {
+       "question_id": {
+        "title": "Question Id",
+        "type": "integer"
+       },
+       "selected_option_id": {
+        "title": "Selected Option Id",
+        "type": "integer"
+       }
+      },
+      "required": [
+       "question_id",
+       "selected_option_id"
+      ],
+      "title": "AnswerSubmissionSchema",
+      "type": "object"
+     },
+     "Body_upload_pdf_api_admin_upload_pdf_post": {
+      "properties": {
+       "category": {
+        "default": "short",
+        "title": "Category",
+        "type": "string"
+       },
+       "file": {
+        "contentMediaType": "application/octet-stream",
+        "title": "File",
+        "type": "string"
+       },
+       "level": {
+        "default": "N3",
+        "title": "Level",
+        "type": "string"
+       },
+       "title_override": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Title Override"
+       }
+      },
+      "required": [
+       "file"
+      ],
+      "title": "Body_upload_pdf_api_admin_upload_pdf_post",
+      "type": "object"
+     },
+     "HTTPValidationError": {
+      "properties": {
+       "detail": {
+        "items": {
+         "$ref": "#/components/schemas/ValidationError"
+        },
+        "title": "Detail",
+        "type": "array"
+       }
+      },
+      "title": "HTTPValidationError",
+      "type": "object"
+     },
+     "OptionAnalysisSchema": {
+      "properties": {
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_correct": {
+        "title": "Is Correct",
+        "type": "boolean"
+       },
+       "option_explanation": {
+        "title": "Option Explanation",
+        "type": "string"
+       },
+       "option_number": {
+        "title": "Option Number",
+        "type": "integer"
+       },
+       "option_text": {
+        "title": "Option Text",
+        "type": "string"
+       },
+       "trap_type": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Trap Type"
+       },
+       "was_selected": {
+        "title": "Was Selected",
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "id",
+       "option_number",
+       "option_text",
+       "is_correct",
+       "option_explanation",
+       "was_selected"
+      ],
+      "title": "OptionAnalysisSchema",
+      "type": "object"
+     },
+     "OptionReadSchema": {
+      "properties": {
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "option_number": {
+        "title": "Option Number",
+        "type": "integer"
+       },
+       "option_text": {
+        "title": "Option Text",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "option_number",
+       "option_text"
+      ],
+      "title": "OptionReadSchema",
+      "type": "object"
+     },
+     "QuestionAnalysisSchema": {
+      "properties": {
+       "correct_option_id": {
+        "title": "Correct Option Id",
+        "type": "integer"
+       },
+       "evidence_span_id": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Evidence Span Id"
+       },
+       "general_explanation": {
+        "title": "General Explanation",
+        "type": "string"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_user_correct": {
+        "title": "Is User Correct",
+        "type": "boolean"
+       },
+       "options": {
+        "items": {
+         "$ref": "#/components/schemas/OptionAnalysisSchema"
+        },
+        "title": "Options",
+        "type": "array"
+       },
+       "question_number": {
+        "title": "Question Number",
+        "type": "integer"
+       },
+       "question_text": {
+        "title": "Question Text",
+        "type": "string"
+       },
+       "selected_option_id": {
+        "anyOf": [
+         {
+          "type": "integer"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Selected Option Id"
+       }
+      },
+      "required": [
+       "id",
+       "question_number",
+       "question_text",
+       "general_explanation",
+       "is_user_correct",
+       "correct_option_id",
+       "options"
+      ],
+      "title": "QuestionAnalysisSchema",
+      "type": "object"
+     },
+     "QuestionReadSchema": {
+      "properties": {
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "options": {
+        "items": {
+         "$ref": "#/components/schemas/OptionReadSchema"
+        },
+        "title": "Options",
+        "type": "array"
+       },
+       "question_number": {
+        "title": "Question Number",
+        "type": "integer"
+       },
+       "question_text": {
+        "title": "Question Text",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "question_number",
+       "question_text",
+       "options"
+      ],
+      "title": "QuestionReadSchema",
+      "type": "object"
+     },
+     "ReportTaskRequest": {
+      "properties": {
+       "details": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Details"
+       },
+       "reason": {
+        "title": "Reason",
+        "type": "string"
+       },
+       "user_id": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "User Id"
+       }
+      },
+      "required": [
+       "reason"
+      ],
+      "title": "ReportTaskRequest",
+      "type": "object"
+     },
+     "StreamCompleteRequest": {
+      "properties": {
+       "all_correct_max_attempts": {
+        "default": 2,
+        "title": "All Correct Max Attempts",
+        "type": "integer"
+       },
+       "answers": {
+        "items": {
+         "$ref": "#/components/schemas/AnswerSubmissionSchema"
+        },
+        "title": "Answers",
+        "type": "array"
+       },
+       "idempotency_key": {
+        "title": "Idempotency Key",
+        "type": "string"
+       },
+       "mode": {
+        "default": "first",
+        "title": "Mode",
+        "type": "string"
+       },
+       "solved_when": {
+        "default": "all_questions_answered",
+        "title": "Solved When",
+        "type": "string"
+       },
+       "text_id": {
+        "title": "Text Id",
+        "type": "integer"
+       },
+       "user_id": {
+        "default": "default-user",
+        "title": "User Id",
+        "type": "string"
+       }
+      },
+      "required": [
+       "text_id",
+       "answers",
+       "idempotency_key"
+      ],
+      "title": "StreamCompleteRequest",
+      "type": "object"
+     },
+     "SubmitPayloadSchema": {
+      "properties": {
+       "answers": {
+        "items": {
+         "$ref": "#/components/schemas/AnswerSubmissionSchema"
+        },
+        "title": "Answers",
+        "type": "array"
+       },
+       "time_spent_sec": {
+        "anyOf": [
+         {
+          "type": "integer"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Time Spent Sec"
+       }
+      },
+      "required": [
+       "answers"
+      ],
+      "title": "SubmitPayloadSchema",
+      "type": "object"
+     },
+     "TextAnalysisSchema": {
+      "properties": {
+       "category": {
+        "title": "Category",
+        "type": "string"
+       },
+       "content_html": {
+        "title": "Content Html",
+        "type": "string"
+       },
+       "correct_count": {
+        "title": "Correct Count",
+        "type": "integer"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_nhk": {
+        "default": false,
+        "title": "Is Nhk",
+        "type": "boolean"
+       },
+       "level": {
+        "title": "Level",
+        "type": "string"
+       },
+       "questions": {
+        "items": {
+         "$ref": "#/components/schemas/QuestionAnalysisSchema"
+        },
+        "title": "Questions",
+        "type": "array"
+       },
+       "recommended_time_min": {
+        "title": "Recommended Time Min",
+        "type": "integer"
+       },
+       "score_percent": {
+        "title": "Score Percent",
+        "type": "number"
+       },
+       "source_exam": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Source Exam"
+       },
+       "time_spent_sec": {
+        "anyOf": [
+         {
+          "type": "integer"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Time Spent Sec"
+       },
+       "title": {
+        "title": "Title",
+        "type": "string"
+       },
+       "total_questions": {
+        "title": "Total Questions",
+        "type": "integer"
+       },
+       "translation_ru": {
+        "title": "Translation Ru",
+        "type": "string"
+       },
+       "vocabulary": {
+        "items": {
+         "$ref": "#/components/schemas/VocabularyItemSchema"
+        },
+        "title": "Vocabulary",
+        "type": "array"
+       }
+      },
+      "required": [
+       "id",
+       "title",
+       "level",
+       "category",
+       "recommended_time_min",
+       "content_html",
+       "translation_ru",
+       "vocabulary",
+       "total_questions",
+       "correct_count",
+       "score_percent",
+       "questions"
+      ],
+      "title": "TextAnalysisSchema",
+      "type": "object"
+     },
+     "TextListItemSchema": {
+      "properties": {
+       "category": {
+        "title": "Category",
+        "type": "string"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_nhk": {
+        "default": false,
+        "title": "Is Nhk",
+        "type": "boolean"
+       },
+       "level": {
+        "title": "Level",
+        "type": "string"
+       },
+       "question_count": {
+        "title": "Question Count",
+        "type": "integer"
+       },
+       "recommended_time_min": {
+        "title": "Recommended Time Min",
+        "type": "integer"
+       },
+       "source_exam": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Source Exam"
+       },
+       "title": {
+        "title": "Title",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "title",
+       "level",
+       "category",
+       "recommended_time_min",
+       "question_count"
+      ],
+      "title": "TextListItemSchema",
+      "type": "object"
+     },
+     "TextReadSchema": {
+      "properties": {
+       "category": {
+        "title": "Category",
+        "type": "string"
+       },
+       "content_html": {
+        "title": "Content Html",
+        "type": "string"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_nhk": {
+        "default": false,
+        "title": "Is Nhk",
+        "type": "boolean"
+       },
+       "level": {
+        "title": "Level",
+        "type": "string"
+       },
+       "questions": {
+        "items": {
+         "$ref": "#/components/schemas/QuestionReadSchema"
+        },
+        "title": "Questions",
+        "type": "array"
+       },
+       "recommended_time_min": {
+        "title": "Recommended Time Min",
+        "type": "integer"
+       },
+       "source_exam": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Source Exam"
+       },
+       "title": {
+        "title": "Title",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "title",
+       "level",
+       "category",
+       "recommended_time_min",
+       "content_html",
+       "questions"
+      ],
+      "title": "TextReadSchema",
+      "type": "object"
+     },
+     "ValidationError": {
+      "properties": {
+       "ctx": {
+        "title": "Context",
+        "type": "object"
+       },
+       "input": {
+        "title": "Input"
+       },
+       "loc": {
+        "items": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "integer"
+          }
+         ]
+        },
+        "title": "Location",
+        "type": "array"
+       },
+       "msg": {
+        "title": "Message",
+        "type": "string"
+       },
+       "type": {
+        "title": "Error Type",
+        "type": "string"
+       }
+      },
+      "required": [
+       "loc",
+       "msg",
+       "type"
+      ],
+      "title": "ValidationError",
+      "type": "object"
+     },
+     "VocabularyItemSchema": {
+      "properties": {
+       "furigana": {
+        "title": "Furigana",
+        "type": "string"
+       },
+       "translation": {
+        "title": "Translation",
+        "type": "string"
+       },
+       "word": {
+        "title": "Word",
+        "type": "string"
+       }
+      },
+      "required": [
+       "word",
+       "furigana",
+       "translation"
+      ],
+      "title": "VocabularyItemSchema",
+      "type": "object"
+     }
+    }
+   },
+   "info": {
+    "description": "Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
+    "title": "JLPT Dokkai Master (読解トレーナー)",
+    "version": "2.1.0"
+   },
+   "openapi": "3.1.0",
+   "paths": {
+    "/": {
+     "get": {
+      "operationId": "serve_index__get",
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       }
+      },
+      "summary": "Serve Index"
+     }
+    },
+    "/api/admin/drafts": {
+     "get": {
+      "description": "Возвращает список всех черновиков в staging.",
+      "operationId": "get_staging_drafts_api_admin_drafts_get",
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       }
+      },
+      "summary": "Get Staging Drafts"
+     }
+    },
+    "/api/admin/drafts/{slug}": {
+     "delete": {
+      "description": "Удаляет черновик из staging.",
+      "operationId": "delete_staging_draft_api_admin_drafts__slug__delete",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "slug",
+        "required": true,
+        "schema": {
+         "title": "Slug",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Delete Staging Draft"
+     },
+     "get": {
+      "description": "Возвращает полную структуру черновика по slug.",
+      "operationId": "get_single_staging_draft_api_admin_drafts__slug__get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "slug",
+        "required": true,
+        "schema": {
+         "title": "Slug",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Get Single Staging Draft"
+     },
+     "put": {
+      "description": "Обновляет черновик (например, выбор правильного ответа или редактирование текста).",
+      "operationId": "update_staging_draft_api_admin_drafts__slug__put",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "slug",
+        "required": true,
+        "schema": {
+         "title": "Slug",
+         "type": "string"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Update Staging Draft"
+     }
+    },
+    "/api/admin/drafts/{slug}/publish": {
+     "post": {
+      "description": "Публикует проверенный черновик из staging в боевую базу данных тренажёра.",
+      "operationId": "publish_staging_draft_api_admin_drafts__slug__publish_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "slug",
+        "required": true,
+        "schema": {
+         "title": "Slug",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Publish Staging Draft"
+     }
+    },
+    "/api/admin/upload-pdf": {
+     "post": {
+      "description": "Загружает PDF книгу/материал, запускает процесс извлечения и сегментации,\nи сохраняет распознанные тексты в staging черновики для ревью.",
+      "operationId": "upload_pdf_api_admin_upload_pdf_post",
+      "requestBody": {
+       "content": {
+        "multipart/form-data": {
+         "schema": {
+          "$ref": "#/components/schemas/Body_upload_pdf_api_admin_upload_pdf_post"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Upload Pdf"
+     }
+    },
+    "/api/dictionary/lookup": {
+     "get": {
+      "description": "Lookup endpoint for Yomichan-style popup dictionary.\nReturns reading, JLPT level, and Russian translation.",
+      "operationId": "dictionary_lookup_api_dictionary_lookup_get",
+      "parameters": [
+       {
+        "in": "query",
+        "name": "q",
+        "required": true,
+        "schema": {
+         "maxLength": 50,
+         "minLength": 1,
+         "title": "Q",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Dictionary Lookup",
+      "tags": [
+       "Dictionary"
+      ]
+     }
+    },
+    "/api/health": {
+     "get": {
+      "description": "Healthcheck endpoint for Render and uptime monitoring.",
+      "operationId": "health_check_api_health_get",
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       }
+      },
+      "summary": "Health Check",
+      "tags": [
+       "Health"
+      ]
+     }
+    },
+    "/api/stream/complete": {
+     "post": {
+      "description": "Атомарная фиксация решения задания с поддержкой idempotency_key.\nПри успешном завершении задание переходит в «Решённые»,\nа слот немедленно заменяется новым непройденным заданием того же профиля.\nAnti-Cheat: если режим all_correct и есть ошибки, отдаются только ID ошибочных вопросов без ключа.",
+      "operationId": "complete_stream_task_api_stream_complete_post",
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/StreamCompleteRequest"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Complete Stream Task",
+      "tags": [
+       "Stream"
+      ]
+     }
+    },
+    "/api/stream/retry/{text_id}": {
+     "post": {
+      "description": "Повторное прохождение решённого задания.\nAnti-Cheat: возвращает структуру текста со скрытыми ответами для повторной тренировки.",
+      "operationId": "retry_stream_task_api_stream_retry__text_id__post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "query",
+        "name": "user_id",
+        "required": false,
+        "schema": {
+         "default": "default-user",
+         "title": "User Id",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Retry Stream Task",
+      "tags": [
+       "Stream"
+      ]
+     }
+    },
+    "/api/stream/slots": {
+     "get": {
+      "description": "Возвращает 3 активных слота заданий для выбранного профиля сложности.\nПри нехватке слотов атомарно дозаполняет их новыми непройденными заданиями.\nAnti-Cheat: правильные ответы и объяснения не возвращаются.",
+      "operationId": "get_stream_slots_api_stream_slots_get",
+      "parameters": [
+       {
+        "description": "ID сессии или пользователя",
+        "in": "query",
+        "name": "user_id",
+        "required": false,
+        "schema": {
+         "default": "default-user",
+         "description": "ID сессии или пользователя",
+         "title": "User Id",
+         "type": "string"
+        }
+       },
+       {
+        "description": "Ключ профиля сложности, например N5:short:detail:1:XS",
+        "in": "query",
+        "name": "profile_key",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Ключ профиля сложности, например N5:short:detail:1:XS",
+         "title": "Profile Key"
+        }
+       },
+       {
+        "description": "Уровень JLPT (N5-N1), если profile_key не указан",
+        "in": "query",
+        "name": "level",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "default": "N5",
+         "description": "Уровень JLPT (N5-N1), если profile_key не указан",
+         "title": "Level"
+        }
+       },
+       {
+        "description": "Категория (short, medium, long, info_search)",
+        "in": "query",
+        "name": "category",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "default": "short",
+         "description": "Категория (short, medium, long, info_search)",
+         "title": "Category"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Get Stream Slots",
+      "tags": [
+       "Stream"
+      ]
+     }
+    },
+    "/api/stream/solved": {
+     "get": {
+      "description": "Возвращает список завершённых заданий пользователя (архив «Решённые») с пагинацией и фильтрами.",
+      "operationId": "get_solved_stream_tasks_api_stream_solved_get",
+      "parameters": [
+       {
+        "description": "ID сессии или пользователя",
+        "in": "query",
+        "name": "user_id",
+        "required": false,
+        "schema": {
+         "default": "default-user",
+         "description": "ID сессии или пользователя",
+         "title": "User Id",
+         "type": "string"
+        }
+       },
+       {
+        "description": "Фильтр по уровню: N5-N1",
+        "in": "query",
+        "name": "level",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Фильтр по уровню: N5-N1",
+         "title": "Level"
+        }
+       },
+       {
+        "description": "Только решённые на 100% без ошибок",
+        "in": "query",
+        "name": "only_perfect",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "boolean"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Только решённые на 100% без ошибок",
+         "title": "Only Perfect"
+        }
+       },
+       {
+        "description": "Только с ошибками",
+        "in": "query",
+        "name": "only_errors",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "boolean"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Только с ошибками",
+         "title": "Only Errors"
+        }
+       },
+       {
+        "description": "Номер страницы",
+        "in": "query",
+        "name": "page",
+        "required": false,
+        "schema": {
+         "default": 1,
+         "description": "Номер страницы",
+         "minimum": 1,
+         "title": "Page",
+         "type": "integer"
+        }
+       },
+       {
+        "description": "Количество на страницу",
+        "in": "query",
+        "name": "page_size",
+        "required": false,
+        "schema": {
+         "default": 20,
+         "description": "Количество на страницу",
+         "maximum": 100,
+         "minimum": 1,
+         "title": "Page Size",
+         "type": "integer"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Get Solved Stream Tasks",
+      "tags": [
+       "Stream"
+      ]
+     }
+    },
+    "/api/stream/solved/{text_id}": {
+     "get": {
+      "description": "Обзор завершённого задания.\nAnti-Cheat: доступ разрешён ТОЛЬКО если данное задание уже решено пользователем.",
+      "operationId": "get_solved_stream_task_detail_api_stream_solved__text_id__get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "description": "ID сессии или пользователя",
+        "in": "query",
+        "name": "user_id",
+        "required": false,
+        "schema": {
+         "default": "default-user",
+         "description": "ID сессии или пользователя",
+         "title": "User Id",
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Get Solved Stream Task Detail",
+      "tags": [
+       "Stream"
+      ]
+     }
+    },
+    "/api/texts": {
+     "get": {
+      "operationId": "list_texts_api_texts_get",
+      "parameters": [
+       {
+        "description": "JLPT Level: N5, N4, N3, N2, N1",
+        "in": "query",
+        "name": "level",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "JLPT Level: N5, N4, N3, N2, N1",
+         "title": "Level"
+        }
+       },
+       {
+        "description": "Category: short, medium, long, info_search, article",
+        "in": "query",
+        "name": "category",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Category: short, medium, long, info_search, article",
+         "title": "Category"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "items": {
+            "$ref": "#/components/schemas/TextListItemSchema"
+           },
+           "title": "Response List Texts Api Texts Get",
+           "type": "array"
+          }
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "List Texts",
+      "tags": [
+       "Catalog"
+      ]
+     }
+    },
+    "/api/texts/{text_id}": {
+     "get": {
+      "description": "STRICT ANTI-CHEAT ENDPOINT:\nReturns ONLY the text, questions, and option texts.\nDoes NOT leak answers, explanations, translations, or evidence span IDs.",
+      "operationId": "get_text_for_reading_api_texts__text_id__get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/TextReadSchema"
+          }
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Get Text For Reading",
+      "tags": [
+       "Reading (Anti-Cheat)"
+      ]
+     }
+    },
+    "/api/texts/{text_id}/report": {
+     "post": {
+      "description": "Подача жалобы на опечатку/дефект в задании.\nЕсли число жалоб достигает порога (report_threshold: 3),\nзадание автоматически деактивируется (is_active = False).",
+      "operationId": "report_task_defect_api_texts__text_id__report_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/ReportTaskRequest"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Report Task Defect",
+      "tags": [
+       "Quality & Reports"
+      ]
+     }
+    },
+    "/api/texts/{text_id}/submit": {
+     "post": {
+      "description": "POST-SUBMIT EVALUATION ENDPOINT:\nValidates user choices against DB records and unlocks:\n- Correctness status\n- Explanations for all options (distractor breakdown & correct logic)\n- Key evidence span IDs in the text\n- Full Russian translation and vocabulary list",
+      "operationId": "submit_and_analyze_api_texts__text_id__submit_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/SubmitPayloadSchema"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/TextAnalysisSchema"
+          }
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Submit And Analyze",
+      "tags": [
+       "Analysis"
+      ]
+     }
+    },
+    "/api/version": {
+     "get": {
+      "description": "Version and build metadata endpoint for QA synchronization (no secrets).",
+      "operationId": "version_info_api_version_get",
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       }
+      },
+      "summary": "Version Info",
+      "tags": [
+       "Health"
+      ]
+     }
+    },
+    "/sw.js": {
+     "get": {
+      "operationId": "serve_service_worker_sw_js_get",
+      "parameters": [
+       {
+        "in": "query",
+        "name": "version",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Version"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Serve Service Worker"
+     }
+    }
+   }
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/openapi.json"
+ },
+ "report": {
+  "body": {
+   "deactivated": "bool",
+   "is_active": "bool",
+   "message": "str",
+   "report_count": "int",
+   "status": "str",
+   "text_id": "int"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/texts/1/report"
+ },
+ "report_invalid": {
+  "body": {
+   "detail": [
+    {
+     "input": {},
+     "loc": [
+      "body",
+      "reason"
+     ],
+     "msg": "Field required",
+     "type": "missing"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/texts/1/report"
+ },
+ "report_missing_text": {
+  "body": {
+   "detail": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 404,
+  "url": "/api/texts/999999/report"
+ },
+ "retry": {
+  "body": {
+   "category": "str",
+   "content_html": "str",
+   "is_retry": "bool",
+   "level": "str",
+   "origin": "str",
+   "questions": {
+    "__list__": 1,
+    "item": {
+     "id": "int",
+     "options": {
+      "__list__": 4,
+      "item": {
+       "id": "int",
+       "option_number": "int",
+       "option_text": "str"
+      }
+     },
+     "question_number": "int",
+     "question_text": "str"
+    }
+   },
+   "recommended_time_min": "int",
+   "slug": "str",
+   "text_id": "int",
+   "title": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/retry/<TID>?user_id=snap-user"
+ },
+ "retry_missing": {
+  "body": {
+   "detail": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "shape",
+  "status": 404,
+  "url": "/api/stream/retry/999999?user_id=snap-user"
+ },
+ "slots_n5_short": {
+  "body": {
+   "profile_key": "str",
+   "slots": {
+    "__list__": 3,
+    "item": {
+     "id": "int",
+     "position": "int",
+     "profile_key": "str",
+     "state": "str",
+     "text": {
+      "category": "str",
+      "content_html": "str",
+      "id": "int",
+      "level": "str",
+      "origin": "str",
+      "question_count": "int",
+      "questions": {
+       "__list__": 1,
+       "item": {
+        "id": "int",
+        "options": {
+         "__list__": 4,
+         "item": {
+          "id": "int",
+          "option_number": "int",
+          "option_text": "str"
+         }
+        },
+        "question_number": "int",
+        "question_text": "str"
+       }
+      },
+      "recommended_time_min": "int",
+      "slug": "str",
+      "title": "str",
+      "verification_status": "str"
+     },
+     "updated_at": "str"
+    }
+   },
+   "user_id": "str"
+  },
+  "headers": {
+   "cache-control": "no-cache, no-store, must-revalidate",
+   "content-type": "application/json",
+   "expires": "0",
+   "pragma": "no-cache",
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/slots?user_id=snap-user&level=N5&category=short"
+ },
+ "solved_bad_page": {
+  "body": {
+   "detail": [
+    {
+     "ctx": {
+      "ge": 1
+     },
+     "input": "0",
+     "loc": [
+      "query",
+      "page"
+     ],
+     "msg": "Input should be greater than or equal to 1",
+     "type": "greater_than_equal"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/stream/solved?page=0"
+ },
+ "solved_detail": {
+  "body": {
+   "category": "str",
+   "content_html": "str",
+   "correct_count": "int",
+   "is_retry": "bool",
+   "is_solved": "bool",
+   "level": "str",
+   "perfect": "bool",
+   "questions": {
+    "__list__": 1,
+    "item": {
+     "correct_option_id": "int",
+     "evidence_span_id": "str",
+     "general_explanation": "str",
+     "id": "int",
+     "is_user_correct": "bool",
+     "options": {
+      "__list__": 4,
+      "item": {
+       "id": "int",
+       "is_correct": "bool",
+       "option_explanation": "str",
+       "option_number": "int",
+       "option_text": "str",
+       "trap_type": "null",
+       "was_selected": "bool"
+      }
+     },
+     "question_number": "int",
+     "question_text": "str",
+     "selected_option_id": "int"
+    }
+   },
+   "replacement": "null",
+   "score_percent": "float",
+   "text_id": "int",
+   "title": "str",
+   "total_questions": "int",
+   "translation_ru": "str",
+   "vocabulary": {
+    "__list__": 3,
+    "item": {
+     "furigana": "str",
+     "translation": "str",
+     "word": "str"
+    }
+   }
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/solved/<TID>?user_id=snap-user"
+ },
+ "solved_detail_missing": {
+  "body": {
+   "detail": "str"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 403,
+  "url": "/api/stream/solved/999999?user_id=snap-user"
+ },
+ "solved_list": {
+  "body": {
+   "items": {
+    "__list__": 1,
+    "item": {
+     "attempts_count": "int",
+     "best_score": "float",
+     "category": "str",
+     "last_score": "float",
+     "level": "str",
+     "origin": "str",
+     "perfect": "bool",
+     "slug": "str",
+     "solved_at": "str",
+     "text_id": "int",
+     "title": "str"
+    }
+   },
+   "page": "int",
+   "page_size": "int",
+   "total": "int"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/solved?user_id=snap-user"
+ },
+ "solved_list_filters": {
+  "body": {
+   "items": {
+    "__list__": 1,
+    "item": {
+     "attempts_count": "int",
+     "best_score": "float",
+     "category": "str",
+     "last_score": "float",
+     "level": "str",
+     "origin": "str",
+     "perfect": "bool",
+     "slug": "str",
+     "solved_at": "str",
+     "text_id": "int",
+     "title": "str"
+    }
+   },
+   "page": "int",
+   "page_size": "int",
+   "total": "int"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "shape",
+  "status": 200,
+  "url": "/api/stream/solved?user_id=snap-user&level=N5&only_perfect=true&page=1&page_size=5"
+ },
+ "static_missing": {
+  "headers": {
+   "cache-control": "no-cache, must-revalidate",
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "headers-only",
+  "status": 404,
+  "url": "/static/nope.txt"
+ },
+ "submit_empty": {
+  "body": {
+   "category": "short",
+   "content_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>から、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>平日<rt>へいじつ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時（くじ）から<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>は、<ruby>午前<rt>ごぜん</rt></ruby>10時（じゅうじ）から<ruby>午後<rt>ごご</rt></ruby>5時（ごじ）まで<ruby>開<rt>あ</rt></ruby>いています。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+   "correct_count": 0,
+   "id": 1,
+   "is_nhk": false,
+   "level": "N5",
+   "questions": [
+    {
+     "correct_option_id": 1,
+     "evidence_span_id": "ev-q1",
+     "general_explanation": "В предложении ev-q1 прямо сказано: по субботам и воскресеньям библиотека открыта с 10:00 до 17:00.",
+     "id": 1,
+     "is_user_correct": false,
+     "options": [
+      {
+       "id": 1,
+       "is_correct": true,
+       "option_explanation": "Правильно! Точное время работы в выходные дни (ev-q1).",
+       "option_number": 1,
+       "option_text": "午前10時から午後5時まで",
+       "trap_type": null,
+       "was_selected": false
+      },
+      {
+       "id": 2,
+       "is_correct": false,
+       "option_explanation": "Неверно. Это часы работы по будням (平日).",
+       "option_number": 2,
+       "option_text": "午前9時から午後6時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      },
+      {
+       "id": 3,
+       "is_correct": false,
+       "option_explanation": "Неверно. Такого расписания в тексте нет.",
+       "option_number": 3,
+       "option_text": "午前9時から午後5時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      },
+      {
+       "id": 4,
+       "is_correct": false,
+       "option_explanation": "Неверно.",
+       "option_number": 4,
+       "option_text": "午後1時から午後6時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      }
+     ],
+     "question_number": 1,
+     "question_text": "日曜日は何時から何時まで図書館が開いていますか。",
+     "selected_option_id": null
+    }
+   ],
+   "recommended_time_min": 2,
+   "score_percent": 0.0,
+   "source_exam": "JLPT N5 精選教材",
+   "time_spent_sec": null,
+   "title": "図書館の利用時間変更 (N5) #1",
+   "total_questions": 1,
+   "translation_ru": "Со следующего понедельника меняются часы работы библиотеки. По будням — с 9:00 до 18:00. По субботам и воскресеньям библиотека открыта с 10:00 до 17:00. Спасибо за понимание.",
+   "vocabulary": [
+    {
+     "furigana": "としょかん",
+     "translation": "библиотека",
+     "word": "図書館"
+    },
+    {
+     "furigana": "じかん",
+     "translation": "время",
+     "word": "時間"
+    },
+    {
+     "furigana": "うけつけ",
+     "translation": "стойка регистрации",
+     "word": "受付"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts/1/submit"
+ },
+ "submit_invalid": {
+  "body": {
+   "detail": [
+    {
+     "input": {
+      "nope": 1
+     },
+     "loc": [
+      "body",
+      "answers"
+     ],
+     "msg": "Field required",
+     "type": "missing"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/texts/1/submit"
+ },
+ "submit_missing_text": {
+  "body": {
+   "detail": "Text not found"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 404,
+  "url": "/api/texts/999999/submit"
+ },
+ "submit_text_1": {
+  "body": {
+   "category": "short",
+   "content_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>から、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>平日<rt>へいじつ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時（くじ）から<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>は、<ruby>午前<rt>ごぜん</rt></ruby>10時（じゅうじ）から<ruby>午後<rt>ごご</rt></ruby>5時（ごじ）まで<ruby>開<rt>あ</rt></ruby>いています。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+   "correct_count": 1,
+   "id": 1,
+   "is_nhk": false,
+   "level": "N5",
+   "questions": [
+    {
+     "correct_option_id": 1,
+     "evidence_span_id": "ev-q1",
+     "general_explanation": "В предложении ev-q1 прямо сказано: по субботам и воскресеньям библиотека открыта с 10:00 до 17:00.",
+     "id": 1,
+     "is_user_correct": true,
+     "options": [
+      {
+       "id": 1,
+       "is_correct": true,
+       "option_explanation": "Правильно! Точное время работы в выходные дни (ev-q1).",
+       "option_number": 1,
+       "option_text": "午前10時から午後5時まで",
+       "trap_type": null,
+       "was_selected": true
+      },
+      {
+       "id": 2,
+       "is_correct": false,
+       "option_explanation": "Неверно. Это часы работы по будням (平日).",
+       "option_number": 2,
+       "option_text": "午前9時から午後6時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      },
+      {
+       "id": 3,
+       "is_correct": false,
+       "option_explanation": "Неверно. Такого расписания в тексте нет.",
+       "option_number": 3,
+       "option_text": "午前9時から午後5時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      },
+      {
+       "id": 4,
+       "is_correct": false,
+       "option_explanation": "Неверно.",
+       "option_number": 4,
+       "option_text": "午後1時から午後6時まで",
+       "trap_type": "temporal_mismatch",
+       "was_selected": false
+      }
+     ],
+     "question_number": 1,
+     "question_text": "日曜日は何時から何時まで図書館が開いていますか。",
+     "selected_option_id": 1
+    }
+   ],
+   "recommended_time_min": 2,
+   "score_percent": 100.0,
+   "source_exam": "JLPT N5 精選教材",
+   "time_spent_sec": 42,
+   "title": "図書館の利用時間変更 (N5) #1",
+   "total_questions": 1,
+   "translation_ru": "Со следующего понедельника меняются часы работы библиотеки. По будням — с 9:00 до 18:00. По субботам и воскресеньям библиотека открыта с 10:00 до 17:00. Спасибо за понимание.",
+   "vocabulary": [
+    {
+     "furigana": "としょかん",
+     "translation": "библиотека",
+     "word": "図書館"
+    },
+    {
+     "furigana": "じかん",
+     "translation": "время",
+     "word": "時間"
+    },
+    {
+     "furigana": "うけつけ",
+     "translation": "стойка регистрации",
+     "word": "受付"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "POST",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts/1/submit"
+ },
+ "sw_headers": {
+  "headers": {
+   "cache-control": "no-cache, no-store, must-revalidate",
+   "content-type": "application/javascript",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": "/"
+  },
+  "method": "GET",
+  "mode": "headers-only",
+  "status": 200,
+  "url": "/sw.js"
+ },
+ "sw_version_override": {
+  "headers": {
+   "cache-control": "no-cache, no-store, must-revalidate",
+   "content-type": "application/javascript",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": "/"
+  },
+  "method": "GET",
+  "mode": "headers-only",
+  "status": 200,
+  "url": "/sw.js?version=9.9.9"
+ },
+ "text_1": {
+  "body": {
+   "category": "short",
+   "content_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>から、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>平日<rt>へいじつ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時（くじ）から<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>は、<ruby>午前<rt>ごぜん</rt></ruby>10時（じゅうじ）から<ruby>午後<rt>ごご</rt></ruby>5時（ごじ）まで<ruby>開<rt>あ</rt></ruby>いています。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
+   "id": 1,
+   "is_nhk": false,
+   "level": "N5",
+   "questions": [
+    {
+     "id": 1,
+     "options": [
+      {
+       "id": 1,
+       "option_number": 1,
+       "option_text": "午前10時から午後5時まで"
+      },
+      {
+       "id": 2,
+       "option_number": 2,
+       "option_text": "午前9時から午後6時まで"
+      },
+      {
+       "id": 3,
+       "option_number": 3,
+       "option_text": "午前9時から午後5時まで"
+      },
+      {
+       "id": 4,
+       "option_number": 4,
+       "option_text": "午後1時から午後6時まで"
+      }
+     ],
+     "question_number": 1,
+     "question_text": "日曜日は何時から何時まで図書館が開いていますか。"
+    }
+   ],
+   "recommended_time_min": 2,
+   "source_exam": "JLPT N5 精選教材",
+   "title": "図書館の利用時間変更 (N5) #1"
+  },
+  "headers": {
+   "cache-control": "no-cache, no-store, must-revalidate",
+   "content-type": "application/json",
+   "expires": "0",
+   "pragma": "no-cache",
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts/1"
+ },
+ "text_bad_id": {
+  "body": {
+   "detail": [
+    {
+     "input": "abc",
+     "loc": [
+      "path",
+      "text_id"
+     ],
+     "msg": "Input should be a valid integer, unable to parse string as an integer",
+     "type": "int_parsing"
+    }
+   ]
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 422,
+  "url": "/api/texts/abc"
+ },
+ "text_missing": {
+  "body": {
+   "detail": "Text not found"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 404,
+  "url": "/api/texts/999999"
+ },
+ "texts_all": {
+  "body": [
+   {
+    "category": "short",
+    "id": 1,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "図書館の利用時間変更 (N5) #1"
+   },
+   {
+    "category": "short",
+    "id": 2,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "週末の公園そうじ (N5) #2"
+   },
+   {
+    "category": "short",
+    "id": 3,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "留学生パーティー (N5) #3"
+   },
+   {
+    "category": "short",
+    "id": 4,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "わすれもののおしらせ (N5) #4"
+   },
+   {
+    "category": "short",
+    "id": 5,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "エレベーターの点検 (N5) #5"
+   },
+   {
+    "category": "short",
+    "id": 6,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "健康しんだんの日 (N5) #6"
+   },
+   {
+    "category": "short",
+    "id": 7,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "アルバイトの時間 (N5) #7"
+   },
+   {
+    "category": "short",
+    "id": 8,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "荷物の配達について (N5) #8"
+   },
+   {
+    "category": "short",
+    "id": 9,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "カフェの新しいケーキ (N5) #9"
+   },
+   {
+    "category": "short",
+    "id": 10,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "バス停の場所 (N5) #10"
+   },
+   {
+    "category": "short",
+    "id": 11,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "スピーチ大会 (N5) #11"
+   },
+   {
+    "category": "short",
+    "id": 12,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "授業の休み (N5) #12"
+   },
+   {
+    "category": "medium",
+    "id": 13,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "私の好きな町と公園 (N5) #1"
+   },
+   {
+    "category": "medium",
+    "id": 14,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "毎朝の朝ごはんとくだもの (N5) #2"
+   },
+   {
+    "category": "medium",
+    "id": 15,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日曜日のお買い物とスーパー (N5) #3"
+   },
+   {
+    "category": "medium",
+    "id": 16,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本のコンビニとべんりなもの (N5) #4"
+   },
+   {
+    "category": "medium",
+    "id": 17,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "友だちと行く楽しい旅行 (N5) #5"
+   },
+   {
+    "category": "medium",
+    "id": 18,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "私のいえの犬と猫 (N5) #6"
+   },
+   {
+    "category": "medium",
+    "id": 19,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本語のべんきょうと漢字 (N5) #7"
+   },
+   {
+    "category": "medium",
+    "id": 20,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "夏休みの海と山 (N5) #8"
+   },
+   {
+    "category": "medium",
+    "id": 21,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "おいしい日本のお茶とおかし (N5) #9"
+   },
+   {
+    "category": "medium",
+    "id": 22,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "毎日の散歩と写真 (N5) #10"
+   },
+   {
+    "category": "medium",
+    "id": 23,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "学校の友だちと先生 (N5) #11"
+   },
+   {
+    "category": "medium",
+    "id": 24,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "冬の雪とあたたかいスープ (N5) #12"
+   },
+   {
+    "category": "long",
+    "id": 25,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本での生活と四季 (N5) #1"
+   },
+   {
+    "category": "long",
+    "id": 26,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "私の一週間のスケジュール (N5) #2"
+   },
+   {
+    "category": "long",
+    "id": 27,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "電車に乗って出かける日 (N5) #3"
+   },
+   {
+    "category": "long",
+    "id": 28,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本の家族とごはん (N5) #4"
+   },
+   {
+    "category": "long",
+    "id": 29,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "休みの日の料理と買い物 (N5) #5"
+   },
+   {
+    "category": "long",
+    "id": 30,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "手紙とメールのやりとり (N5) #6"
+   },
+   {
+    "category": "long",
+    "id": 31,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本語学校のクラスメイト (N5) #7"
+   },
+   {
+    "category": "long",
+    "id": 32,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "町のお祭りと花火 (N5) #8"
+   },
+   {
+    "category": "long",
+    "id": 33,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "図書館で本を読む時間 (N5) #9"
+   },
+   {
+    "category": "long",
+    "id": 34,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "私の国の紹介と日本の思い出 (N5) #10"
+   },
+   {
+    "category": "long",
+    "id": 35,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "自転車で走る街の道 (N5) #11"
+   },
+   {
+    "category": "long",
+    "id": 36,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "新しい友だちと遊ぶ週末 (N5) #12"
+   },
+   {
+    "category": "info_search",
+    "id": 37,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "さくらスポーツクラブの案内 (N5) #1"
+   },
+   {
+    "category": "info_search",
+    "id": 38,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "市民プールの利用時間と休み (N5) #2"
+   },
+   {
+    "category": "info_search",
+    "id": 39,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "中央図書館のカードの作り方 (N5) #3"
+   },
+   {
+    "category": "info_search",
+    "id": 40,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "バスの切符と乗り場 (N5) #4"
+   },
+   {
+    "category": "info_search",
+    "id": 41,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "秋の日本語教室のおしらせ (N5) #5"
+   },
+   {
+    "category": "info_search",
+    "id": 42,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "カメラ屋さんのセール案内 (N5) #6"
+   },
+   {
+    "category": "info_search",
+    "id": 43,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "病院の受付時間と休診日 (N5) #7"
+   },
+   {
+    "category": "info_search",
+    "id": 44,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "パソコン室の使い方のルール (N5) #8"
+   },
+   {
+    "category": "info_search",
+    "id": 45,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "映画館のチケット割引案内 (N5) #9"
+   },
+   {
+    "category": "info_search",
+    "id": 46,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "スキー場のリフト料金 (N5) #10"
+   },
+   {
+    "category": "info_search",
+    "id": 47,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "電話会社の学割プラン (N5) #11"
+   },
+   {
+    "category": "info_search",
+    "id": 48,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "荷物の送り方と料金 (N5) #12"
+   },
+   {
+    "category": "article",
+    "id": 49,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本のコンビニのべんりなサービス (N5) #1"
+   },
+   {
+    "category": "article",
+    "id": 50,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "古いお寺と新しい建物 (N5) #2"
+   },
+   {
+    "category": "article",
+    "id": 51,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本のゴミの分別ルール (N5) #3"
+   },
+   {
+    "category": "article",
+    "id": 52,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "春の桜と花見の文化 (N5) #4"
+   },
+   {
+    "category": "article",
+    "id": 53,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "夏休みの祭りとおどり (N5) #5"
+   },
+   {
+    "category": "article",
+    "id": 54,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本の新幹線と安全な旅 (N5) #6"
+   },
+   {
+    "category": "article",
+    "id": 55,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "和食のおいしさと魚料理 (N5) #7"
+   },
+   {
+    "category": "article",
+    "id": 56,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "町のボランティア活動 (N5) #8"
+   },
+   {
+    "category": "article",
+    "id": 57,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "外国人留学生の一日 (N5) #9"
+   },
+   {
+    "category": "article",
+    "id": 58,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本の自動販売機の多さ (N5) #10"
+   },
+   {
+    "category": "article",
+    "id": 59,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "お茶の歴史と楽しい飲み方 (N5) #11"
+   },
+   {
+    "category": "article",
+    "id": 60,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "日本語を学ぶ楽しさ (N5) #12"
+   },
+   {
+    "category": "short",
+    "id": 61,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "市民センターの利用案内 (N4) #1"
+   },
+   {
+    "category": "short",
+    "id": 62,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本語スピーチ大会の申込 (N4) #2"
+   },
+   {
+    "category": "short",
+    "id": 63,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "アパートのごみ出しルール (N4) #3"
+   },
+   {
+    "category": "short",
+    "id": 64,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "駅前の自転車置き場について (N4) #4"
+   },
+   {
+    "category": "short",
+    "id": 65,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "アルバイトのシフト連絡 (N4) #5"
+   },
+   {
+    "category": "short",
+    "id": 66,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "荷物の受け取り時間変更 (N4) #6"
+   },
+   {
+    "category": "short",
+    "id": 67,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "健康診断の問診票記入 (N4) #7"
+   },
+   {
+    "category": "short",
+    "id": 68,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "カフェの季節限定メニュー (N4) #8"
+   },
+   {
+    "category": "short",
+    "id": 69,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "大学の休講と補講のお知らせ (N4) #9"
+   },
+   {
+    "category": "short",
+    "id": 70,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "エレベーターの点検案内 (N4) #10"
+   },
+   {
+    "category": "short",
+    "id": 71,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "図書館の特別貸出サービス (N4) #11"
+   },
+   {
+    "category": "short",
+    "id": 72,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "留学生交流バスツアー (N4) #12"
+   },
+   {
+    "category": "medium",
+    "id": 73,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本のリサイクルと分別の経験 (N4) #1"
+   },
+   {
+    "category": "medium",
+    "id": 74,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "コンビニの便利なサービス (N4) #2"
+   },
+   {
+    "category": "medium",
+    "id": 75,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "ワーケーションという新しい働き方 (N4) #3"
+   },
+   {
+    "category": "medium",
+    "id": 76,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "和食の健康的なバランス (N4) #4"
+   },
+   {
+    "category": "medium",
+    "id": 77,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "自動販売機の便利さと治安 (N4) #5"
+   },
+   {
+    "category": "medium",
+    "id": 78,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "一人旅で学んだ大切なこと (N4) #6"
+   },
+   {
+    "category": "medium",
+    "id": 79,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "手書きの手帳を使う理由 (N4) #7"
+   },
+   {
+    "category": "medium",
+    "id": 80,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "ペットと暮らすマナー (N4) #8"
+   },
+   {
+    "category": "medium",
+    "id": 81,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "シェアサイクルの使い方 (N4) #9"
+   },
+   {
+    "category": "medium",
+    "id": 82,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "古着を選ぶ若い人たち (N4) #10"
+   },
+   {
+    "category": "medium",
+    "id": 83,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "銭湯の気持ちよさと交流 (N4) #11"
+   },
+   {
+    "category": "medium",
+    "id": 84,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "方言の面白さと標準語 (N4) #12"
+   },
+   {
+    "category": "long",
+    "id": 85,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本の電車マナーと時間通りの運行 (N4) #1"
+   },
+   {
+    "category": "long",
+    "id": 86,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "ホームステイで学んだ家族の温かさ (N4) #2"
+   },
+   {
+    "category": "long",
+    "id": 87,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "ボランティア活動を通して知ったこと (N4) #3"
+   },
+   {
+    "category": "long",
+    "id": 88,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本の四季と旬の食べ物の関係 (N4) #4"
+   },
+   {
+    "category": "long",
+    "id": 89,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "古民家カフェで過ごす静かな時間 (N4) #5"
+   },
+   {
+    "category": "long",
+    "id": 90,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "散歩で見つけた地域の歴史 (N4) #6"
+   },
+   {
+    "category": "long",
+    "id": 91,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本の祭りとお神輿を担いだ体験 (N4) #7"
+   },
+   {
+    "category": "long",
+    "id": 92,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "日本語のオノマトペ（擬音語・擬態語） (N4) #8"
+   },
+   {
+    "category": "long",
+    "id": 93,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "友だちと作った日本料理 (N4) #9"
+   },
+   {
+    "category": "long",
+    "id": 94,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "山登りで見えた美しい景色と達成感 (N4) #10"
+   },
+   {
+    "category": "long",
+    "id": 95,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "手紙を書くことの楽しさと温もり (N4) #11"
+   },
+   {
+    "category": "long",
+    "id": 96,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "これからの夢と日本語の勉強 (N4) #12"
+   },
+   {
+    "category": "info_search",
+    "id": 97,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "市民語学講座の募集案内 (N4) #1"
+   },
+   {
+    "category": "info_search",
+    "id": 98,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "文化会館のホール利用規約 (N4) #2"
+   },
+   {
+    "category": "info_search",
+    "id": 99,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "スポーツジムの会員プラン一覧 (N4) #3"
+   },
+   {
+    "category": "info_search",
+    "id": 100,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "高速バスの予約と荷物制限 (N4) #4"
+   },
+   {
+    "category": "info_search",
+    "id": 101,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "市立病院の検査コース案内 (N4) #5"
+   },
+   {
+    "category": "info_search",
+    "id": 102,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "映画館の割引デーと上映時間 (N4) #6"
+   },
+   {
+    "category": "info_search",
+    "id": 103,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "パソコン講習会の参加要項 (N4) #7"
+   },
+   {
+    "category": "info_search",
+    "id": 104,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "高原ホテルの宿泊プランとキャンセル料 (N4) #8"
+   },
+   {
+    "category": "info_search",
+    "id": 105,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "引っ越しサービスの料金表 (N4) #9"
+   },
+   {
+    "category": "info_search",
+    "id": 106,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "スキー場リフト券の割引案内 (N4) #10"
+   },
+   {
+    "category": "info_search",
+    "id": 107,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "通信会社の家族割引プラン (N4) #11"
+   },
+   {
+    "category": "info_search",
+    "id": 108,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "家具組み立てサービスの案内 (N4) #12"
+   },
+   {
+    "category": "article",
+    "id": 109,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "食品ロスを減らすための新しい工夫 (N4) #1"
+   },
+   {
+    "category": "article",
+    "id": 110,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "伝統工芸を守る若い職人たちの挑戦 (N4) #2"
+   },
+   {
+    "category": "article",
+    "id": 111,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "富士山の環境を守るための登山ルール (N4) #3"
+   },
+   {
+    "category": "article",
+    "id": 112,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "電気自動車の普及とこれからの社会 (N4) #4"
+   },
+   {
+    "category": "article",
+    "id": 113,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "和食文化の広がりとおいしい食材 (N4) #5"
+   },
+   {
+    "category": "article",
+    "id": 114,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "お年寄りと若者が一緒に住む家 (N4) #6"
+   },
+   {
+    "category": "article",
+    "id": 115,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "プラスチックごみを減らす新しい素材 (N4) #7"
+   },
+   {
+    "category": "article",
+    "id": 116,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "小学校でのプログラミング学習 (N4) #8"
+   },
+   {
+    "category": "article",
+    "id": 117,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "遠い島の人たちを支えるオンライン診療 (N4) #9"
+   },
+   {
+    "category": "article",
+    "id": 118,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "地域の特産品を全国に広める工夫 (N4) #10"
+   },
+   {
+    "category": "article",
+    "id": 119,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "宇宙のごみを集める新しい技術 (N4) #11"
+   },
+   {
+    "category": "article",
+    "id": 120,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 3,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N4 精選教材",
+    "title": "休みの日を増やして元気に働く会社 (N4) #12"
+   },
+   {
+    "category": "short",
+    "id": 121,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "NHK ニュース（気象・交通情報 2024年秋）に基づく適応",
+    "title": "台風接近に伴う店舗営業時間短縮のお知らせ (N3)"
+   },
+   {
+    "category": "short",
+    "id": 122,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "マンション水道管定期点検および断水のご案内 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 123,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "大学国際交流センター スピーチコンテスト原稿締切 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 124,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "市立図書館 夜間返却ポストの一時利用停止について (N3)"
+   },
+   {
+    "category": "short",
+    "id": 125,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "アルバイト勤務シフト変更申請に関するお願い (N3)"
+   },
+   {
+    "category": "short",
+    "id": 126,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "宅配便サービス利用規約に基づく再構成",
+    "title": "宅配便の再配達および不在連絡票の保管期限案内 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 127,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "駅前駐輪場 定期利用更新手続きのご案内 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 128,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "市民健康診断の事前問診票記入と受診注意事項 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 129,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "日本語学習サークル 春の合宿参加費集金のお知らせ (N3)"
+   },
+   {
+    "category": "short",
+    "id": 130,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "社内PCセキュリティパスワード定期更新の依頼 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 131,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "地域交通案内情報に基づく適応",
+    "title": "近隣道路舗装工事に伴うバス停一時移転のご案内 (N3)"
+   },
+   {
+    "category": "short",
+    "id": 132,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "年末年始のごみ収集日程変更のお知らせ (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 133,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "NHK 解説アーカイブ（食品廃棄問題 2024）",
+    "title": "コンビニエンスストアの食品ロス削減の試み (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 134,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "若者が重視する「タイパ」（時間対効果）と読書文化 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 135,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "地域経済特集記事に基づく適応",
+    "title": "地方移住を希望する若者が直面する現実と課題 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 136,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "マイボトル持参運動が変える日常の環境意識 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 137,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "日常の挨拶が職場環境に与える心理的影響 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 138,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "手書きの手帳を使う人々の心理と記憶の定着 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 139,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "文化・ライフスタイル報道に基づく適応",
+    "title": "地域の銭湯がコミュニティ交流拠点として再注目される理由 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 140,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "働き方改革関連レポートに基づく適応",
+    "title": "リモートワーク普及による住環境選びの変化 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 141,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "伝統工芸品を現代の若者向けにアレンジする挑戦 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 142,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "自転車通勤のメリットと守るべき交通マナー (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 143,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "インバウンド観光特集に基づく適応",
+    "title": "観光地における多言語案内サービスの現状と課題 (N3)"
+   },
+   {
+    "category": "medium",
+    "id": 144,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "古着ファッションの流行と持続可能な消費 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 145,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "「聞く力」の重要性：共感と傾聴が生み出す真の対話 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 146,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "環境と地域観光に関する報告記事に基づく適応",
+    "title": "自然環境の保護と観光産業の両立：富士山の入山管理を考える (N3)"
+   },
+   {
+    "category": "long",
+    "id": 147,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "デジタル社会における「忘れること」の価値と脳の休息 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 148,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "言葉遣いと心の距離：現代日本語における敬語の多様化 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 149,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "失敗を恐れる心理と挑戦する勇気：教育現場からの考察 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 150,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "都市環境レポートに基づく適応",
+    "title": "都市の緑地保全がもたらす気候緩和と市民の健康 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 151,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "「効率性」の追求が生み出す心のゆとりの喪失について (N3)"
+   },
+   {
+    "category": "long",
+    "id": 152,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "世代間コミュニケーションの難しさとそれを乗り越える工夫 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 153,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "日本の食文化と季節感：旬の食材が教える自然のリズム (N3)"
+   },
+   {
+    "category": "long",
+    "id": 154,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "孤独と孤立の相違点：一人の時間を豊かに生きる技術 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 155,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK 環境特集に基づく適応",
+    "title": "プラスチック製品の利便性と海洋環境への長期的影響 (N3)"
+   },
+   {
+    "category": "long",
+    "id": 156,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "歴史的建造物の保存と街の活性化：古民家再生の試み (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 157,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "さくら市民スポーツセンター 利用案内・料金表 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 158,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "みどり市 国際交流フェスティバル 会場マップとプログラム (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 159,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "中央図書館 特別夜間開館と自習室利用ルール (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 160,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "成田・羽田空港直行 高速バス時刻表および運賃案内 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 161,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "市民カルチャーセンター 秋の外国語特別講座一覧 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 162,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "家電量販店 ポイント還元サービスと長期無料保証規定 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 163,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "総合病院 人間ドックおよび生活習慣病健診コース比較表 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 164,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "コワーキングスペース 会員プランと会議室利用料金 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 165,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "シネマコンプレックス 映画鑑賞割引デーと特別料金規定 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 166,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "高原スキー場 リフト券およびレンタル用具料金案内 (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 167,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "格安スマートフォン通信プラン比較・学割キャンペーン (N3)"
+   },
+   {
+    "category": "info_search",
+    "id": 168,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N3 精選教材",
+    "title": "大型家具・家電 配送設置サービスエリア別料金表 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 169,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK特報：AI需要予測システムが切り拓くスーパーの廃棄ゼロ作戦 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 170,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK解説：伝統木造建築の技術を継承するVRトレーニングの最前線 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 171,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK報道：富士山の夜間登山規制と環境保全協力金の効果 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 172,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK深層：次世代EVバッテリー開発競争と日本のものづくりの挑戦 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 173,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK文化：ユネスコ無形文化遺産「和食」の普及と食材確保の課題 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 174,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK生活：高齢者の孤立を防ぐ「世代間シェアハウス」の先進事例 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 175,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK科学：深海探査で見つかるマイクロプラスチックと分解技術 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 176,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK教育：小学校における論理的思考・プログラミング教育の成果 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 177,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK医療：ドローンとオンライン診療で支える離島・過疎地医療 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 178,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK地域：地域おこし協力隊が成功させた特産果物の全国ブランド化 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 179,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK宇宙：宇宙ゴミ（スペースデブリ）除去に挑む日本の民間ベンチャー (N3)"
+   },
+   {
+    "category": "article",
+    "id": 180,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK労働：選択的週休3日制を導入した企業の生産性と従業員満足度 (N3)"
+   },
+   {
+    "category": "article",
+    "id": 181,
+    "is_nhk": true,
+    "level": "N3",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "新幹線開業60周年：安全を守る日本の最新点検ロボット (N3)"
+   },
+   {
+    "category": "short",
+    "id": 182,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "選択のパラドックス：選択肢の過剰がもたらす決断の先送り (N2)"
+   },
+   {
+    "category": "short",
+    "id": 183,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "美術館の展示解説文における専門用語と一般来館者の心理的距離 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 184,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "社内ビジネスメールにおけるクッション言葉の機能と誤解リスク (N2)"
+   },
+   {
+    "category": "short",
+    "id": 185,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "現代都市生活に関する論説に基づく適応",
+    "title": "都市部における「サードプレイス」（第3の居場所）の変容と役割 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 186,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "スマートフォンの通知機能が人間の集中維持に及ぼす影響 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 187,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "読書における「紙の書籍」と「電子書籍」の認知的差異 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 188,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "商品パッケージのデザイン変更が消費者の購買意欲を左右する理由 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 189,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "ビジネス心理学レポートに基づく適応",
+    "title": "リモートワーク環境における非言語コミュニケーションの限界 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 190,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "伝統工芸の後継者不足とデジタルアーカイブ技術の応用 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 191,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "「タイパ」重視の若者文化と深い思索のトレードオフ (N2)"
+   },
+   {
+    "category": "short",
+    "id": 192,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "情報通信白書に基づく適応",
+    "title": "災害時のデマ拡散を防ぐメディアリテラシーの重要性 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 193,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "キャッシュレス社会の進展と金銭感覚の希薄化に関する考察 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 194,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "「共感」の功罪：感情的連帯が生み出す排他性のリスク (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 195,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "日本経済新聞 テクノロジー論説に基づく適応",
+    "title": "生成AI時代の著作権と人間の創造性の再定義 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 196,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "母語の喪失とアイデンティティ：多言語社会を生きる葛藤 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 197,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "時間を加速させる現代技術と「退屈」を感じる能力の価値 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 198,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "対話の本質：意見の合意ではなく断絶の受容から始まる関係 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 199,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "工芸の美と用の美：民藝運動に学ぶ実用と美意識の統合 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 200,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "スクロール文化が奪う深い認知体験と記憶の構造 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 201,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "沈黙のコミュニケーション：日本の「間」が持つ調和の力 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 202,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "科学・生命倫理シンポジウム報告に基づく適応",
+    "title": "科学の発展と倫理的判断の限界：ゲノム編集が迫る問い (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 203,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "貨幣経済を超えた「贈与」と信用の循環構造 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 204,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "法と情報社会の課題記事に基づく適応",
+    "title": "デジタルアーカイブと「忘れられる権利」の対立 (N2)"
+   },
+   {
+    "category": "medium",
+    "id": 205,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "孤独と孤立の明確な境界：自立した個人の精神的成熟 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 206,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "近代都市空間における人間性の回復：緑化と公共空間の再設計 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 207,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "人工知能と美意識の相克：感性の模倣は芸術足り得るか (N2)"
+   },
+   {
+    "category": "long",
+    "id": 208,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "グローバル化と地域言語の復権：言語の多様性が担保する思考の深さ (N2)"
+   },
+   {
+    "category": "long",
+    "id": 209,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "加速する情報化社会における「待つ時間」の哲学的再評価 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 210,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "他者理解の不可能性を出発点とするコミュニケーションの倫理 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 211,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "機能性と装飾性の相克：柳宗悦の民藝論に見る現代デザインの課題 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 212,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "デジタル空間における身体性の喪失とリアルな体験の価値 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 213,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "沈黙の弁証法：日本文化における「余白」の解釈と創造性 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 214,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "科学技術と社会フォーラム報告に基づく適応",
+    "title": "科学技術至上主義の限界と予防原則に基づく合意形成 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 215,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "資本主義のフロンティアと「コモンズ」（共有財）の再生 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 216,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "記憶の外部化がもたらす歴史認識の変容と個人の主体性 (N2)"
+   },
+   {
+    "category": "long",
+    "id": 217,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "承認欲求の構造と自律的個人の確立に関する試論 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 218,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "県立総合文化芸術劇場 大ホール・小ホール利用案内と規約 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 219,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "国際ビジネスイノベーションEXPO 会場ブースマップとセミナー日程 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 220,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "国立大学附属図書館 一般市民利用制度および夜間特別貸出規則 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 221,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "成田・関西国際空港リムジンバス 運行時刻表および手荷物持込制限 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 222,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "先端IT技術者アカデミー 秋期集中講座受講要項と奨学金制度 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 223,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "家電総合補償サービス 延長保証適用基準と免責事項ガイド (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 224,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "健診センター 人間ドックプレミアムコース検査項目・オプション一覧 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 225,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "シェアオフィス＆インキュベーション施設 会員プランおよび登記規程 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 226,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "シネマコンプレックス 年間フリーパスおよび特別上映料金体系 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 227,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "マウンテンリゾート シーズンパス・レンタル用具補償パック案内 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 228,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "次世代5G通信サービス 法人・個人向け料金プラン比較表 (N2)"
+   },
+   {
+    "category": "info_search",
+    "id": 229,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N2 精選教材",
+    "title": "精密機器・美術品 特殊配送サービス約款と保険補償限度額 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 230,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK深層取材：フードロス半減へ向けたAIダイナミックプライシングの挑戦 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 231,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK解説：伝統木造建築の宮大工技法を継承する3Dモデリングの可能性 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 232,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHK報道：富士山夜間登山規制と入山料導入がもたらした行動変容 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 233,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKビジネス：次世代全固体電池をめぐる国際標準化と知財戦略 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 234,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKカルチャー：無形文化遺産登録から10年を経た和食文化のグローバル展開と課題 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 235,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKソーシャル：世代間共生シェアハウスが変える高齢者の孤立問題 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 236,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKサイエンス：海洋マイクロプラスチック汚染の実態と生分解性素材の開発最前線 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 237,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKエデュケーション：探究学習とプログラミング的思考が育む児童の主体性 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 238,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKメディカル：へき地・離島医療を変革する遠隔ロボット手術と規制緩和 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 239,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKローカル：関係人口の創出による過疎地域の持続可能な地方創生モデル (N2)"
+   },
+   {
+    "category": "article",
+    "id": 240,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKフロンティア：民間企業によるスペースデブリ捕獲衛星の実証実験 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 241,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "NHKワークスタイル：選択的週休3日制が労働生産性と従業員の創造性に与える波及効果 (N2)"
+   },
+   {
+    "category": "article",
+    "id": 242,
+    "is_nhk": true,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "NHK WORLD-JAPAN 特集報道アーカイブに基づく学習用適応",
+    "title": "若者の間で広がる「デジタルデトックス」：スマホを手放す旅 (N2)"
+   },
+   {
+    "category": "short",
+    "id": 243,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "オリジナリティの逆説：模倣の徹底が生み出す独自の文体 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 244,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "科学的客観性の神話と観察者の主観的バイアス (N1)"
+   },
+   {
+    "category": "short",
+    "id": 245,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "翻訳における「等価性」の不可能性と文化的再創造 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 246,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "建築における「用の美」と空間が語る身体的記憶 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 247,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "忘却の積極的価値：情報の飽和が阻む思索の深化 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 248,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "貨幣の抽象化と人間の労働価値の変容に関する覚書 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 249,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "情報社会論壇レビューに基づく適応",
+    "title": "デジタル空間におけるアノニミティ（匿名性）と倫理の解体 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 250,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "自然科学の還元主義が切り捨てる生命のダイナミズム (N1)"
+   },
+   {
+    "category": "short",
+    "id": 251,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "「雑談」の機能論：非生産的対話が担保する組織のレジリエンス (N1)"
+   },
+   {
+    "category": "short",
+    "id": 252,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "近代小説における「私」の誕生と個人主義の隘路 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 253,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "写真というメディアが孕む記録性と虚構性の二重性 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 254,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "制度化された寛容が孕む不寛容：多文化共生の隠れたアポリア (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 255,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "言語とリアリティの乖離：名指すことによって失われる微細な陰影 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 256,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "科学的合理主義の隘路と非合理な知の復権 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 257,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "近代法秩序における主体概念の解体と動物の権利論 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 258,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "デジタル複製技術が剥奪する「アウラ」と現代アートの現在地 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 259,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "時間の商品化と「待機」のポリティクス (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 260,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "他者の苦痛を消費するスペクタクル社会の倫理的アポリア (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 261,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "無為の効用：効率性の神話に抗う思索的沈黙 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 262,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "記憶の空間化：建築が保存する都市の無意識 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 263,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "貨幣のフェティシズムと人間関係の物象化 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 264,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "知覚の現象学：メルロ＝ポンティの身体論から見る主客未分 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 265,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "生命倫理国際シンポジウム論考に基づく適応",
+    "title": "優生思想の潜伏：遺伝子編集技術がもたらす新たな不平等 (N1)"
+   },
+   {
+    "category": "medium",
+    "id": 266,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "死の隠蔽と生の意味の希薄化：近代病院空間の批判的考察 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 267,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "言語論的転回以降の哲学：語り得ぬものへの沈黙と語りの可能性 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 268,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "歴史の不可逆性と記憶の倫理：アウシュヴィッツ以後の詩と証言 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 269,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "科学的還元主義と創発性（エマージェンス）：全体は部分の総和を超越するか (N1)"
+   },
+   {
+    "category": "long",
+    "id": 270,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "資本主義の外部と贈与の人間学：モースとバタイユの経済哲学 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 271,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "近代美学の脱構築：制度としての芸術と日常の美意識の回復 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 272,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "技術の存在論：ハイデッガーの「気遣い」と道具連関の現代的変容 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 273,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "現代思想・哲学誌論文に基づく適応",
+    "title": "情報社会における監視資本主義と主体性のアルゴリズム的変容 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 274,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "生命倫理の根底にある「人間」の境界画定：サイボーグとポストヒューマン (N1)"
+   },
+   {
+    "category": "long",
+    "id": 275,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "共同体の解体と無縁社会の深層：アソシエーションの新たな連帯 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 276,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "自己決定論の神話とケアの倫理：依存を前提とする人間の脆弱性 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 277,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "記号論的消費社会における「本物」の喪失とシミュラークルの増殖 (N1)"
+   },
+   {
+    "category": "long",
+    "id": 278,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "自然観の比較文化論：西洋の支配的自然観と東洋の「おのずから」なる秩序 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 279,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "国際高等学術研究所 特別フェローシップ公募要領および助成金規程 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 280,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "先端バイオテクノロジー国際会議 参加登録および口頭発表規程 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 281,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "国立公文書館 特別歴史資料閲覧・複写利用に関する厳密運用基準 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 282,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "国際定期航空便 ファーストクラス・ビジネス特別手荷物約款 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 283,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "先端人工知能開発コンソーシアム 参画企業規約および知財帰属条項 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 284,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "ハイテク精密機器製造物賠償責任保険 特約条項および免責要件 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 285,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "先端総合先端医療センター ゲノム診断・治験プロトコル同意説明書 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 286,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "グローバルイノベーションハブ 会員規約および特許出願支援細則 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 287,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "国際映画祭 コンペティション部門応募資格・上映権利許諾契約書 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 288,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "アルパインリゾート 国際プロスキー連盟公認コース利用安全規定 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 289,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "超高速広帯域量子通信ネットワーク 実証実験参加機関利用規約 (N1)"
+   },
+   {
+    "category": "info_search",
+    "id": 290,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 2,
+    "recommended_time_min": 6,
+    "source_exam": "JLPT N1 精選教材",
+    "title": "高額美術品・重要文化財 国際輸送保険約款および免責限度額 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 291,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK学術特集：生成AIが迫る認知科学のパラダイムシフトと意識の創発 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 292,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK論壇解説：近代立憲主義の危機とポピュリズム時代の熟議民主主義 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 293,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK深層分析：グローバル・サウスの台頭が揺るがす国際通貨体制と地政学 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 294,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK経済展望：資本主義のフロンティア喪失と「脱成長」経済学の射程 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 295,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK文化批評：デジタル複製技術時代における文化的オーセンティシティの行方 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 296,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK生命倫理：ヒト胚のゲノム編集技術が突きつける「生の人為的設計」の是非 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 297,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHKサイエンス最前線：気候変動における不可逆的転換点（ティッピングポイント）の数理モデル (N1)"
+   },
+   {
+    "category": "article",
+    "id": 298,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK社会時評：超高齢社会における多死時代と看取りの共同性の再構築 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 299,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK国際報道：人権レジームの普遍性と地域的相対主義をめぐる規範の相克 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 300,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK都市論：スマートシティにおけるデータ主権の奪還と市民参加型ガバナンス (N1)"
+   },
+   {
+    "category": "article",
+    "id": 301,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK宇宙開発：深宇宙探査における国際法制の空白と資源占有の倫理的境界 (N1)"
+   },
+   {
+    "category": "article",
+    "id": 302,
+    "is_nhk": true,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "NHK WORLD-JAPAN 深層解説・学術論壇レポートに基づく適応",
+    "title": "NHK科学哲学：量子の非局所性が覆す決定論的世界観と自由意志の根拠 (N1)"
+   },
+   {
+    "category": "short",
+    "id": 303,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 304,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 305,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 306,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 307,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 308,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 309,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 310,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 311,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 312,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 313,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 314,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   }
+  ],
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts"
+ },
+ "texts_n5_short": {
+  "body": [
+   {
+    "category": "short",
+    "id": 1,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "図書館の利用時間変更 (N5) #1"
+   },
+   {
+    "category": "short",
+    "id": 2,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "週末の公園そうじ (N5) #2"
+   },
+   {
+    "category": "short",
+    "id": 3,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "留学生パーティー (N5) #3"
+   },
+   {
+    "category": "short",
+    "id": 4,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "わすれもののおしらせ (N5) #4"
+   },
+   {
+    "category": "short",
+    "id": 5,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "エレベーターの点検 (N5) #5"
+   },
+   {
+    "category": "short",
+    "id": 6,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "健康しんだんの日 (N5) #6"
+   },
+   {
+    "category": "short",
+    "id": 7,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "アルバイトの時間 (N5) #7"
+   },
+   {
+    "category": "short",
+    "id": 8,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "荷物の配達について (N5) #8"
+   },
+   {
+    "category": "short",
+    "id": 9,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "カフェの新しいケーキ (N5) #9"
+   },
+   {
+    "category": "short",
+    "id": 10,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "バス停の場所 (N5) #10"
+   },
+   {
+    "category": "short",
+    "id": 11,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "スピーチ大会 (N5) #11"
+   },
+   {
+    "category": "short",
+    "id": 12,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "JLPT N5 精選教材",
+    "title": "授業の休み (N5) #12"
+   },
+   {
+    "category": "short",
+    "id": 303,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 304,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 305,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 306,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 307,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 308,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 309,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 310,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 311,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 312,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 313,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 314,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 0,
+    "recommended_time_min": 2,
+    "source_exam": null,
+    "title": "Тест на дефекты"
+   }
+  ],
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts?level=n5&category=short"
+ },
+ "texts_no_match": {
+  "body": [],
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/texts?level=ZZ"
+ },
+ "unknown_route": {
+  "body": {
+   "detail": "Not Found"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 404,
+  "url": "/api/nope"
+ },
+ "version": {
+  "body": {
+   "commit": "<COMMIT>",
+   "database_backend": "sqlite",
+   "env": "development",
+   "version": "2.1.0"
+  },
+  "headers": {
+   "cache-control": null,
+   "content-type": "application/json",
+   "expires": null,
+   "pragma": null,
+   "service-worker-allowed": null
+  },
+  "method": "GET",
+  "mode": "exact",
+  "status": 200,
+  "url": "/api/version"
+ }
+}

@@ -15,8 +15,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 STAGING_DIR = BASE_DIR / "content" / "staging"
 STAGING_DIR.mkdir(parents=True, exist_ok=True)
 
-from database import SessionLocal
-from models import Text, Question, Option
+from app.core.database import SessionLocal
+from app.models import Text, Question, Option
 from validate_content import validate_text_record
 
 def list_staging_drafts() -> List[Dict[str, Any]]:

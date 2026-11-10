@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Header & Zen Brand Bar
+   ========================================================================== */
+
+.app-header {
+    height: 66px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--washi-border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s ease;
+}
+
+.header-brand:hover {
+    opacity: 0.85;
+}
+
+.brand-monogram {
+    background: var(--vermilion);
+    color: #ffffff;
+    font-family: var(--font-mincho);
+    font-size: 1.15rem;
+    font-weight: 700;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 6px rgba(208, 59, 43, 0.25);
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--sumi-900);
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.brand-sub {
+    font-size: 0.72rem;
+    color: var(--sumi-500);
+    font-family: var(--font-gothic);
+    font-weight: 500;
+}
+
+.exercise-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.timer-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--washi-card);
+    border: 1px solid var(--washi-border);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.25s ease;
+}
+
+.timer-box.timer-warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+    animation: pulseBorder 1.2s infinite;
+}
+
+.timer-box.timer-warning .timer-digits {
+    color: #b45309;
+}
+
+.timer-box.timer-expired {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.timer-box.timer-expired .timer-digits {
+    color: #b91c1c;
+}
+
+.timer-box.is-paused .timer-dot {
+    background: #94a3b8;
+    animation: none;
+}
+
+@keyframes pulseBorder {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+}
+
+.timer-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--vermilion);
+    animation: blinkDot 1.5s infinite;
+}
+
+@keyframes blinkDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.timer-digits {
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--sumi-900);
+    letter-spacing: 0.5px;
+    min-width: 48px;
+}
+
+.timer-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 0.2rem;
+    border-left: 1px solid var(--washi-border);
+    padding-left: 0.4rem;
+}
+
+.btn-timer-action {
+    background: transparent;
+    border: none;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    color: var(--sumi-600);
+    transition: all 0.15s ease;
+}
+
+.btn-timer-action:hover {
+    background: var(--washi-accent);
+    color: var(--sumi-900);
+}
+
+.btn-timer-close:hover {
+    color: #ef4444;
+}
+
+.btn-add-timer {
+    background: #fffdf5;
+    color: #92400e;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+.btn-add-timer:hover {
+    background: #fef3c7;
+    border-style: solid;
+    transform: translateY(-1px);
+}
+
+.timer-duration-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.6rem;
+    padding: 0.45rem 0.75rem;
+    background: var(--washi-accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+}
+
+.stepper-box {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.btn-stepper {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    border: 1px solid var(--washi-border);
+    background: #ffffff;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.btn-stepper:hover {
+    background: var(--sumi-200);
+}
+
+.stepper-value {
+    font-size: 0.9rem;
+    color: var(--sumi-900);
+}
+
+.timer-alert-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.88rem;
+    gap: 1rem;
+    animation: fadeIn 0.25s ease;
+}
+
+.timer-alert-banner .alert-icon {
+    font-size: 1.25rem;
+}
+
+
+
+/* ==========================================================================
+   Header Navigation Tabs & Notebook Button
+   ========================================================================== */
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--sumi-600);
+    padding: 0.45rem 0.95rem;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.nav-tab:hover {
+    background: var(--washi-accent);
+    color: var(--sumi-900);
+}
+
+.nav-tab.active {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: var(--sumi-900);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.nav-tab .notebook-badge {
+    background: #d97706;
+    color: #ffffff;
+    font-size: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-weight: 800;
+    min-width: 18px;
+    text-align: center;
+}
+
+.notebook-page-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+}
+
+.notebook-page-card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--washi-border);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+

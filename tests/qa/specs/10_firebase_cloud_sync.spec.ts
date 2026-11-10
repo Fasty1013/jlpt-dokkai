@@ -123,4 +123,61 @@ test.describe('Dokkai Master - Firebase Cloud Sync & Auth Integration', () => {
         await page.click('#btn-tab-catalog');
         await expect(page.locator('#catalog-view')).toBeVisible();
     });
+
+    test('06. Mock Google Sign-In, sync status transition, and sign-out flow', async ({ page }) => {
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+
+        // 1. Open Sync Modal
+        await page.click('#btn-sync-status');
+        const modal = page.locator('#sync-modal-backdrop');
+        await expect(modal).toBeVisible();
+
+        // 2. Mock signInGoogle and signOut
+        await page.evaluate(() => {
+            const mockUser = {
+                uid: 'google_mock_user_12345',
+                displayName: '山田 太郎 (Yamada Taro)',
+                email: 'yamada.taro@example.com',
+                isAnonymous: false
+            };
+
+            window.DokkaiCloudSync.signInGoogle = async () => {
+                window.DokkaiCloudSync.setUser(mockUser);
+                window.DokkaiCloudSync.setStatus('synced');
+                window.DokkaiCloudSync.notifyFeedback('success', `Аккаунт успешно привязан к Google: ${mockUser.email}`);
+                return mockUser;
+            };
+
+            window.DokkaiCloudSync.signOut = async () => {
+                window.DokkaiCloudSync.setUser(null);
+                window.DokkaiCloudSync.setStatus('local');
+                window.DokkaiCloudSync.notifyFeedback('info', 'Вы вышли из облачного аккаунта. Локальные данные сохранены.');
+            };
+        });
+
+        // 3. Click Google Sign-in button
+        await page.click('#btn-cloud-signin-google');
+
+        // 4. Verify authenticated user UI
+        const userInfo = page.locator('#sync-user-info');
+        await expect(userInfo).toBeVisible();
+        await expect(page.locator('#sync-user-name')).toHaveText('山田 太郎 (Yamada Taro)');
+        await expect(page.locator('#sync-user-email')).toHaveText('yamada.taro@example.com');
+        await expect(page.locator('#sync-auth-actions')).toBeHidden();
+
+        // Check header sync badge status
+        const syncLabel = page.locator('#header-sync-label');
+        await expect(syncLabel).toContainText('yamada.taro@example.com');
+
+        // 5. Click Sign-out button
+        await page.click('#btn-cloud-signout');
+
+        // 6. Verify signed out UI
+        await expect(userInfo).toBeHidden();
+        await expect(page.locator('#sync-auth-actions')).toBeVisible();
+        await expect(syncLabel).toContainText('На устройстве');
+        const alertBox = page.locator('#sync-modal-alert');
+        await expect(alertBox).toContainText('Вы вышли из облачного аккаунта');
+    });
 });

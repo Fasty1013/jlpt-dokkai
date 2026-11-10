@@ -1,0 +1,40 @@
+/**
+ * JLPT Dokkai Master - Exercise Feature Entry Point
+ */
+
+import {
+  saveCurrentActiveSession,
+  renderWizard,
+  handleOptionSelect,
+  wizardGoNext,
+  wizardGoPrev
+} from './wizard.js';
+
+import { startExercise } from './exercise_view.js';
+import { initExerciseEvents } from './exercise_events.js';
+
+export {
+  saveCurrentActiveSession,
+  renderWizard,
+  handleOptionSelect,
+  wizardGoNext,
+  wizardGoPrev,
+  startExercise,
+  initExerciseEvents
+};
+
+const DokkaiExercise = {
+  saveCurrentActiveSession,
+  renderWizard,
+  handleOptionSelect,
+  wizardGoNext,
+  wizardGoPrev,
+  startExercise,
+  initEvents: initExerciseEvents
+};
+
+if (typeof window !== 'undefined') {
+  window.DokkaiExercise = DokkaiExercise;
+}
+
+export default DokkaiExercise;

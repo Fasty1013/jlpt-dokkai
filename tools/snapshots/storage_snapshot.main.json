@@ -1,0 +1,1976 @@
+{
+  "indexeddb_mode": {
+    "localStorage": {
+      "dokkai_idb_migrated_v1": "true",
+      "dokkai_pretest_config": "{\"timerEnabled\":false,\"minutes\":8}",
+      "dokkai_saved_words": "[{\"word\":\"先生\",\"reading\":\"せんせい\",\"meaning\":\"teacher\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"本\",\"reading\":\"ほん\",\"meaning\":\"book\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}]",
+      "dokkai_user_id": "user-7ppxhu0lnloyw3v28"
+    },
+    "indexedDB": {
+      "name": "dokkai_master_db",
+      "version": 1,
+      "stores": {
+        "active_session": {
+          "keyPath": "id",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [
+            "current"
+          ],
+          "records": [
+            {
+              "id": "current",
+              "textId": 101,
+              "title": "テスト一",
+              "level": "N5",
+              "currentQuestionIndex": 2,
+              "userAnswers": {
+                "1": 1,
+                "2": 3
+              },
+              "timer": null,
+              "timestamp": 1700000000000
+            }
+          ]
+        },
+        "notebook": {
+          "keyPath": "word",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "mastered",
+              "keyPath": "mastered",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "updated_at",
+              "keyPath": "updated_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [
+            "先生",
+            "本"
+          ],
+          "records": [
+            {
+              "word": "先生",
+              "reading": "せんせい",
+              "meaning": "teacher",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "本",
+              "reading": "ほん",
+              "meaning": "book",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "settings": {
+          "keyPath": "key",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [
+            "pretest_config",
+            "stream_profile",
+            "user_settings"
+          ],
+          "records": [
+            {
+              "key": "pretest_config",
+              "value": {
+                "timerEnabled": false,
+                "minutes": 8
+              },
+              "updated_at": 1700000000000
+            },
+            {
+              "key": "stream_profile",
+              "value": {
+                "level": "N4",
+                "category": "mid"
+              },
+              "updated_at": 1700000000000
+            },
+            {
+              "key": "user_settings",
+              "value": {
+                "fontFamily": "serif",
+                "fontSizePx": 20,
+                "updated_at": 1700000000000
+              },
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "solved_tasks": {
+          "keyPath": "text_id",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "level",
+              "keyPath": "level",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "solved_at",
+              "keyPath": "solved_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [
+            101,
+            102
+          ],
+          "records": [
+            {
+              "text_id": 101,
+              "title": "テスト一",
+              "level": "N5",
+              "category": "short",
+              "score": 66,
+              "correct_count": 2,
+              "total_questions": 3,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 0,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 102,
+              "title": "テスト二",
+              "level": "N4",
+              "category": "mid",
+              "score": 50,
+              "correct_count": 1,
+              "total_questions": 2,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 99,
+              "answers": [],
+              "updated_at": 1700000000000
+            }
+          ]
+        }
+      }
+    },
+    "indexedDBDatabases": [
+      {
+        "name": "dokkai_master_db",
+        "version": 1
+      },
+      {
+        "name": "firebase-heartbeat-database",
+        "version": 1
+      },
+      {
+        "name": "firebaseLocalStorageDb",
+        "version": 1
+      }
+    ],
+    "storage": {
+      "useFallback": false,
+      "isReady": true,
+      "fallbackMemory": {
+        "solved_tasks": {},
+        "notebook": {},
+        "settings": {},
+        "active_session": {}
+      }
+    },
+    "api": {
+      "solved": [
+        {
+          "text_id": 101,
+          "title": "テスト一",
+          "level": "N5",
+          "category": "short",
+          "score": 66,
+          "correct_count": 2,
+          "total_questions": 3,
+          "perfect": false,
+          "solved_at": "2023-11-14T22:13:20.000Z",
+          "time_spent_sec": 0,
+          "answers": [],
+          "updated_at": 1700000000000
+        },
+        {
+          "text_id": 102,
+          "title": "テスト二",
+          "level": "N4",
+          "category": "mid",
+          "score": 50,
+          "correct_count": 1,
+          "total_questions": 2,
+          "perfect": false,
+          "solved_at": "2023-11-14T22:13:20.000Z",
+          "time_spent_sec": 99,
+          "answers": [],
+          "updated_at": 1700000000000
+        }
+      ],
+      "words": [
+        {
+          "word": "先生",
+          "reading": "せんせい",
+          "meaning": "teacher",
+          "level": "JLPT",
+          "mastered": true,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        },
+        {
+          "word": "本",
+          "reading": "ほん",
+          "meaning": "book",
+          "level": "JLPT",
+          "mastered": false,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        }
+      ],
+      "userSettings": {
+        "fontFamily": "serif",
+        "fontSizePx": 20,
+        "updated_at": 1700000000000
+      },
+      "pretest": {
+        "timerEnabled": false,
+        "minutes": 8
+      },
+      "streamProfile": {
+        "level": "N4",
+        "category": "mid"
+      },
+      "activeSession": {
+        "id": "current",
+        "textId": 101,
+        "title": "テスト一",
+        "level": "N5",
+        "currentQuestionIndex": 2,
+        "userAnswers": {
+          "1": 1,
+          "2": 3
+        },
+        "timer": null,
+        "timestamp": 1700000000000
+      }
+    },
+    "export": {
+      "app": "Dokkai Master",
+      "schema_version": 1,
+      "exported_at": "2023-11-14T22:13:20.000Z",
+      "user_id": "user-7ppxhu0lnloyw3v28",
+      "data": {
+        "solved_tasks": [
+          {
+            "text_id": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "category": "short",
+            "score": 66,
+            "correct_count": 2,
+            "total_questions": 3,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 0,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 102,
+            "title": "テスト二",
+            "level": "N4",
+            "category": "mid",
+            "score": 50,
+            "correct_count": 1,
+            "total_questions": 2,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 99,
+            "answers": [],
+            "updated_at": 1700000000000
+          }
+        ],
+        "notebook": [
+          {
+            "word": "先生",
+            "reading": "せんせい",
+            "meaning": "teacher",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "本",
+            "reading": "ほん",
+            "meaning": "book",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        ],
+        "settings": {
+          "user_settings": {
+            "fontFamily": "serif",
+            "fontSizePx": 20,
+            "updated_at": 1700000000000
+          },
+          "pretest_config": {
+            "timerEnabled": false,
+            "minutes": 8
+          },
+          "stream_profile": {
+            "level": "N4",
+            "category": "mid"
+          }
+        }
+      }
+    }
+  },
+  "firestore_payload": {
+    "calls": [
+      [
+        "getDoc",
+        "users/uid-snapshot/sync/state"
+      ],
+      [
+        "setDoc",
+        "users/uid-snapshot/sync/state",
+        {
+          "uid": "uid-snapshot",
+          "email": "snap@example.test",
+          "isAnonymous": false,
+          "solved_tasks": {
+            "101": {
+              "text_id": 101,
+              "title": "REMOTE-101",
+              "level": "N5",
+              "category": "short",
+              "score": 100,
+              "correct_count": 3,
+              "total_questions": 3,
+              "perfect": true,
+              "solved_at": "2021-01-01T00:00:00.000Z",
+              "time_spent_sec": 5,
+              "answers": [],
+              "updated_at": 1
+            },
+            "102": {
+              "text_id": 102,
+              "title": "テスト二",
+              "level": "N4",
+              "category": "mid",
+              "score": 50,
+              "correct_count": 1,
+              "total_questions": 2,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 99,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            "300": {
+              "text_id": 300,
+              "title": "REMOTE-300",
+              "level": "N2",
+              "category": "long",
+              "score": 80,
+              "correct_count": 4,
+              "total_questions": 5,
+              "perfect": false,
+              "solved_at": "2021-02-02T00:00:00.000Z",
+              "time_spent_sec": 7,
+              "answers": [],
+              "updated_at": 2
+            }
+          },
+          "notebook": {
+            "先生": {
+              "word": "先生",
+              "reading": "せんせい",
+              "meaning": "teacher",
+              "mastered": true,
+              "updated_at": 1900000000000,
+              "level": "JLPT",
+              "added_at": "2023-11-14T22:13:20.000Z"
+            },
+            "空": {
+              "word": "空",
+              "reading": "そら",
+              "meaning": "sky",
+              "mastered": true,
+              "updated_at": 5
+            },
+            "本": {
+              "word": "本",
+              "reading": "ほん",
+              "meaning": "book",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          },
+          "settings": {
+            "user_settings": {
+              "fontFamily": "serif",
+              "fontSizePx": 20,
+              "updated_at": 1700000000000
+            },
+            "pretest_config": {
+              "timerEnabled": false,
+              "minutes": 8
+            },
+            "stream_profile": {
+              "level": "N4",
+              "category": "mid"
+            }
+          },
+          "settings_updated_at": 1700000000000,
+          "active_session": {
+            "id": "current",
+            "textId": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "currentQuestionIndex": 2,
+            "userAnswers": {
+              "1": 1,
+              "2": 3
+            },
+            "timer": null,
+            "timestamp": 1700000000000
+          },
+          "last_synced_at": "2023-11-14T22:13:20.000Z"
+        },
+        {
+          "merge": true
+        }
+      ]
+    ],
+    "statuses": [
+      [
+        "syncing",
+        null
+      ],
+      [
+        "synced",
+        null
+      ]
+    ],
+    "hasPendingChanges": false
+  },
+  "indexeddb_mode_after_sync": {
+    "localStorage": {
+      "dokkai_idb_migrated_v1": "true",
+      "dokkai_pretest_config": "{\"timerEnabled\":false,\"minutes\":8}",
+      "dokkai_saved_words": "[{\"word\":\"先生\",\"reading\":\"せんせい\",\"meaning\":\"teacher\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"本\",\"reading\":\"ほん\",\"meaning\":\"book\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"空\",\"reading\":\"そら\",\"meaning\":\"sky\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}]",
+      "dokkai_user_id": "user-7ppxhu0lnloyw3v28"
+    },
+    "indexedDB": {
+      "name": "dokkai_master_db",
+      "version": 1,
+      "stores": {
+        "active_session": {
+          "keyPath": "id",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [
+            "current"
+          ],
+          "records": [
+            {
+              "id": "current",
+              "textId": 101,
+              "title": "テスト一",
+              "level": "N5",
+              "currentQuestionIndex": 2,
+              "userAnswers": {
+                "1": 1,
+                "2": 3
+              },
+              "timer": null,
+              "timestamp": 1700000000000
+            }
+          ]
+        },
+        "notebook": {
+          "keyPath": "word",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "mastered",
+              "keyPath": "mastered",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "updated_at",
+              "keyPath": "updated_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [
+            "先生",
+            "本",
+            "空"
+          ],
+          "records": [
+            {
+              "word": "先生",
+              "reading": "せんせい",
+              "meaning": "teacher",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "本",
+              "reading": "ほん",
+              "meaning": "book",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "空",
+              "reading": "そら",
+              "meaning": "sky",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "settings": {
+          "keyPath": "key",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [
+            "pretest_config",
+            "stream_profile",
+            "user_settings"
+          ],
+          "records": [
+            {
+              "key": "pretest_config",
+              "value": {
+                "timerEnabled": false,
+                "minutes": 8
+              },
+              "updated_at": 1700000000000
+            },
+            {
+              "key": "stream_profile",
+              "value": {
+                "level": "N4",
+                "category": "mid"
+              },
+              "updated_at": 1700000000000
+            },
+            {
+              "key": "user_settings",
+              "value": {
+                "fontFamily": "serif",
+                "fontSizePx": 20,
+                "updated_at": 1700000000000
+              },
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "solved_tasks": {
+          "keyPath": "text_id",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "level",
+              "keyPath": "level",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "solved_at",
+              "keyPath": "solved_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [
+            101,
+            102,
+            300
+          ],
+          "records": [
+            {
+              "text_id": 101,
+              "title": "REMOTE-101",
+              "level": "N5",
+              "category": "short",
+              "score": 100,
+              "correct_count": 3,
+              "total_questions": 3,
+              "perfect": true,
+              "solved_at": "2021-01-01T00:00:00.000Z",
+              "time_spent_sec": 5,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 102,
+              "title": "テスト二",
+              "level": "N4",
+              "category": "mid",
+              "score": 50,
+              "correct_count": 1,
+              "total_questions": 2,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 99,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 300,
+              "title": "REMOTE-300",
+              "level": "N2",
+              "category": "long",
+              "score": 80,
+              "correct_count": 4,
+              "total_questions": 5,
+              "perfect": false,
+              "solved_at": "2021-02-02T00:00:00.000Z",
+              "time_spent_sec": 7,
+              "answers": [],
+              "updated_at": 1700000000000
+            }
+          ]
+        }
+      }
+    },
+    "indexedDBDatabases": [
+      {
+        "name": "dokkai_master_db",
+        "version": 1
+      },
+      {
+        "name": "firebase-heartbeat-database",
+        "version": 1
+      },
+      {
+        "name": "firebaseLocalStorageDb",
+        "version": 1
+      }
+    ],
+    "storage": {
+      "useFallback": false,
+      "isReady": true,
+      "fallbackMemory": {
+        "solved_tasks": {},
+        "notebook": {},
+        "settings": {},
+        "active_session": {}
+      }
+    },
+    "api": {
+      "solved": [
+        {
+          "text_id": 102,
+          "title": "テスト二",
+          "level": "N4",
+          "category": "mid",
+          "score": 50,
+          "correct_count": 1,
+          "total_questions": 2,
+          "perfect": false,
+          "solved_at": "2023-11-14T22:13:20.000Z",
+          "time_spent_sec": 99,
+          "answers": [],
+          "updated_at": 1700000000000
+        },
+        {
+          "text_id": 300,
+          "title": "REMOTE-300",
+          "level": "N2",
+          "category": "long",
+          "score": 80,
+          "correct_count": 4,
+          "total_questions": 5,
+          "perfect": false,
+          "solved_at": "2021-02-02T00:00:00.000Z",
+          "time_spent_sec": 7,
+          "answers": [],
+          "updated_at": 1700000000000
+        },
+        {
+          "text_id": 101,
+          "title": "REMOTE-101",
+          "level": "N5",
+          "category": "short",
+          "score": 100,
+          "correct_count": 3,
+          "total_questions": 3,
+          "perfect": true,
+          "solved_at": "2021-01-01T00:00:00.000Z",
+          "time_spent_sec": 5,
+          "answers": [],
+          "updated_at": 1700000000000
+        }
+      ],
+      "words": [
+        {
+          "word": "先生",
+          "reading": "せんせい",
+          "meaning": "teacher",
+          "level": "JLPT",
+          "mastered": true,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        },
+        {
+          "word": "本",
+          "reading": "ほん",
+          "meaning": "book",
+          "level": "JLPT",
+          "mastered": false,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        },
+        {
+          "word": "空",
+          "reading": "そら",
+          "meaning": "sky",
+          "level": "JLPT",
+          "mastered": true,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        }
+      ],
+      "userSettings": {
+        "fontFamily": "serif",
+        "fontSizePx": 20,
+        "updated_at": 1700000000000
+      },
+      "pretest": {
+        "timerEnabled": false,
+        "minutes": 8
+      },
+      "streamProfile": {
+        "level": "N4",
+        "category": "mid"
+      },
+      "activeSession": {
+        "id": "current",
+        "textId": 101,
+        "title": "テスト一",
+        "level": "N5",
+        "currentQuestionIndex": 2,
+        "userAnswers": {
+          "1": 1,
+          "2": 3
+        },
+        "timer": null,
+        "timestamp": 1700000000000
+      }
+    },
+    "export": {
+      "app": "Dokkai Master",
+      "schema_version": 1,
+      "exported_at": "2023-11-14T22:13:20.000Z",
+      "user_id": "user-7ppxhu0lnloyw3v28",
+      "data": {
+        "solved_tasks": [
+          {
+            "text_id": 102,
+            "title": "テスト二",
+            "level": "N4",
+            "category": "mid",
+            "score": 50,
+            "correct_count": 1,
+            "total_questions": 2,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 99,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 300,
+            "title": "REMOTE-300",
+            "level": "N2",
+            "category": "long",
+            "score": 80,
+            "correct_count": 4,
+            "total_questions": 5,
+            "perfect": false,
+            "solved_at": "2021-02-02T00:00:00.000Z",
+            "time_spent_sec": 7,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 101,
+            "title": "REMOTE-101",
+            "level": "N5",
+            "category": "short",
+            "score": 100,
+            "correct_count": 3,
+            "total_questions": 3,
+            "perfect": true,
+            "solved_at": "2021-01-01T00:00:00.000Z",
+            "time_spent_sec": 5,
+            "answers": [],
+            "updated_at": 1700000000000
+          }
+        ],
+        "notebook": [
+          {
+            "word": "先生",
+            "reading": "せんせい",
+            "meaning": "teacher",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "本",
+            "reading": "ほん",
+            "meaning": "book",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "空",
+            "reading": "そら",
+            "meaning": "sky",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        ],
+        "settings": {
+          "user_settings": {
+            "fontFamily": "serif",
+            "fontSizePx": 20,
+            "updated_at": 1700000000000
+          },
+          "pretest_config": {
+            "timerEnabled": false,
+            "minutes": 8
+          },
+          "stream_profile": {
+            "level": "N4",
+            "category": "mid"
+          }
+        }
+      }
+    }
+  },
+  "import_roundtrip": {
+    "result": {
+      "success": true,
+      "solvedCount": 2,
+      "wordsCount": 2
+    },
+    "bad": {
+      "success": false,
+      "error": "Expected property name or '}' in JSON at position 1 (line 1 column 2)"
+    },
+    "bad2": {
+      "success": false,
+      "error": "Некорректный формат файла бэкапа"
+    },
+    "dump": {
+      "localStorage": {
+        "dokkai_idb_migrated_v1": "true",
+        "dokkai_pretest_config": "{\"timerEnabled\":true,\"minutes\":5}",
+        "dokkai_saved_words": "[{\"word\":\"先生\",\"reading\":\"せんせい\",\"meaning\":\"teacher\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"本\",\"reading\":\"ほん\",\"meaning\":\"book\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"空\",\"reading\":\"そら\",\"meaning\":\"sky\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"雨\",\"reading\":\"あめ\",\"meaning\":\"rain\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}]",
+        "dokkai_user_id": "user-7ppxhu0lnloyw3v28"
+      },
+      "indexedDB": {
+        "name": "dokkai_master_db",
+        "version": 1,
+        "stores": {
+          "active_session": {
+            "keyPath": "id",
+            "autoIncrement": false,
+            "indexes": [],
+            "keys": [
+              "current"
+            ],
+            "records": [
+              {
+                "id": "current",
+                "textId": 101,
+                "title": "テスト一",
+                "level": "N5",
+                "currentQuestionIndex": 2,
+                "userAnswers": {
+                  "1": 1,
+                  "2": 3
+                },
+                "timer": null,
+                "timestamp": 1700000000000
+              }
+            ]
+          },
+          "notebook": {
+            "keyPath": "word",
+            "autoIncrement": false,
+            "indexes": [
+              {
+                "name": "mastered",
+                "keyPath": "mastered",
+                "unique": false,
+                "multiEntry": false
+              },
+              {
+                "name": "updated_at",
+                "keyPath": "updated_at",
+                "unique": false,
+                "multiEntry": false
+              }
+            ],
+            "keys": [
+              "先生",
+              "本",
+              "空",
+              "雨"
+            ],
+            "records": [
+              {
+                "word": "先生",
+                "reading": "せんせい",
+                "meaning": "teacher",
+                "level": "JLPT",
+                "mastered": true,
+                "added_at": "2023-11-14T22:13:20.000Z",
+                "updated_at": 1700000000000
+              },
+              {
+                "word": "本",
+                "reading": "ほん",
+                "meaning": "book",
+                "level": "JLPT",
+                "mastered": false,
+                "added_at": "2023-11-14T22:13:20.000Z",
+                "updated_at": 1700000000000
+              },
+              {
+                "word": "空",
+                "reading": "そら",
+                "meaning": "sky",
+                "level": "JLPT",
+                "mastered": true,
+                "added_at": "2023-11-14T22:13:20.000Z",
+                "updated_at": 1700000000000
+              },
+              {
+                "word": "雨",
+                "reading": "あめ",
+                "meaning": "rain",
+                "level": "JLPT",
+                "mastered": true,
+                "added_at": "2023-11-14T22:13:20.000Z",
+                "updated_at": 1700000000000
+              }
+            ]
+          },
+          "settings": {
+            "keyPath": "key",
+            "autoIncrement": false,
+            "indexes": [],
+            "keys": [
+              "pretest_config",
+              "stream_profile",
+              "user_settings"
+            ],
+            "records": [
+              {
+                "key": "pretest_config",
+                "value": {
+                  "timerEnabled": true,
+                  "minutes": 5
+                },
+                "updated_at": 1700000000000
+              },
+              {
+                "key": "stream_profile",
+                "value": {
+                  "level": "N3",
+                  "category": "long"
+                },
+                "updated_at": 1700000000000
+              },
+              {
+                "key": "user_settings",
+                "value": {
+                  "fontFamily": "sans",
+                  "fontSizePx": 18
+                },
+                "updated_at": 1700000000000
+              }
+            ]
+          },
+          "solved_tasks": {
+            "keyPath": "text_id",
+            "autoIncrement": false,
+            "indexes": [
+              {
+                "name": "level",
+                "keyPath": "level",
+                "unique": false,
+                "multiEntry": false
+              },
+              {
+                "name": "solved_at",
+                "keyPath": "solved_at",
+                "unique": false,
+                "multiEntry": false
+              }
+            ],
+            "keys": [
+              7,
+              101,
+              102,
+              300
+            ],
+            "records": [
+              {
+                "text_id": 7,
+                "title": "Imp",
+                "level": "N3",
+                "category": "long",
+                "score": 100,
+                "correct_count": 4,
+                "total_questions": 4,
+                "perfect": true,
+                "solved_at": "2022-02-02T00:00:00.000Z",
+                "time_spent_sec": 0,
+                "answers": [],
+                "updated_at": 1700000000000
+              },
+              {
+                "text_id": 101,
+                "title": "REMOTE-101",
+                "level": "N5",
+                "category": "short",
+                "score": 100,
+                "correct_count": 3,
+                "total_questions": 3,
+                "perfect": true,
+                "solved_at": "2021-01-01T00:00:00.000Z",
+                "time_spent_sec": 5,
+                "answers": [],
+                "updated_at": 1700000000000
+              },
+              {
+                "text_id": 102,
+                "title": "テスト二",
+                "level": "N4",
+                "category": "mid",
+                "score": 50,
+                "correct_count": 1,
+                "total_questions": 2,
+                "perfect": false,
+                "solved_at": "2023-11-14T22:13:20.000Z",
+                "time_spent_sec": 99,
+                "answers": [],
+                "updated_at": 1700000000000
+              },
+              {
+                "text_id": 300,
+                "title": "REMOTE-300",
+                "level": "N2",
+                "category": "long",
+                "score": 80,
+                "correct_count": 4,
+                "total_questions": 5,
+                "perfect": false,
+                "solved_at": "2021-02-02T00:00:00.000Z",
+                "time_spent_sec": 7,
+                "answers": [],
+                "updated_at": 1700000000000
+              }
+            ]
+          }
+        }
+      },
+      "indexedDBDatabases": [
+        {
+          "name": "dokkai_master_db",
+          "version": 1
+        },
+        {
+          "name": "firebase-heartbeat-database",
+          "version": 1
+        },
+        {
+          "name": "firebaseLocalStorageDb",
+          "version": 1
+        }
+      ],
+      "storage": {
+        "useFallback": false,
+        "isReady": true,
+        "fallbackMemory": {
+          "solved_tasks": {},
+          "notebook": {},
+          "settings": {},
+          "active_session": {}
+        }
+      },
+      "api": {
+        "solved": [
+          {
+            "text_id": 102,
+            "title": "テスト二",
+            "level": "N4",
+            "category": "mid",
+            "score": 50,
+            "correct_count": 1,
+            "total_questions": 2,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 99,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 7,
+            "title": "Imp",
+            "level": "N3",
+            "category": "long",
+            "score": 100,
+            "correct_count": 4,
+            "total_questions": 4,
+            "perfect": true,
+            "solved_at": "2022-02-02T00:00:00.000Z",
+            "time_spent_sec": 0,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 300,
+            "title": "REMOTE-300",
+            "level": "N2",
+            "category": "long",
+            "score": 80,
+            "correct_count": 4,
+            "total_questions": 5,
+            "perfect": false,
+            "solved_at": "2021-02-02T00:00:00.000Z",
+            "time_spent_sec": 7,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 101,
+            "title": "REMOTE-101",
+            "level": "N5",
+            "category": "short",
+            "score": 100,
+            "correct_count": 3,
+            "total_questions": 3,
+            "perfect": true,
+            "solved_at": "2021-01-01T00:00:00.000Z",
+            "time_spent_sec": 5,
+            "answers": [],
+            "updated_at": 1700000000000
+          }
+        ],
+        "words": [
+          {
+            "word": "先生",
+            "reading": "せんせい",
+            "meaning": "teacher",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "本",
+            "reading": "ほん",
+            "meaning": "book",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "空",
+            "reading": "そら",
+            "meaning": "sky",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "雨",
+            "reading": "あめ",
+            "meaning": "rain",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        ],
+        "userSettings": {
+          "fontFamily": "sans",
+          "fontSizePx": 18
+        },
+        "pretest": {
+          "timerEnabled": true,
+          "minutes": 5
+        },
+        "streamProfile": {
+          "level": "N3",
+          "category": "long"
+        },
+        "activeSession": {
+          "id": "current",
+          "textId": 101,
+          "title": "テスト一",
+          "level": "N5",
+          "currentQuestionIndex": 2,
+          "userAnswers": {
+            "1": 1,
+            "2": 3
+          },
+          "timer": null,
+          "timestamp": 1700000000000
+        }
+      },
+      "export": {
+        "app": "Dokkai Master",
+        "schema_version": 1,
+        "exported_at": "2023-11-14T22:13:20.000Z",
+        "user_id": "user-7ppxhu0lnloyw3v28",
+        "data": {
+          "solved_tasks": [
+            {
+              "text_id": 102,
+              "title": "テスト二",
+              "level": "N4",
+              "category": "mid",
+              "score": 50,
+              "correct_count": 1,
+              "total_questions": 2,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 99,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 7,
+              "title": "Imp",
+              "level": "N3",
+              "category": "long",
+              "score": 100,
+              "correct_count": 4,
+              "total_questions": 4,
+              "perfect": true,
+              "solved_at": "2022-02-02T00:00:00.000Z",
+              "time_spent_sec": 0,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 300,
+              "title": "REMOTE-300",
+              "level": "N2",
+              "category": "long",
+              "score": 80,
+              "correct_count": 4,
+              "total_questions": 5,
+              "perfect": false,
+              "solved_at": "2021-02-02T00:00:00.000Z",
+              "time_spent_sec": 7,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            {
+              "text_id": 101,
+              "title": "REMOTE-101",
+              "level": "N5",
+              "category": "short",
+              "score": 100,
+              "correct_count": 3,
+              "total_questions": 3,
+              "perfect": true,
+              "solved_at": "2021-01-01T00:00:00.000Z",
+              "time_spent_sec": 5,
+              "answers": [],
+              "updated_at": 1700000000000
+            }
+          ],
+          "notebook": [
+            {
+              "word": "先生",
+              "reading": "せんせい",
+              "meaning": "teacher",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "本",
+              "reading": "ほん",
+              "meaning": "book",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "空",
+              "reading": "そら",
+              "meaning": "sky",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "雨",
+              "reading": "あめ",
+              "meaning": "rain",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          ],
+          "settings": {
+            "user_settings": {
+              "fontFamily": "sans",
+              "fontSizePx": 18
+            },
+            "pretest_config": {
+              "timerEnabled": true,
+              "minutes": 5
+            },
+            "stream_profile": {
+              "level": "N3",
+              "category": "long"
+            }
+          }
+        }
+      }
+    }
+  },
+  "indexeddb_mode_errors": [],
+  "fallback_mode": {
+    "localStorage": {
+      "dokkai_idb_active_session": "{\"current\":{\"id\":\"current\",\"textId\":101,\"title\":\"テスト一\",\"level\":\"N5\",\"currentQuestionIndex\":2,\"userAnswers\":{\"1\":1,\"2\":3},\"timer\":null,\"timestamp\":1700000000000}}",
+      "dokkai_idb_notebook": "{\"先生\":{\"word\":\"先生\",\"reading\":\"せんせい\",\"meaning\":\"teacher\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},\"本\":{\"word\":\"本\",\"reading\":\"ほん\",\"meaning\":\"book\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}}",
+      "dokkai_idb_settings": "{\"user_settings\":{\"key\":\"user_settings\",\"value\":{\"fontFamily\":\"serif\",\"fontSizePx\":20,\"updated_at\":1700000000000},\"updated_at\":1700000000000},\"pretest_config\":{\"key\":\"pretest_config\",\"value\":{\"timerEnabled\":false,\"minutes\":8},\"updated_at\":1700000000000},\"stream_profile\":{\"key\":\"stream_profile\",\"value\":{\"level\":\"N4\",\"category\":\"mid\"},\"updated_at\":1700000000000}}",
+      "dokkai_idb_solved_tasks": "{\"101\":{\"text_id\":101,\"title\":\"テスト一\",\"level\":\"N5\",\"category\":\"short\",\"score\":66,\"correct_count\":2,\"total_questions\":3,\"perfect\":false,\"solved_at\":\"2023-11-14T22:13:20.000Z\",\"time_spent_sec\":0,\"answers\":[],\"updated_at\":1700000000000},\"102\":{\"text_id\":102,\"title\":\"テスト二\",\"level\":\"N4\",\"category\":\"mid\",\"score\":50,\"correct_count\":1,\"total_questions\":2,\"perfect\":false,\"solved_at\":\"2023-11-14T22:13:20.000Z\",\"time_spent_sec\":99,\"answers\":[],\"updated_at\":1700000000000}}",
+      "dokkai_pretest_config": "{\"timerEnabled\":false,\"minutes\":8}",
+      "dokkai_saved_words": "[{\"word\":\"先生\",\"reading\":\"せんせい\",\"meaning\":\"teacher\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"本\",\"reading\":\"ほん\",\"meaning\":\"book\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}]",
+      "dokkai_user_id": "user-7ppxhu0lnloyw3v28"
+    },
+    "indexedDB": null,
+    "storage": {
+      "useFallback": true,
+      "isReady": true,
+      "fallbackMemory": {
+        "solved_tasks": {
+          "101": {
+            "text_id": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "category": "short",
+            "score": 66,
+            "correct_count": 2,
+            "total_questions": 3,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 0,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          "102": {
+            "text_id": 102,
+            "title": "テスト二",
+            "level": "N4",
+            "category": "mid",
+            "score": 50,
+            "correct_count": 1,
+            "total_questions": 2,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 99,
+            "answers": [],
+            "updated_at": 1700000000000
+          }
+        },
+        "notebook": {
+          "先生": {
+            "word": "先生",
+            "reading": "せんせい",
+            "meaning": "teacher",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          "本": {
+            "word": "本",
+            "reading": "ほん",
+            "meaning": "book",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        },
+        "settings": {
+          "user_settings": {
+            "key": "user_settings",
+            "value": {
+              "fontFamily": "serif",
+              "fontSizePx": 20,
+              "updated_at": 1700000000000
+            },
+            "updated_at": 1700000000000
+          },
+          "pretest_config": {
+            "key": "pretest_config",
+            "value": {
+              "timerEnabled": false,
+              "minutes": 8
+            },
+            "updated_at": 1700000000000
+          },
+          "stream_profile": {
+            "key": "stream_profile",
+            "value": {
+              "level": "N4",
+              "category": "mid"
+            },
+            "updated_at": 1700000000000
+          }
+        },
+        "active_session": {
+          "current": {
+            "id": "current",
+            "textId": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "currentQuestionIndex": 2,
+            "userAnswers": {
+              "1": 1,
+              "2": 3
+            },
+            "timer": null,
+            "timestamp": 1700000000000
+          }
+        }
+      }
+    },
+    "api": {
+      "solved": [
+        {
+          "text_id": 101,
+          "title": "テスト一",
+          "level": "N5",
+          "category": "short",
+          "score": 66,
+          "correct_count": 2,
+          "total_questions": 3,
+          "perfect": false,
+          "solved_at": "2023-11-14T22:13:20.000Z",
+          "time_spent_sec": 0,
+          "answers": [],
+          "updated_at": 1700000000000
+        },
+        {
+          "text_id": 102,
+          "title": "テスト二",
+          "level": "N4",
+          "category": "mid",
+          "score": 50,
+          "correct_count": 1,
+          "total_questions": 2,
+          "perfect": false,
+          "solved_at": "2023-11-14T22:13:20.000Z",
+          "time_spent_sec": 99,
+          "answers": [],
+          "updated_at": 1700000000000
+        }
+      ],
+      "words": [
+        {
+          "word": "先生",
+          "reading": "せんせい",
+          "meaning": "teacher",
+          "level": "JLPT",
+          "mastered": true,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        },
+        {
+          "word": "本",
+          "reading": "ほん",
+          "meaning": "book",
+          "level": "JLPT",
+          "mastered": false,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        }
+      ],
+      "userSettings": {
+        "fontFamily": "serif",
+        "fontSizePx": 20,
+        "updated_at": 1700000000000
+      },
+      "pretest": {
+        "timerEnabled": false,
+        "minutes": 8
+      },
+      "streamProfile": {
+        "level": "N4",
+        "category": "mid"
+      },
+      "activeSession": {
+        "id": "current",
+        "textId": 101,
+        "title": "テスト一",
+        "level": "N5",
+        "currentQuestionIndex": 2,
+        "userAnswers": {
+          "1": 1,
+          "2": 3
+        },
+        "timer": null,
+        "timestamp": 1700000000000
+      }
+    },
+    "export": {
+      "app": "Dokkai Master",
+      "schema_version": 1,
+      "exported_at": "2023-11-14T22:13:20.000Z",
+      "user_id": "user-7ppxhu0lnloyw3v28",
+      "data": {
+        "solved_tasks": [
+          {
+            "text_id": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "category": "short",
+            "score": 66,
+            "correct_count": 2,
+            "total_questions": 3,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 0,
+            "answers": [],
+            "updated_at": 1700000000000
+          },
+          {
+            "text_id": 102,
+            "title": "テスト二",
+            "level": "N4",
+            "category": "mid",
+            "score": 50,
+            "correct_count": 1,
+            "total_questions": 2,
+            "perfect": false,
+            "solved_at": "2023-11-14T22:13:20.000Z",
+            "time_spent_sec": 99,
+            "answers": [],
+            "updated_at": 1700000000000
+          }
+        ],
+        "notebook": [
+          {
+            "word": "先生",
+            "reading": "せんせい",
+            "meaning": "teacher",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "本",
+            "reading": "ほん",
+            "meaning": "book",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        ],
+        "settings": {
+          "user_settings": {
+            "fontFamily": "serif",
+            "fontSizePx": 20,
+            "updated_at": 1700000000000
+          },
+          "pretest_config": {
+            "timerEnabled": false,
+            "minutes": 8
+          },
+          "stream_profile": {
+            "level": "N4",
+            "category": "mid"
+          }
+        }
+      }
+    }
+  },
+  "fallback_firestore_payload": {
+    "calls": [
+      [
+        "getDoc",
+        "users/uid-snapshot/sync/state"
+      ],
+      [
+        "setDoc",
+        "users/uid-snapshot/sync/state",
+        {
+          "uid": "uid-snapshot",
+          "email": "snap@example.test",
+          "isAnonymous": false,
+          "solved_tasks": {
+            "101": {
+              "text_id": 101,
+              "title": "REMOTE-101",
+              "level": "N5",
+              "category": "short",
+              "score": 100,
+              "correct_count": 3,
+              "total_questions": 3,
+              "perfect": true,
+              "solved_at": "2021-01-01T00:00:00.000Z",
+              "time_spent_sec": 5,
+              "answers": [],
+              "updated_at": 1
+            },
+            "102": {
+              "text_id": 102,
+              "title": "テスト二",
+              "level": "N4",
+              "category": "mid",
+              "score": 50,
+              "correct_count": 1,
+              "total_questions": 2,
+              "perfect": false,
+              "solved_at": "2023-11-14T22:13:20.000Z",
+              "time_spent_sec": 99,
+              "answers": [],
+              "updated_at": 1700000000000
+            },
+            "300": {
+              "text_id": 300,
+              "title": "REMOTE-300",
+              "level": "N2",
+              "category": "long",
+              "score": 80,
+              "correct_count": 4,
+              "total_questions": 5,
+              "perfect": false,
+              "solved_at": "2021-02-02T00:00:00.000Z",
+              "time_spent_sec": 7,
+              "answers": [],
+              "updated_at": 2
+            }
+          },
+          "notebook": {
+            "先生": {
+              "word": "先生",
+              "reading": "せんせい",
+              "meaning": "teacher",
+              "mastered": true,
+              "updated_at": 1900000000000,
+              "level": "JLPT",
+              "added_at": "2023-11-14T22:13:20.000Z"
+            },
+            "空": {
+              "word": "空",
+              "reading": "そら",
+              "meaning": "sky",
+              "mastered": true,
+              "updated_at": 5
+            },
+            "本": {
+              "word": "本",
+              "reading": "ほん",
+              "meaning": "book",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          },
+          "settings": {
+            "user_settings": {
+              "fontFamily": "serif",
+              "fontSizePx": 20,
+              "updated_at": 1700000000000
+            },
+            "pretest_config": {
+              "timerEnabled": false,
+              "minutes": 8
+            },
+            "stream_profile": {
+              "level": "N4",
+              "category": "mid"
+            }
+          },
+          "settings_updated_at": 1700000000000,
+          "active_session": {
+            "id": "current",
+            "textId": 101,
+            "title": "テスト一",
+            "level": "N5",
+            "currentQuestionIndex": 2,
+            "userAnswers": {
+              "1": 1,
+              "2": 3
+            },
+            "timer": null,
+            "timestamp": 1700000000000
+          },
+          "last_synced_at": "2023-11-14T22:13:20.000Z"
+        },
+        {
+          "merge": true
+        }
+      ]
+    ],
+    "statuses": [
+      [
+        "syncing",
+        null
+      ],
+      [
+        "synced",
+        null
+      ]
+    ],
+    "hasPendingChanges": false
+  },
+  "fallback_mode_errors": [],
+  "legacy_migration": {
+    "localStorage": {
+      "dokkai_idb_migrated_v1": "true",
+      "dokkai_pretest_config": "{\"timerEnabled\":true,\"minutes\":12}",
+      "dokkai_saved_words": "[{\"word\":\"犬\",\"reading\":\"いぬ\",\"meaning\":\"dog\",\"level\":\"JLPT\",\"mastered\":true,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000},{\"word\":\"猫\",\"reading\":\"ねこ\",\"meaning\":\"cat\",\"level\":\"JLPT\",\"mastered\":false,\"added_at\":\"2023-11-14T22:13:20.000Z\",\"updated_at\":1700000000000}]",
+      "dokkai_user_id": "legacy-user-1"
+    },
+    "indexedDB": {
+      "name": "dokkai_master_db",
+      "version": 1,
+      "stores": {
+        "active_session": {
+          "keyPath": "id",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [],
+          "records": []
+        },
+        "notebook": {
+          "keyPath": "word",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "mastered",
+              "keyPath": "mastered",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "updated_at",
+              "keyPath": "updated_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [
+            "犬",
+            "猫"
+          ],
+          "records": [
+            {
+              "word": "犬",
+              "reading": "いぬ",
+              "meaning": "dog",
+              "level": "JLPT",
+              "mastered": true,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            },
+            {
+              "word": "猫",
+              "reading": "ねこ",
+              "meaning": "cat",
+              "level": "JLPT",
+              "mastered": false,
+              "added_at": "2023-11-14T22:13:20.000Z",
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "settings": {
+          "keyPath": "key",
+          "autoIncrement": false,
+          "indexes": [],
+          "keys": [
+            "pretest_config"
+          ],
+          "records": [
+            {
+              "key": "pretest_config",
+              "value": {
+                "timerEnabled": true,
+                "minutes": 12
+              },
+              "updated_at": 1700000000000
+            }
+          ]
+        },
+        "solved_tasks": {
+          "keyPath": "text_id",
+          "autoIncrement": false,
+          "indexes": [
+            {
+              "name": "level",
+              "keyPath": "level",
+              "unique": false,
+              "multiEntry": false
+            },
+            {
+              "name": "solved_at",
+              "keyPath": "solved_at",
+              "unique": false,
+              "multiEntry": false
+            }
+          ],
+          "keys": [],
+          "records": []
+        }
+      }
+    },
+    "indexedDBDatabases": [
+      {
+        "name": "dokkai_master_db",
+        "version": 1
+      },
+      {
+        "name": "firebase-heartbeat-database",
+        "version": 1
+      },
+      {
+        "name": "firebaseLocalStorageDb",
+        "version": 1
+      }
+    ],
+    "storage": {
+      "useFallback": false,
+      "isReady": true,
+      "fallbackMemory": {
+        "solved_tasks": {},
+        "notebook": {},
+        "settings": {},
+        "active_session": {}
+      }
+    },
+    "api": {
+      "solved": [],
+      "words": [
+        {
+          "word": "犬",
+          "reading": "いぬ",
+          "meaning": "dog",
+          "level": "JLPT",
+          "mastered": true,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        },
+        {
+          "word": "猫",
+          "reading": "ねこ",
+          "meaning": "cat",
+          "level": "JLPT",
+          "mastered": false,
+          "added_at": "2023-11-14T22:13:20.000Z",
+          "updated_at": 1700000000000
+        }
+      ],
+      "userSettings": null,
+      "pretest": {
+        "timerEnabled": true,
+        "minutes": 12
+      },
+      "streamProfile": null,
+      "activeSession": null
+    },
+    "export": {
+      "app": "Dokkai Master",
+      "schema_version": 1,
+      "exported_at": "2023-11-14T22:13:20.000Z",
+      "user_id": "legacy-user-1",
+      "data": {
+        "solved_tasks": [],
+        "notebook": [
+          {
+            "word": "犬",
+            "reading": "いぬ",
+            "meaning": "dog",
+            "level": "JLPT",
+            "mastered": true,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          },
+          {
+            "word": "猫",
+            "reading": "ねこ",
+            "meaning": "cat",
+            "level": "JLPT",
+            "mastered": false,
+            "added_at": "2023-11-14T22:13:20.000Z",
+            "updated_at": 1700000000000
+          }
+        ],
+        "settings": {
+          "user_settings": {},
+          "pretest_config": {
+            "timerEnabled": true,
+            "minutes": 12
+          },
+          "stream_profile": {}
+        }
+      }
+    }
+  },
+  "legacy_migration_errors": []
+}

@@ -22,8 +22,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 from main import app
-from database import SessionLocal
-import models
+from app.core.database import SessionLocal
+from app import models
 
 client = TestClient(app)
 

@@ -22,8 +22,8 @@ os.chdir(PROJECT_ROOT)
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from database import engine, Base, SessionLocal
-from models import Text, Question, Option, TaskSlot, UserTextState, Attempt, GenerationJob
+from app.core.database import engine, Base, SessionLocal
+from app.models import Text, Question, Option, TaskSlot, UserTextState, Attempt, GenerationJob
 
 BACKUP_PATH = PROJECT_ROOT / "dokkai.db.pre_stream_backup"
 

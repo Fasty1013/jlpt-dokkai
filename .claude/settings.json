@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_dangerous.cjs\"",
+            "timeout": 15,
+            "statusMessage": "Dokkai: проверка опасных команд"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit*)",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/precommit_verify.cjs\"",
+            "timeout": 1800,
+            "statusMessage": "Dokkai: граф модулей и паритет с main перед коммитом"
+          }
+        ]
+      }
+    ]
+  }
+}

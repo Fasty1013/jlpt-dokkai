@@ -103,25 +103,106 @@ python run_agents.py --check
 ## 📂 Структура проекта
 
 ```text
-├── .agents/
-│   └── agents/
-│       ├── jlpt-expert.md   # Конфигурация агента-лингвиста JLPT
-│       └── senior-dev.md    # Конфигурация Senior Software Engineer
-├── run_agents.py            # Менеджер и оркестратор мультиагентной системы
-├── AGENTS.md                # Документация и руководство по агентам
-├── database.py              # Инициализация SQLAlchemy ORM
-├── models.py                # Модели данных: Text, Question, Option
-├── schemas.py               # Раздельные Pydantic-схемы (Чтение vs Анализ)
-├── seed.py                  # База текстов с разметкой фуриганы и доказательств
-├── main.py                  # FastAPI приложение, REST API, автосидирование
-├── test_api.py              # Автотесты бэкенда и Anti-Cheat протокола
-├── requirements.txt         # Список зависимостей
+├── main.py                  # Точка входа ASGI (`uvicorn main:app`): app, lifespan, роутеры
+├── app/
+│   ├── core/                # config (пути), database (engine, сессия SQLAlchemy)
+│   ├── models/              # Модели SQLAlchemy: Text, Question, Option, TaskSlot, ...
+│   ├── schemas/             # Pydantic-схемы (чтение без ответов vs анализ после отправки)
+│   ├── services/            # scoring_service, stream_service, dictionary_service
+│   └── routers/             # health, catalog, reading, dictionary, analysis, stream,
+│                            # reports, admin, pages
+├── seed.py, content_loader.py, validate_content.py   # Наполнение и проверка контента
+├── content/, tools/         # Тексты, генераторы, миграции, импорт PDF, QA-скрипты
 ├── static/
-│   ├── index.html           # Интерфейс (Split-Screen, Noto Sans JP)
-│   ├── styles.css           # CSS Variables, оформление кандзи и подсветка
-│   └── app.js               # Пошаговый мастер вопросов (Wizard), таймер, словарь
-└── .gitignore               # Исключение локальных БД и кэша
+│   ├── index.html, manifest.json, sw.js
+│   ├── css/                 # Модульный CSS
+│   └── js/
+│       ├── main.js          # Точка входа ES-модулей (оркестрация)
+│       ├── app/             # Инициализация, действия, persistence
+│       ├── features/        # Фичи: catalog, exercise, analysis, notebook, sync_ui, ...
+│       ├── state/           # store.js, elements.js
+│       ├── storage/         # IndexedDB + localStorage fallback (DokkaiStorage)
+│       ├── sync/            # Firebase Auth + Firestore sync (DokkaiCloudSync)
+│       └── config/          # firebase-config.js
+├── tests/qa/                # Playwright (Desktop HD / Mobile iPhone 390), axe-core
+├── docs/                    # Заметки, отчёты, INTENTIONAL_DIFFERENCES.md
+├── .agents/, AGENTS.md      # Мультиагентная система (jlpt-expert, senior-dev)
+└── requirements.txt, Procfile, render.yaml, Dockerfile
 ```
+
+### Потоки данных
+
+1. **Чтение:** `GET /api/texts/{id}` отдаёт только текст и варианты без ответов (Anti-Cheat).
+2. **Проверка:** `POST /api/texts/{id}/submit` или `/api/stream/complete` — единственные места, где
+   сервер раскрывает правильность, объяснения, `trap_type` и `evidence_span_id`.
+3. **Хранение:** результаты и настройки пишутся в IndexedDB (`dokkai_master_db`), при её
+   недоступности — в localStorage (`dokkai_idb_*`).
+4. **Облако:** при входе через Firebase выполняется lossless-слияние с `users/{uid}/sync/state`.
+   Без входа приложение полностью работает офлайн.
+
+### Проверки паритета и качества
+
+```bash
+python tools/api_snapshot.py                        # API: 38 запросов против golden
+node tools/compare_storage_snapshot.cjs --baseline  # IndexedDB / localStorage / Firestore payload
+node tools/check_dependency_graph.cjs               # ES-модули без циклов
+node tools/stress_scenarios.cjs                     # холодный старт, сломанная IndexedDB, офлайн
+cd tests/qa && npx playwright test --project=desktop_hd_light --project=mobile_iphone_class_390
+```
+
+Сравнения с веткой `main` (`tools/compare_*.cjs`, `tools/pixel_diff.py`) требуют двух серверов:
+ветка на `:8000`, `main` на `:8001`.
+
+---
+
+## 🧪 Автотесты и тестовый режим (DOKKAI_TEST_MODE)
+
+В проекте настроен полный сьют интеграционных, E2E и визуальных тестов:
+- **Backend / Anti-Cheat тесты:** `python test_api.py` (или `python run_agents.py --check`)
+- **E2E Playwright тесты:** `cd tests/qa && npx playwright test`
+- **Пиксельное сравнение экранов (Pixel Diff):** `python tools/pixel_diff.py`
+- **Проверка вычисленных стилей (Style Protection, обязательный Pre-Merge Check):**
+  ```bash
+  node tools/compare_computed_styles.cjs
+  ```
+  *Скрипт автоматически сравнивает вычисленные стили (`getComputedStyle` по 38 свойствам, включая `:hover` и `:focus`) между `main` (порт 8001) и веткой (порт 8000) по 9 ключевым экранам. Допуск: строго 0 расхождений.*
+
+### Переменная окружения `DOKKAI_TEST_MODE`:
+Для безопасного тестирования динамического обновления версий Service Worker (тест деплоя новой версии) бэкенд проверяет флаг `DOKKAI_TEST_MODE=1`.
+- **В локальных тестах:** Playwright автоматически передаёт `DOKKAI_TEST_MODE=1` в `webServer` конфига (`tests/qa/playwright.config.ts`).
+  При ручном запуске сервера для тестов выполните:
+  ```powershell
+  $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8000
+  ```
+- **На проде (Production):** Переменная `DOKKAI_TEST_MODE` не задана. Любые запросы с параметром `?version=...` к `/sw.js` строго игнорируются, исключая подделку версий извне.
+
+---
+
+## ⚙️ Управление Service Worker и очистка кэша
+
+В приложении работает легковесный Service Worker (`/sw.js`), обеспечивающий автономную работу (PWA) и кэширование статических файлов (CSS/JS) по стратегии **Network-First** (свежая версия всегда запрашивается из сети).
+
+### Как отключить Service Worker или сбросить застрявший кэш
+Если требуется принудительно отключить Service Worker или очистить локальный кэш браузера, выполните в DevTools Console (F12):
+
+```javascript
+// 1. Отмена регистрации всех активных Service Workers
+navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (const reg of registrations) {
+        reg.unregister();
+        console.log('[PWA] Service Worker unregistered:', reg.scope);
+    }
+});
+
+// 2. Очистка хранилища Cache Storage
+caches.keys().then(cacheNames => {
+    for (const name of cacheNames) {
+        caches.delete(name);
+        console.log('[PWA] Cache deleted:', name);
+    }
+});
+```
+После выполнения обновите страницу с жестким сбросом: `Ctrl + F5` (или `Cmd + Shift + R`).
 
 ---
 

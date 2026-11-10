@@ -1,0 +1,40 @@
+/**
+ * JLPT Dokkai Master - Timer Feature Barrel Export
+ * Provides modern ES module exports and window.DokkaiTimer bridge.
+ */
+
+import {
+  stopTimer,
+  startUntimedMode,
+  startCountdownTimer,
+  toggleTimerPause,
+  addTimerMinute,
+  dismissTimer,
+  enableTimerAtRuntime
+} from './timer.js';
+
+import { initTimerEvents } from './timer_events.js';
+
+export {
+  stopTimer,
+  startUntimedMode,
+  startCountdownTimer,
+  toggleTimerPause,
+  addTimerMinute,
+  dismissTimer,
+  enableTimerAtRuntime,
+  initTimerEvents
+};
+
+if (typeof window !== 'undefined') {
+  window.DokkaiTimer = {
+    stopTimer,
+    startUntimedMode,
+    startCountdownTimer,
+    toggleTimerPause,
+    addTimerMinute,
+    dismissTimer,
+    enableTimerAtRuntime,
+    initEvents: initTimerEvents
+  };
+}

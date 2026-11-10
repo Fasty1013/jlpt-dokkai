@@ -26,9 +26,9 @@ DB_PATH = BASE_DIR / "dokkai.db"
 BACKUP_PATH = BASE_DIR / "dokkai.db.bak"
 CONTENT_DIR = BASE_DIR / "content"
 
-from database import SessionLocal, engine, Base
-import models
-from models import Text, Question, Option, TaskSlot, UserTextState, Attempt
+from app.core.database import SessionLocal, engine, Base
+from app import models
+from app.models import Text, Question, Option, TaskSlot, UserTextState, Attempt
 from validate_content import validate_all_content
 
 def backup_database():

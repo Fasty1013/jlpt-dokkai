@@ -31,6 +31,16 @@ export default defineConfig({
   },
   outputDir: evidenceDir,
 
+  webServer: isProd ? undefined : {
+    command: 'python -m uvicorn main:app --port 8000',
+    port: 8000,
+    reuseExistingServer: true,
+    timeout: 30000,
+    env: {
+      DOKKAI_TEST_MODE: '1',
+    },
+  },
+
   projects: [
     // --- 1. Chromium Desktop ---
     {
