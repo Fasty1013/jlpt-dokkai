@@ -5,6 +5,7 @@
  */
 
 import './storage/storage.js'; // defines window.DokkaiStorage (Step 7c)
+import './sync/cloud_sync.js'; // defines window.DokkaiCloudSync (Step 7c)
 import './state/index.js';
 import './utils/index.js';
 import './api/index.js';
