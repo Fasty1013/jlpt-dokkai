@@ -3,6 +3,7 @@
  */
 
 import { request } from './client.js';
+import { getUserId } from '../utils/user.js';
 
 /**
  * Fetch text detail for strict reading mode (Anti-Cheat: no answers or explanations).
@@ -10,7 +11,8 @@ import { request } from './client.js';
  * @returns {Promise<any>}
  */
 export async function fetchTextDetail(textId) {
-  return request(`/api/texts/${textId}?_t=${Date.now()}`, {
+  // user_id seeds the per-user option shuffle (Step 11d); options come back with opaque ids
+  return request(`/api/texts/${textId}?_t=${Date.now()}&user_id=${encodeURIComponent(getUserId())}`, {
     cache: 'no-store',
     headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
   });

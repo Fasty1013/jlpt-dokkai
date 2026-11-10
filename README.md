@@ -69,6 +69,7 @@ uvicorn main:app --reload --port 8000
 
 1. **Build Command:** `pip install -r requirements.txt`
 2. **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+3. **Переменная `SHUFFLE_SECRET`** — секретный ключ HMAC для перемешивания вариантов ответов (в `render.yaml` создаётся автоматически). Задайте один раз и не меняйте: при смене ключа порядок вариантов в незавершённых попытках изменится.
 
 ---
 
