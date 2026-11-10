@@ -12,7 +12,7 @@
 * **Бэкенд:** Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy ORM (SQLite в локальной разработке / PostgreSQL на хостинге Render).
 * **Фронтенд:** Vanilla JavaScript ES6+ (модульная архитектура, Web Components / Template Strings), CSS3 (BEM-подобный, модули без CSS-фреймворков), HTML5.
 * **PWA & Офлайн:** Service Worker (`static/sw.js`) со строгой политикой `network-first` для статики и полной изоляцией API.
-* **Хранилище:** IndexedDB (`DokkaiStorage`, БД `dokkai_storage_v1`), LocalStorage (настройки, резервный кэш), Firebase Firestore (облачная синхронизация `users/{uid}/sync/state`).
+* **Хранилище:** IndexedDB (`DokkaiStorage`, БД `dokkai_master_db`), LocalStorage (настройки, резервный кэш), Firebase Firestore (облачная синхронизация `users/{uid}/sync/state`).
 * **Аутентификация:** Firebase Auth (Google Sign-In с fallback на redirect, анонимный гостевой вход).
 * **Лингвистический движок:** Собственный токенизатор и парсер фуриганы (`<ruby>漢字<rt>かんじ</rt></ruby>`), интерактивный словарь в стиле Yomichan, озвучка японского языка через Web Speech API (`ja-JP`).
 * **QA и Верификация:** Playwright Test Suite (100+ тестов, поддержка профилей Desktop HD и Mobile iPhone 390), библиотека axe-core (доступность WCAG AA), Pillow (пиксельный diff с допуском 0), вспомогательные CJS-скрипты сравнения DOM и сетевых запросов.
@@ -57,7 +57,7 @@
 │  ├─ Шаг 6e-1: Вынос Store/Elements, ликвидация резолверов      [✅ СДАНО]   │
 │  ├─ Шаг 6e-2: Ликвидация window.* мостов barrel-файлов          [✅ СДАНО]   │
 │  ├─ Шаг 6e-3: app.js → ES-модуль main.js + static/js/app/*      [✅ СДАНО]    │
-│  ├─ Шаг 7: Рефакторинг Storage, Cloud Sync и Firebase           [🎯 7a на приёмке]│
+│  ├─ Шаг 7: Рефакторинг Storage, Cloud Sync и Firebase           [🎯 7a ✅, 7b на приёмке]│
 │  ├─ Шаг 8: Модуляризация бэкенда Python (FastAPI/SQLAlchemy)    [⏳ В ПЛАНЕ]  │
 │  ├─ Шаг 9: Очистка мертвого кода и финализация структуры        [⏳ В ПЛАНЕ]  │
 │  └─ Шаг 10: Сквозная приёмка Части II и подготовка к релизу    [⏳ В ПЛАНЕ]  │
@@ -111,13 +111,13 @@
   * Подключение `<script type="module" src="/static/js/main.js">` в `index.html`.
 
 #### Шаг 7: Хранилище, синхронизация и Firebase
-* **7a:** Физический перенос legacy-файлов без изменения логики:
+* **7a (✅ Завершено, коммит `08235b3`):** Физический перенос legacy-файлов без изменения логики:
   * `static/storage.js` → `static/js/storage/`
   * `static/cloud_sync.js` → `static/js/sync/`
   * `static/firebase-config.js` → `static/js/config/`
-* **7b:** Создание snapshot-тестов хранилища перед рефакторингом (гарантия идентичной сериализации состояния в IndexedDB, LocalStorage и Firestore на `main` и в ветке).
+* **7b (🎯 выполнен, ждёт «ок» и коммита; `tools/compare_storage_snapshot.cjs`):** Создание snapshot-тестов хранилища перед рефакторингом (гарантия идентичной сериализации состояния в IndexedDB, LocalStorage и Firestore на `main` и в ветке).
 * **7c:** Модульное разделение ответственности:
-  * Слой `storage`: адаптер IndexedDB, fallback на LocalStorage, миграции схемы, экспорт/импорт бэкапа JSON (имя БД `dokkai_storage_v1` и ключи неизменны).
+  * Слой `storage`: адаптер IndexedDB, fallback на LocalStorage, миграции схемы, экспорт/импорт бэкапа JSON (имя БД `dokkai_master_db` и ключи неизменны).
   * Слой `sync`: Firebase Auth (Google/Anon/Redirect), транспорт Firestore с батчингом и дебаунсом, чистая логика разрешения конфликтов (lossless merge).
 
 #### Шаг 8: Модуляризация бэкенда Python (FastAPI / SQLAlchemy)
@@ -224,7 +224,14 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
    ```
    *Парсит все импорты в `static/js/` и математически доказывает отсутствие циклических ссылок.*
 
-6. **Полный сьют тестов Playwright на двух профилях:**
+6. **Снимок хранилища и Firestore-payload (IndexedDB, localStorage, fallback, миграция, `users/{uid}/sync/state`):**
+   ```bash
+   node tools/compare_storage_snapshot.cjs            # main (:8001) vs ветка (:8000)
+   node tools/compare_storage_snapshot.cjs --baseline  # ветка vs tools/snapshots/storage_snapshot.main.json
+   ```
+   *10 секций, замороженные часы и Math.random; перед сравнением проверяется детерминизм main vs main. Ожидается 10/10.*
+
+7. **Полный сьют тестов Playwright на двух профилях:**
    ```bash
    cd tests/qa
    npx playwright test --project=desktop_hd_light --project=mobile_iphone_class_390

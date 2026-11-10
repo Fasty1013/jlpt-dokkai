@@ -51,3 +51,12 @@
 | :-: | :--- | :--- | :--- |
 | **O3** | Файлы перенесены без правок логики: `static/storage.js` → `static/js/storage/storage.js`, `static/cloud_sync.js` → `static/js/sync/cloud_sync.js`, `static/firebase-config.js` → `static/js/config/firebase-config.js`. Обновлены `index.html`, `sw.js`, исключение в `tests/qa/specs/12_service_worker_integrity.spec.ts`. Они по-прежнему классические скрипты. | Паритет подтверждён (92/92, 0 расхождений стилей, 28/28, 0 px). | Преобразование в ES-модули — Шаг 7c. |
 | **O4** | В первом полном прогоне Playwright один раз отметился flaky тест `15 › 03. Slot Refresh` (desktop_hd_light). Восемь повторов подряд и повторный полный прогон — 99 passed, 0 flaky. Вероятная причина: тест кликает `#btn-refresh-slots` сразу после появления кнопки в DOM, возможно до подключения обработчиков в `boot()` при высокой нагрузке. Не исправлялось. | Нестабильность теста, не поведения приложения; гонка не подтверждена. | Проверить причину и стабилизировать тест (ожидание готовности приложения) отдельным шагом. |
+
+---
+
+## 🔎 Наблюдения шага 7b
+
+| № | Наблюдение | Влияние | Что дальше |
+| :-: | :--- | :--- | :--- |
+| **D4** | В `CLAUDE.md` имя БД IndexedDB было указано как `dokkai_storage_v1`, фактически в `storage.js` используется `dokkai_master_db` (версия 1, хранилища `solved_tasks`, `notebook`, `settings`, `active_session`). Исправлена только документация; код и формат хранилища не менялись. | Только описание. Формат хранилища не затронут. | Имя `dokkai_master_db` и ключи не менять на шаге 7c. |
+| **O5** | Добавлен `tools/compare_storage_snapshot.cjs` и эталон `tools/snapshots/storage_snapshot.main.json` (снят с `main`). Сравнивает 10 секций: IndexedDB (сырой дамп), localStorage, экспорт и импорт бэкапа, режим fallback без IndexedDB, миграцию legacy-ключей, payload `users/{uid}/sync/state` (Firebase замокан, сеть не используется). Часы и `Math.random` заморожены. Чувствительность проверена двумя мутациями (`storage.js`, `cloud_sync.js`): обе обнаружены, изменения откатаны. | Паритет `main` vs ветка: 10/10. | Запускать после каждой подитерации 7c. |
