@@ -10,7 +10,7 @@ from typing import List, Dict, Any, Optional, Tuple, Set
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import and_, or_, func
 
-from models import Text, Question, Option, TaskSlot, UserTextState, Attempt
+from app.models import Text, Question, Option, TaskSlot, UserTextState, Attempt
 from tools.param_gen.generator import generate_parametric_text
 
 ACTIVE_SLOTS_PER_PROFILE = 3

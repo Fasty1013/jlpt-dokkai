@@ -90,7 +90,7 @@ assert dict_res["level"] == "N2"
 print("Dictionary Lookup PASSED:", dict_res["word"], "->", dict_res["reading"])
 
 # 5. Test Stream Complete Idempotency
-from app.stream.service import complete_task, get_or_create_slots
+from app.services.stream_service import complete_task, get_or_create_slots
 from models import Attempt, UserTextState, TaskSlot
 
 test_user = "test-user-idempotency"
