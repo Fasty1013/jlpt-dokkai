@@ -21,14 +21,23 @@ _TOKEN_BYTES = 6  # 48 bits < 2**53 (JS Number.MAX_SAFE_INTEGER)
 
 # Options that point at other options or at "all/none of the above".
 _CROSS_REFERENCE = re.compile(
-    r"(選択肢"
+    # "選択肢" alone is an ordinary noun ("choices"), so only a numbered/positional reference counts.
+    r"(選択肢\s*[1-4１-４①-④ア-エ]"
+    r"|(?:上|下|前|次)の選択肢"
     r"|[1-4１-４①-④]\s*(?:と|、|・|か|および|及び)\s*[1-4１-４①-④]"
     r"|[1-4１-４①-④]\s*のどちら"
     r"|^\s*(?:上の|以上の)?\s*(?:すべて|全部|全て|どれ(?:も)?|いずれ(?:も)?|両方|どちら(?:も)?)\s*(?:が|も|は)?\s*(?:正しい|間違い|違う|誤り|当てはまる|同じ|ない|あてはまる)"
     r"|^\s*(?:上の|以上の)(?:すべて|全部|全て|どれ)"
-    r"|^\s*(?:A|B|ア|イ)\s*と\s*(?:A|B|ア|イ)\s*(?:両方|の両方)?\s*$)"
+    r"|^\s*(?:上記|右|これら)(?:の)?(?:すべて|全部|全て|どれ|二つ|2つ)"
+    r"|^\s*(?:上の|以上の)?(?:二つ|2つ|両方とも|どちらとも)"
+    r"|^\s*(?:どれ|どちら)(?:も|でも)(?:正しくない|当てはまらない|あてはまらない|ない)"
+    r"|前者|後者"
+    r"|^\s*[ア-エ]\s*[・、]\s*[ア-エ]"
+    r"|^\s*[ア-エ]\s*(?:と|の)\s*[ア-エ]"
+    r"|[12１２]つ目)"
 )
 _DIGITS = re.compile(r"\d+")
+_THOUSANDS = re.compile(r"(?<=\d),(?=\d{3})")  # "1,200円" is 1200, not 1 and 200
 
 
 def _hmac_int(message: str, nbytes: int = _TOKEN_BYTES) -> int:
@@ -43,11 +52,12 @@ def is_order_dependent(option_texts: List[str]) -> bool:
     # Numeric / date / time options that are sorted (ascending or descending): keep the natural order.
     firsts = []
     for t in option_texts:
-        found = _DIGITS.findall(t or "")
+        found = _DIGITS.findall(_THOUSANDS.sub("", t or ""))
         if not found:
             return False
         firsts.append(int(found[0]))
-    if len(set(firsts)) > 1 and (firsts == sorted(firsts) or firsts == sorted(firsts, reverse=True)):
+    # Strictly monotonic only: ties like 10, 9, 9, 1 are coincidence, not a natural order.
+    if len(set(firsts)) == len(firsts) and (firsts == sorted(firsts) or firsts == sorted(firsts, reverse=True)):
         return True
     return False
 

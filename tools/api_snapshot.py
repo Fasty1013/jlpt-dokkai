@@ -11,6 +11,8 @@ Comparison modes per request:
   exact - body must be byte-identical after masking volatile values (timestamps, git commit)
   shape - body structure only (keys, types, list lengths); used where the server picks
           content with SQL random() (stream slots) so values legitimately differ per run.
+  loose - like shape, but list lengths are ignored too (the script answers options[0]; since
+          Step 11d the correct option position is shuffled, so error lists vary per run).
 
 Also asserts the Anti-Cheat protocol: pre-submit endpoints never expose is_correct,
 explanation, trap_type or evidence_span_id.
@@ -58,10 +60,12 @@ def mask(v, key=None):
     return v
 
 
-def shape(v):
+def shape(v, loose=False):
     if isinstance(v, dict):
-        return {k: shape(x) for k, x in sorted(v.items())}
+        return {k: shape(x, loose) for k, x in sorted(v.items())}
     if isinstance(v, list):
+        if loose:  # list length / emptiness depends on the random slot text and shuffled options
+            return {"__list__": "*"}
         return {"__list__": len(v), "item": shape(v[0]) if v else None}
     return type(v).__name__ if v is not None else "null"
 
@@ -98,7 +102,7 @@ def main():
                     if bad:
                         leaks.append((name, sorted(bad)))
                 entry["mode"] = mode
-                entry["body"] = mask(body) if mode == "exact" else shape(body)
+                entry["body"] = mask(body) if mode == "exact" else shape(body, loose=(mode == "loose"))
             out[name] = entry
             return r
 
@@ -137,15 +141,15 @@ def main():
         tid = t["id"]
         ans = [{"question_id": q["id"], "selected_option_id": q["options"][0]["id"]} for q in t["questions"]]
         body = {"user_id": user, "text_id": tid, "answers": ans, "idempotency_key": "snap-key-1"}
-        rec("complete_first", "POST", "/api/stream/complete", mode="shape", json=body)
-        rec("complete_idempotent", "POST", "/api/stream/complete", mode="shape", json=body)
+        rec("complete_first", "POST", "/api/stream/complete", mode="loose", json=body)
+        rec("complete_idempotent", "POST", "/api/stream/complete", mode="loose", json=body)
         rec("complete_missing_text", "POST", "/api/stream/complete", mode="shape",
             json={**body, "text_id": 999999, "idempotency_key": "snap-key-2"})
         rec("complete_invalid", "POST", "/api/stream/complete", json={"user_id": user})
         rec("solved_list", "GET", f"/api/stream/solved?user_id={user}", mode="shape")
-        rec("solved_list_filters", "GET", f"/api/stream/solved?user_id={user}&level=N5&only_perfect=true&page=1&page_size=5", mode="shape")
+        rec("solved_list_filters", "GET", f"/api/stream/solved?user_id={user}&level=N5&only_perfect=true&page=1&page_size=5", mode="loose")
         rec("solved_bad_page", "GET", "/api/stream/solved?page=0")
-        rec("solved_detail", "GET", f"/api/stream/solved/{tid}?user_id={user}", mode="shape")
+        rec("solved_detail", "GET", f"/api/stream/solved/{tid}?user_id={user}", mode="loose")
         rec("solved_detail_missing", "GET", f"/api/stream/solved/999999?user_id={user}", mode="shape")
         rec("retry", "POST", f"/api/stream/retry/{tid}?user_id={user}", mode="shape")
         rec("retry_missing", "POST", f"/api/stream/retry/999999?user_id={user}", mode="shape")

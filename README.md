@@ -134,7 +134,7 @@ python run_agents.py --check
 ### Потоки данных
 
 1. **Чтение:** `GET /api/texts/{id}` отдаёт только текст и варианты без ответов (Anti-Cheat).
-2. **Проверка:** `POST /api/texts/{id}/submit` или `/api/stream/complete` — единственные места, где
+2. **Проверка:** `POST /api/stream/complete` (и `POST /api/texts/{id}/submit`, только при `DOKKAI_TEST_MODE=1`) — единственные места, где
    сервер раскрывает правильность, объяснения, `trap_type` и `evidence_span_id`.
 3. **Хранение:** результаты и настройки пишутся в IndexedDB (`dokkai_master_db`), при её
    недоступности — в localStorage (`dokkai_idb_*`).

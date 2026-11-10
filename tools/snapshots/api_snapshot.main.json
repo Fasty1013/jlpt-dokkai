@@ -42,29 +42,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": {
     "position": "int",
@@ -77,20 +55,7 @@
      "origin": "str",
      "question_count": "int",
      "questions": {
-      "__list__": 1,
-      "item": {
-       "id": "int",
-       "options": {
-        "__list__": 4,
-        "item": {
-         "id": "int",
-         "option_number": "int",
-         "option_text": "str"
-        }
-       },
-       "question_number": "int",
-       "question_text": "str"
-      }
+      "__list__": "*"
      },
      "recommended_time_min": "int",
      "slug": "str",
@@ -103,12 +68,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -119,7 +79,7 @@
    "service-worker-allowed": null
   },
   "method": "POST",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/complete"
  },
@@ -133,29 +93,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": "null",
    "score_percent": "float",
@@ -164,12 +102,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -180,7 +113,7 @@
    "service-worker-allowed": null
   },
   "method": "POST",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/complete"
  },
@@ -2168,29 +2101,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": "null",
    "score_percent": "float",
@@ -2199,12 +2110,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -2215,7 +2121,7 @@
    "service-worker-allowed": null
   },
   "method": "GET",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/solved/<TID>?user_id=snap-user"
  },
@@ -2272,20 +2178,7 @@
  "solved_list_filters": {
   "body": {
    "items": {
-    "__list__": 1,
-    "item": {
-     "attempts_count": "int",
-     "best_score": "float",
-     "category": "str",
-     "last_score": "float",
-     "level": "str",
-     "origin": "str",
-     "perfect": "bool",
-     "slug": "str",
-     "solved_at": "str",
-     "text_id": "int",
-     "title": "str"
-    }
+    "__list__": "*"
    },
    "page": "int",
    "page_size": "int",
@@ -2299,7 +2192,7 @@
    "service-worker-allowed": null
   },
   "method": "GET",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/solved?user_id=snap-user&level=N5&only_perfect=true&page=1&page_size=5"
  },
@@ -2510,7 +2403,7 @@
      ],
      "question_number": 1,
      "question_text": "日曜日は何時から何時まで図書館が開いていますか。",
-     "selected_option_id": 102261010832195
+     "selected_option_id": 18609400033018
     }
    ],
    "recommended_time_min": 2,
@@ -2588,9 +2481,9 @@
      "id": 1,
      "options": [
       {
-       "id": 102261010832195,
+       "id": 18609400033018,
        "option_number": 1,
-       "option_text": "午前10時から午後5時まで"
+       "option_text": "午後1時から午後6時まで"
       },
       {
        "id": 237477852280924,
@@ -2598,14 +2491,14 @@
        "option_text": "午前9時から午後6時まで"
       },
       {
-       "id": 116857499588795,
+       "id": 102261010832195,
        "option_number": 3,
-       "option_text": "午前9時から午後5時まで"
+       "option_text": "午前10時から午後5時まで"
       },
       {
-       "id": 18609400033018,
+       "id": 116857499588795,
        "option_number": 4,
-       "option_text": "午後1時から午後6時まで"
+       "option_text": "午前9時から午後5時まで"
       }
      ],
      "question_number": 1,
