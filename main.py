@@ -3,6 +3,7 @@
 Thin composition root (Step 8b): application object, lifespan, middleware and routers.
 Business logic lives in app/services, HTTP endpoints in app/routers.
 """
+import logging
 import sys
 from contextlib import asynccontextmanager
 
@@ -13,7 +14,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
-from app.core.config import STATIC_DIR
+from app.core.config import STATIC_DIR, SHUFFLE_SECRET_IS_DEFAULT
 from app.core.database import engine, Base
 from app.routers import (
     health, catalog, reading, dictionary, analysis, stream, reports, admin, pages,
@@ -28,6 +29,12 @@ async def lifespan(app: FastAPI):
     seed_database()
     from tools.migrations.add_stream_tables import migrate
     migrate()
+    if SHUFFLE_SECRET_IS_DEFAULT:
+        # The fallback key is public (repository source): anyone could undo the option shuffle.
+        logging.getLogger("uvicorn.error").warning(
+            "SHUFFLE_SECRET is not set: using the public development key. "
+            "Set SHUFFLE_SECRET in production (Render > Environment)."
+        )
     yield
 
 

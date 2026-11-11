@@ -53,8 +53,8 @@ const MOCK_SLOTS = {
         title: '図書館の利用時間変更 (N5) #1',
         level: 'N5',
         category: 'short',
-        total_questions: 1,
-        estimated_reading_time_sec: 180
+        question_count: 1,
+        recommended_time_min: 3
       }
     },
     {
@@ -65,8 +65,8 @@ const MOCK_SLOTS = {
         title: '留学生パーティー (N5) #2',
         level: 'N5',
         category: 'short',
-        total_questions: 1,
-        estimated_reading_time_sec: 180
+        question_count: 1,
+        recommended_time_min: 3
       }
     },
     {
@@ -77,8 +77,8 @@ const MOCK_SLOTS = {
         title: 'アルバイトの募集 (N5) #3',
         level: 'N5',
         category: 'short',
-        total_questions: 1,
-        estimated_reading_time_sec: 180
+        question_count: 1,
+        recommended_time_min: 3
       }
     }
   ]

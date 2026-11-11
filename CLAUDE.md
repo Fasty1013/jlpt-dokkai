@@ -245,9 +245,10 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
 ## 📍 6. Текущий статус репозитория (Точка передачи эстафеты)
 
 * **Ветки:** всё влито в `main` (2026-11-11): PR #1 Часть III → `05a87ef`, PR #2 i18n → `9b4836f`. Ветки `fix/sync-speech-mobile-ui-shuffle` и `feat/i18n-switcher` остались на GitHub (не удалялись). Локальная копия `main` для :8001 — `Dokkai-main-compare` (обновлена до `9b4836f`).
-* **Состояние:** Части I–III и i18n (подитерации 1–3) выполнены и в `main`. Отчёт Части III — `docs/REPORT_PART_III.md`; отличия — `docs/INTENTIONAL_DIFFERENCES.md` (п. 13–35, D5, I1–I20, I17а); i18n — `docs/i18n/`; заметки — `docs/notes/`.
+* **Состояние:** Части I–III и i18n (подитерации 1–3) выполнены и в `main`. Отчёт Части III — `docs/REPORT_PART_III.md`; отличия — `docs/INTENTIONAL_DIFFERENCES.md` (п. 13–35, D5, I1–I22, I17а); i18n — `docs/i18n/`; заметки — `docs/notes/`.
 * **Проверки (приёмка, 2026-11-11):** Часть III — Playwright 99 passed / 1 skipped, api_snapshot 38/38, shuffle_check ALL PASSED; i18n — Playwright 133 passed / 1 flaky (таймаут `page.goto`) / 4 skipped, api_snapshot 38/38, dictionary_i18n_check и i18n_check OK, граф 87 модулей; строгий паритет ветки с новым `main` — обход 92/92, стили 0, сеть 28/28, пиксели 0.
-* **СЛЕДУЮЩИЙ ШАГ:** решение пользователя по открытым вопросам — `SHUFFLE_SECRET` на Render, вычитка uz/en/ja, `<html lang>` для ru (I2), перевод предложений, японские толкования, изоляция БД Playwright (I3), C1 на устройстве (см. `docs/notes/2026-11-11.md`).
+* **Прод (Render):** сервис `jlpt-dokkai` (Docker, создан вручную — `render.yaml` не применяется), автодеплой из `main`. `SHUFFLE_SECRET` задан пользователем 2026-11-11 и проверен с прода; не менять. Без ключа сервер пишет WARNING при старте (I21). Эталонные скриншоты — `docs/qa/baseline_screenshots/i18n/` (I22).
+* **СЛЕДУЮЩИЙ ШАГ:** решение пользователя по открытым вопросам — вычитка uz/en/ja, `<html lang>` для ru (I2), перевод предложений, японские толкования, изоляция БД Playwright (I3), C1 на устройстве (см. `docs/notes/2026-11-11.md`).
 
 ---
 
