@@ -1,0 +1,342 @@
+# Manual glosses: word|en|uz   (written by the project, NOT taken from a third-party dictionary; uz/en need native review)
+# N5
+私|I, me (polite)|men (xushmuomala shakl)
+学生|student, pupil|talaba, o'quvchi
+学校|school|maktab
+先生|teacher, instructor|o'qituvchi, ustoz
+本|book; origin, basis|kitob; asos
+日本語|Japanese language|yapon tili
+友達|friend, friends|do'st, do'stlar
+時間|time; hours|vaqt, soat
+毎日|every day|har kuni
+今日|today|bugun
+明日|tomorrow|ertaga
+昨日|yesterday|kecha
+図書館|library|kutubxona
+電車|train, electric train|elektrichka, poyezd
+食べる|to eat|yemoq, ovqatlanmoq
+飲む|to drink|ichmoq
+行く|to go|bormoq
+来る|to come|kelmoq
+見る|to see, to look at|ko'rmoq, qaramoq
+聞く|to listen, to ask|eshitmoq, so'ramoq
+読む|to read|o'qimoq
+書く|to write|yozmoq
+買う|to buy|sotib olmoq
+新しい|new|yangi
+古い|old|eski
+大きい|big|katta
+小さい|small|kichik
+高い|tall; expensive|baland; qimmat
+安い|cheap; peaceful|arzon; xotirjam
+面白い|interesting, funny|qiziqarli, kulgili
+# N4
+案内|guidance, notice; guiding|yo'l-yo'riq, xabarnoma; ko'rsatish
+安心|peace of mind, relief|xotirjamlik, ko'ngil tinchligi
+利用|use, utilization|foydalanish
+注意|attention, caution|e'tibor, ehtiyotkorlik
+用意|preparation, readiness|tayyorgarlik
+意見|opinion, point of view|fikr, nuqtai nazar
+連絡|contact, communication, message|aloqa, xabar
+都合|circumstances, convenience|sharoit, qulaylik
+遠慮|reserve, refraining|o'zini tiyish, tortinish
+危険|danger; dangerous|xavf; xavfli
+便利|convenient|qulay
+不便|inconvenient|noqulay
+簡単|simple, easy|oddiy, oson
+複雑|complicated, complex|murakkab
+経験|experience|tajriba
+説明|explanation|tushuntirish
+理由|reason, grounds|sabab, asos
+目的|purpose, aim|maqsad
+場合|case, circumstance|holat, vaziyat
+習慣|custom, habit|odat, urf
+約束|promise, appointment|va'da, kelishuv
+関係|relation, connection|munosabat, aloqa
+手伝う|to help, to assist|yordam bermoq
+参加|participation|ishtirok
+予定|plan, schedule|reja, jadval
+# N3
+関する|to be related to, to concern|... ga oid bo'lmoq, tegishli bo'lmoq
+影響|influence, effect|ta'sir
+環境|environment, surroundings|atrof-muhit, muhit
+変化|change, variation|o'zgarish
+結果|result, consequence|natija, oqibat
+効果|effect, effectiveness|samara, ta'sir
+増加|increase, growth|ko'payish, o'sish
+減少|decrease, decline|kamayish, pasayish
+原因|cause, origin|sabab, manba
+解決|solution (of a problem)|hal qilish, yechim
+必要|necessity; necessary|zarurat; zarur
+重要|important, essential|muhim, ahamiyatli
+可能|possible, feasible|mumkin, amalga oshadigan
+不可能|impossible|mumkin emas
+価値|value, worth|qadr-qimmat, qiymat
+調査|investigation, survey|tadqiqot, so'rovnoma
+発表|announcement, publication, presentation|e'lon, taqdimot, ma'ruza
+開発|development, exploitation|ishlab chiqish, o'zlashtirish
+発展|development, progress|rivojlanish, taraqqiyot
+比較|comparison|taqqoslash
+傾向|tendency, trend|tendensiya, moyillik
+意識|consciousness, awareness|ong, anglash
+特徴|characteristic, feature|xususiyat, o'ziga xos belgi
+態度|attitude, behavior|munosabat, xulq
+状況|situation, circumstances|vaziyat, ahvol
+# N2
+持続可能|sustainable|barqaror, uzoq davom etadigan
+意思決定|decision making|qaror qabul qilish
+深刻|serious, grave, acute|jiddiy, og'ir
+課題|task, challenge, problem|vazifa, muammo
+対象|object, target, subject|ob'yekt, maqsadli guruh
+批判|criticism, judgment|tanqid, baho
+主張|assertion, claim, author's position|da'vo, muallif pozitsiyasi
+把握|grasp, understanding|tushunish, mohiyatini anglash
+背景|background, context|fon, kontekst
+指摘|pointing out (a fact or an error)|ko'rsatib o'tish (fakt yoki xato)
+共通|common, shared|umumiy, mushtarak
+独自|original, unique, one's own|o'ziga xos, original
+普及|spread, popularization|keng tarqalish, ommalashish
+導入|introduction, adoption|joriy etish, kiritish
+義務|duty, obligation|majburiyat, burch
+懸念|concern, apprehension|xavotir, tashvish
+視点|point of view, perspective|nuqtai nazar
+観点|viewpoint, aspect|jihat, nuqtai nazar
+基準|standard, norm, criterion|standart, me'yor, mezon
+柔軟|flexible, adaptable|moslashuvchan, egiluvchan
+# N1
+根底|foundation, basis, root|poydevor, asos
+概念|concept, notion|tushuncha, konsepsiya
+本質|essence, true nature|mohiyat, asl tabiat
+妥協|compromise, concession|murosa, yon berish
+示唆|suggestion, hint, implication|ishora, maslahat
+乖離|divergence, estrangement, gap|nomuvofiqlik, ajralish, uzilish
+看過|overlooking, passing over|e'tiborsiz qoldirish, ko'z yumish
+卓越|excellence, eminence|ustunlik, mahorat
+変遷|transition, change over time|o'zgarishlar tarixi, evolyutsiya
+象徴|symbol, emblem|ramz
+共生|living together, symbiosis|birga yashash, simbioz
+吟味|close examination, scrutiny|sinchiklab ko'rib chiqish
+固定観念|stereotype, fixed idea|stereotip, qotib qolgan tasavvur
+自律|autonomy, self-regulation|avtonomiya, o'zini o'zi boshqarish
+持続可能性|sustainability|barqarorlik
+# Project theme keywords
+短文|short text, short passage|qisqa matn, qisqa gap
+短文メモ|short memo, short note|qisqa eslatma, yozuv
+利用カード|library card, user card|kutubxona kartasi, foydalanuvchi kartasi
+開館時間|opening hours|ochiq turish vaqti
+公園清掃|park cleaning|parkni tozalash
+清掃|cleaning, sweeping|tozalash
+地域活動|local community activity|mahalladagi faoliyat
+参加資格|eligibility to participate|ishtirok etish shartlari
+雨天順延|postponed in case of rain|yomg'ir bo'lsa, keyinga qoldiriladi
+交流会|social gathering, networking event|muloqot uchrashuvi
+会費無料|free admission, no membership fee|ishtirok bepul
+事前申込|advance application|oldindan ariza berish
+窓口対応|counter service|oynada xizmat ko'rsatish
+保管期間|storage period|saqlash muddati
+身分証|identification card|shaxsni tasdiqlovchi hujjat
+拾得物|found article, lost-and-found item|topilgan buyum
+ビル管理|building management|bino boshqaruvi
+停電注意|caution: power outage|diqqat: elektr o'chishi
+階段利用|use of stairs|zinadan foydalanish
+安全点検|safety inspection|xavfsizlikni tekshirish
+健康管理|health management|salomatlikni nazorat qilish
+問診票|medical questionnaire|tibbiy so'rovnoma
+前日絶食|fasting the day before|bir kun oldin och qolish
+受診時間|consultation hours|shifokor qabuli vaqti
+勤務調整|work schedule adjustment|ish jadvalini moslashtirish
+代替要員|substitute, replacement staff|almashtiruvchi xodim
+店長承認|store manager's approval|do'kon boshlig'ining ruxsati
+連絡締切|contact deadline|xabar berish muddati
+不在票|notice of attempted delivery|yetkazib bera olmaganlik haqida xabarnoma
+保管期限|storage deadline|saqlash muddati
+自動受付|automatic reception|avtomatik qabul qilish
+指定時間|designated time|belgilangan vaqt
+新商品|new product|yangi mahsulot
+数量限定|limited quantity|cheklangan miqdor
+道路工事|road construction|yo'l ta'miri
+迂回運行|detour service|aylanib o'tuvchi qatnov
+乗降場所|boarding and alighting point|chiqish va tushish joyi
+工事期間|construction period|ta'mir muddati
+大会要項|competition guidelines|musobaqa nizomi
+原稿提出|manuscript submission|qo'lyozma topshirish
+審査基準|judging criteria|baholash mezonlari
+表彰規定|awards regulations|mukofotlash qoidalari
+休講連絡|class cancellation notice|dars bekor qilingani haqida xabar
+補講日程|make-up class schedule|qo'shimcha darslar jadvali
+課題提出|assignment submission|topshiriqni topshirish
+教務課|academic affairs office|o'quv bo'limi
+環境問題|environmental problems|ekologik muammolar
+資源回収|resource collection, recycling|xomashyoni qayta yig'ish
+市民の意識|public awareness of citizens|shahar aholisining ongi
+地域差|regional differences|hududlararo farqlar
+深夜営業|late-night business hours|tunda ishlash
+利便性|convenience, usability|qulaylik
+社会基盤|social infrastructure|ijtimoiy infratuzilma
+無人レジ|self-service checkout|o'zi-o'ziga xizmat kassasi
+地方創生|regional revitalization|hududlarni jonlantirish
+仕事と休暇|work and vacation|ish va ta'til
+自己管理|self-management, self-control|o'zini o'zi boshqarish
+一汁三菜|traditional meal of soup and three dishes|bir sho'rva va uch taomdan iborat an'anaviy ovqat
+発酵食品|fermented foods|bijg'itilgan mahsulotlar
+無形文化遺産|intangible cultural heritage|nomoddiy madaniy meros
+栄養バランス|nutritional balance|ozuqa muvozanati
+治安の良さ|good public safety|jamoat xavfsizligining yaxshiligi
+冷温同時|simultaneous heating and cooling|bir vaqtda isitish va sovitish
+災害時支援|disaster assistance|ofat paytidagi yordam
+技術革新|technological innovation|texnologik yangilik
+孤独の価値|the value of solitude|yolg'izlikning qadri
+自由な選択|free choice|erkin tanlov
+未知の体験|unknown experience|noma'lum tajriba
+自立心|spirit of independence|mustaqillik hissi
+手書きの記憶|memory of handwriting|qo'lda yozishning xotirasi
+スケジュール管理|schedule management|jadvalni boshqarish
+愛着|attachment, affection|bog'lanish, mehr
+デジタル併用|combined use with digital tools|raqamli vositalar bilan birga foydalanish
+飼い主の責任|owner's responsibility for a pet|uy hayvoni egasining mas'uliyati
+動物愛護|animal welfare|hayvonlarni asrash
+公共の場|public place|jamoat joyi
+共生ルール|rules for living together|birga yashash qoidalari
+短距離移動|short-distance travel|qisqa masofaga qatnov
+エコ通勤|eco-friendly commuting|ekologik toza qatnov (ishga borish)
+専用ポート|dedicated docking station|maxsus bekat
+駐輪マナー|bicycle parking etiquette|velosiped qo'yish odobi
+個性の表現|expression of individuality|o'ziga xoslikni ifodalash
+衣類再利用|clothing reuse|kiyimni qayta ishlatish
+循環型社会|recycling-oriented society|aylanma iqtisodiyotli jamiyat
+癒しの空間|healing space|ruhiy dam olish maskani
+温冷交代浴|contrast bathing|iliq va sovuq suvli almashinuvchi cho'milish
+地域アイデンティティ|regional identity|hududiy o'zlik
+親しみやすさ|approachability, friendliness|samimiylik, yaqinlik
+場面に応じた言葉|words suited to the situation|vaziyatga mos so'zlar
+文化の多様性|cultural diversity|madaniy xilma-xillik
+都市計画|city planning|shaharsozlik rejasi
+緑地保全|green space conservation|yashil hududlarni saqlash
+生態系ネットワーク|ecological network|ekotizim tarmog'i
+心理的充足|psychological fulfillment|ruhiy qoniqish
+著作権|copyright|mualliflik huquqi
+感情の模倣|imitation of emotions|his-tuyg'ularni taqlid qilish
+独自の美意識|unique sense of beauty|o'ziga xos go'zallik tuyg'usi
+複言語教育|plurilingual education|ko'p tilli ta'lim
+思考の枠組み|framework of thought|tafakkur doirasi
+言語消滅|language extinction|tillarning yo'qolishi
+即時性の代償|the price of immediacy|tezkorlikning bahosi
+思索の停滞|stagnation of reflection|chuqur fikrlashning to'xtab qolishi
+余白の価値|the value of blank space and pauses|bo'sh joy va tanaffusning qadri
+# Vocabulary lists of the texts
+受付|reception desk, information desk|qabulxona, ro'yxatga olish stoli
+散歩|walk, stroll|sayr, piyoda aylanish
+公園|park|bog', park
+四季|four seasons|to'rt fasl
+桜|cherry blossom, cherry tree|sakura, gilos guli
+週間|week (duration)|hafta (davomiylik)
+宿題|homework|uy vazifasi
+東口|east exit|sharqiy chiqish
+喫茶店|coffee shop, cafe|kafe, choyxona
+みそ汁|miso soup|miso sho'rvasi
+新鮮|fresh|yangi, toza
+近所|neighborhood, nearby|qo'shni hudud, yaqin atrof
+野菜|vegetables|sabzavotlar
+手紙|letter|xat
+切手|postage stamp|pochta markasi
+単語|word, vocabulary item|so'z
+神社|Shinto shrine|sintoist ibodatxonasi
+花火|fireworks|otashin (feyerverk)
+市立|municipal, city-run|shahar (munitsipal)
+絵本|picture book|rasmli kitob
+紹介|introduction, referral|tanishtirish, tavsiya
+有名|famous|mashhur
+自転車|bicycle|velosiped
+安全|safe, safety|xavfsiz, xavfsizlik
+牛肉|beef|mol go'shti
+集まる|to gather, to assemble|to'planmoq
+会費|membership fee, dues|a'zolik badali
+休館日|closing day (of a facility)|dam olish kuni (muassasa uchun)
+区分|division, category|bo'lim, toifa
+夜間|nighttime, evening hours|kechqurun, tungi vaqt
+期間|period, term|davr, muddat
+有効|valid, effective|amal qiladigan, samarali
+片道|one way|bir tomonga
+所要時間|time required, travel time|kerak bo'ladigan vaqt, yo'l vaqti
+定員|capacity, quota of seats|sig'im, o'rinlar soni
+締切|deadline, closing|oxirgi muddat
+本体|main unit, the device itself|asosiy qism, qurilmaning o'zi
+診療|medical examination and treatment|shifokor ko'rigi va davolash
+休診|clinic closed for the day|shifoxona dam olish kuni
+印刷|printing|bosma, chop etish
+飲食|eating and drinking|ovqatlanish va ichimlik iste'mol qilish
+鑑賞|appreciation (of art, films)|tomosha qilish, san'atdan zavqlanish
+提示|presentation (of a document), showing|ko'rsatish (hujjatni)
+種類|kind, type|tur, xil
+用具|equipment, tools|jihoz, anjom
+容量|capacity (memory, data)|hajm (xotira, ma'lumot)
+通話|phone call, conversation|telefon qo'ng'irog'i, suhbat
+宅配便|home delivery service, courier|uyga yetkazib berish, kuryer
+持込|bringing in, carrying in yourself|o'zi bilan olib kirish
+料金|fee, charge, fare|to'lov, tarif
+歴史|history|tarix
+魅力|charm, appeal, attraction|jozibadorlik, jozib
+分別|separation, sorting (of waste)|saralash (chiqindi)
+指定|designation, specified|belgilash, belgilangan
+花見|cherry blossom viewing|sakura gulini tomosha qilish
+入学式|entrance ceremony|o'qishga qabul marosimi
+盆踊り|Bon dance|Bon raqsi
+太鼓|drum, taiko|baraban, taiko
+新幹線|Shinkansen, bullet train|Shinkansen, tezyurar poyezd
+正確|accurate, punctual|aniq, to'g'ri
+和食|Japanese cuisine|yapon oshxonasi
+基本|basics, foundation|asos, poydevor
+活動|activity, activities|faoliyat
+住民|residents, inhabitants|aholi, yashovchilar
+留学生|international student|xorijiy talaba
+生活費|living expenses|yashash xarajatlari
+自動販売機|vending machine|savdo avtomati
+治安|public safety, public order|jamoat xavfsizligi, tartib
+日常的|everyday, daily|kundalik
+和菓子|Japanese sweets|yapon shirinliklari
+文字|character, letter|belgi, harf
+看板|signboard, sign|peshlavha, lavha
+期日|due date, appointed day|muddat, belgilangan kun
+思いやり|consideration, compassion|g'amxo'rlik, mehr-shafqat
+異文化|different culture|boshqa madaniyat
+達成感|sense of accomplishment|maqsadga erishgan hissi
+事務手数料|administrative fee|ro'yxatga olish to'lovi
+特典|special benefit, bonus|imtiyoz, bonus
+話題|topic of conversation|suhbat mavzusi
+平素|usually, ordinarily|odatda, kundalik
+窓口|service counter, window|xizmat oynasi
+価値観|values, value system|qadriyatlar tizimi
+創造的|creative|ijodiy
+調和|harmony, accord|uyg'unlik, hamohanglik
+一律|uniform, equally|bir xil, barobar
+活性化|activation, revitalization|faollashtirish, jonlantirish
+担当者|person in charge|mas'ul shaxs
+逆説|paradox|paradoks
+主体性|independence, subjectivity|mustaqillik, sub'ektlik
+葛藤|conflict, inner struggle|ziddiyat, ichki kurash
+排除|exclusion, elimination|chetlatish, bartaraf etish
+礎|foundation stone, cornerstone|poydevor toshi
+捨象|abstraction, setting aside|mavhumlashtirish, chetga surib qo'yish
+荒廃|devastation, ruin, decline|vayron bo'lish, tanazzul
+英知|wisdom, high intellect|donolik, yuksak aql
+免除|exemption (from a fee)|ozod qilish (to'lovdan)
+規程|regulations, rules|qoidalar, reglament
+約款|terms and conditions, contract clauses|shartnoma bandlari, shartlar
+先駆的|pioneering, innovative|yangilikchi, ilg'or
+対症療法|symptomatic treatment|simptomatik davolash
+実効性|practical effectiveness|amaldagi samaradorlik
+止揚|sublation (Hegelian Aufheben)|bartaraf etib yuksaltirish (gegelcha Aufheben)
+耽溺|indulgence, being addicted to|berilib ketish, mukkasidan ketish
+普遍|universality|universallik, hammabop bo'lish
+豊穣|fertility, abundance|hosildorlik, to'kinlik
+二元論|dualism|dualizm
+再定位|reorientation, repositioning|qayta yo'naltirish
+啓蒙主義|the Enlightenment|ma'rifatparvarlik
+間主観的|intersubjective|intersub'ektiv
+萌芽|budding, germination, the first sprouts|nish urish, dastlabki kurtaklar
+帰属|attribution, belonging (of rights)|tegishlilik (huquqlar)
+消印無効|postmark not valid (only if received by the deadline)|pochta shtampi bo'yicha emas, qabul qilingan sana hisobga olinadi
+併任|concurrent appointment|ikki lavozimni qo'shib olib borish
+創発的|emergent, self-organizing|o'z-o'zidan paydo bo'ladigan, emergent
+熟議|deliberation, thorough discussion|chuqur muhokama, deliberatsiya
+知的謙虚さ|intellectual humility|intellektual kamtarlik

@@ -242,6 +242,39 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    /* Swipeable on any width: when the tabs + language select do not fit, the row scrolls
+       sideways (touch swipe, wheel, drag - see features/events/swipe_rows.js) instead of
+       being clipped by the viewport. The -6px/+6px padding keeps layout unchanged and leaves
+       room for the active tab's shadow and focus ring inside the scroll box. */
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 2px;
+    margin: -6px -2px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sumi-300) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+.header-nav::-webkit-scrollbar {
+    height: 4px;
+}
+
+.header-nav::-webkit-scrollbar-thumb {
+    background: var(--sumi-300);
+    border-radius: 999px;
+}
+
+.header-nav > * {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.header-brand {
+    flex: 0 0 auto;
 }
 
 .nav-tab {
@@ -297,3 +330,42 @@
     overflow: hidden;
 }
 
+
+/* ==========================================================================
+   Language switcher (feat/i18n-switcher): native <select> in the header nav
+   ========================================================================== */
+.lang-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23475569' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    border: 1px solid #cbd5e1;
+    border-radius: var(--radius-full);
+    color: var(--sumi-600);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0.45rem 2rem 0.45rem 0.95rem;
+    cursor: pointer;
+    min-height: 2.2rem;
+}
+
+.lang-select:hover {
+    background-color: var(--washi-accent);
+    color: var(--sumi-900);
+}
+
+.lang-select:focus-visible {
+    outline: 2px solid var(--sumi-600);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    /* touch target >= 44px; the row itself stays one line (see Step 11a swipeable rows) */
+    .lang-select {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}

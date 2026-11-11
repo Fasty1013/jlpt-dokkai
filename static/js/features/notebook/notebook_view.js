@@ -2,6 +2,7 @@
  * JLPT Dokkai Master - Personal Vocabulary Notebook View
  * Renders saved words list, statistics counters, and filter partitions.
  */
+import { t } from '../../i18n/index.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { getSavedWords } from './notebook_storage.js';
 import { state as storeState } from '../../state/store.js';
@@ -25,7 +26,7 @@ export function renderNotebookWords(elements = domElements, state = storeState) 
         if (currentElements.notebookCountLearning) currentElements.notebookCountLearning.textContent = countLearning;
         if (currentElements.notebookCountLearned) currentElements.notebookCountLearned.textContent = countLearned;
         if (currentElements.headerSavedCount) currentElements.headerSavedCount.textContent = countAll;
-        if (currentElements.notebookStatsText) currentElements.notebookStatsText.textContent = `Всего сохранённых слов: ${countAll}`;
+        if (currentElements.notebookStatsText) currentElements.notebookStatsText.textContent = t('notebook.statsTotal', { n: countAll });
     }
 
     // Filter words safely
@@ -51,8 +52,8 @@ export function renderNotebookWords(elements = domElements, state = storeState) 
         container.innerHTML = `
             <div class="notebook-empty-state">
                 <div class="notebook-empty-icon">📖</div>
-                <p>В словаре пока нет сохранённых слов.</p>
-                <small>Выделяйте или кликайте на любые японские слова в текстах, чтобы посмотреть перевод и добавить их в свой персональный словарь.</small>
+                <p>${t('notebook.empty')}</p>
+                <small>${t('notebook.emptyHint')}</small>
             </div>
         `;
         return;
@@ -69,19 +70,19 @@ export function renderNotebookWords(elements = domElements, state = storeState) 
         <div class="notebook-word-card ${isMastered ? 'is-mastered' : ''}" data-word="${wordText}">
             <div class="notebook-word-info">
                 <div class="notebook-word-top">
-                    <span class="notebook-word-jp">${wordText}</span>
+                    <span class="notebook-word-jp" lang="ja">${wordText}</span>
                     ${readingText ? `<span class="notebook-word-reading">${readingText}</span>` : ''}
                     <span class="popup-level-tag">${levelText}</span>
                 </div>
                 <div class="notebook-word-meaning">${meaningText}</div>
             </div>
             <div class="notebook-word-actions">
-                <button type="button" class="notebook-btn-icon btn-speak-saved" title="Прослушать" data-action="notebook-speak-word" data-word="${wordText}">🔊</button>
-                <label class="switch" title="${isMastered ? 'Отметить как изучаемое' : 'Отметить как выученное'}" style="transform: scale(0.75);">
+                <button type="button" class="notebook-btn-icon btn-speak-saved" title="${t('notebook.listen')}" data-action="notebook-speak-word" data-word="${wordText}">🔊</button>
+                <label class="switch" title="${isMastered ? t('notebook.markLearning') : t('notebook.markLearned')}" style="transform: scale(0.75);">
                     <input type="checkbox" class="cb-toggle-mastered" data-action="notebook-toggle-mastered" data-word="${wordText}" ${isMastered ? 'checked' : ''}>
                     <span class="slider round"></span>
                 </label>
-                <button type="button" class="notebook-btn-icon btn-delete-saved" title="Удалить" data-action="notebook-delete-word" data-word="${wordText}">🗑️</button>
+                <button type="button" class="notebook-btn-icon btn-delete-saved" title="${t('notebook.delete')}" data-action="notebook-delete-word" data-word="${wordText}">🗑️</button>
             </div>
         </div>
         `;

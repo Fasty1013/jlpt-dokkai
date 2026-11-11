@@ -3,9 +3,10 @@
  * Renders score banner, tabbed question analysis, evidence locator, and supplementary study drawer.
  */
 
+import { t } from '../../i18n/index.js';
 import { formatTime } from '../../utils/time.js';
 import { escapeHtml } from '../../utils/dom.js';
-import { TRAP_LABELS } from '../../constants/labels.js';
+import { getTrapLabel } from '../../constants/labels.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
@@ -33,16 +34,16 @@ export function renderAnalysisView(data, state = storeState, elements = domEleme
     els.scoreText.textContent = `${data.correct_count} / ${data.total_questions}`;
   }
   if (els.scorePercent) {
-    els.scorePercent.textContent = `${data.score_percent}% ВЕРНО`;
+    els.scorePercent.textContent = t('analysis.scorePercent', { pct: data.score_percent });
   }
 
   if (els.bannerResultTitle) {
     if (data.score_percent === 100) {
-      els.bannerResultTitle.textContent = '🎉 Великолепно! Все ответы верны!';
+      els.bannerResultTitle.textContent = t('analysis.titlePerfect');
     } else if (data.score_percent >= 50) {
-      els.bannerResultTitle.textContent = '👍 Хорошая работа!';
+      els.bannerResultTitle.textContent = t('analysis.titleGood');
     } else {
-      els.bannerResultTitle.textContent = '💪 Требуется практика.';
+      els.bannerResultTitle.textContent = t('analysis.titlePractice');
     }
   }
 
@@ -54,9 +55,9 @@ export function renderAnalysisView(data, state = storeState, elements = domEleme
     if (s.timer && s.timer.enabled) {
       const targetFormatted = formatTime(s.timer.totalSeconds);
       const inLimit = spentSeconds <= s.timer.totalSeconds;
-      els.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} из ${targetFormatted} (${inLimit ? 'Уложились в лимит ✅' : 'Лимит превышен ⏱️'})`;
+      els.bannerResultMeta.textContent = t('analysis.metaTimed', { spent: spentTimeFormatted, target: targetFormatted, status: inLimit ? t('analysis.inLimit') : t('analysis.overLimit') });
     } else {
-      els.bannerResultMeta.textContent = `Затрачено: ${spentTimeFormatted} | Режим: Свободное чтение без таймера`;
+      els.bannerResultMeta.textContent = t('analysis.metaFree', { spent: spentTimeFormatted });
     }
   }
 
@@ -67,7 +68,7 @@ export function renderAnalysisView(data, state = storeState, elements = domEleme
   if (allowHints) {
     if (s.settings) s.settings.evidenceVisible = true;
     if (els.passageContent) els.passageContent.classList.add('show-evidence');
-    if (els.evidenceStatus) els.evidenceStatus.textContent = 'ВКЛ';
+    if (els.evidenceStatus) els.evidenceStatus.textContent = t('common.on');
     if (els.btnToggleEvidence) els.btnToggleEvidence.classList.remove('hidden');
     if (els.btnToggleTranslation) els.btnToggleTranslation.classList.remove('hidden');
     if (els.btnToggleVocab) els.btnToggleVocab.classList.remove('hidden');
@@ -75,18 +76,18 @@ export function renderAnalysisView(data, state = storeState, elements = domEleme
 
     // Prepare Russian Translation & Vocabulary
     if (els.translationText) {
-      els.translationText.textContent = data.translation_ru || 'Перевод недоступен.';
+      els.translationText.textContent = data.translation_ru || t('analysis.translationUnavailable');
     }
     if (els.vocabList) {
       els.vocabList.innerHTML = (data.vocabulary && data.vocabulary.length > 0)
         ? data.vocabulary.map(v => `
             <div class="vocab-row">
-              <span class="vocab-word">${escapeHtml(v.word)}</span>
+              <span class="vocab-word" lang="ja">${escapeHtml(v.word)}</span>
               <span class="vocab-furigana">[${escapeHtml(v.furigana)}]</span>
               <span class="vocab-trans">${escapeHtml(v.translation)}</span>
             </div>
           `).join('')
-        : '<p style="color: var(--sumi-500);">Словарь пуст.</p>';
+        : `<p style="color: var(--sumi-500);">${t('analysis.vocabEmpty')}</p>`;
     }
   } else {
     if (s.settings) s.settings.evidenceVisible = false;
@@ -120,7 +121,7 @@ export function renderAnalysisTabs(state = storeState, elements = domElements) {
     return `
       <button type="button" class="analysis-tab-btn ${isActive ? 'active' : ''}" data-action="switch-analysis-tab" data-tab-index="${idx}">
         <span class="analysis-tab-status ${isCorrect ? 'correct' : 'wrong'}"></span>
-        Вопрос №${q.question_number}
+        ${t('analysis.tabQuestion', { n: q.question_number })}
       </button>
     `;
   }).join('');
@@ -161,9 +162,9 @@ export function renderAnalysisActiveCard(q, state = storeState, elements = domEl
     <div class="question-card" id="card-q-${q.id}">
       <div class="question-top">
         <span class="question-num-badge">№${q.question_number}</span>
-        <p class="question-prompt">${q.question_text}</p>
+        <p class="question-prompt" lang="ja">${q.question_text}</p>
         <span class="option-status-badge ${q.is_user_correct ? 'badge-correct' : 'badge-user-wrong'}">
-          ${q.is_user_correct ? '✓ Верно' : '✗ Ошибка'}
+          ${q.is_user_correct ? t('analysis.correct') : t('analysis.wrong')}
         </span>
       </div>
 
@@ -175,16 +176,16 @@ export function renderAnalysisActiveCard(q, state = storeState, elements = domEl
 
           if (opt.is_correct) {
             stateClass = 'state-correct';
-            badgeHtml = '<span class="option-status-badge badge-correct">✓ Правильный ответ</span>';
+            badgeHtml = `<span class="option-status-badge badge-correct">${t('analysis.optCorrect')}</span>`;
           } else if (opt.was_selected) {
             stateClass = 'state-wrong-selected';
-            badgeHtml = '<span class="option-status-badge badge-user-wrong">✗ Ваш выбор</span>';
+            badgeHtml = `<span class="option-status-badge badge-user-wrong">${t('analysis.optYours')}</span>`;
           }
 
           if (allowHints && opt.option_explanation) {
             const expClass = opt.is_correct ? 'correct-exp' : 'wrong-exp';
-            const trapBadge = (!opt.is_correct && opt.trap_type && TRAP_LABELS[opt.trap_type])
-              ? `<div class="trap-type-pill">⚠️ ${escapeHtml(TRAP_LABELS[opt.trap_type])}</div>`
+            const trapBadge = (!opt.is_correct && opt.trap_type && getTrapLabel(opt.trap_type))
+              ? `<div class="trap-type-pill">⚠️ ${escapeHtml(getTrapLabel(opt.trap_type))}</div>`
               : '';
             explanationBoxHtml = `
               <div class="option-explanation-box ${expClass}">
@@ -203,7 +204,7 @@ export function renderAnalysisActiveCard(q, state = storeState, elements = domEl
                   ${opt.was_selected ? 'checked' : ''} 
                   class="option-radio"
                 >
-                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
+                <span class="option-text" lang="ja">${opt.option_number}. ${opt.option_text}</span>
                 ${badgeHtml}
               </div>
               ${explanationBoxHtml}
@@ -215,17 +216,17 @@ export function renderAnalysisActiveCard(q, state = storeState, elements = domEl
       <!-- General question analysis & Evidence locator -->
       ${allowHints ? `
         <div class="question-general-explanation">
-          <strong>💡 Разбор вопроса:</strong>
+          <strong>${t('analysis.explTitle')}</strong>
           <p style="margin-top: 0.35rem;">${q.general_explanation || ''}</p>
           ${q.evidence_span_id ? `
             <button type="button" class="btn-locate-evidence" data-action="locate-evidence" data-span-id="${escapeHtml(q.evidence_span_id)}">
-              📍 Показать доказательство в тексте
+              ${t('analysis.locateEvidence')}
             </button>
           ` : ''}
         </div>
       ` : `
         <div class="question-general-explanation" style="background: #fafaf9; border-left-color: var(--sumi-400); color: var(--sumi-500); font-style: italic;">
-          Разбор и подсказки скрыты в соответствии с вашими предварительными настройками.
+          ${t('analysis.hintsHidden')}
         </div>
       `}
     </div>
@@ -252,11 +253,11 @@ export function toggleFurigana(state = storeState, elements = domElements) {
 
   if (s.settings.furiganaVisible) {
     if (els.passageContent) els.passageContent.classList.remove('hide-furigana');
-    if (els.furiganaStatus) els.furiganaStatus.textContent = 'ВКЛ';
+    if (els.furiganaStatus) els.furiganaStatus.textContent = t('common.on');
     if (els.btnToggleFurigana) els.btnToggleFurigana.classList.add('active');
   } else {
     if (els.passageContent) els.passageContent.classList.add('hide-furigana');
-    if (els.furiganaStatus) els.furiganaStatus.textContent = 'ВЫКЛ';
+    if (els.furiganaStatus) els.furiganaStatus.textContent = t('common.off');
     if (els.btnToggleFurigana) els.btnToggleFurigana.classList.remove('active');
   }
 }
@@ -277,11 +278,11 @@ export function toggleEvidence(state = storeState, elements = domElements) {
 
   if (s.settings.evidenceVisible) {
     if (els.passageContent) els.passageContent.classList.add('show-evidence');
-    if (els.evidenceStatus) els.evidenceStatus.textContent = 'ВКЛ';
+    if (els.evidenceStatus) els.evidenceStatus.textContent = t('common.on');
     if (els.btnToggleEvidence) els.btnToggleEvidence.classList.add('active');
   } else {
     if (els.passageContent) els.passageContent.classList.remove('show-evidence');
-    if (els.evidenceStatus) els.evidenceStatus.textContent = 'ВЫКЛ';
+    if (els.evidenceStatus) els.evidenceStatus.textContent = t('common.off');
     if (els.btnToggleEvidence) els.btnToggleEvidence.classList.remove('active');
   }
 }

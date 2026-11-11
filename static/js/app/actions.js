@@ -7,6 +7,7 @@
  * other, and the dependency graph must stay acyclic.
  */
 
+import { t } from '../i18n/index.js';
 import { state } from '../state/store.js';
 import { elements } from '../state/elements.js';
 import { escapeHtml, getUserId, formatTime } from '../utils/index.js';
@@ -363,11 +364,11 @@ export async function checkAndPromptActiveSession() {
       state.activeSession = session;
       if (elements.unfinishedTestBanner) {
         if (elements.unfinishedTaskTitle) {
-          elements.unfinishedTaskTitle.textContent = `Продолжить тест «${escapeHtml(session.title)}»?`;
+          elements.unfinishedTaskTitle.textContent = t('resume.title', { title: escapeHtml(session.title) });
         }
         if (elements.unfinishedTaskMeta) {
           const qNum = (session.currentQuestionIndex || 0) + 1;
-          elements.unfinishedTaskMeta.textContent = `Вопрос ${qNum} • ${session.level || 'N5'}`;
+          elements.unfinishedTaskMeta.textContent = t('resume.meta', { n: qNum, level: session.level || 'N5' });
         }
         elements.unfinishedTestBanner.classList.remove('hidden');
       }
@@ -400,6 +401,6 @@ export async function resumeActiveExercise(session) {
     renderWizard();
   } catch (err) {
     console.error('Failed to resume exercise', err);
-    alert('Не удалось восстановить незавершённое задание.');
+    alert(t('resume.failed'));
   }
 }

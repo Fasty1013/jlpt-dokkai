@@ -3,6 +3,7 @@
  * Supports both untimed free-reading mode and configurable countdown timers.
  */
 
+import { t } from '../../i18n/index.js';
 import { formatTime } from '../../utils/time.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
@@ -173,7 +174,7 @@ export function addTimerMinute(timerState = (storeState ? storeState.timer : nul
 export function dismissTimer(timerState = (storeState ? storeState.timer : null), elements = domElements) {
   const state = timerState;
   const els = elements || {};
-  if (confirm('Выключить таймер и продолжить решать в спокойном темпе?')) {
+  if (confirm(t('timer.confirmOff'))) {
     startUntimedMode(state, els);
   }
 }

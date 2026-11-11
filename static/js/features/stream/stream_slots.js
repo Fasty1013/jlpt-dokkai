@@ -2,11 +2,11 @@
  * JLPT Dokkai Master - Stream Slots & Dynamic Catalog Feature Module
  */
 
+import { t as tr } from '../../i18n/index.js';
 import { fetchStreamSlots } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { getUserId } from '../../utils/user.js';
-import { CATEGORY_NAMES } from '../../constants/labels.js';
-import { UI_TEXTS } from '../../content/texts/ru.js';
+import { getCategoryName } from '../../constants/labels.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
@@ -21,8 +21,8 @@ export function renderSlotCardHtml(slot, profileKey = '') {
     return `
       <div class="stream-slot-placeholder" data-position="${slot.position}">
           <div class="placeholder-pulse">⏳</div>
-          <div class="placeholder-title">Готовится новое задание...</div>
-          <div class="placeholder-desc">Для профиля ${escapeHtml(profileKey)} генерируется или подбирается оригинальный учебный материал.</div>
+          <div class="placeholder-title">${tr('stream.placeholderTitle')}</div>
+          <div class="placeholder-desc">${tr('stream.placeholderDesc', { profile: escapeHtml(profileKey) })}</div>
       </div>
     `;
   }
@@ -30,9 +30,9 @@ export function renderSlotCardHtml(slot, profileKey = '') {
   const t = slot.text;
   let originBadge = '';
   if (t.origin === 'parametric') {
-    originBadge = '<span class="origin-badge-param">⚡ Параметрический</span>';
+    originBadge = `<span class="origin-badge-param">${tr('stream.originParam')}</span>`;
   } else if (t.origin === 'ai_generated') {
-    originBadge = '<span class="origin-badge-param" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe;">🤖 ИИ-генерация</span>';
+    originBadge = `<span class="origin-badge-param" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe;">${tr('stream.originAi')}</span>`;
   } else if (t.category === 'nhk' || (t.title && t.title.includes('NHK'))) {
     originBadge = '<span class="nhk-badge">NHK WORLD</span>';
   } else {
@@ -41,20 +41,20 @@ export function renderSlotCardHtml(slot, profileKey = '') {
 
   return `
     <div class="stream-slot-card" data-slot-id="${escapeHtml(slot.id)}" data-text-id="${escapeHtml(t.id)}" data-position="${escapeHtml(slot.position)}" data-action="open-pretest" role="button" tabindex="0" style="cursor: pointer;">
-        <div class="slot-position-badge">Слот #${slot.position}</div>
+        <div class="slot-position-badge">${tr('stream.slot', { n: slot.position })}</div>
         <div class="slot-meta-row">
             <span class="level-tag" data-lvl="${t.level}">${t.level}</span>
-            <span class="category-tag">${CATEGORY_NAMES[t.category] || t.category}</span>
+            <span class="category-tag">${getCategoryName(t.category) || t.category}</span>
             ${originBadge}
         </div>
-        <h3 class="slot-title">${escapeHtml(t.title)}</h3>
+        <h3 class="slot-title" lang="ja">${escapeHtml(t.title)}</h3>
         <div class="slot-footer">
             <div class="slot-specs">
-                <span>⏱️ ${t.recommended_time_min} мин</span>
-                <span>❓ ${t.question_count} вопр.</span>
+                <span>⏱️ ${tr('exercise.minutes', { n: t.recommended_time_min })}</span>
+                <span>${tr('stream.questions', { n: t.question_count })}</span>
             </div>
             <button type="button" class="btn btn-primary btn-sm" data-action="open-pretest" data-text-id="${t.id}">
-                Начать решение →
+                ${tr('stream.start')}
             </button>
         </div>
     </div>
@@ -66,11 +66,21 @@ export function renderSlotCardHtml(slot, profileKey = '') {
  * @param {boolean} isExplicitRefresh
  * @param {Object} context - { state, elements, getUserId }
  */
+let lastProfileKey = '';
+
+/** Re-render the already loaded slot cards (language switch) without a network request. */
+export function rerenderSlotsFromCache(context = {}) {
+  const state = context.state || storeState;
+  const elements = context.elements || domElements;
+  if (!elements || !elements.activeSlotsList || !state || !Array.isArray(state.cachedSlots) || state.cachedSlots.length === 0) return;
+  elements.activeSlotsList.innerHTML = state.cachedSlots.map(slot => renderSlotCardHtml(slot, lastProfileKey)).join('');
+}
+
 export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {}) {
   const state = context.state || storeState;
   const elements = context.elements || domElements;
   if (!elements || !elements.activeSlotsList) return;
-  elements.activeSlotsList.innerHTML = '<div class="loading-spinner">Загрузка слотов заданий...</div>';
+  elements.activeSlotsList.innerHTML = `<div class="loading-spinner">${tr('stream.loading')}</div>`;
 
   const userId = (typeof context.getUserId === 'function') ? context.getUserId() : getUserId();
   const profileLevel = state?.streamProfile?.level || 'N5';
@@ -98,14 +108,15 @@ export async function fetchAndRenderSlots(isExplicitRefresh = false, context = {
       elements.mobileActiveCount.textContent = activeCount;
     }
 
-    elements.activeSlotsList.innerHTML = slots.map(slot => renderSlotCardHtml(slot, data?.profile_key || '')).join('');
+    lastProfileKey = data?.profile_key || '';
+    elements.activeSlotsList.innerHTML = slots.map(slot => renderSlotCardHtml(slot, lastProfileKey)).join('');
   } catch (err) {
     console.error(err);
     elements.activeSlotsList.innerHTML = `
       <div style="text-align: center; padding: 2rem; color: var(--vermilion);">
-          <p>${UI_TEXTS.catalog.loadSlotsError}</p>
+          <p>${tr('stream.loadError')}</p>
           <button type="button" class="btn btn-secondary btn-sm" data-action="refresh-slots" style="margin-top: 0.5rem;">
-              ${UI_TEXTS.catalog.retryCatalog}
+              ${tr('stream.retry')}
           </button>
       </div>
     `;

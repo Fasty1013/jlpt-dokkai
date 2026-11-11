@@ -4,6 +4,7 @@
  * Note: Pure data storage and sync logic are encapsulated in DokkaiStorage and DokkaiCloudSync.
  */
 
+import { t } from '../../i18n/index.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
@@ -63,7 +64,7 @@ export function closeSyncModal() {
 export function updateSyncStatusUI(status, extraInfo) {
     const els = getElements();
     if (!els.headerSyncDot || !els.headerSyncLabel) return;
-    const info = window.DokkaiCloudSync ? window.DokkaiCloudSync.getStatusInfo() : { text: 'На устройстве', class: 'status-local', icon: '📱' };
+    const info = window.DokkaiCloudSync ? window.DokkaiCloudSync.getStatusInfo() : { text: t('cloud.localText'), class: 'status-local', icon: '📱' };
 
     els.headerSyncDot.className = `sync-dot ${info.class}`;
     els.headerSyncLabel.textContent = `${info.icon} ${info.text}`;
@@ -76,15 +77,15 @@ export function updateSyncStatusUI(status, extraInfo) {
     }
     if (els.modalSyncDesc) {
         if (info.class === 'status-synced') {
-            els.modalSyncDesc.textContent = 'Все решённые задания, личный словарь и настройки синхронизированы с Google Firebase ($0 бесплатно).';
+            els.modalSyncDesc.textContent = t('sync.statusSynced');
         } else if (info.class === 'status-syncing') {
-            els.modalSyncDesc.textContent = 'Идёт синхронизация данных с облаком...';
+            els.modalSyncDesc.textContent = t('sync.statusSyncing');
         } else if (info.class === 'status-offline') {
-            els.modalSyncDesc.textContent = 'Сеть недоступна. Все данные сохраняются на вашем устройстве (IndexedDB) и синхронизируются при включении интернета.';
+            els.modalSyncDesc.textContent = t('sync.statusOffline');
         } else if (info.class === 'status-error') {
-            els.modalSyncDesc.textContent = extraInfo ? `Ошибка синхронизации: ${extraInfo}` : 'Ошибка соединения с облаком. Данные надёжно сохранены на устройстве.';
+            els.modalSyncDesc.textContent = extraInfo ? t('sync.statusErrorWith', { error: extraInfo }) : t('sync.statusError');
         } else {
-            els.modalSyncDesc.textContent = 'Все данные надёжно сохраняются на этом устройстве (IndexedDB). Они не пропадут при закрытии вкладки или перезапуске сервера Render.';
+            els.modalSyncDesc.textContent = t('sync.statusLocal');
         }
     }
 }
@@ -103,12 +104,12 @@ export function updateSyncUserUI(user) {
             els.syncAuthActions.classList.remove('hidden');
             if (els.btnCloudSigninAnon) els.btnCloudSigninAnon.classList.add('hidden');
             if (els.syncLinkGoogleHint) els.syncLinkGoogleHint.classList.remove('hidden');
-            if (els.syncUserName) els.syncUserName.textContent = 'Анонимный профиль';
-            if (els.syncUserEmail) els.syncUserEmail.textContent = 'Облачный ID: ' + (user.uid ? user.uid.slice(0, 10) : '');
+            if (els.syncUserName) els.syncUserName.textContent = t('sync.anonProfile');
+            if (els.syncUserEmail) els.syncUserEmail.textContent = t('sync.cloudId', { id: user.uid ? user.uid.slice(0, 10) : '' });
         } else {
             els.syncAuthActions.classList.add('hidden');
             if (els.syncLinkGoogleHint) els.syncLinkGoogleHint.classList.add('hidden');
-            if (els.syncUserName) els.syncUserName.textContent = user.displayName || 'Пользователь Google';
+            if (els.syncUserName) els.syncUserName.textContent = user.displayName || t('sync.googleUser');
             if (els.syncUserEmail) els.syncUserEmail.textContent = user.email || '';
         }
     } else {
@@ -138,7 +139,7 @@ export async function exportProgressJson() {
         URL.revokeObjectURL(url);
     } catch (e) {
         console.error('Export failed', e);
-        showSyncModalAlert('error', 'Не удалось экспортировать файл: ' + e.message);
+        showSyncModalAlert('error', t('sync.exportFailed', { message: e.message }));
     }
 }
 
@@ -154,7 +155,7 @@ export async function handleImportJsonFile(file) {
             const content = e.target.result;
             const res = await window.DokkaiStorage.importAllData(content);
             if (res.success) {
-                showSyncModalAlert('success', `Успешно импортировано: ${res.solvedCount} решённых заданий, ${res.wordsCount} слов в словаре!`);
+                showSyncModalAlert('success', t('sync.importOk', { solved: res.solvedCount, words: res.wordsCount }));
                 if (storeState) {
                     storeState.savedWords = await window.DokkaiStorage.getAllWords();
                 }
@@ -163,13 +164,13 @@ export async function handleImportJsonFile(file) {
                 if (window.fetchAndRenderSolvedTasks) window.fetchAndRenderSolvedTasks();
                 if (window.DokkaiCloudSync) window.DokkaiCloudSync.scheduleAutoSync();
             } else {
-                showSyncModalAlert('error', 'Ошибка при импорте файла: ' + (res.error || 'неверный формат'));
+                showSyncModalAlert('error', t('sync.importError', { error: res.error || t('sync.importBadFormat') }));
             }
         };
         reader.readAsText(file);
     } catch (err) {
         console.error('Import error', err);
-        showSyncModalAlert('error', 'Ошибка чтения файла: ' + err.message);
+        showSyncModalAlert('error', t('sync.readError', { message: err.message }));
     }
 }
 
@@ -203,7 +204,7 @@ export function initSyncModalUI() {
         els.btnCloudSigninGoogle.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
             try {
-                showSyncModalAlert('info', 'Подключение к Google...');
+                showSyncModalAlert('info', t('sync.connectingGoogle'));
                 await window.DokkaiCloudSync.signInGoogle();
             } catch (err) {
                 showSyncModalAlert('error', err.message);
@@ -214,7 +215,7 @@ export function initSyncModalUI() {
         els.btnCloudSigninAnon.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
             try {
-                showSyncModalAlert('info', 'Создание анонимного облачного профиля...');
+                showSyncModalAlert('info', t('sync.creatingAnon'));
                 await window.DokkaiCloudSync.signInAnonymous();
             } catch (err) {
                 showSyncModalAlert('error', err.message);
@@ -225,7 +226,7 @@ export function initSyncModalUI() {
         els.btnCloudSignout.addEventListener('click', async () => {
             if (!window.DokkaiCloudSync) return;
             await window.DokkaiCloudSync.signOut();
-            showSyncModalAlert('info', 'Вы вышли из облачного аккаунта. Локальные данные сохранены.');
+            showSyncModalAlert('info', t('sync.signedOut'));
         });
     }
 
@@ -236,12 +237,12 @@ export function initSyncModalUI() {
                 const parsed = JSON.parse(els.firebaseConfigInput.value.trim());
                 const res = await window.DokkaiCloudSync.saveFirebaseConfig(parsed);
                 if (res.success) {
-                    showSyncModalAlert('success', 'Конфигурация Firebase успешно сохранена!');
+                    showSyncModalAlert('success', t('sync.configSaved'));
                 } else {
-                    showSyncModalAlert('error', 'Ошибка подключения: ' + res.error);
+                    showSyncModalAlert('error', t('sync.configError', { error: res.error }));
                 }
             } catch (e) {
-                showSyncModalAlert('error', 'Пожалуйста, вставьте корректный JSON объект конфигурации Firebase.');
+                showSyncModalAlert('error', t('sync.configBadJson'));
             }
         });
     }
@@ -250,7 +251,7 @@ export function initSyncModalUI() {
             if (!window.DokkaiCloudSync) return;
             window.DokkaiCloudSync.clearFirebaseConfig();
             if (els.firebaseConfigInput) els.firebaseConfigInput.value = '';
-            showSyncModalAlert('info', 'Конфигурация сброшена к настройкам по умолчанию.');
+            showSyncModalAlert('info', t('sync.configReset'));
         });
     }
 

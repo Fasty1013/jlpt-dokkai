@@ -3,6 +3,7 @@
  * Step-by-Step Question Wizard navigation, card rendering, and active session persistence.
  */
 
+import { t } from '../../i18n/index.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
@@ -48,7 +49,7 @@ export function renderWizard(state = storeState, elements = domElements) {
 
   // Status label & progress
   if (els.wizardStepLabel) {
-    els.wizardStepLabel.textContent = `Вопрос ${currentQIdx + 1} из ${totalQ}`;
+    els.wizardStepLabel.textContent = t('wizard.stepLabel', { n: currentQIdx + 1, total: totalQ });
   }
   if (els.totalQuestionsCount) {
     els.totalQuestionsCount.textContent = totalQ;
@@ -65,7 +66,7 @@ export function renderWizard(state = storeState, elements = domElements) {
       let dotClass = 'wizard-dot';
       if (isActive) dotClass += ' active';
       else if (isAnswered) dotClass += ' answered';
-      return `<span class="${dotClass}" title="Вопрос ${idx + 1}"></span>`;
+      return `<span class="${dotClass}" title="${t('wizard.dotTitle', { n: idx + 1 })}"></span>`;
     }).join('');
   }
 
@@ -77,7 +78,7 @@ export function renderWizard(state = storeState, elements = domElements) {
         <div class="question-card" id="card-q-${currentQ.id}">
             <div class="question-top">
                 <span class="question-num-badge">№${currentQ.question_number}</span>
-                <p class="question-prompt">${currentQ.question_text}</p>
+                <p class="question-prompt" lang="ja">${currentQ.question_text}</p>
             </div>
             <div class="options-group">
                 ${currentQ.options.map(opt => {
@@ -96,7 +97,7 @@ export function renderWizard(state = storeState, elements = domElements) {
                                     data-question-id="${currentQ.id}"
                                     data-option-id="${opt.id}"
                                 >
-                                <span class="option-text">${opt.option_number}. ${opt.option_text}</span>
+                                <span class="option-text" lang="ja">${opt.option_number}. ${opt.option_text}</span>
                             </label>
                         </div>
                     `;
@@ -110,11 +111,11 @@ export function renderWizard(state = storeState, elements = domElements) {
   if (els.btnWizardPrev) {
     els.btnWizardPrev.disabled = false;
     if (currentQIdx === 0) {
-      els.btnWizardPrev.textContent = '← На главную';
-      els.btnWizardPrev.title = 'Вернуться на главную страницу каталога';
+      els.btnWizardPrev.textContent = t('wizard.home');
+      els.btnWizardPrev.title = t('wizard.homeTitle');
     } else {
-      els.btnWizardPrev.textContent = '← Назад';
-      els.btnWizardPrev.title = 'Вернуться к предыдущему вопросу';
+      els.btnWizardPrev.textContent = t('wizard.back');
+      els.btnWizardPrev.title = t('wizard.backTitle');
     }
   }
 

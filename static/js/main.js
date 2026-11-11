@@ -14,6 +14,10 @@ import { fetchAndRenderDrafts } from './features/pdf_import/index.js';
 import { initEventListeners } from './app/init_events.js';
 import { initPersistenceAndSync } from './app/persistence.js';
 import * as actions from './app/actions.js';
+import { initSwipeRows } from './features/events/swipe_rows.js';
+import { initI18n } from './i18n/index.js';
+import { initI18nEvents } from './i18n/i18n_events.js';
+import { initLanguageRefresh } from './app/i18n_refresh.js';
 
 // ----------------------------------------------------------------------------
 // Temporary runtime bridges (to be removed in Step 9).
@@ -38,7 +42,11 @@ Object.assign(window, {
 
 async function boot() {
   history.replaceState({ view: 'catalog' }, '', window.location.pathname);
+  initI18n();
+  initSwipeRows();
   initEventListeners();
+  initI18nEvents();
+  initLanguageRefresh();
   try {
     await Promise.race([
       initPersistenceAndSync(),

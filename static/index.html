@@ -29,11 +29,11 @@
     <div id="app" class="app-layout">
         <!-- Minimal Zen Header -->
         <header class="app-header">
-            <div class="header-brand" id="btn-home" data-action="return-to-catalog" role="button" tabindex="0" title="Вернуться в каталог">
+            <div class="header-brand" id="btn-home" data-action="return-to-catalog" role="button" tabindex="0" title="Вернуться в каталог" data-i18n-attr="title:html.btn-home.title">
                 <span class="brand-monogram">読</span>
                 <div class="brand-text">
                     <span class="brand-title">Dokkai Master</span>
-                    <span class="brand-sub">JLPT 読解トレーナー</span>
+                    <span class="brand-sub" lang="ja">JLPT 読解トレーナー</span>
                 </div>
             </div>
 
@@ -51,21 +51,21 @@
                     <span class="timer-digits" id="timer-display">03:00</span>
                     <div class="timer-actions">
                         <button type="button" class="btn-timer-action" id="btn-timer-toggle-pause" data-action="toggle-timer-pause"
-                            title="Поставить на паузу / возобновить">⏸️</button>
+                            title="Поставить на паузу / возобновить" data-i18n-attr="title:timer.pauseTitle">⏸️</button>
                         <button type="button" class="btn-timer-action" id="btn-timer-add-min" data-action="add-timer-minute"
-                            title="Добавить 1 минуту">+1м</button>
+                            title="Добавить 1 минуту" data-i18n-attr="title:html.btn-timer-add-min.title" data-i18n="html.btn-timer-add-min.2">+1м</button>
                         <button type="button" class="btn-timer-action btn-timer-close" id="btn-timer-dismiss" data-action="dismiss-timer"
-                            title="Выключить таймер">✕</button>
+                            title="Выключить таймер" data-i18n-attr="title:html.btn-timer-dismiss.title">✕</button>
                     </div>
                 </div>
 
                 <!-- Quick Button to add timer during test if user wants -->
                 <button type="button" class="btn btn-add-timer" id="btn-enable-timer-runtime" data-action="enable-timer-runtime"
-                    title="Включить таймер с ограничением времени">
+                    title="Включить таймер с ограничением времени" data-i18n-attr="title:html.btn-enable-timer-runtime.title" data-i18n="html.btn-enable-timer-runtime.2">
                     ⏱️ Включить таймер
                 </button>
 
-                <button class="btn btn-ghost btn-sm" id="btn-abort-exercise" data-action="return-to-catalog" title="Вернуться на главную страницу">
+                <button class="btn btn-ghost btn-sm" id="btn-abort-exercise" data-action="return-to-catalog" title="Вернуться на главную страницу" data-i18n-attr="title:html.btn-abort-exercise.title" data-i18n="html.btn-abort-exercise.2">
                     ← На главную
                 </button>
             </div>
@@ -73,27 +73,34 @@
             <!-- Header Tab Navigation -->
             <nav class="header-nav" id="header-nav">
                 <button type="button" class="nav-tab active" id="btn-tab-catalog" data-action="switch-main-tab" data-tab="catalog"
-                    title="Каталог текстов и тестов JLPT">
+                    title="Каталог текстов и тестов JLPT" data-i18n-attr="title:nav.catalog.title">
                     <span class="nav-icon">📚</span>
-                    <span class="nav-label">Тексты и тесты</span>
+                    <span class="nav-label" data-i18n="nav.catalog.label">Тексты и тесты</span>
                 </button>
                 <button type="button" class="nav-tab" id="btn-tab-notebook" data-action="switch-main-tab" data-tab="notebook"
-                    title="Мой персональный словарь">
+                    title="Мой персональный словарь" data-i18n-attr="title:nav.notebook.title">
                     <span class="nav-icon">⭐</span>
-                    <span class="nav-label">Мой словарь</span>
+                    <span class="nav-label" data-i18n="nav.notebook.label">Мой словарь</span>
                     <span class="notebook-badge" id="header-saved-count">0</span>
                 </button>
                 <button type="button" class="nav-tab" id="btn-tab-import" data-action="switch-main-tab" data-tab="import"
-                    title="Импорт книги PDF">
+                    title="Импорт книги PDF" data-i18n-attr="title:nav.import.title">
                     <span class="nav-icon">📥</span>
-                    <span class="nav-label">Импорт PDF</span>
+                    <span class="nav-label" data-i18n="nav.import.label">Импорт PDF</span>
                     <span class="notebook-badge hidden" id="header-drafts-count">0</span>
                 </button>
                 <button type="button" class="nav-tab sync-status-tab" id="btn-sync-status" data-action="open-sync-modal"
-                    title="Статус синхронизации и бэкап прогресса">
+                    title="Статус синхронизации и бэкап прогресса" data-i18n-attr="title:html.btn-sync-status.title">
                     <span class="sync-dot status-local" id="header-sync-dot"></span>
                     <span class="nav-label" id="header-sync-label">📱 На устройстве</span>
                 </button>
+                <select class="lang-select" id="lang-select" data-action="set-language" aria-label="Язык интерфейса"
+                    data-i18n-attr="aria-label:lang.selectLabel">
+                    <option value="ru" lang="ru" selected>Русский</option>
+                    <option value="uz" lang="uz">O'zbek</option>
+                    <option value="en" lang="en">English</option>
+                    <option value="ja" lang="ja">日本語</option>
+                </select>
             </nav>
         </header>
 
@@ -107,10 +114,10 @@
                 </div>
             </div>
             <div class="unfinished-actions">
-                <button type="button" class="btn btn-primary btn-sm" id="btn-resume-unfinished" data-action="resume-unfinished">
+                <button type="button" class="btn btn-primary btn-sm" id="btn-resume-unfinished" data-action="resume-unfinished" data-i18n="html.btn-resume-unfinished">
                     ▶ Продолжить
                 </button>
-                <button type="button" class="btn btn-ghost btn-sm" id="btn-dismiss-unfinished" data-action="dismiss-unfinished" title="Закрыть и сбросить">
+                <button type="button" class="btn btn-ghost btn-sm" id="btn-dismiss-unfinished" data-action="dismiss-unfinished" title="Закрыть и сбросить" data-i18n-attr="title:html.btn-dismiss-unfinished.title">
                     ✕
                 </button>
             </div>
@@ -122,8 +129,8 @@
             <section id="catalog-view" class="view catalog-view">
                 <div class="catalog-hero">
                     <div class="hero-badge">JLPT 読解 CONTINUOUS STREAM</div>
-                    <h1 class="hero-title">Тренажёр по чтению японского языка</h1>
-                    <p class="hero-desc">
+                    <h1 class="hero-title" data-i18n="html.catalog-view">Тренажёр по чтению японского языка</h1>
+                    <p class="hero-desc" data-i18n="html.catalog-view.2">
                         Непрерывный поток заданий JLPT N5–N1: 3 активных слота вашего уровня сложности. При решении задание мгновенно переходит в «Решённые», а на его место приходит новое.
                     </p>
                 </div>
@@ -132,7 +139,7 @@
                 <div class="filters-card stream-control-card">
                     <div class="filter-group">
                         <span class="filter-icon">🎯</span>
-                        <label class="filter-label">Уровень JLPT:</label>
+                        <label class="filter-label" data-i18n="html.catalog-view.3">Уровень JLPT:</label>
                         <div class="pill-selectors" id="stream-level-pills">
                             <button class="filter-pill active" data-action="filter-level" data-level="N5">N5</button>
                             <button class="filter-pill" data-action="filter-level" data-level="N4">N4</button>
@@ -144,21 +151,21 @@
 
                     <div class="filter-group">
                         <span class="filter-icon">📂</span>
-                        <label class="filter-label">Формат задания:</label>
+                        <label class="filter-label" data-i18n="html.catalog-view.4">Формат задания:</label>
                         <div class="pill-selectors" id="stream-category-pills">
-                            <button class="filter-pill active" data-action="filter-category" data-category="short">短文 (Короткие)</button>
-                            <button class="filter-pill" data-action="filter-category" data-category="medium">中文 (Средние)</button>
-                            <button class="filter-pill" data-action="filter-category" data-category="long">長文 (Длинные)</button>
-                            <button class="filter-pill" data-action="filter-category" data-category="info_search">情報検索 (Объявления)</button>
+                            <button class="filter-pill active" data-action="filter-category" data-category="short" data-i18n="html.stream-category-pills">短文 (Короткие)</button>
+                            <button class="filter-pill" data-action="filter-category" data-category="medium" data-i18n="html.stream-category-pills.2">中文 (Средние)</button>
+                            <button class="filter-pill" data-action="filter-category" data-category="long" data-i18n="html.stream-category-pills.3">長文 (Длинные)</button>
+                            <button class="filter-pill" data-action="filter-category" data-category="info_search" data-i18n="html.stream-category-pills.4">情報検索 (Объявления)</button>
                         </div>
                     </div>
 
                     <div class="filter-group filter-group-mode">
                         <span class="filter-icon">⚖️</span>
-                        <label class="filter-label">Условие сдачи:</label>
+                        <label class="filter-label" data-i18n="html.catalog-view.5">Условие сдачи:</label>
                         <div class="pill-selectors" id="stream-mode-pills">
-                            <button class="filter-pill active" data-action="filter-solved-when" data-solved-when="all_questions_answered" title="Завершать задание сразу после ответа на все вопросы">Сразу (все вопросы)</button>
-                            <button class="filter-pill" data-action="filter-solved-when" data-solved-when="all_correct" title="Только при 100% правильных ответах (до 2 попыток исправления ошибок)">Только все верные</button>
+                            <button class="filter-pill active" data-action="filter-solved-when" data-solved-when="all_questions_answered" title="Завершать задание сразу после ответа на все вопросы" data-i18n-attr="title:html.stream-mode-pills.title" data-i18n="html.stream-mode-pills.2">Сразу (все вопросы)</button>
+                            <button class="filter-pill" data-action="filter-solved-when" data-solved-when="all_correct" title="Только при 100% правильных ответах (до 2 попыток исправления ошибок)" data-i18n-attr="title:html.stream-mode-pills.3.title" data-i18n="html.stream-mode-pills.4">Только все верные</button>
                         </div>
                     </div>
                 </div>
@@ -166,10 +173,10 @@
                 <!-- Mobile Column Switcher (Visible on small screens) -->
                 <div class="stream-mobile-tabs" id="stream-mobile-tabs">
                     <button type="button" class="stream-mobile-tab active" id="tab-col-active" data-action="switch-mobile-stream-col" data-col="active">
-                        ⚡ Задания <span class="stream-badge-count" id="mobile-active-count">3</span>
+                        <span data-i18n="html.tab-col-active">⚡ Задания</span> <span class="stream-badge-count" id="mobile-active-count">3</span>
                     </button>
                     <button type="button" class="stream-mobile-tab" id="tab-col-solved" data-action="switch-mobile-stream-col" data-col="solved">
-                        🏆 Решённые <span class="stream-badge-count" id="mobile-solved-count">0</span>
+                        <span data-i18n="html.tab-col-solved">🏆 Решённые</span> <span class="stream-badge-count" id="mobile-solved-count">0</span>
                     </button>
                 </div>
 
@@ -179,10 +186,10 @@
                     <div class="stream-column stream-column-active" id="col-active-slots">
                         <div class="stream-column-header">
                             <div class="stream-column-title-wrap">
-                                <h2 class="stream-column-title">⚡ Задания</h2>
-                                <span class="stream-column-desc">3 активных слота выбранного профиля сложности</span>
+                                <h2 class="stream-column-title" data-i18n="html.tab-col-active">⚡ Задания</h2>
+                                <span class="stream-column-desc" data-i18n="html.col-active-slots">3 активных слота выбранного профиля сложности</span>
                             </div>
-                            <button type="button" class="btn-refresh-slots" id="btn-refresh-slots" data-action="refresh-slots" title="Обновить слоты">🔄</button>
+                            <button type="button" class="btn-refresh-slots" id="btn-refresh-slots" data-action="refresh-slots" title="Обновить слоты" data-i18n-attr="title:html.btn-refresh-slots.title">🔄</button>
                         </div>
 
                         <div class="stream-slots-list" id="active-slots-list">
@@ -194,13 +201,13 @@
                     <div class="stream-column stream-column-solved" id="col-solved-archive">
                         <div class="stream-column-header">
                             <div class="stream-column-title-wrap">
-                                <h2 class="stream-column-title">🏆 Решённые</h2>
-                                <span class="stream-column-desc">Архив выполненных заданий (<span id="solved-archive-total">0</span>)</span>
+                                <h2 class="stream-column-title" data-i18n="html.tab-col-solved">🏆 Решённые</h2>
+                                <span class="stream-column-desc"><span data-i18n="html.col-solved-archive">Архив выполненных заданий (</span><span id="solved-archive-total">0</span>)</span>
                             </div>
                             <div class="solved-filter-pills" id="solved-filter-pills">
-                                <button class="mini-pill active" data-action="filter-solved" data-solved-filter="all">Все</button>
+                                <button class="mini-pill active" data-action="filter-solved" data-solved-filter="all" data-i18n="html.solved-filter-pills">Все</button>
                                 <button class="mini-pill" data-action="filter-solved" data-solved-filter="perfect">100%</button>
-                                <button class="mini-pill" data-action="filter-solved" data-solved-filter="errors">С ошибками</button>
+                                <button class="mini-pill" data-action="filter-solved" data-solved-filter="errors" data-i18n="html.solved-filter-pills.2">С ошибками</button>
                             </div>
                         </div>
 
@@ -219,16 +226,16 @@
             <section id="exercise-view" class="view exercise-view hidden">
                 <!-- Hardcore Exam Mode Active Notice (Shown if hints are disabled) -->
                 <div id="hardcore-notice" class="hardcore-notice hidden">
-                    ⚡ <strong>Режим «Строгий Экзамен»:</strong> Подсказки, переводы и подсветка доказательств в тексте
-                    отключены вашими настройками.
+                    ⚡ <strong data-i18n="html.hardcore-notice">Режим «Строгий Экзамен»:</strong> <span data-i18n="html.hardcore-notice.2">Подсказки, переводы и подсветка доказательств в тексте
+                    отключены вашими настройками.</span>
                 </div>
 
                 <!-- Timer Expired Notice (Shown if timer reaches 00:00) -->
                 <div id="timer-alert-banner" class="timer-alert-banner hidden">
                     <span class="alert-icon">⏱️</span>
-                    <span class="alert-text"><strong>Время вышло!</strong> Вы можете отправить ответы на проверку прямо
-                        сейчас или продолжить решать в спокойном темпе.</span>
-                    <button type="button" class="btn btn-outline-light btn-sm" id="btn-dismiss-timer-alert" data-action="dismiss-timer-alert">Понятно,
+                    <span class="alert-text"><strong data-i18n="html.timer-alert-banner">Время вышло!</strong> <span data-i18n="html.timer-alert-banner.2">Вы можете отправить ответы на проверку прямо
+                        сейчас или продолжить решать в спокойном темпе.</span></span>
+                    <button type="button" class="btn btn-outline-light btn-sm" id="btn-dismiss-timer-alert" data-action="dismiss-timer-alert" data-i18n="html.btn-dismiss-timer-alert">Понятно,
                         продолжить</button>
                 </div>
 
@@ -248,24 +255,24 @@
                     <!-- Toolbar with Study Tools (Adaptive to Pre-test Config) -->
                     <div class="study-tools-bar" id="study-tools-bar">
                         <button class="tool-btn active" id="btn-toggle-furigana" data-action="toggle-furigana"
-                            title="Показать или скрыть фуригану над кандзи">
+                            title="Показать или скрыть фуригану над кандзи" data-i18n-attr="title:html.btn-toggle-furigana.title">
                             <span class="tool-icon">あ</span>
-                            <span class="tool-text">Фуригана: <strong id="furigana-status">ВКЛ</strong></span>
+                            <span class="tool-text"><span data-i18n="html.btn-toggle-furigana.2">Фуригана:</span> <strong id="furigana-status">ВКЛ</strong></span>
                         </button>
                         <button class="tool-btn active" id="btn-toggle-evidence" data-action="toggle-evidence"
-                            title="Включить подсветку ключевых предложений в тексте">
+                            title="Включить подсветку ключевых предложений в тексте" data-i18n-attr="title:html.btn-toggle-evidence.title">
                             <span class="tool-icon">🔍</span>
-                            <span class="tool-text">Доказательства: <strong id="evidence-status">ВКЛ</strong></span>
+                            <span class="tool-text"><span data-i18n="html.btn-toggle-evidence.2">Доказательства:</span> <strong id="evidence-status">ВКЛ</strong></span>
                         </button>
-                        <button class="tool-btn" id="btn-toggle-translation" data-action="toggle-translation" title="Открыть перевод текста на русский">
+                        <button class="tool-btn" id="btn-toggle-translation" data-action="toggle-translation" title="Открыть перевод текста на русский" data-i18n-attr="title:html.btn-toggle-translation.title">
                             <span class="tool-icon">🇷🇺</span>
-                            <span class="tool-text">Перевод</span>
+                            <span class="tool-text" data-i18n="html.btn-toggle-translation.2">Перевод</span>
                         </button>
-                        <button class="tool-btn" id="btn-toggle-vocab" data-action="toggle-vocab" title="Показать словарь сложных слов">
+                        <button class="tool-btn" id="btn-toggle-vocab" data-action="toggle-vocab" title="Показать словарь сложных слов" data-i18n-attr="title:html.btn-toggle-vocab.title">
                             <span class="tool-icon">📖</span>
-                            <span class="tool-text">Словарь (<span id="vocab-count-badge">0</span>)</span>
+                            <span class="tool-text"><span data-i18n="html.btn-toggle-vocab.2">Словарь (</span><span id="vocab-count-badge">0</span>)</span>
                         </button>
-                        <button class="btn btn-outline-light" id="btn-back-to-catalog" data-action="return-to-catalog" title="Вернуться на главную страницу">
+                        <button class="btn btn-outline-light" id="btn-back-to-catalog" data-action="return-to-catalog" title="Вернуться на главную страницу" data-i18n-attr="title:html.btn-abort-exercise.title" data-i18n="html.btn-abort-exercise.2">
                             ← На главную
                         </button>
                     </div>
@@ -274,16 +281,16 @@
                 <!-- Supplementary Drawer for Russian Translation & Vocabulary -->
                 <div id="supplementary-drawer" class="supplementary-drawer hidden">
                     <div class="drawer-header">
-                        <h4 class="drawer-title" id="drawer-title">Перевод и лексика текста</h4>
+                        <h4 class="drawer-title" id="drawer-title" data-i18n="html.drawer-title">Перевод и лексика текста</h4>
                         <button class="drawer-close" id="btn-close-drawer" data-action="close-drawer">✕</button>
                     </div>
                     <div class="drawer-body">
                         <div id="drawer-translation-section" class="drawer-section">
-                            <h5>Полный русский перевод</h5>
+                            <h5 data-i18n="html.drawer-translation-section">Полный русский перевод</h5>
                             <div class="translation-content" id="translation-text"></div>
                         </div>
                         <div id="drawer-vocab-section" class="drawer-section">
-                            <h5>Словарь ключевых слов</h5>
+                            <h5 data-i18n="html.drawer-vocab-section">Словарь ключевых слов</h5>
                             <div class="vocab-grid" id="vocab-list"></div>
                         </div>
                     </div>
@@ -305,26 +312,26 @@
                                     <!-- Reader customization tools (Font Size & Font Style & Popup Dict) -->
                                     <div class="reader-tools">
                                         <button class="btn-tool-sm active" id="btn-toggle-popup-dict" data-action="toggle-popup-dict"
-                                            title="Всплывающий словарь при выделении или клике на японские слова">
-                                            📖 Словарь: <strong id="popup-dict-status">ВКЛ</strong>
+                                            title="Всплывающий словарь при выделении или клике на японские слова" data-i18n-attr="title:html.btn-toggle-popup-dict.title">
+                                            <span data-i18n="html.btn-toggle-popup-dict.2">📖 Словарь:</span> <strong id="popup-dict-status">ВКЛ</strong>
                                         </button>
                                         <div class="font-toggle-group">
                                             <button class="btn-tool-sm active" id="btn-font-gothic" data-action="set-reader-font" data-font="gothic"
-                                                title="Шрифт Готика (Без засечек)">Gothic</button>
+                                                title="Шрифт Готика (Без засечек)" data-i18n-attr="title:html.btn-font-gothic.title">Gothic</button>
                                             <button class="btn-tool-sm" id="btn-font-mincho" data-action="set-reader-font" data-font="mincho"
-                                                title="Шрифт Минтё (С засечками - как в книге)">Mincho</button>
+                                                title="Шрифт Минтё (С засечками - как в книге)" data-i18n-attr="title:html.btn-font-mincho.title">Mincho</button>
                                         </div>
                                         <div class="size-toggle-group">
                                             <button class="btn-tool-sm" id="btn-font-decrease" data-action="adjust-font-size" data-delta="-2"
-                                                title="Уменьшить шрифт">A−</button>
+                                                title="Уменьшить шрифт" data-i18n-attr="title:html.btn-font-decrease.title">A−</button>
                                             <button class="btn-tool-sm" id="btn-font-increase" data-action="adjust-font-size" data-delta="2"
-                                                title="Увеличить шрифт">A+</button>
+                                                title="Увеличить шрифт" data-i18n-attr="title:html.btn-font-increase.title">A+</button>
                                         </div>
                                     </div>
                                 </div>
-                                <h2 class="passage-title" id="passage-title">タイトル</h2>
+                                <h2 class="passage-title" id="passage-title" lang="ja">タイトル</h2>
                             </div>
-                            <div class="passage-content japanese-text font-gothic" id="passage-content">
+                            <div class="passage-content japanese-text font-gothic" id="passage-content" lang="ja">
                                 <!-- Raw HTML of text injected here -->
                             </div>
                         </div>
@@ -342,7 +349,7 @@
                                     </div>
                                 </div>
                                 <div class="progress-indicator" id="progress-indicator">
-                                    Отвечено: <span id="answered-count">0</span> / <span
+                                    <span data-i18n="html.progress-indicator">Отвечено:</span> <span id="answered-count">0</span> / <span
                                         id="total-questions-count">0</span>
                                 </div>
                             </div>
@@ -357,10 +364,10 @@
                                 <button type="button" class="btn btn-secondary" id="btn-wizard-prev" data-action="wizard-prev" title="Вернуться на главную">
                                     ← На главную
                                 </button>
-                                <button type="button" class="btn btn-primary" id="btn-wizard-next" data-action="wizard-next" disabled>
+                                <button type="button" class="btn btn-primary" id="btn-wizard-next" data-action="wizard-next" disabled data-i18n="html.btn-wizard-next">
                                     Следующий вопрос →
                                 </button>
-                                <button type="button" class="btn btn-primary btn-submit hidden" id="btn-wizard-submit" data-action="wizard-submit"
+                                <button type="button" class="btn btn-primary btn-submit hidden" id="btn-wizard-submit" data-i18n="submit.finish" data-action="wizard-submit"
                                     disabled>
                                     Завершить и проверить ответы ✓
                                 </button>
@@ -385,8 +392,8 @@
                 <div class="notebook-page-container">
                     <div class="catalog-hero">
                         <div class="hero-badge">PERSONAL VOCABULARY NOTEBOOK</div>
-                        <h1 class="hero-title">⭐ Мой словарь японского языка</h1>
-                        <p class="hero-desc">
+                        <h1 class="hero-title" data-i18n="html.notebook-view">⭐ Мой словарь японского языка</h1>
+                        <p class="hero-desc" data-i18n="html.notebook-view.2">
                             Ваш персональный список сохранённых японских слов, правильных чтений (фуригана) и переводов.
                             Слушайте японское произношение и отмечайте выученное!
                         </p>
@@ -397,24 +404,24 @@
                             <div class="notebook-search-box">
                                 <span class="search-icon">🔍</span>
                                 <input type="text" id="notebook-search-input"
-                                    placeholder="Поиск по иероглифам, чтению (хирагане) или русскому переводу...">
+                                    placeholder="Поиск по иероглифам, чтению (хирагане) или русскому переводу..." data-i18n-attr="placeholder:html.notebook-search-input.placeholder">
                             </div>
                             <div class="notebook-filters" id="notebook-filters">
-                                <button type="button" class="notebook-filter-pill active" data-action="filter-notebook" data-filter="all">Все (<span
+                                <button type="button" class="notebook-filter-pill active" data-action="filter-notebook" data-filter="all"><span data-i18n="html.notebook-filters">Все (</span><span
                                         id="notebook-count-all">0</span>)</button>
-                                <button type="button" class="notebook-filter-pill" data-action="filter-notebook" data-filter="learning">Изучаю (<span
+                                <button type="button" class="notebook-filter-pill" data-action="filter-notebook" data-filter="learning"><span data-i18n="html.notebook-filters.2">Изучаю (</span><span
                                         id="notebook-count-learning">0</span>)</button>
-                                <button type="button" class="notebook-filter-pill" data-action="filter-notebook" data-filter="learned">Выучено (<span
+                                <button type="button" class="notebook-filter-pill" data-action="filter-notebook" data-filter="learned"><span data-i18n="html.notebook-filters.3">Выучено (</span><span
                                         id="notebook-count-learned">0</span>)</button>
                             </div>
                         </div>
                         <div class="notebook-backup-actions">
                             <button type="button" class="btn btn-ghost btn-sm" id="btn-export-backup" data-action="export-notebook-backup"
-                                title="Скачать резервную копию прогресса и словаря в .json">
+                                title="Скачать резервную копию прогресса и словаря в .json" data-i18n-attr="title:html.btn-export-backup.title" data-i18n="html.btn-export-backup.2">
                                 📥 Экспорт прогресса (.json)
                             </button>
                             <button type="button" class="btn btn-ghost btn-sm" id="btn-import-backup-trigger" data-action="import-notebook-backup-trigger"
-                                title="Загрузить прогресс из файла .json">
+                                title="Загрузить прогресс из файла .json" data-i18n-attr="title:html.btn-import-backup-trigger.title" data-i18n="html.btn-import-backup-trigger.2">
                                 📤 Импорт (.json)
                             </button>
                             <input type="file" id="input-import-backup-file" accept=".json" class="hidden">
@@ -425,7 +432,7 @@
                         <div class="notebook-footer">
                             <span class="notebook-stats" id="notebook-stats-text">Всего сохранённых слов: 0</span>
                             <button type="button" class="btn btn-ghost btn-sm text-danger"
-                                id="btn-clear-notebook" data-action="clear-notebook">Очистить весь словарь</button>
+                                id="btn-clear-notebook" data-action="clear-notebook" data-i18n="html.btn-clear-notebook">Очистить весь словарь</button>
                         </div>
                     </div>
                 </div>
@@ -436,8 +443,8 @@
                 <div class="import-page-container">
                     <div class="catalog-hero">
                         <div class="hero-badge">AI & HEURISTIC PDF INGESTION</div>
-                        <h1 class="hero-title">📥 Импорт заданий из PDF книг</h1>
-                        <p class="hero-desc">
+                        <h1 class="hero-title" data-i18n="html.import-view">📥 Импорт заданий из PDF книг</h1>
+                        <p class="hero-desc" data-i18n="html.import-view.2">
                             Загрузите PDF японского учебника или сборника тестов JLPT. Система автоматически извлечёт тексты для чтения, вопросы, 4 варианта ответа и сопоставит ключ ответов из конца книги.
                         </p>
                     </div>
@@ -447,8 +454,8 @@
                         <div class="import-card-header">
                             <span class="import-header-icon">📄</span>
                             <div>
-                                <h3 class="import-card-title">Загрузка PDF документа</h3>
-                                <p class="import-card-desc">Поддерживаются цифровые PDF книги и экзаменационные буклеты с текстовым слоем</p>
+                                <h3 class="import-card-title" data-i18n="html.import-view.3">Загрузка PDF документа</h3>
+                                <p class="import-card-desc" data-i18n="html.import-view.4">Поддерживаются цифровые PDF книги и экзаменационные буклеты с текстовым слоем</p>
                             </div>
                         </div>
 
@@ -458,8 +465,8 @@
                                 <input type="file" id="pdf-file-input" accept=".pdf" class="file-input-hidden">
                                 <div class="dropzone-content" id="dropzone-prompt">
                                     <span class="dropzone-icon">📥</span>
-                                    <p class="dropzone-text"><strong>Нажмите для выбора</strong> или перетащите PDF файл книги сюда</p>
-                                    <span class="dropzone-hint">Формат .pdf, до 50 МБ</span>
+                                    <p class="dropzone-text"><strong data-i18n="html.dropzone-prompt">Нажмите для выбора</strong> <span data-i18n="html.dropzone-prompt.2">или перетащите PDF файл книги сюда</span></p>
+                                    <span class="dropzone-hint" data-i18n="html.dropzone-prompt.3">Формат .pdf, до 50 МБ</span>
                                 </div>
                                 <div class="dropzone-file-info hidden" id="dropzone-file-info">
                                     <span class="file-icon">📑</span>
@@ -467,45 +474,45 @@
                                         <span class="file-name" id="dropzone-file-name">filename.pdf</span>
                                         <span class="file-size" id="dropzone-file-size">0 KB</span>
                                     </div>
-                                    <button type="button" class="btn-clear-file" id="btn-clear-file" data-action="clear-pdf-file" title="Убрать файл">✕</button>
+                                    <button type="button" class="btn-clear-file" id="btn-clear-file" data-action="clear-pdf-file" title="Убрать файл" data-i18n-attr="title:html.btn-clear-file.title">✕</button>
                                 </div>
                             </div>
 
                             <!-- Meta Configuration Grid -->
                             <div class="upload-meta-grid">
                                 <div class="meta-field">
-                                    <label class="field-label" for="import-level">Целевой уровень JLPT:</label>
+                                    <label class="field-label" for="import-level" data-i18n="html.form-pdf-upload">Целевой уровень JLPT:</label>
                                     <select id="import-level" class="field-select">
-                                        <option value="N5">N5 (Начальный)</option>
-                                        <option value="N4">N4 (Базовый)</option>
-                                        <option value="N3" selected>N3 (Средний)</option>
-                                        <option value="N2">N2 (Продвинутый)</option>
-                                        <option value="N1">N1 (Высший)</option>
+                                        <option value="N5" data-i18n="html.import-level">N5 (Начальный)</option>
+                                        <option value="N4" data-i18n="html.import-level.2">N4 (Базовый)</option>
+                                        <option value="N3" selected data-i18n="html.import-level.3">N3 (Средний)</option>
+                                        <option value="N2" data-i18n="html.import-level.4">N2 (Продвинутый)</option>
+                                        <option value="N1" data-i18n="html.import-level.5">N1 (Высший)</option>
                                     </select>
                                 </div>
 
                                 <div class="meta-field">
-                                    <label class="field-label" for="import-category">Тип заданий в книге:</label>
+                                    <label class="field-label" for="import-category" data-i18n="html.form-pdf-upload.2">Тип заданий в книге:</label>
                                     <select id="import-category" class="field-select">
-                                        <option value="short" selected>短文 (Короткие тексты, 1-2 вопроса)</option>
-                                        <option value="medium">中文 (Средние тексты, 3-4 вопроса)</option>
-                                        <option value="long">長文 (Длинные тексты, 4-5 вопросов)</option>
-                                        <option value="info_search">情報検索 (Поиск информации / объявления)</option>
-                                        <option value="article">記事・論説 (Статьи и эссе)</option>
+                                        <option value="short" selected data-i18n="html.import-category">短文 (Короткие тексты, 1-2 вопроса)</option>
+                                        <option value="medium" data-i18n="html.import-category.2">中文 (Средние тексты, 3-4 вопроса)</option>
+                                        <option value="long" data-i18n="html.import-category.3">長文 (Длинные тексты, 4-5 вопросов)</option>
+                                        <option value="info_search" data-i18n="html.import-category.4">情報検索 (Поиск информации / объявления)</option>
+                                        <option value="article" data-i18n="html.import-category.5">記事・論説 (Статьи и эссе)</option>
                                     </select>
                                 </div>
 
                                 <div class="meta-field meta-field-full">
-                                    <label class="field-label" for="import-title-override">Название книги / источника (необязательно):</label>
+                                    <label class="field-label" for="import-title-override" data-i18n="html.form-pdf-upload.3">Название книги / источника (необязательно):</label>
                                     <input type="text" id="import-title-override" class="field-input"
-                                        placeholder="Например: 新完全マスター N3 読解 (Глава 2)">
+                                        placeholder="Например: 新完全マスター N3 読解 (Глава 2)" data-i18n-attr="placeholder:html.import-title-override.placeholder">
                                 </div>
                             </div>
 
                             <!-- Upload Action Button -->
                             <div class="upload-actions">
                                 <button type="submit" class="btn btn-primary btn-lg" id="btn-start-upload">
-                                    <span class="btn-icon">⚡</span> Запустить распознавание книги
+                                    <span class="btn-icon">⚡</span> <span data-i18n="html.btn-start-upload">Запустить распознавание книги</span>
                                 </button>
                                 <div class="upload-loading hidden" id="upload-loading-spinner">
                                     <span class="spinner"></span>
@@ -519,10 +526,10 @@
                     <div class="staging-section" id="staging-section">
                         <div class="staging-header">
                             <div>
-                                <h2 class="staging-title">Песочница черновиков (<span id="drafts-count">0</span>)</h2>
-                                <p class="staging-subtitle">Распознанные материалы сохраняются здесь. Проверьте варианты и нажмите «Опубликовать», чтобы они появились в каталоге.</p>
+                                <h2 class="staging-title"><span data-i18n="html.staging-section">Песочница черновиков (</span><span id="drafts-count">0</span>)</h2>
+                                <p class="staging-subtitle" data-i18n="html.staging-section.2">Распознанные материалы сохраняются здесь. Проверьте варианты и нажмите «Опубликовать», чтобы они появились в каталоге.</p>
                             </div>
-                            <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-drafts" data-action="refresh-pdf-drafts">
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-drafts" data-action="refresh-pdf-drafts" data-i18n="html.btn-refresh-drafts">
                                 🔄 Обновить список
                             </button>
                         </div>
@@ -541,7 +548,7 @@
                 <div class="modal-header">
                     <div class="modal-icon">⚙️</div>
                     <div class="modal-header-text">
-                        <h3 class="modal-title">Параметры прохождения теста</h3>
+                        <h3 class="modal-title" data-i18n="html.pretest-modal-backdrop">Параметры прохождения теста</h3>
                         <p class="modal-subtitle" id="modal-text-title">Название текста</p>
                     </div>
                     <button class="modal-close" id="modal-btn-close" data-action="close-pretest-modal">✕</button>
@@ -551,12 +558,12 @@
                     <div class="setting-row">
                         <div class="setting-info">
                             <div class="setting-label-wrap">
-                                <span class="setting-name">Показывать фуригану (<ruby>漢字<rt>かんじ</rt></ruby>)</span>
+                                <span class="setting-name"><span data-i18n="html.pretest-modal-backdrop.2">Показывать фуригану (</span><ruby>漢字<rt>かんじ</rt></ruby>)</span>
                                 <span class="setting-tag" id="tag-furigana">Рекомендуется для тренировки</span>
                             </div>
                             <p class="setting-desc">
-                                Включено: над кандзи отображаются подсказки чтения.<br>
-                                <strong>Выключено:</strong> чистые кандзи как на реальном экзамене JLPT.
+                                <span data-i18n="html.pretest-modal-backdrop.3">Включено: над кандзи отображаются подсказки чтения.</span><br>
+                                <strong data-i18n="html.pretest-modal-backdrop.4">Выключено:</strong> <span data-i18n="html.pretest-modal-backdrop.5">чистые кандзи как на реальном экзамене JLPT.</span>
                             </p>
                         </div>
                         <label class="switch">
@@ -568,14 +575,14 @@
                     <div class="setting-row">
                         <div class="setting-info">
                             <div class="setting-label-wrap">
-                                <span class="setting-name">Подсветка ключевых слов и подробный разбор</span>
+                                <span class="setting-name" data-i18n="html.pretest-modal-backdrop.6">Подсветка ключевых слов и подробный разбор</span>
                                 <span class="setting-tag tag-warning" id="tag-hints">Режим анализа</span>
                             </div>
                             <p class="setting-desc">
-                                Включено: после сдачи подсвечиваются доказательства в тексте, перевод и разбор
-                                дистракторов.<br>
-                                <strong>Выключено:</strong> «Режим Хардкор / Экзамен» — только статус Верно/Неверно без
-                                подсказок и переводов.
+                                <span data-i18n="html.pretest-modal-backdrop.7">Включено: после сдачи подсвечиваются доказательства в тексте, перевод и разбор
+                                дистракторов.</span><br>
+                                <strong data-i18n="html.pretest-modal-backdrop.4">Выключено:</strong> <span data-i18n="html.pretest-modal-backdrop.8">«Режим Хардкор / Экзамен» — только статус Верно/Неверно без
+                                подсказок и переводов.</span>
                             </p>
                         </div>
                         <label class="switch">
@@ -587,23 +594,23 @@
                     <div class="setting-row">
                         <div class="setting-info">
                             <div class="setting-label-wrap">
-                                <span class="setting-name">Таймер с обратным отсчётом</span>
+                                <span class="setting-name" data-i18n="html.pretest-modal-backdrop.9">Таймер с обратным отсчётом</span>
                                 <span class="setting-tag" id="tag-timer">По желанию</span>
                             </div>
                             <p class="setting-desc">
-                                Включено: тренировка тайм-менеджмента как на реальном экзамене с предупреждением за 60
-                                сек.<br>
-                                <strong>Выключено:</strong> спокойное свободное чтение в своём темпе без таймера.
+                                <span data-i18n="html.pretest-modal-backdrop.10">Включено: тренировка тайм-менеджмента как на реальном экзамене с предупреждением за 60
+                                сек.</span><br>
+                                <strong data-i18n="html.pretest-modal-backdrop.4">Выключено:</strong> <span data-i18n="html.pretest-modal-backdrop.11">спокойное свободное чтение в своём темпе без таймера.</span>
                             </p>
                             <!-- Duration selector when timer is enabled -->
                             <div class="timer-duration-selector hidden" id="timer-duration-selector">
-                                <span class="duration-label">Лимит времени:</span>
+                                <span class="duration-label" data-i18n="html.timer-duration-selector">Лимит времени:</span>
                                 <div class="stepper-box">
                                     <button type="button" class="btn-stepper" id="btn-timer-minus" data-action="timer-duration-minus"
-                                        title="Уменьшить на 1 минуту">−</button>
-                                    <span class="stepper-value"><strong id="modal-timer-minutes">3</strong> мин</span>
+                                        title="Уменьшить на 1 минуту" data-i18n-attr="title:html.btn-timer-minus.title">−</button>
+                                    <span class="stepper-value"><strong id="modal-timer-minutes">3</strong> <span data-i18n="html.timer-duration-selector.2">мин</span></span>
                                     <button type="button" class="btn-stepper" id="btn-timer-plus" data-action="timer-duration-plus"
-                                        title="Увеличить на 1 минуту">+</button>
+                                        title="Увеличить на 1 минуту" data-i18n-attr="title:html.btn-timer-plus.title">+</button>
                                 </div>
                             </div>
                         </div>
@@ -614,13 +621,13 @@
                     </div>
 
                     <div class="modal-test-meta" id="modal-test-meta-info">
-                        ⏱️ Рекомендуемое время для текста: <span id="modal-time-estimate">3</span> мин
+                        <span data-i18n="html.modal-test-meta-info">⏱️ Рекомендуемое время для текста:</span> <span id="modal-time-estimate">3</span> <span data-i18n="html.timer-duration-selector.2">мин</span>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-ghost" id="modal-btn-cancel" data-action="close-pretest-modal">Отмена</button>
-                    <button class="btn btn-primary btn-lg" id="modal-btn-start" data-action="start-exercise">Начать решение →</button>
+                    <button class="btn btn-ghost" id="modal-btn-cancel" data-action="close-pretest-modal" data-i18n="html.modal-btn-cancel">Отмена</button>
+                    <button class="btn btn-primary btn-lg" id="modal-btn-start" data-action="start-exercise" data-i18n="html.modal-btn-start">Начать решение →</button>
                 </div>
             </div>
         </div>
@@ -631,7 +638,7 @@
                 <div class="modal-header">
                     <div class="modal-icon">⚠️</div>
                     <div class="modal-header-text">
-                        <h3 class="modal-title">Сообщить об ошибке в задании</h3>
+                        <h3 class="modal-title" data-i18n="html.report-modal-backdrop">Сообщить об ошибке в задании</h3>
                         <p class="modal-subtitle" id="report-modal-task-title">Название текста</p>
                     </div>
                     <button class="modal-close" id="btn-close-report-modal" data-action="close-report-modal">✕</button>
@@ -639,29 +646,29 @@
                 <div class="modal-body">
                     <div class="setting-row">
                         <div class="setting-info" style="width: 100%;">
-                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;">Тип проблемы:</span>
+                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;" data-i18n="html.report-modal-backdrop.2">Тип проблемы:</span>
                             <select id="report-reason-select" class="form-select" style="width: 100%; padding: 0.6rem; border: 1px solid var(--washi-border); border-radius: var(--radius-sm); font-size: 0.95rem; background: #fff;">
-                                <option value="Опечатка в тексте или вопросе">Опечатка в японском тексте или вопросе</option>
-                                <option value="Неверный ответ или спорный ключ">Неверный правильный ответ / спорный ключ</option>
-                                <option value="Ошибка фуриганы">Неправильное чтение кандзи (фуригана)</option>
-                                <option value="Несоответствие уровню JLPT">Текст не соответствует заявленному уровню</option>
-                                <option value="Другая ошибка">Другое замечание</option>
+                                <option value="Опечатка в тексте или вопросе" data-i18n="html.report-reason-select">Опечатка в японском тексте или вопросе</option>
+                                <option value="Неверный ответ или спорный ключ" data-i18n="html.report-reason-select.2">Неверный правильный ответ / спорный ключ</option>
+                                <option value="Ошибка фуриганы" data-i18n="html.report-reason-select.3">Неправильное чтение кандзи (фуригана)</option>
+                                <option value="Несоответствие уровню JLPT" data-i18n="html.report-reason-select.4">Текст не соответствует заявленному уровню</option>
+                                <option value="Другая ошибка" data-i18n="html.report-reason-select.5">Другое замечание</option>
                             </select>
                         </div>
                     </div>
                     <div class="setting-row">
                         <div class="setting-info" style="width: 100%;">
-                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;">Подробности (необязательно):</span>
-                            <textarea id="report-details-textarea" style="width: 100%; padding: 0.6rem; border: 1px solid var(--washi-border); border-radius: var(--radius-sm); font-size: 0.95rem; resize: vertical;" rows="3" placeholder="Укажите конкретную строчку или предложение..."></textarea>
+                            <span class="setting-name" style="margin-bottom: 0.5rem; display: block;" data-i18n="html.report-modal-backdrop.3">Подробности (необязательно):</span>
+                            <textarea id="report-details-textarea" style="width: 100%; padding: 0.6rem; border: 1px solid var(--washi-border); border-radius: var(--radius-sm); font-size: 0.95rem; resize: vertical;" rows="3" placeholder="Укажите конкретную строчку или предложение..." data-i18n-attr="placeholder:html.report-details-textarea.placeholder"></textarea>
                         </div>
                     </div>
-                    <div style="font-size: 0.82rem; color: var(--sumi-500); padding: 0.5rem 0.75rem; background: var(--washi-accent); border-radius: var(--radius-sm); border-left: 3px solid var(--vermilion);">
+                    <div style="font-size: 0.82rem; color: var(--sumi-500); padding: 0.5rem 0.75rem; background: var(--washi-accent); border-radius: var(--radius-sm); border-left: 3px solid var(--vermilion);" data-i18n="html.report-modal-backdrop.4">
                         ℹ️ Задания с 3 и более жалобами автоматически снимаются с показа для проверки экспертом.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-ghost" id="btn-cancel-report" data-action="close-report-modal">Отмена</button>
-                    <button class="btn btn-primary" id="btn-submit-report" data-action="submit-report">Отправить замечание</button>
+                    <button class="btn btn-ghost" id="btn-cancel-report" data-action="close-report-modal" data-i18n="html.modal-btn-cancel">Отмена</button>
+                    <button class="btn btn-primary" id="btn-submit-report" data-i18n="report.submit" data-action="submit-report">Отправить замечание</button>
                 </div>
             </div>
         </div>
@@ -672,8 +679,8 @@
                 <div class="modal-header">
                     <div class="modal-icon">☁️</div>
                     <div class="modal-header-text">
-                        <h3 class="modal-title">Синхронизация и сохранность данных</h3>
-                        <p class="modal-subtitle">Ваш прогресс сохраняется автоматически и бесплатно</p>
+                        <h3 class="modal-title" data-i18n="html.sync-modal-backdrop">Синхронизация и сохранность данных</h3>
+                        <p class="modal-subtitle" data-i18n="html.sync-modal-backdrop.2">Ваш прогресс сохраняется автоматически и бесплатно</p>
                     </div>
                     <button class="modal-close" id="btn-close-sync-modal" data-action="close-sync-modal">✕</button>
                 </div>
@@ -696,7 +703,7 @@
 
                     <!-- Cloud Account Options -->
                     <div class="sync-account-section">
-                        <h4 class="sync-section-title">Облачная синхронизация между устройствами</h4>
+                        <h4 class="sync-section-title" data-i18n="html.sync-modal-backdrop.3">Облачная синхронизация между устройствами</h4>
                         <div id="sync-user-info" class="sync-user-info hidden">
                             <span class="user-avatar" id="sync-user-avatar">👤</span>
                             <div class="user-details">
@@ -704,33 +711,33 @@
                                 <span id="sync-user-email">email@example.com</span>
                             </div>
                             <div class="user-actions">
-                                <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signout" data-action="cloud-signout">Выйти</button>
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signout" data-action="cloud-signout" data-i18n="html.btn-cloud-signout">Выйти</button>
                             </div>
                         </div>
                         <div id="sync-auth-actions" class="sync-auth-actions">
                             <button type="button" class="btn btn-google-auth" id="btn-cloud-signin-google" data-action="cloud-signin-google">
-                                <span class="google-icon">G</span> Войти через Google
+                                <span class="google-icon">G</span> <span data-i18n="html.btn-cloud-signin-google">Войти через Google</span>
                             </button>
-                            <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signin-anon" data-action="cloud-signin-anon" title="Создать анонимный облачный профиль в 1 клик">
+                            <button type="button" class="btn btn-ghost btn-sm" id="btn-cloud-signin-anon" data-action="cloud-signin-anon" title="Создать анонимный облачный профиль в 1 клик" data-i18n-attr="title:html.btn-cloud-signin-anon.title" data-i18n="html.btn-cloud-signin-anon.2">
                                 Анонимная облачная привязка
                             </button>
                         </div>
                         <div id="sync-link-google-hint" class="sync-link-hint hidden">
-                            <p>💡 Вы используете анонимный профиль. Нажмите <strong>«Войти через Google»</strong>, чтобы сохранить данные навсегда и перенести на другие устройства.</p>
+                            <p><span data-i18n="html.sync-link-google-hint">💡 Вы используете анонимный профиль. Нажмите</span> <strong data-i18n="html.sync-link-google-hint.2">«Войти через Google»</strong><span data-i18n="html.sync-link-google-hint.3">, чтобы сохранить данные навсегда и перенести на другие устройства.</span></p>
                         </div>
                     </div>
 
                     <!-- Manual Backup & Restore -->
                     <div class="sync-backup-section">
-                        <h4 class="sync-section-title">Резервная копия (бэкап)</h4>
-                        <p class="sync-section-sub">
+                        <h4 class="sync-section-title" data-i18n="html.sync-modal-backdrop.4">Резервная копия (бэкап)</h4>
+                        <p class="sync-section-sub" data-i18n="html.sync-modal-backdrop.5">
                             Скачайте файл с вашими ответами и словарём для переноса на другое устройство или защиты от очистки браузера.
                         </p>
                         <div class="backup-btn-row">
-                            <button type="button" class="btn btn-secondary btn-sm" id="modal-btn-export" data-action="export-sync-backup">
+                            <button type="button" class="btn btn-secondary btn-sm" id="modal-btn-export" data-action="export-sync-backup" data-i18n="html.modal-btn-export">
                                 📥 Скачать прогресс (.json)
                             </button>
-                            <button type="button" class="btn btn-ghost btn-sm" id="modal-btn-import-trigger" data-action="import-sync-backup-trigger">
+                            <button type="button" class="btn btn-ghost btn-sm" id="modal-btn-import-trigger" data-action="import-sync-backup-trigger" data-i18n="html.modal-btn-import-trigger">
                                 📤 Загрузить из файла
                             </button>
                         </div>
@@ -738,21 +745,21 @@
 
                     <!-- Advanced Firebase Configuration (For Developers) -->
                     <details class="sync-advanced-details">
-                        <summary>🛠️ Для разработчиков (пользовательский Firebase)</summary>
+                        <summary data-i18n="html.sync-modal-backdrop.6">🛠️ Для разработчиков (пользовательский Firebase)</summary>
                         <div class="sync-firebase-config-form">
-                            <p class="config-help">
+                            <p class="config-help" data-i18n="html.sync-modal-backdrop.7">
                                 По умолчанию подключён официальный проект Firebase Spark ($0). При необходимости вы можете подключить собственный проект:
                             </p>
                             <textarea id="firebase-config-input" rows="4" placeholder='{"apiKey": "AIza...", "projectId": "my-dokkai", ...}'></textarea>
                             <div class="config-actions">
-                                <button type="button" class="btn btn-primary btn-sm" id="btn-save-firebase-config" data-action="save-firebase-config">Сохранить конфигурацию</button>
-                                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-firebase-config" data-action="clear-firebase-config">Сбросить к умолчанию</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btn-save-firebase-config" data-action="save-firebase-config" data-i18n="html.btn-save-firebase-config">Сохранить конфигурацию</button>
+                                <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-firebase-config" data-action="clear-firebase-config" data-i18n="html.btn-clear-firebase-config">Сбросить к умолчанию</button>
                             </div>
                         </div>
                     </details>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-sync-modal-done" data-action="close-sync-modal">Готово</button>
+                    <button class="btn btn-primary" id="btn-sync-modal-done" data-action="close-sync-modal" data-i18n="html.btn-sync-modal-done">Готово</button>
                 </div>
             </div>
         </div>
@@ -761,17 +768,18 @@
         <div id="popup-dictionary-card" class="popup-dict-card hidden">
             <div class="popup-dict-header">
                 <div class="popup-word-group">
-                    <span class="popup-word" id="popup-word">持続可能</span>
+                    <span class="popup-word" id="popup-word" lang="ja">持続可能</span>
                     <span class="popup-reading" id="popup-reading">[じぞくかのう]</span>
                     <span class="popup-level-tag" id="popup-level">N2</span>
                 </div>
                 <div class="popup-actions-top">
-                    <button class="btn-dict-audio" id="popup-btn-audio" data-action="dict-play-audio" title="Прослушать произношение">🔊</button>
+                    <button class="btn-dict-audio" id="popup-btn-audio" data-action="dict-play-audio" title="Прослушать произношение" data-i18n-attr="title:html.popup-btn-audio.title">🔊</button>
                     <button class="popup-dict-close" id="popup-btn-close" data-action="dict-close">✕</button>
                 </div>
             </div>
             <div class="popup-dict-body">
                 <p class="popup-meaning" id="popup-meaning">устойчивый, экологичный; способный продолжаться долго</p>
+                <p class="popup-meaning-note hidden" id="popup-meaning-note"></p>
             </div>
             <div class="popup-dict-footer">
                 <button class="btn-dict-save" id="popup-btn-save" data-action="dict-save-word">

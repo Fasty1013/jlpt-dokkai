@@ -5,7 +5,16 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const { chromium } = require(path.resolve(__dirname, '../tests/qa/node_modules/@playwright/test'));
+
+const REAL_NOW = Date.now();
+const RUN_USER_ID = `computed-styles-${REAL_NOW.toString(36)}`;
+const APPROVED_FILE = process.env.COMPUTED_STYLES_APPROVED
+  ? path.resolve(process.env.COMPUTED_STYLES_APPROVED)
+  : path.join(__dirname, 'snapshots', 'computed_styles_approved.json');
+const WRITE_APPROVED = process.argv.includes('--write-approved');
+const NO_APPROVED = process.argv.includes('--no-approved');
 
 const PROPERTIES_TO_COMPARE = [
   // Dimensions & Box Model
@@ -161,10 +170,14 @@ async function setupMocksAndOpen(page, baseUrl) {
   });
   page.on('pageerror', err => console.log(`[PAGE CRASH ${baseUrl}]`, err.message));
 
-  await page.addInitScript(() => {
+  await page.addInitScript((runUserId) => {
     const fixedTime = 1793966400000;
     Date.now = () => fixedTime;
-  });
+    // Step 11d shuffles options by HMAC(user_id | text_id | attempt). A random per-tab user_id made
+    // main and branch show different option orders (and a different order on every run). One fresh
+    // user_id per run, shared by both sides, gives both servers the same order (attempt 0).
+    try { localStorage.setItem('dokkai_user_id', runUserId); } catch { /* storage unavailable */ }
+  }, RUN_USER_ID);
 
   await page.route('**/api/stream/slots*', route => {
     route.fulfill({
@@ -413,24 +426,94 @@ async function runComparison() {
   await browser.close();
 
   if (process.env.DISCREPANCIES_JSON) {
-    require('fs').writeFileSync(process.env.DISCREPANCIES_JSON, JSON.stringify(discrepancies, null, 1));
+    fs.writeFileSync(process.env.DISCREPANCIES_JSON, JSON.stringify(discrepancies, null, 1));
+  }
+
+  if (WRITE_APPROVED) {
+    writeApproved(discrepancies);
+    process.exit(0);
+  }
+
+  const approved = loadApproved();
+  let fresh = discrepancies;
+  let approvedSeen = 0;
+  if (approved) {
+    const seen = new Set();
+    fresh = discrepancies.filter((d) => {
+      const key = discrepancyKey(d);
+      if (!approved.keys.has(key)) return true;
+      seen.add(key);
+      return false;
+    });
+    approvedSeen = seen.size;
   }
 
   // Report
   console.log('\n=============================================================');
   console.log('COMPUTED STYLES COMPARISON REPORT');
   console.log('=============================================================');
-  if (discrepancies.length === 0) {
-    console.log('✓ 0 DISCREPANCIES FOUND! All computed styles match identically between main and branch across all 9 screens and states.');
+  if (approved) {
+    console.log(`Approved baseline: ${path.relative(process.cwd(), APPROVED_FILE)} ` +
+      `(reference: ${approved.meta.reference || 'unknown'}, ${approved.keys.size} entries). ` +
+      `Matched ${approvedSeen}; approved but not observed: ${approved.keys.size - approvedSeen}.`);
+  }
+  if (fresh.length === 0) {
+    if (approved) {
+      console.log(`✓ 0 DISCREPANCIES outside the approved baseline (${approvedSeen} approved).`);
+    } else {
+      console.log('✓ 0 DISCREPANCIES FOUND! All computed styles match identically between main and branch across all 9 screens and states.');
+    }
     process.exit(0);
   } else {
-    console.log(`✗ FOUND ${discrepancies.length} COMPUTED STYLE DISCREPANCIES:`);
-    console.table(discrepancies.slice(0, 50));
-    if (discrepancies.length > 50) {
-      console.log(`... and ${discrepancies.length - 50} more discrepancies.`);
+    const label = approved ? 'NEW (NOT APPROVED) COMPUTED STYLE DIFFERENCES' : 'COMPUTED STYLE DISCREPANCIES';
+    console.log(`✗ FOUND ${fresh.length} ${label}:`);
+    console.table(fresh.slice(0, 50));
+    if (fresh.length > 50) {
+      console.log(`... and ${fresh.length - 50} more.`);
     }
     process.exit(1);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Approved baseline (docs/INTENTIONAL_DIFFERENCES.md, I17).
+// A discrepancy is approved only if screen, element, state, property AND both
+// values match an entry exactly; anything else is reported as new.
+//   node tools/compare_computed_styles.cjs                    -> uses the baseline if the file exists
+//   node tools/compare_computed_styles.cjs --no-approved      -> strict mode, every discrepancy counts
+//   APPROVED_REFERENCE=404012d node tools/compare_computed_styles.cjs --write-approved
+//                                                             -> (re)captures the baseline from this run
+// COMPUTED_STYLES_APPROVED=<path> overrides the baseline file location.
+// ---------------------------------------------------------------------------
+function discrepancyKey(d) {
+  return JSON.stringify([d.screen, d.element, d.state, d.property, d.mainVal, d.refVal]);
+}
+
+function loadApproved() {
+  if (NO_APPROVED || !fs.existsSync(APPROVED_FILE)) return null;
+  const data = JSON.parse(fs.readFileSync(APPROVED_FILE, 'utf-8'));
+  if (!data || !Array.isArray(data.entries)) {
+    throw new Error(`Approved baseline ${APPROVED_FILE} has no "entries" array`);
+  }
+  return { meta: data.meta || {}, keys: new Set(data.entries.map(discrepancyKey)) };
+}
+
+function writeApproved(discrepancies) {
+  const entries = discrepancies
+    .map((d) => ({ screen: d.screen, element: d.element, state: d.state, property: d.property, mainVal: d.mainVal, refVal: d.refVal }))
+    .sort((a, b) => discrepancyKey(a).localeCompare(discrepancyKey(b)));
+  const meta = {
+    reference: process.env.APPROVED_REFERENCE || 'unknown',
+    captured_at: new Date(REAL_NOW).toISOString(),
+    count: entries.length,
+    note: 'Approved computed-style differences vs the reference served on :8001. See docs/INTENTIONAL_DIFFERENCES.md (I17). Recapture after the reference changes.'
+  };
+  // One entry per line keeps git diffs of the baseline readable.
+  const body = '{\n "meta": ' + JSON.stringify(meta) + ',\n "entries": [\n' +
+    entries.map((e) => '  ' + JSON.stringify(e)).join(',\n') + '\n ]\n}\n';
+  fs.mkdirSync(path.dirname(APPROVED_FILE), { recursive: true });
+  fs.writeFileSync(APPROVED_FILE, body, 'utf-8');
+  console.log(`\nApproved baseline written: ${APPROVED_FILE} (${entries.length} entries, reference: ${meta.reference}).`);
 }
 
 runComparison().catch(err => {

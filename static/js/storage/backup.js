@@ -1,5 +1,6 @@
 /** Full JSON export / import of local data (Step 7c). Payload format is frozen (schema_version 1). */
 
+import { t } from '../i18n/index.js';
 import { LEGACY_KEYS } from './constants.js';
 
 export async function exportAllData(storage) {
@@ -32,7 +33,7 @@ export async function importAllData(storage, jsonString) {
     try {
         const parsed = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
         if (!parsed || !parsed.data) {
-            throw new Error('Некорректный формат файла бэкапа');
+            throw new Error(t('backup.badFormat'));
         }
 
         const data = parsed.data;

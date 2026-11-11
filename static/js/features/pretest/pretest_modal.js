@@ -2,6 +2,7 @@
  * JLPT Dokkai Master - Pretest Modal Feature Module
  */
 
+import { t } from '../../i18n/index.js';
 import { saveStoredConfig } from './config.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
@@ -15,20 +16,20 @@ export function updateModalSettingTags(elements) {
 
   if (elements.pretestToggleFurigana && elements.tagFurigana) {
     if (elements.pretestToggleFurigana.checked) {
-      elements.tagFurigana.textContent = 'Обучающий режим';
+      elements.tagFurigana.textContent = t('pretest.tagTraining');
       elements.tagFurigana.className = 'setting-tag';
     } else {
-      elements.tagFurigana.textContent = 'Экзамен (Без фуриганы)';
+      elements.tagFurigana.textContent = t('pretest.tagExam');
       elements.tagFurigana.className = 'setting-tag tag-warning';
     }
   }
 
   if (elements.pretestToggleHints && elements.tagHints) {
     if (elements.pretestToggleHints.checked) {
-      elements.tagHints.textContent = 'Полный разбор';
+      elements.tagHints.textContent = t('pretest.tagFull');
       elements.tagHints.className = 'setting-tag';
     } else {
-      elements.tagHints.textContent = 'Хардкор (Без подсказок)';
+      elements.tagHints.textContent = t('pretest.tagHardcore');
       elements.tagHints.className = 'setting-tag tag-warning';
     }
   }
@@ -37,11 +38,11 @@ export function updateModalSettingTags(elements) {
     const timerActive = elements.pretestToggleTimer.checked;
     const mins = elements.modalTimerMinutes ? elements.modalTimerMinutes.textContent : '3';
     if (timerActive) {
-      elements.tagTimer.textContent = `ВКЛ: ${mins} мин`;
+      elements.tagTimer.textContent = t('pretest.tagTimerOn', { mins });
       elements.tagTimer.className = 'setting-tag tag-warning';
       if (elements.timerDurationSelector) elements.timerDurationSelector.classList.remove('hidden');
     } else {
-      elements.tagTimer.textContent = 'ВЫКЛ: Без таймера';
+      elements.tagTimer.textContent = t('pretest.tagTimerOff');
       elements.tagTimer.className = 'setting-tag';
       if (elements.timerDurationSelector) elements.timerDurationSelector.classList.add('hidden');
     }
@@ -77,7 +78,7 @@ export function openPretestModal(textId, context = {}) {
     elements.modalTextTitle.textContent = textInfo.title;
     if (elements.modalTimeEstimate) elements.modalTimeEstimate.textContent = recMin;
   } else if (elements.modalTextTitle) {
-    elements.modalTextTitle.textContent = 'Текст задания';
+    elements.modalTextTitle.textContent = t('pretest.textTitle');
     if (elements.modalTimeEstimate) elements.modalTimeEstimate.textContent = recMin;
   }
 

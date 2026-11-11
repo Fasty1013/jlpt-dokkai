@@ -31,7 +31,7 @@ sys.path.insert(0, str(ROOT))
 os.chdir(ROOT)
 
 TMP = tempfile.mkdtemp(prefix="dokkai_snap_")
-shutil.copy(ROOT / "dokkai.db", Path(TMP) / "snap.db")
+shutil.copy(os.environ.get("DOKKAI_SNAPSHOT_DB") or (ROOT / "dokkai.db"), Path(TMP) / "snap.db")
 os.environ["DATABASE_URL"] = "sqlite:///" + str(Path(TMP) / "snap.db").replace("\\", "/")
 os.environ["DOKKAI_TEST_MODE"] = "1"
 

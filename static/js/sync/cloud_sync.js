@@ -12,6 +12,7 @@
  *   to preserve free read/write quotas (Step 11b)
  */
 
+import { t } from '../i18n/index.js';
 import { getEffectiveConfig, FIREBASE_CONFIG_KEY } from './config_store.js';
 import { translateFirebaseError } from './auth_errors.js';
 import { loadFirebaseSdk } from './sdk_loader.js';
@@ -125,29 +126,29 @@ class DokkaiCloudSync {
 
     getStatusInfo() {
         if (!navigator.onLine) {
-            return { text: 'Офлайн', class: 'status-offline', icon: '⚠️', tooltip: 'Нет интернета. Данные сохраняются на устройстве' };
+            return { text: t('cloud.offlineText'), class: 'status-offline', icon: '⚠️', tooltip: t('cloud.offlineTip') };
         }
 
         if (this.user) {
             switch (this.status) {
                 case 'synced':
-                    const userLabel = this.user.email || (this.user.isAnonymous ? 'Анонимный профиль' : 'В облаке');
+                    const userLabel = this.user.email || (this.user.isAnonymous ? t('cloud.anonProfile') : t('cloud.inCloudLabel'));
                     return {
-                        text: `В облаке (${userLabel})`,
+                        text: t('cloud.inCloudText', { user: userLabel }),
                         class: 'status-synced',
                         icon: '🟢',
-                        tooltip: `Синхронизировано с Google Firestore (${userLabel})`
+                        tooltip: t('cloud.syncedTip', { user: userLabel })
                     };
                 case 'syncing':
-                    return { text: 'Синхронизация...', class: 'status-syncing', icon: '🔄', tooltip: 'Синхронизация с облаком' };
+                    return { text: t('cloud.syncingText'), class: 'status-syncing', icon: '🔄', tooltip: t('cloud.syncingTip') };
                 case 'error':
-                    return { text: 'Ошибка синхронизации (Повторить)', class: 'status-error', icon: '⚠️', tooltip: 'Нажмите, чтобы повторить синхронизацию' };
+                    return { text: t('cloud.errorText'), class: 'status-error', icon: '⚠️', tooltip: t('cloud.errorTip') };
                 default:
-                    return { text: 'Подключено', class: 'status-synced', icon: '🟢', tooltip: 'Облачная синхронизация активна' };
+                    return { text: t('cloud.connectedText'), class: 'status-synced', icon: '🟢', tooltip: t('cloud.connectedTip') };
             }
         }
 
-        return { text: 'На устройстве', class: 'status-local', icon: '📱', tooltip: 'Данные сохраняются в памяти вашего браузера (IndexedDB)' };
+        return { text: t('cloud.localText'), class: 'status-local', icon: '📱', tooltip: t('cloud.localTip') };
     }
 
     async init() {
@@ -186,7 +187,7 @@ class DokkaiCloudSync {
                 const redirectResult = await this._firebaseFns.getRedirectResult(this.auth);
                 if (redirectResult && redirectResult.user) {
                     console.info('[CloudSync] Redirect sign-in completed for:', redirectResult.user.email || redirectResult.user.uid);
-                    this.notifyFeedback('success', `Успешный вход: ${redirectResult.user.email || 'Анонимный профиль'}`);
+                    this.notifyFeedback('success', t('cloud.loginOk', { user: redirectResult.user.email || t('cloud.anonProfile') }));
                 }
             } catch (redErr) {
                 console.warn('[CloudSync] Redirect result error:', redErr);
@@ -225,14 +226,14 @@ class DokkaiCloudSync {
 
     async signInGoogle() {
         if (!navigator.onLine) {
-            const msg = 'Нет подключения к интернету. Проверьте сеть.';
+            const msg = t('cloud.noInternet');
             this.notifyFeedback('error', msg);
             throw new Error(msg);
         }
 
         await this._ensureInitialized();
         if (!this.auth || !this._firebaseFns) {
-            const msg = 'Облачный сервис Firebase инициализируется или недоступен.';
+            const msg = t('cloud.firebaseUnavailable');
             this.notifyFeedback('error', msg);
             throw new Error(msg);
         }
@@ -244,7 +245,7 @@ class DokkaiCloudSync {
         if (this.user && this.user.isAnonymous) {
             try {
                 const cred = await this._firebaseFns.linkWithPopup(this.user, provider);
-                this.notifyFeedback('success', `Аккаунт успешно привязан к Google: ${cred.user.email}`);
+                this.notifyFeedback('success', t('cloud.linkedGoogle', { user: cred.user.email }));
                 await this.syncNow();
                 return cred.user;
             } catch (linkErr) {
@@ -255,12 +256,12 @@ class DokkaiCloudSync {
                     const credential = this._firebaseFns.GoogleAuthProvider.credentialFromError(linkErr);
                     if (credential) {
                         const res = await this._firebaseFns.signInWithCredential(this.auth, credential);
-                        this.notifyFeedback('info', `Объединение данных с Google аккаунтом: ${res.user.email}`);
+                        this.notifyFeedback('info', t('cloud.merging', { user: res.user.email }));
                         await this.syncNow();
                         return res.user;
                     }
                 } else if (linkErr.code === 'auth/popup-blocked') {
-                    this.notifyFeedback('warning', 'Всплывающее окно заблокировано. Перенаправляем на вход Google...');
+                    this.notifyFeedback('warning', t('cloud.popupBlockedRedirect'));
                     await this._firebaseFns.signInWithRedirect(this.auth, provider);
                     return null;
                 }
@@ -273,11 +274,11 @@ class DokkaiCloudSync {
         // Case B: Regular Google Sign-In with popup -> fallback to redirect
         try {
             const result = await this._firebaseFns.signInWithPopup(this.auth, provider);
-            this.notifyFeedback('success', `Вход выполнен: ${result.user.email}`);
+            this.notifyFeedback('success', t('cloud.signedIn', { user: result.user.email }));
             return result.user;
         } catch (err) {
             if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
-                this.notifyFeedback('warning', 'Всплывающее окно заблокировано браузером. Перенаправляем на страницу входа Google...');
+                this.notifyFeedback('warning', t('cloud.popupBlockedRedirect2'));
                 await this._firebaseFns.signInWithRedirect(this.auth, provider);
                 return null;
             }
@@ -289,21 +290,21 @@ class DokkaiCloudSync {
 
     async signInAnonymous() {
         if (!navigator.onLine) {
-            const msg = 'Нет подключения к интернету. Проверьте сеть.';
+            const msg = t('cloud.noInternet');
             this.notifyFeedback('error', msg);
             throw new Error(msg);
         }
 
         await this._ensureInitialized();
         if (!this.auth || !this._firebaseFns) {
-            const msg = 'Облачный сервис Firebase инициализируется или недоступен.';
+            const msg = t('cloud.firebaseUnavailable');
             this.notifyFeedback('error', msg);
             throw new Error(msg);
         }
 
         try {
             const result = await this._firebaseFns.signInAnonymously(this.auth);
-            this.notifyFeedback('success', `Создан анонимный облачный профиль (ID: ${result.user.uid.slice(0, 8)}).`);
+            this.notifyFeedback('success', t('cloud.anonCreated', { id: result.user.uid.slice(0, 8) }));
             return result.user;
         } catch (err) {
             const friendlyMsg = translateFirebaseError(err);
@@ -318,7 +319,7 @@ class DokkaiCloudSync {
                 await this._firebaseFns.signOut(this.auth);
                 this.setUser(null);
                 this.setStatus('local');
-                this.notifyFeedback('info', 'Вы вышли из облачного аккаунта. Локальные данные сохранены.');
+                this.notifyFeedback('info', t('cloud.signedOut'));
             } catch (e) {
                 console.error('[CloudSync] Sign out error:', e);
             }

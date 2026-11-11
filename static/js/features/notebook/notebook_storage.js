@@ -3,6 +3,7 @@
  * Manages saving, deleting, and syncing notebook words between LocalStorage and DokkaiStorage (IndexedDB).
  */
 
+import { t } from '../../i18n/index.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
 
@@ -87,7 +88,7 @@ export async function toggleSaveWord(wordData, state = storeState, elements = do
         if (currentElements && currentElements.popupBtnSave) {
             currentElements.popupBtnSave.classList.remove('is-saved');
             if (currentElements.popupBtnSaveText) {
-                currentElements.popupBtnSaveText.textContent = 'В мой словарь';
+                currentElements.popupBtnSaveText.textContent = t('popup.save');
             }
         }
     } else {
@@ -108,7 +109,7 @@ export async function toggleSaveWord(wordData, state = storeState, elements = do
         if (currentElements && currentElements.popupBtnSave) {
             currentElements.popupBtnSave.classList.add('is-saved');
             if (currentElements.popupBtnSaveText) {
-                currentElements.popupBtnSaveText.textContent = '✓ В словаре';
+                currentElements.popupBtnSaveText.textContent = t('popup.saved');
             }
         }
     }
@@ -125,7 +126,7 @@ export async function clearAllSavedWords(state = storeState, elements = domEleme
     const currentElements = elements;
 
     if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
-        if (!window.confirm('Вы уверены, что хотите полностью очистить свой словарь?')) {
+        if (!window.confirm(t('notebook.confirmClear'))) {
             return;
         }
     }
