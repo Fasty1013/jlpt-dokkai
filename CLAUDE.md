@@ -218,7 +218,7 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
    ```
    *Сравнивает 15 экранов и модальных окон в десктопном и мобильном разрешениях. Допустимый процент расхождения: строго 0.0000%.*
 
-   > Ветка `feat/i18n-switcher`: скрипты 2 и 4 сравнивают с эталонами одобренных отличий (`tools/snapshots/computed_styles_approved.json`, `tools/snapshots/pixel_approved/`, сняты против `404012d`; INTENTIONAL_DIFFERENCES I17–I20). Новое отличие вне эталона — ошибка; `--no-approved` — строгий режим; после смены эталона на :8001 — переснять с `--write-approved`.
+   > Эталоны одобренных отличий: если есть `tools/snapshots/computed_styles_approved.json` / `tools/snapshots/pixel_approved/meta.json`, скрипты 2 и 4 не считают одобренные отличия (INTENTIONAL_DIFFERENCES I17–I20). Сейчас (после слияния i18n в `main`, I17а) эталонов нет — режим строгий, допуск 0. Для ветки с намеренными отличиями: `APPROVED_REFERENCE=<commit> … --write-approved` против актуального `main` на :8001.
 
 5. **Проверка графа зависимостей ES-модулей (DAG, 0 циклов):**
    ```bash
@@ -244,10 +244,10 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
 
 ## 📍 6. Текущий статус репозитория (Точка передачи эстафеты)
 
-* **Ветки:** `fix/sync-speech-mobile-ui-shuffle` (Часть III, от `main` `6103f28`, последний коммит `404012d` — D5, белый список, `viewport-fit=cover`) и поверх неё `feat/i18n-switcher` (коммит `9ebd5e8` — переключатель языков ru/uz/en/ja и словарь на языке интерфейса). Обе отправлены на GitHub с PR цепочкой: Часть III → `main`, i18n → `fix/sync-speech-mobile-ui-shuffle`. В `main` не влиты.
-* **Состояние:** Часть II влита в `main`; Часть III (11a–11e + доработки) и i18n (подитерации 1–3) выполнены. Отчёт Части III — `docs/REPORT_PART_III.md`; отличия — `docs/INTENTIONAL_DIFFERENCES.md` (п. 13–35, D5, I1–I20); i18n — `docs/i18n/`; заметки — `docs/notes/`.
-* **Проверки (i18n, 2026-11-11):** Playwright 134 passed / 4 skipped; pre-commit хук против `404012d` (обход, стили и пиксели с эталонами I17/I19, сеть 28/28, граф 87 модулей) — пройден.
-* **СЛЕДУЮЩИЙ ШАГ:** ручная приёмка и слияние PR пользователем (сначала Часть III, потом i18n); после слияния в `main` переснять эталоны стилей и пикселей. Открытые вопросы i18n — в `docs/notes/2026-11-10-handover-i18n.md` (вычитка uz/en/ja, `<html lang>` для ru, перевод предложений, японские толкования, БД Playwright, C1 на устройстве).
+* **Ветки:** всё влито в `main` (2026-11-11): PR #1 Часть III → `05a87ef`, PR #2 i18n → `9b4836f`. Ветки `fix/sync-speech-mobile-ui-shuffle` и `feat/i18n-switcher` остались на GitHub (не удалялись). Локальная копия `main` для :8001 — `Dokkai-main-compare` (обновлена до `9b4836f`).
+* **Состояние:** Части I–III и i18n (подитерации 1–3) выполнены и в `main`. Отчёт Части III — `docs/REPORT_PART_III.md`; отличия — `docs/INTENTIONAL_DIFFERENCES.md` (п. 13–35, D5, I1–I20, I17а); i18n — `docs/i18n/`; заметки — `docs/notes/`.
+* **Проверки (приёмка, 2026-11-11):** Часть III — Playwright 99 passed / 1 skipped, api_snapshot 38/38, shuffle_check ALL PASSED; i18n — Playwright 133 passed / 1 flaky (таймаут `page.goto`) / 4 skipped, api_snapshot 38/38, dictionary_i18n_check и i18n_check OK, граф 87 модулей; строгий паритет ветки с новым `main` — обход 92/92, стили 0, сеть 28/28, пиксели 0.
+* **СЛЕДУЮЩИЙ ШАГ:** решение пользователя по открытым вопросам — `SHUFFLE_SECRET` на Render, вычитка uz/en/ja, `<html lang>` для ru (I2), перевод предложений, японские толкования, изоляция БД Playwright (I3), C1 на устройстве (см. `docs/notes/2026-11-11.md`).
 
 ---
 
