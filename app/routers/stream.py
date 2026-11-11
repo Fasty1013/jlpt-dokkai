@@ -12,6 +12,8 @@ from app.services.stream_service import (
     list_solved_texts,
     get_solved_task_details,
     get_default_profile_for_level,
+    get_attempt_epoch,
+    serialize_questions_for_user,
 )
 
 router = APIRouter()
@@ -160,20 +162,5 @@ def retry_stream_task(
         "content_html": text.content_html,
         "origin": text.origin,
         "is_retry": True,
-        "questions": [
-            {
-                "id": q.id,
-                "question_number": q.question_number,
-                "question_text": q.question_text,
-                "options": [
-                    {
-                        "id": opt.id,
-                        "option_number": opt.option_number,
-                        "option_text": opt.option_text
-                    }
-                    for opt in sorted(q.options, key=lambda o: o.option_number)
-                ]
-            }
-            for q in sorted(text.questions, key=lambda x: x.question_number)
-        ]
+        "questions": serialize_questions_for_user(user_id, text, get_attempt_epoch(db, user_id, text.id))
     }

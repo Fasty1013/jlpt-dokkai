@@ -8,13 +8,19 @@
  * - Google Sign-In with automatic fallback to Redirect on popup blockers
  * - Anonymous Account Linking (lossless account upgrade to Google)
  * - Lossless Union Merge in Firestore (/users/{userId}/sync/state)
- * - Debounced batch updates (1.5s delay) to preserve free read/write quotas
+ * - Debounced batch updates (15s debounce, 30s max wait, flushed on tab hide / pagehide)
+ *   to preserve free read/write quotas (Step 11b)
  */
 
 import { getEffectiveConfig, FIREBASE_CONFIG_KEY } from './config_store.js';
 import { translateFirebaseError } from './auth_errors.js';
 import { loadFirebaseSdk } from './sdk_loader.js';
 import { mergeSolvedTasks, mergeNotebook } from './merge.js';
+
+// Step 11b: sync only on meaningful user changes, batched.
+const SYNC_DEBOUNCE_MS = 15000;      // quiet period after the last change
+const SYNC_MAX_WAIT_MS = 30000;      // upper bound from the first unsynced change
+const SYNCING_BADGE_DELAY_MS = 900;  // background syncs show "syncing" only if they take longer
 
 class DokkaiCloudSync {
     constructor() {
@@ -33,8 +39,11 @@ class DokkaiCloudSync {
         this.syncDebounceTimer = null;
         this.hasPendingChanges = false;
         this.isSyncing = false;
+        this.firstPendingAt = 0;
+        this.changeSeq = 0;
 
         this._setupNetworkListeners();
+        this._setupLifecycleFlush();
     }
 
     _setupNetworkListeners() {
@@ -52,6 +61,22 @@ class DokkaiCloudSync {
             console.warn('[CloudSync] Network connection lost');
             this.setStatus('offline');
         });
+    }
+
+    /** Push pending changes right away when the tab is hidden or the page is closed. */
+    _setupLifecycleFlush() {
+        if (typeof document === 'undefined') return;
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') this.flushPending();
+        });
+        window.addEventListener('pagehide', () => this.flushPending());
+    }
+
+    flushPending() {
+        if (!this.hasPendingChanges || !this.user || !navigator.onLine) return;
+        clearTimeout(this.syncDebounceTimer);
+        this.syncDebounceTimer = null;
+        this.syncNow({ silent: true });
     }
 
     onStatusChange(fn) {
@@ -333,21 +358,26 @@ class DokkaiCloudSync {
 
     scheduleAutoSync() {
         this.hasPendingChanges = true;
+        this.changeSeq++;
+        if (!this.firstPendingAt) this.firstPendingAt = Date.now();
         if (!this.user || !navigator.onLine) {
             return;
         }
 
+        const waitLeft = Math.max(0, this.firstPendingAt + SYNC_MAX_WAIT_MS - Date.now());
+        const delay = Math.min(SYNC_DEBOUNCE_MS, waitLeft);
         clearTimeout(this.syncDebounceTimer);
         this.syncDebounceTimer = setTimeout(() => {
-            this.syncNow();
-        }, 1500);
+            this.syncDebounceTimer = null;
+            this.syncNow({ silent: true });
+        }, delay);
     }
 
     /**
      * Perform atomic lossless two-way union sync between IndexedDB and Cloud Firestore.
      * Target Document: users/{userId}/sync/state (strictly matches Firestore rules)
      */
-    async syncNow() {
+    async syncNow({ silent = false } = {}) {
         if (this.isSyncing) return;
         if (!this.user || !this.db || !this._firebaseFns) {
             this.setStatus('local');
@@ -359,7 +389,14 @@ class DokkaiCloudSync {
         }
 
         this.isSyncing = true;
-        this.setStatus('syncing');
+        const seqAtStart = this.changeSeq;
+        // Background (debounced) syncs do not flash the status badge unless they are slow
+        let badgeTimer = null;
+        if (silent) {
+            badgeTimer = setTimeout(() => this.setStatus('syncing'), SYNCING_BADGE_DELAY_MS);
+        } else {
+            this.setStatus('syncing');
+        }
 
         try {
             const uid = this.user.uid;
@@ -394,7 +431,7 @@ class DokkaiCloudSync {
             // Write merged tasks back into local IndexedDB
             if (window.DokkaiStorage) {
                 for (const t of Object.values(mergedSolvedMap)) {
-                    await window.DokkaiStorage.recordSolvedTask(t);
+                    await window.DokkaiStorage.recordSolvedTask(t, false); // no echo: writing merged data back must not schedule another sync
                 }
             }
 
@@ -457,10 +494,19 @@ class DokkaiCloudSync {
 
             await this._firebaseFns.setDoc(userDocRef, payload, { merge: true });
 
-            this.hasPendingChanges = false;
+            clearTimeout(badgeTimer);
+            if (seqAtStart === this.changeSeq) {
+                this.hasPendingChanges = false;
+                this.firstPendingAt = 0;
+            } else {
+                // New changes arrived while this sync was running: batch them in the next one
+                this.firstPendingAt = Date.now();
+                this.scheduleAutoSync();
+            }
             this.setStatus('synced');
             console.info('[CloudSync] Successfully synced with Firebase Firestore');
         } catch (err) {
+            clearTimeout(badgeTimer);
             console.error('[CloudSync] Sync failed:', err);
             const friendly = translateFirebaseError(err);
             this.setStatus('error', friendly);

@@ -1,15 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session, joinedload
 
 from app import models
 from app.core.database import get_db
 from app.schemas import TextReadSchema, QuestionReadSchema, OptionReadSchema
+from app.services.option_shuffle import present_options
+from app.services.stream_service import get_attempt_epoch
 
 router = APIRouter()
 
 
 @router.get("/api/texts/{text_id}", response_model=TextReadSchema, tags=["Reading (Anti-Cheat)"])
-def get_text_for_reading(text_id: int, db: Session = Depends(get_db), response: Response = Response()):
+def get_text_for_reading(
+    text_id: int,
+    user_id: str = Query("default-user", description="ID сессии или пользователя (для перемешивания вариантов)"),
+    db: Session = Depends(get_db),
+    response: Response = Response()
+):
     """
     STRICT ANTI-CHEAT ENDPOINT:
     Returns ONLY the text, questions, and option texts.
@@ -29,15 +36,16 @@ def get_text_for_reading(text_id: int, db: Session = Depends(get_db), response: 
     if not text:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Text not found")
 
+    epoch = get_attempt_epoch(db, user_id, text.id)
     questions_read = []
     for q in text.questions:
         options_read = [
             OptionReadSchema(
-                id=opt.id,
-                option_number=opt.option_number,
-                option_text=opt.option_text
+                id=v["token"],
+                option_number=v["number"],
+                option_text=v["opt"].option_text
             )
-            for opt in q.options
+            for v in present_options(user_id, text.id, epoch, q)
         ]
         questions_read.append(
             QuestionReadSchema(

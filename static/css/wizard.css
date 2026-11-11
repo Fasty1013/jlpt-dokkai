@@ -64,6 +64,12 @@
     border-top: 1px solid var(--washi-border);
 }
 
+/* Step 11a: wizard buttons had no base padding (text touched the edges) */
+.wizard-nav-bar .btn {
+    padding: 0.7rem 1.1rem;
+    font-size: 0.9rem;
+}
+
 .btn-submit {
     background: var(--vermilion) !important;
     border-color: var(--vermilion) !important;

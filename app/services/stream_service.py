@@ -12,10 +12,42 @@ from sqlalchemy import func
 
 from app.models import Text, Question, TaskSlot, UserTextState, Attempt
 from tools.param_gen.generator import generate_parametric_text
+from app.services.option_shuffle import present_options, resolve_selected
 
 ACTIVE_SLOTS_PER_PROFILE = 3
 DEFAULT_SOLVED_WHEN = "all_questions_answered"  # or "all_correct"
 ALL_CORRECT_MAX_ATTEMPTS = 2
+
+
+def get_attempt_epoch(db: Session, user_id: str, text_id: int) -> int:
+    """Number of attempts already completed for this text: the 'epoch' of the option shuffle (Step 11d)."""
+    state = (
+        db.query(UserTextState)
+        .filter(UserTextState.user_id == user_id, UserTextState.text_id == text_id)
+        .first()
+    )
+    return int(state.attempts_count or 0) if state else 0
+
+
+def serialize_questions_for_user(user_id: str, text, epoch: int) -> List[Dict[str, Any]]:
+    """Anti-Cheat view of questions: shuffled options with opaque tokens, no answers or explanations."""
+    return [
+        {
+            "id": q.id,
+            "question_number": q.question_number,
+            "question_text": q.question_text,
+            "options": [
+                {
+                    "id": v["token"],
+                    "option_number": v["number"],
+                    "option_text": v["opt"].option_text
+                    # Anti-Cheat: is_correct, trap_type, explanation are NOT sent!
+                }
+                for v in present_options(user_id, text.id, epoch, q)
+            ]
+        }
+        for q in sorted(text.questions, key=lambda x: x.question_number)
+    ]
 
 
 def get_default_profile_for_level(level: str, category: str = "short") -> str:
@@ -110,23 +142,7 @@ def get_or_create_slots(
                 "origin": s.text.origin,
                 "verification_status": s.text.verification_status,
                 "question_count": len(s.text.questions),
-                "questions": [
-                    {
-                        "id": q.id,
-                        "question_number": q.question_number,
-                        "question_text": q.question_text,
-                        "options": [
-                            {
-                                "id": opt.id,
-                                "option_number": opt.option_number,
-                                "option_text": opt.option_text
-                                # Anti-Cheat: is_correct, trap_type, explanation НЕ передаются!
-                            }
-                            for opt in sorted(q.options, key=lambda o: o.option_number)
-                        ]
-                    }
-                    for q in sorted(s.text.questions, key=lambda x: x.question_number)
-                ]
+                "questions": serialize_questions_for_user(user_id, s.text, get_attempt_epoch(db, user_id, s.text.id))
             }
         serialized_slots.append(slot_data)
 
@@ -251,13 +267,18 @@ def complete_task(
         raise ValueError("Задание не найдено")
 
     # 2. Подсчет баллов
+    # Step 11d: the client sends opaque option tokens; resolve them for the epoch the user was shown
+    attempt_epoch = get_attempt_epoch(db, user_id, text_id)
     user_answers_map = {ans["question_id"]: ans["selected_option_id"] for ans in answers if "question_id" in ans and "selected_option_id" in ans}
     total_questions = len(text.questions)
     correct_count = 0
     error_question_ids = []
+    valid_answers_map: Dict[int, int] = {}  # only selections that are valid tokens for this attempt
 
     for q in text.questions:
-        selected_opt_id = user_answers_map.get(q.id)
+        selected_opt_id = resolve_selected(user_id, text_id, attempt_epoch, q, user_answers_map.get(q.id))
+        if selected_opt_id is not None:
+            valid_answers_map[q.id] = user_answers_map[q.id]
         correct_opt = next((opt for opt in q.options if opt.is_correct), None)
         correct_opt_id = correct_opt.id if correct_opt else -1
 
@@ -268,6 +289,9 @@ def complete_task(
 
     score_percent = round((correct_count / total_questions * 100), 1) if total_questions > 0 else 0.0
     is_perfect = (score_percent == 100.0)
+
+    # Step 11d: persist only valid selections (raw/foreign ids are dropped, so the review cannot be forged)
+    answers = [a for a in answers if a.get("question_id") in valid_answers_map and a.get("selected_option_id") == valid_answers_map[a["question_id"]]]
 
     # 3. Запись Attempt (с идемпотентным ключом)
     attempt = Attempt(
@@ -347,22 +371,7 @@ def complete_task(
                         "content_html": next_text.content_html,
                         "origin": next_text.origin,
                         "question_count": len(next_text.questions),
-                        "questions": [
-                            {
-                                "id": q.id,
-                                "question_number": q.question_number,
-                                "question_text": q.question_text,
-                                "options": [
-                                    {
-                                        "id": opt.id,
-                                        "option_number": opt.option_number,
-                                        "option_text": opt.option_text
-                                    }
-                                    for opt in sorted(q.options, key=lambda o: o.option_number)
-                                ]
-                            }
-                            for q in sorted(next_text.questions, key=lambda x: x.question_number)
-                        ]
+                        "questions": serialize_questions_for_user(user_id, next_text, get_attempt_epoch(db, user_id, next_text.id))
                     }
                 }
             else:
@@ -395,8 +404,9 @@ def complete_task(
     return get_solved_task_details(
         db, user_id, text_id, score_percent,
         replacement=replacement_info,
-        user_answers_map=user_answers_map,
-        perfect=user_state.perfect
+        user_answers_map=valid_answers_map,
+        perfect=user_state.perfect,
+        legacy_answer_ids=False
     )
 
 
@@ -408,7 +418,8 @@ def get_solved_task_details(
     replacement: Optional[Dict[str, Any]] = None,
     user_answers_map: Optional[Dict[int, int]] = None,
     perfect: bool = False,
-    is_retry: bool = False
+    is_retry: bool = False,
+    legacy_answer_ids: bool = True
 ) -> Dict[str, Any]:
     """Возвращает полный аналитический разбор завершённого задания."""
     text = (
@@ -430,11 +441,19 @@ def get_solved_task_details(
         else:
             user_answers_map = {}
 
+    # Step 11d: show options in the order the user saw them in the last attempt (epoch = attempts - 1)
+    attempts_done = get_attempt_epoch(db, user_id, text_id)
+    epoch = max(attempts_done - 1, 0)
+
     questions_analysis = []
     correct_count = 0
 
     for q in sorted(text.questions, key=lambda x: x.question_number):
-        selected_opt_id = user_answers_map.get(q.id)
+        selected_opt_id = resolve_selected(
+            user_id, text_id, epoch, q, user_answers_map.get(q.id), allow_legacy_ids=legacy_answer_ids
+        )
+        views = present_options(user_id, text_id, epoch, q)
+        token_of = {v["opt"].id: v["token"] for v in views}
         correct_opt = next((opt for opt in q.options if opt.is_correct), None)
         correct_opt_id = correct_opt.id if correct_opt else -1
         is_user_correct = (selected_opt_id is not None and selected_opt_id == correct_opt_id)
@@ -442,10 +461,11 @@ def get_solved_task_details(
             correct_count += 1
 
         options_analysis = []
-        for opt in sorted(q.options, key=lambda o: o.option_number):
+        for v in views:
+            opt = v["opt"]
             options_analysis.append({
-                "id": opt.id,
-                "option_number": opt.option_number,
+                "id": v["token"],
+                "option_number": v["number"],
                 "option_text": opt.option_text,
                 "is_correct": opt.is_correct,
                 "trap_type": opt.trap_type,
@@ -460,8 +480,8 @@ def get_solved_task_details(
             "general_explanation": q.general_explanation,
             "evidence_span_id": q.evidence_span_id,
             "is_user_correct": is_user_correct,
-            "selected_option_id": selected_opt_id,
-            "correct_option_id": correct_opt_id,
+            "selected_option_id": token_of.get(selected_opt_id) if selected_opt_id is not None else None,
+            "correct_option_id": token_of.get(correct_opt_id, -1),
             "options": options_analysis
         })
 

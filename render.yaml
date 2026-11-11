@@ -8,4 +8,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
+      - key: SHUFFLE_SECRET
+        generateValue: true  # Step 11d: HMAC key for answer-option shuffling; keep it stable
 

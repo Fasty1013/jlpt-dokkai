@@ -42,29 +42,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": {
     "position": "int",
@@ -77,20 +55,7 @@
      "origin": "str",
      "question_count": "int",
      "questions": {
-      "__list__": 1,
-      "item": {
-       "id": "int",
-       "options": {
-        "__list__": 4,
-        "item": {
-         "id": "int",
-         "option_number": "int",
-         "option_text": "str"
-        }
-       },
-       "question_number": "int",
-       "question_text": "str"
-      }
+      "__list__": "*"
      },
      "recommended_time_min": "int",
      "slug": "str",
@@ -103,12 +68,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -119,7 +79,7 @@
    "service-worker-allowed": null
   },
   "method": "POST",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/complete"
  },
@@ -133,29 +93,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": "null",
    "score_percent": "float",
@@ -164,12 +102,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -180,7 +113,7 @@
    "service-worker-allowed": null
   },
   "method": "POST",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/complete"
  },
@@ -1731,6 +1664,18 @@
          "title": "Text Id",
          "type": "integer"
         }
+       },
+       {
+        "description": "ID сессии или пользователя (для перемешивания вариантов)",
+        "in": "query",
+        "name": "user_id",
+        "required": false,
+        "schema": {
+         "default": "default-user",
+         "description": "ID сессии или пользователя (для перемешивания вариантов)",
+         "title": "User Id",
+         "type": "string"
+        }
        }
       ],
       "responses": {
@@ -2156,29 +2101,7 @@
    "level": "str",
    "perfect": "bool",
    "questions": {
-    "__list__": 1,
-    "item": {
-     "correct_option_id": "int",
-     "evidence_span_id": "str",
-     "general_explanation": "str",
-     "id": "int",
-     "is_user_correct": "bool",
-     "options": {
-      "__list__": 4,
-      "item": {
-       "id": "int",
-       "is_correct": "bool",
-       "option_explanation": "str",
-       "option_number": "int",
-       "option_text": "str",
-       "trap_type": "null",
-       "was_selected": "bool"
-      }
-     },
-     "question_number": "int",
-     "question_text": "str",
-     "selected_option_id": "int"
-    }
+    "__list__": "*"
    },
    "replacement": "null",
    "score_percent": "float",
@@ -2187,12 +2110,7 @@
    "total_questions": "int",
    "translation_ru": "str",
    "vocabulary": {
-    "__list__": 3,
-    "item": {
-     "furigana": "str",
-     "translation": "str",
-     "word": "str"
-    }
+    "__list__": "*"
    }
   },
   "headers": {
@@ -2203,7 +2121,7 @@
    "service-worker-allowed": null
   },
   "method": "GET",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/solved/<TID>?user_id=snap-user"
  },
@@ -2260,20 +2178,7 @@
  "solved_list_filters": {
   "body": {
    "items": {
-    "__list__": 1,
-    "item": {
-     "attempts_count": "int",
-     "best_score": "float",
-     "category": "str",
-     "last_score": "float",
-     "level": "str",
-     "origin": "str",
-     "perfect": "bool",
-     "slug": "str",
-     "solved_at": "str",
-     "text_id": "int",
-     "title": "str"
-    }
+    "__list__": "*"
    },
    "page": "int",
    "page_size": "int",
@@ -2287,7 +2192,7 @@
    "service-worker-allowed": null
   },
   "method": "GET",
-  "mode": "shape",
+  "mode": "loose",
   "status": 200,
   "url": "/api/stream/solved?user_id=snap-user&level=N5&only_perfect=true&page=1&page_size=5"
  },
@@ -2447,7 +2352,7 @@
   "body": {
    "category": "short",
    "content_html": "<div class=\"passage-body\">\n<p><ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>月曜日<rt>げつようび</rt></ruby>から、<ruby>図書館<rt>としょかん</rt></ruby>の<ruby>時間<rt>じかん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。</p>\n<p><ruby>平日<rt>へいじつ</rt></ruby>は<ruby>午前<rt>ごぜん</rt></ruby>9時（くじ）から<ruby>午後<rt>ごご</rt></ruby>6時（ろくじ）までです。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>は、<ruby>午前<rt>ごぜん</rt></ruby>10時（じゅうじ）から<ruby>午後<rt>ごご</rt></ruby>5時（ごじ）まで<ruby>開<rt>あ</rt></ruby>いています。</span></p>\n<p>どうぞよろしくお<ruby>願<rt>ねが</rt></ruby>いします。</p>\n</div>",
-   "correct_count": 1,
+   "correct_count": 0,
    "id": 1,
    "is_nhk": false,
    "level": "N5",
@@ -2457,7 +2362,7 @@
      "evidence_span_id": "ev-q1",
      "general_explanation": "В предложении ev-q1 прямо сказано: по субботам и воскресеньям библиотека открыта с 10:00 до 17:00.",
      "id": 1,
-     "is_user_correct": true,
+     "is_user_correct": false,
      "options": [
       {
        "id": 1,
@@ -2466,7 +2371,7 @@
        "option_number": 1,
        "option_text": "午前10時から午後5時まで",
        "trap_type": null,
-       "was_selected": true
+       "was_selected": false
       },
       {
        "id": 2,
@@ -2498,11 +2403,11 @@
      ],
      "question_number": 1,
      "question_text": "日曜日は何時から何時まで図書館が開いていますか。",
-     "selected_option_id": 1
+     "selected_option_id": 18609400033018
     }
    ],
    "recommended_time_min": 2,
-   "score_percent": 100.0,
+   "score_percent": 0.0,
    "source_exam": "JLPT N5 精選教材",
    "time_spent_sec": 42,
    "title": "図書館の利用時間変更 (N5) #1",
@@ -2576,24 +2481,24 @@
      "id": 1,
      "options": [
       {
-       "id": 1,
+       "id": 18609400033018,
        "option_number": 1,
-       "option_text": "午前10時から午後5時まで"
+       "option_text": "午後1時から午後6時まで"
       },
       {
-       "id": 2,
+       "id": 237477852280924,
        "option_number": 2,
        "option_text": "午前9時から午後6時まで"
       },
       {
-       "id": 3,
+       "id": 102261010832195,
        "option_number": 3,
-       "option_text": "午前9時から午後5時まで"
+       "option_text": "午前10時から午後5時まで"
       },
       {
-       "id": 4,
+       "id": 116857499588795,
        "option_number": 4,
-       "option_text": "午後1時から午後6時まで"
+       "option_text": "午前9時から午後5時まで"
       }
      ],
      "question_number": 1,
