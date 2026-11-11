@@ -2,6 +2,7 @@
  * JLPT Dokkai Master - Solved Archive Feature Module
  */
 
+import { t as tr, getLocaleTag } from '../../i18n/index.js';
 import { fetchSolvedTasks, fetchSolvedDetail, retrySolvedTask as apiRetrySolvedTask } from '../../api/stream.js';
 import { escapeHtml } from '../../utils/dom.js';
 import { getUserId } from '../../utils/user.js';
@@ -17,9 +18,9 @@ export function renderSolvedCardHtml(t) {
   const isPerfect = (t.last_score === 100 || t.score === 100 || t.perfect);
   const scoreBadgeClass = isPerfect ? 'score-perfect' : 'score-errors';
   const displayScore = (t.last_score !== undefined) ? t.last_score : (t.score !== undefined ? t.score : 0);
-  const scoreBadgeText = isPerfect ? '100% ★ Идеально' : `${displayScore}% с ошибками`;
+  const scoreBadgeText = isPerfect ? tr('solved.perfect') : tr('solved.withErrors', { pct: displayScore });
   const dateStr = t.solved_at
-    ? new Date(t.solved_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+    ? new Date(t.solved_at).toLocaleDateString(getLocaleTag(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
     : '';
 
   return `
@@ -28,16 +29,16 @@ export function renderSolvedCardHtml(t) {
             <span class="solved-score-badge ${scoreBadgeClass}">${scoreBadgeText}</span>
             <span class="solved-card-date">${dateStr}</span>
         </div>
-        <h4 class="solved-card-title">${escapeHtml(t.title)}</h4>
+        <h4 class="solved-card-title" lang="ja">${escapeHtml(t.title)}</h4>
         <div class="solved-card-actions">
             <button type="button" class="btn-solved-action btn-review" data-action="review-solved" data-text-id="${t.text_id}">
-                🔍 Обзор разбора
+                ${tr('solved.review')}
             </button>
             <button type="button" class="btn-solved-action" data-action="retry-solved" data-text-id="${t.text_id}">
-                🔁 Пройти заново
+                ${tr('solved.retry')}
             </button>
             <button type="button" class="btn-solved-action" data-action="open-report" data-text-id="${t.text_id}" data-task-title="${escapeHtml(t.title)}">
-                ⚠️ Сообщить об ошибке
+                ${tr('solved.report')}
             </button>
         </div>
     </div>
@@ -99,8 +100,8 @@ export async function fetchAndRenderSolvedTasks(context = {}) {
       elements.solvedTasksList.innerHTML = `
         <div class="stream-empty-solved">
             <span class="empty-icon">📖</span>
-            <p>Здесь будут сохраняться решённые вами задания.</p>
-            <span class="empty-hint">Выберите любое задание из левой колонки «Задания», чтобы начать!</span>
+            <p>${tr('solved.empty')}</p>
+            <span class="empty-hint">${tr('solved.emptyHint')}</span>
         </div>
       `;
       return;
@@ -111,7 +112,7 @@ export async function fetchAndRenderSolvedTasks(context = {}) {
     console.error(err);
     elements.solvedTasksList.innerHTML = `
       <div style="text-align: center; padding: 1.5rem; color: var(--vermilion);">
-          Не удалось загрузить архив решённых заданий.
+          ${tr('solved.loadError')}
       </div>
     `;
   }
@@ -132,7 +133,7 @@ export async function reviewSolvedTask(textId, context = {}) {
       data = await fetchSolvedDetail(textId, userId);
     } catch (err) {
       if (err.status === 403) {
-        alert('Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.');
+        alert(tr('srv.notSolved'));
         return;
       }
       throw err;
@@ -154,7 +155,7 @@ export async function reviewSolvedTask(textId, context = {}) {
     }
   } catch (e) {
     console.error(e);
-    alert('Не удалось загрузить разбор задания');
+    alert(tr('solved.reviewFailed'));
   }
 }
 
@@ -181,6 +182,6 @@ export async function retrySolvedTask(textId, context = {}) {
     }
   } catch (e) {
     console.error(e);
-    alert('Не удалось запустить повторное прохождение');
+    alert(tr('solved.retryFailed'));
   }
 }

@@ -5,7 +5,8 @@
  * Note: Never commits user PDFs to git. Server-side /api/admin/* endpoints remain untouched.
  */
 
-import { CATEGORY_NAMES } from '../../constants/labels.js';
+import { t } from '../../i18n/index.js';
+import { getCategoryName } from '../../constants/labels.js';
 import { formatFileSize, escapeHtml } from '../../utils/index.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
@@ -35,7 +36,7 @@ export function setCurrentDraftsCache(drafts) {
 export function handlePdfFileSelected(file) {
     if (!file) return;
     if (!file.name.toLowerCase().endsWith('.pdf')) {
-        alert('Пожалуйста, выберите файл в формате .pdf');
+        alert(t('pdf.needPdf'));
         return;
     }
     const state = getState();
@@ -67,7 +68,7 @@ export async function handlePdfUpload(e) {
     if (e && e.preventDefault) e.preventDefault();
     const state = getState();
     if (!state.selectedPdfFile) {
-        alert('Пожалуйста, выберите или перетащите PDF файл книги.');
+        alert(t('pdf.needFile'));
         return;
     }
 
@@ -83,7 +84,7 @@ export async function handlePdfUpload(e) {
 
     if (els.btnStartUpload) els.btnStartUpload.disabled = true;
     if (els.uploadLoadingSpinner) els.uploadLoadingSpinner.classList.remove('hidden');
-    if (els.uploadStatusText) els.uploadStatusText.textContent = 'Распознавание книги: извлечение страниц, вопросов и ключей...';
+    if (els.uploadStatusText) els.uploadStatusText.textContent = t('pdf.recognizing');
 
     try {
         const resp = await fetch('/api/admin/upload-pdf', {
@@ -93,7 +94,7 @@ export async function handlePdfUpload(e) {
 
         const data = await resp.json();
         if (!resp.ok || !data.success) {
-            throw new Error(data.error || data.detail || 'Не удалось распознать PDF');
+            throw new Error(data.error || data.detail || t('pdf.recognizeFailed'));
         }
 
         clearSelectedPdfFile();
@@ -102,10 +103,10 @@ export async function handlePdfUpload(e) {
         await fetchAndRenderDrafts();
 
         const count = data.drafts ? data.drafts.length : 0;
-        alert(`✓ Успешно! Извлечено заданий/текстов: ${count}. Они отображаются в песочнице черновиков ниже.`);
+        alert(t('pdf.success', { count }));
     } catch (err) {
         console.error('PDF upload error:', err);
-        alert(`Ошибка при обработке PDF:\n${err.message}`);
+        alert(t('pdf.processError', { message: err.message }));
     } finally {
         if (els.btnStartUpload) els.btnStartUpload.disabled = false;
         if (els.uploadLoadingSpinner) els.uploadLoadingSpinner.classList.add('hidden');
@@ -153,8 +154,8 @@ export function renderDraftsList(drafts) {
         els.stagingDraftsList.innerHTML = `
             <div class="empty-state">
                 <span class="empty-icon">📭</span>
-                <h3>Песочница черновиков пуста</h3>
-                <p>Загрузите PDF книгу выше — распознанные тексты и вопросы появятся здесь перед публикацией.</p>
+                <h3>${t('pdf.emptyTitle')}</h3>
+                <p>${t('pdf.emptyDesc')}</p>
             </div>
         `;
         return;
@@ -164,12 +165,12 @@ export function renderDraftsList(drafts) {
         const confidencePct = Math.round((draft.confidence || 0) * 100);
         const confColor = confidencePct >= 80 ? 'color-good' : (confidencePct >= 60 ? 'color-med' : 'color-low');
         const needsReviewBadge = draft.needs_review
-            ? `<span class="badge-review-needed">⚠️ Требует проверки</span>`
-            : `<span class="badge-review-ready">✓ Готов к публикации</span>`;
+            ? `<span class="badge-review-needed">${t('pdf.needsReview')}</span>`
+            : `<span class="badge-review-ready">${t('pdf.ready')}</span>`;
 
         const warningsHtml = (draft.needs_manual_review && draft.needs_manual_review.length > 0)
             ? `<div class="draft-warnings-box">
-                <strong>Замечания системы:</strong>
+                <strong>${t('pdf.warnings')}</strong>
                 <ul>${draft.needs_manual_review.map(r => `<li>${r}</li>`).join('')}</ul>
                </div>`
             : '';
@@ -177,8 +178,8 @@ export function renderDraftsList(drafts) {
         const questionsHtml = (draft.questions || []).map((q, qIdx) => {
             const hasMatched = q.answer_matched;
             const matchStatus = hasMatched
-                ? `<span class="match-badge match-ok">✓ Ответ найден в ключе</span>`
-                : `<span class="match-badge match-missing">✗ Ответ не найден в ключе (выберите верный)</span>`;
+                ? `<span class="match-badge match-ok">${t('pdf.answerFound')}</span>`
+                : `<span class="match-badge match-missing">${t('pdf.answerMissing')}</span>`;
 
             const optionsHtml = (q.options || []).map(opt => {
                 const isChecked = opt.is_correct ? 'checked' : '';
@@ -199,7 +200,7 @@ export function renderDraftsList(drafts) {
             return `
                 <div class="draft-q-item">
                     <div class="draft-q-header">
-                        <span class="draft-q-num">Вопрос ${q.question_number || (qIdx + 1)}:</span>
+                        <span class="draft-q-num">${t('pdf.questionNum', { n: q.question_number || (qIdx + 1) })}</span>
                         <span class="draft-q-prompt">${q.prompt}</span>
                         ${matchStatus}
                     </div>
@@ -215,8 +216,8 @@ export function renderDraftsList(drafts) {
                 <div class="staging-card-top">
                     <div class="staging-meta">
                         <span class="level-tag" data-lvl="${draft.level}">${draft.level}</span>
-                        <span class="category-tag">${CATEGORY_NAMES[draft.category] || draft.category}</span>
-                        <span class="confidence-pill ${confColor}">Точность: ${confidencePct}%</span>
+                        <span class="category-tag">${getCategoryName(draft.category) || draft.category}</span>
+                        <span class="confidence-pill ${confColor}">${t('pdf.accuracy', { pct: confidencePct })}</span>
                         ${needsReviewBadge}
                     </div>
                     <h3 class="staging-card-title">${draft.title}</h3>
@@ -228,8 +229,8 @@ export function renderDraftsList(drafts) {
                 <div class="staging-passage-preview">
                     <details class="draft-details">
                         <summary class="draft-summary">
-                            <span>📖 Текст для чтения (${(draft.body_html || '').replace(/<[^>]+>/g, '').length} симв.)</span>
-                            <span class="details-cue">Развернуть / скрыть</span>
+                            <span>${t('pdf.passageSummary', { n: (draft.body_html || '').replace(/<[^>]+>/g, '').length })}</span>
+                            <span class="details-cue">${t('pdf.expandCollapse')}</span>
                         </summary>
                         <div class="draft-passage-body">
                             ${draft.body_html || ''}
@@ -239,7 +240,7 @@ export function renderDraftsList(drafts) {
 
                 <!-- Questions and Options Block -->
                 <div class="staging-questions-block">
-                    <h4 class="staging-block-title">❓ Вопросы и варианты (${(draft.questions || []).length}):</h4>
+                    <h4 class="staging-block-title">${t('pdf.questionsBlock', { n: (draft.questions || []).length })}</h4>
                     ${questionsHtml}
                 </div>
 
@@ -247,14 +248,14 @@ export function renderDraftsList(drafts) {
                 <div class="staging-actions-footer">
                     <div class="draft-footer-left">
                         <button type="button" class="btn btn-ghost btn-sm" data-action="save-draft" data-slug="${escapeHtml(draft.slug)}">
-                            💾 Сохранить изменения
+                            ${t('pdf.save')}
                         </button>
                         <button type="button" class="btn btn-ghost btn-sm text-danger" data-action="delete-draft" data-slug="${escapeHtml(draft.slug)}">
-                            🗑 Удалить
+                            ${t('pdf.delete')}
                         </button>
                     </div>
                     <button type="button" class="btn btn-primary" data-action="publish-draft" data-slug="${escapeHtml(draft.slug)}">
-                        🚀 Опубликовать в тренажёр →
+                        ${t('pdf.publish')}
                     </button>
                 </div>
             </div>
@@ -293,10 +294,10 @@ export async function saveDraft(slug) {
             body: JSON.stringify(draft)
         });
         const data = await resp.json();
-        if (!resp.ok) throw new Error(data.detail || 'Не удалось сохранить');
-        alert('✓ Изменения черновика успешно сохранены!');
+        if (!resp.ok) throw new Error(data.detail || t('pdf.saveFailed'));
+        alert(t('pdf.saved'));
     } catch (err) {
-        alert(`Ошибка при сохранении: ${err.message}`);
+        alert(t('pdf.saveError', { message: err.message }));
     }
 }
 
@@ -309,7 +310,7 @@ export async function publishDraft(slug) {
     if (draft && draft.questions) {
         const missingAns = draft.questions.some(q => !q.options.some(o => o.is_correct));
         if (missingAns) {
-            alert('Внимание: в одном из вопросов не выбран правильный ответ! Выберите правильный вариант (радиокнопкой) перед публикацией.');
+            alert(t('pdf.needCorrect'));
             return;
         }
     }
@@ -329,17 +330,17 @@ export async function publishDraft(slug) {
         });
         const data = await resp.json();
         if (!resp.ok || !data.success) {
-            const errList = data.detail?.errors ? data.detail.errors.join('\n') : (data.detail || 'Ошибка');
+            const errList = data.detail?.errors ? data.detail.errors.join('\n') : (data.detail || t('pdf.errorGeneric'));
             throw new Error(errList);
         }
 
-        alert(`✓ Задание «${draft ? draft.title : slug}» успешно опубликовано и добавлено в каталог сайта!`);
+        alert(t('pdf.published', { title: draft ? draft.title : slug }));
         await fetchAndRenderDrafts();
         if (window.fetchAndRenderCatalog) {
             window.fetchAndRenderCatalog();
         }
     } catch (err) {
-        alert(`Не удалось опубликовать материал:\n${err.message}`);
+        alert(t('pdf.publishError', { message: err.message }));
     }
 }
 
@@ -348,15 +349,15 @@ export async function publishDraft(slug) {
  * @param {string} slug 
  */
 export async function deleteDraft(slug) {
-    if (!confirm('Вы уверены, что хотите удалить этот черновик?')) return;
+    if (!confirm(t('pdf.confirmDelete'))) return;
     try {
         const resp = await fetch(`/api/admin/drafts/${slug}`, {
             method: 'DELETE'
         });
-        if (!resp.ok) throw new Error('Ошибка удаления');
+        if (!resp.ok) throw new Error(t('pdf.deleteFailed'));
         await fetchAndRenderDrafts();
     } catch (err) {
-        alert(`Ошибка: ${err.message}`);
+        alert(t('pdf.errorPrefix', { message: err.message }));
     }
 }
 

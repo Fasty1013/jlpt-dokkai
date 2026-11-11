@@ -1148,7 +1148,7 @@
     },
     "/api/dictionary/lookup": {
      "get": {
-      "description": "Lookup endpoint for Yomichan-style popup dictionary.\nReturns reading, JLPT level, and Russian translation.",
+      "description": "Lookup endpoint for Yomichan-style popup dictionary.\nReturns reading, JLPT level, and the meaning in the requested language (Russian by default).",
       "operationId": "dictionary_lookup_api_dictionary_lookup_get",
       "parameters": [
        {
@@ -1160,6 +1160,25 @@
          "minLength": 1,
          "title": "Q",
          "type": "string"
+        }
+       },
+       {
+        "description": "Gloss language. Omitted or ru: Russian meaning (unchanged contract). en: JMdict / manual gloss. uz: manual gloss, English fallback (fallback=true). ja: reading and level only (no Japanese-definition source).",
+        "in": "query",
+        "name": "lang",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "pattern": "^(ru|uz|en|ja)$",
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "description": "Gloss language. Omitted or ru: Russian meaning (unchanged contract). en: JMdict / manual gloss. uz: manual gloss, English fallback (fallback=true). ja: reading and level only (no Japanese-definition source).",
+         "title": "Lang"
         }
        }
       ],

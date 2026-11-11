@@ -4,6 +4,7 @@
  * local persistence (DokkaiStorage), and handoff to Analysis View.
  */
 
+import { t, setI18nText } from '../../i18n/index.js';
 import { getUserId } from '../../utils/user.js';
 import { stopTimer } from '../timer/timer.js';
 import { renderWizard } from '../exercise/wizard.js';
@@ -31,7 +32,7 @@ export async function submitAnswers(options = {}) {
     if (typeof options.onIncomplete === 'function') {
       options.onIncomplete(answeredCount, totalQuestions);
     } else if (typeof window !== 'undefined' && typeof window.alert === 'function') {
-      window.alert('Пожалуйста, ответьте на все вопросы перед отправкой!');
+      window.alert(t('submit.answerAll'));
     }
     return null;
   }
@@ -55,7 +56,7 @@ export async function submitAnswers(options = {}) {
   try {
     if (els.btnWizardSubmit) {
       els.btnWizardSubmit.disabled = true;
-      els.btnWizardSubmit.textContent = 'Проверка ответов...';
+      setI18nText(els.btnWizardSubmit, 'submit.checking');
     }
 
     s.currentSubmitIdempotencyKey = s.currentSubmitIdempotencyKey || ('idem-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9));
@@ -86,7 +87,7 @@ export async function submitAnswers(options = {}) {
     // Если режим "all_correct" и есть ошибки (задание еще не решено)
     if (!streamResult.is_solved) {
       const errCount = streamResult.error_question_ids ? streamResult.error_question_ids.length : 1;
-      const warnMsg = `Внимательно перепроверьте свои ответы! В ${errCount} вопросах допущены ошибки. Попытка ${streamResult.attempts_used} из ${streamResult.attempts_max}.`;
+      const warnMsg = t('submit.warn', { errors: errCount, used: streamResult.attempts_used, max: streamResult.attempts_max });
 
       if (typeof options.onRetryWarning === 'function') {
         options.onRetryWarning(warnMsg, streamResult);
@@ -102,7 +103,7 @@ export async function submitAnswers(options = {}) {
       }
       if (els.btnWizardSubmit) {
         els.btnWizardSubmit.disabled = false;
-        els.btnWizardSubmit.textContent = 'Завершить и проверить ответы ✓';
+        setI18nText(els.btnWizardSubmit, 'submit.finish');
       }
       s.currentSubmitIdempotencyKey = null; // Reset key for next trial
 
@@ -188,11 +189,11 @@ export async function submitAnswers(options = {}) {
     if (typeof options.onError === 'function') {
       options.onError(err);
     } else if (typeof window !== 'undefined' && typeof window.alert === 'function') {
-      window.alert(err.message || 'Не удалось отправить ответы на проверку. Ваши ответы сохранены.');
+      window.alert(err.message || t('submit.failed'));
     }
     if (els.btnWizardSubmit) {
       els.btnWizardSubmit.disabled = false;
-      els.btnWizardSubmit.textContent = 'Повторить отправку ответов ↻';
+      setI18nText(els.btnWizardSubmit, 'submit.retry');
     }
     throw err;
   }

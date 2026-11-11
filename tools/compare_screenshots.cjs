@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { chromium } = require(path.resolve(__dirname, '../tests/qa/node_modules/@playwright/test'));
 
+const RUN_USER_ID = `screenshots-${Date.now().toString(36)}`;
+const ANSWER_OPTION_TEXT = '午前9時から午後6時まで'; // text 1, question 1 (wrong answer)
+
 const MOCK_SLOTS = {
   profile_key: 'N5:short',
   user_id: 'screenshot-user',
@@ -79,11 +82,15 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     const page = await context.newPage();
 
     // Freeze clock and animations
-    await page.addInitScript(() => {
+    await page.addInitScript((runUserId) => {
       // Freeze Date.now and animations
       const fixedTime = 1793966400000;
       Date.now = () => fixedTime;
-    });
+      // Step 11d shuffles options by HMAC(user_id | text_id | attempt). A random per-tab user_id gave
+      // main and branch different option orders. A fresh id per run and viewport, identical for both
+      // servers, gives both the same order (attempt 0). See docs/INTENTIONAL_DIFFERENCES.md, I19.
+      try { localStorage.setItem('dokkai_user_id', runUserId); } catch { /* storage unavailable */ }
+    }, `${RUN_USER_ID}-${vp.name}`);
 
     // Mock API requests for deterministic data
     await page.route('**/api/stream/slots*', route => {
@@ -232,7 +239,11 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     await page.screenshot({ path: exercisePath, fullPage: false });
 
     // 6. Analysis Post-Submit View
-    const optItem = page.locator('#wizard-card-area .option-item').first();
+    // Pick the answer by text, not by position: the shuffled order changes from run to run, and the
+    // first option was sometimes right, sometimes wrong (different banner score). This is the option
+    // that was first before the shuffle (a wrong answer, so the trap explanation stays on screen).
+    const byText = page.locator('#wizard-card-area .option-item', { hasText: ANSWER_OPTION_TEXT }).first();
+    const optItem = (await byText.count()) ? byText : page.locator('#wizard-card-area .option-item').first();
     if (await optItem.isVisible()) {
       await optItem.click();
       await page.waitForTimeout(400);
@@ -241,6 +252,15 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
         await submitBtn.click();
         await page.waitForSelector('#analysis-banner:not(.hidden)', { timeout: 15000 });
         await page.waitForSelector('#analysis-tabs .analysis-tab-btn', { timeout: 10000 });
+        // Elapsed time comes from real setInterval ticks (00:00 vs 00:01 between runs): normalise digits only.
+        await page.evaluate(() => {
+          const el = document.getElementById('banner-result-meta');
+          if (!el) return;
+          const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+          for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+            n.nodeValue = n.nodeValue.replace(/\d{2}:\d{2}/g, '00:00');
+          }
+        });
         await page.waitForTimeout(500);
         const analysisPath = path.join(outDir, `${targetName}_${vp.name}_analysis.png`);
         await page.screenshot({ path: analysisPath, fullPage: false });

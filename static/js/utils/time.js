@@ -1,6 +1,7 @@
 /**
  * JLPT Dokkai Master - Time & Date Formatting Utilities
  */
+import { getLocaleTag } from '../i18n/index.js';
 
 export function formatTime(totalSeconds) {
     const minutes = Math.floor(totalSeconds / 60);
@@ -12,7 +13,7 @@ export function formatLocaleDate(dateInput) {
     if (!dateInput) return '';
     try {
         const d = new Date(dateInput);
-        return d.toLocaleDateString('ru-RU', {
+        return d.toLocaleDateString(getLocaleTag(), {
             day: 'numeric',
             month: 'short',
             hour: '2-digit',

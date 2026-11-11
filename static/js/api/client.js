@@ -4,7 +4,8 @@
  * cold-start friendly progress notification (>5s), uniform headers and standardized ApiError.
  */
 
-import { UI_TEXTS } from '../content/texts/ru.js';
+import { t } from '../i18n/index.js';
+import { localizeServerMessage } from '../i18n/server_messages.js';
 
 export class ApiError extends Error {
   constructor(message, status = 0, data = null) {
@@ -34,7 +35,7 @@ function showServerWakingNotice() {
     wakingNoticeEl.innerHTML = `
       <div class="server-waking-content">
         <span class="server-waking-icon">⏳</span>
-        <span class="server-waking-text">${UI_TEXTS.common.serverWaking}</span>
+        <span class="server-waking-text">${t('common.serverWaking')}</span>
       </div>
     `;
     document.body.appendChild(wakingNoticeEl);
@@ -50,7 +51,7 @@ function showServerWakingNotice() {
     sub.style.fontSize = '0.85rem';
     sub.style.marginTop = '0.5rem';
     sub.style.opacity = '0.85';
-    sub.textContent = 'Сервер просыпается, подождите до минуты…';
+    sub.textContent = t('common.serverWaking');
     loadingSpinner.appendChild(sub);
   }
 }
@@ -113,7 +114,7 @@ export async function request(url, options = {}) {
       } catch {
         // Fallback for non-JSON error responses
       }
-      const message = errorData?.detail || `HTTP Error ${response.status}: ${response.statusText}`;
+      const message = (errorData?.detail ? localizeServerMessage(errorData.detail) : null) || `HTTP Error ${response.status}: ${response.statusText}`;
       throw new ApiError(message, response.status, errorData);
     }
 
@@ -133,11 +134,11 @@ export async function request(url, options = {}) {
 
     if (err.name === 'AbortError') {
       const sec = Math.round(timeoutMs / 1000);
-      throw new ApiError(`Таймаут соединения с сервером (${sec} с). Пожалуйста, повторите попытку.`, 408);
+      throw new ApiError(t('err.timeout', { sec }), 408);
     }
     if (err instanceof ApiError) {
       throw err;
     }
-    throw new ApiError(err.message || 'Ошибка сети. Проверьте подключение к интернету.', 0);
+    throw new ApiError(err.message || t('err.network'), 0);
   }
 }

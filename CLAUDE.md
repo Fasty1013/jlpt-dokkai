@@ -218,6 +218,8 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
    ```
    *Сравнивает 15 экранов и модальных окон в десктопном и мобильном разрешениях. Допустимый процент расхождения: строго 0.0000%.*
 
+   > Ветка `feat/i18n-switcher`: скрипты 2 и 4 сравнивают с эталонами одобренных отличий (`tools/snapshots/computed_styles_approved.json`, `tools/snapshots/pixel_approved/`, сняты против `404012d`; INTENTIONAL_DIFFERENCES I17–I20). Новое отличие вне эталона — ошибка; `--no-approved` — строгий режим; после смены эталона на :8001 — переснять с `--write-approved`.
+
 5. **Проверка графа зависимостей ES-модулей (DAG, 0 циклов):**
    ```bash
    node tools/check_dependency_graph.cjs

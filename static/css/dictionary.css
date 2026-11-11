@@ -374,3 +374,11 @@
     color: #b91c1c;
 }
 
+
+/* Source / fallback note under the meaning (shown only for non-Russian UI languages) */
+.popup-meaning-note {
+    margin: 0.35rem 0 0;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    color: var(--sumi-500);
+}

@@ -110,6 +110,7 @@ export function initElementsCache(rootDoc = (typeof document !== 'undefined' ? d
     elements.popupReading = rootDoc.getElementById('popup-reading');
     elements.popupLevel = rootDoc.getElementById('popup-level');
     elements.popupMeaning = rootDoc.getElementById('popup-meaning');
+    elements.popupMeaningNote = rootDoc.getElementById('popup-meaning-note');
     elements.popupBtnAudio = rootDoc.getElementById('popup-btn-audio');
     elements.popupBtnClose = rootDoc.getElementById('popup-btn-close');
     elements.popupBtnSave = rootDoc.getElementById('popup-btn-save');

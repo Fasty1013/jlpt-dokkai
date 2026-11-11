@@ -34,12 +34,19 @@ const PRECACHE_ASSETS = [
   '/static/js/sync/sdk_loader.js',
   '/static/js/sync/merge.js',
   '/static/js/main.js',
+  '/static/js/i18n/index.js',
+  '/static/js/i18n/i18n_events.js',
+  '/static/js/i18n/server_messages.js',
+  '/static/js/app/i18n_refresh.js',
+  '/static/js/i18n/locales/ru.js',
+  '/static/js/i18n/locales/en.js',
+  '/static/js/i18n/locales/uz.js',
+  '/static/js/i18n/locales/ja.js',
   '/static/js/app/actions.js',
   '/static/js/app/init_events.js',
   '/static/js/app/persistence.js',
   '/static/js/constants/settings.js',
   '/static/js/constants/labels.js',
-  '/static/js/content/texts/ru.js',
   '/static/js/utils/user.js',
   '/static/js/utils/dom.js',
   '/static/js/utils/time.js',
@@ -99,6 +106,7 @@ const PRECACHE_ASSETS = [
   '/static/js/features/pdf_import/index.js',
   '/static/js/features/events/action_dispatcher.js',
   '/static/js/features/events/navigation_events.js',
+  '/static/js/features/events/swipe_rows.js',
   '/static/js/features/events/index.js'
 ];
 

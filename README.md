@@ -210,3 +210,5 @@ caches.keys().then(cacheNames => {
 ## 📜 Лицензия
 MIT License.
 
+### Данные словаря и благодарности
+Английские глоссы всплывающего словаря (`app/data/jmdict_en.json`) получены из **JMdict** — Dictionary data from JMdict, copyright The Electronic Dictionary Research and Development Group, licensed under CC BY-SA 4.0: https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project (лицензия: https://www.edrdg.org/edrdg/licence.html). Индекс собран `tools/build_jmdict_index.py` из релиза `jmdict-eng-common` 3.6.2 (словарь от 2026-11-09, проект jmdict-simplified) и остаётся под **CC BY-SA 4.0**; лицензия MIT выше относится к коду проекта. Узбекские и часть английских глосс — собственный глоссарий проекта (`app/data/dictionary_manual.txt`). Подробности: `docs/i18n/DICTIONARY_DATA.md`.

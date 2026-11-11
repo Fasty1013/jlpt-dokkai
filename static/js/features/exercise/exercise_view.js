@@ -3,8 +3,9 @@
  * Initializes text details, sets up split reading pane, furigana, and launches wizard.
  */
 
+import { t } from '../../i18n/index.js';
 import { fetchTextDetail } from '../../api/texts.js';
-import { CATEGORY_NAMES } from '../../constants/labels.js';
+import { getCategoryName } from '../../constants/labels.js';
 import { renderWizard, saveCurrentActiveSession } from './wizard.js';
 import { state as storeState } from '../../state/store.js';
 import { elements as domElements } from '../../state/elements.js';
@@ -58,7 +59,7 @@ export async function startExercise(textId, options = {}) {
       els.headerLevelTag.setAttribute('data-lvl', textData.level);
     }
     if (els.headerCategoryTag) {
-      els.headerCategoryTag.textContent = CATEGORY_NAMES[textData.category] || textData.category;
+      els.headerCategoryTag.textContent = getCategoryName(textData.category) || textData.category;
     }
 
     if (els.headerExamBadge) {
@@ -98,7 +99,7 @@ export async function startExercise(textId, options = {}) {
       els.passageLevel.setAttribute('data-lvl', textData.level);
     }
     if (els.passageCategory) {
-      els.passageCategory.textContent = CATEGORY_NAMES[textData.category] || textData.category;
+      els.passageCategory.textContent = getCategoryName(textData.category) || textData.category;
     }
 
     if (els.passageExamBadge) {
@@ -111,7 +112,7 @@ export async function startExercise(textId, options = {}) {
     }
 
     if (els.passageTime) {
-      els.passageTime.textContent = `${textData.recommended_time_min} мин`;
+      els.passageTime.textContent = t('exercise.minutes', { n: textData.recommended_time_min });
     }
 
     // Render Japanese HTML
@@ -124,12 +125,12 @@ export async function startExercise(textId, options = {}) {
       if (pretestConfig.showFurigana) {
         if (s.settings) s.settings.furiganaVisible = true;
         els.passageContent.classList.remove('hide-furigana');
-        if (els.furiganaStatus) els.furiganaStatus.textContent = 'ВКЛ';
+        if (els.furiganaStatus) els.furiganaStatus.textContent = t('common.on');
         if (els.btnToggleFurigana) els.btnToggleFurigana.classList.add('active');
       } else {
         if (s.settings) s.settings.furiganaVisible = false;
         els.passageContent.classList.add('hide-furigana');
-        if (els.furiganaStatus) els.furiganaStatus.textContent = 'ВЫКЛ';
+        if (els.furiganaStatus) els.furiganaStatus.textContent = t('common.off');
         if (els.btnToggleFurigana) els.btnToggleFurigana.classList.remove('active');
       }
 

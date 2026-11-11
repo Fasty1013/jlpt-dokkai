@@ -1,0 +1,1983 @@
+[
+ {
+  "file": "app/routers/admin.py",
+  "line": 33,
+  "kind": "string",
+  "category": "server-text",
+  "text": "detail=\"Разрешены только файлы формата PDF (.pdf)\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 57,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Возвращает список всех черновиков в staging.\"\"\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 63,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Возвращает полную структуру черновика по slug.\"\"\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 66,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Черновик не найден\")"
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 72,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Обновляет черновик (например, выбор правильного ответа или редактирование текста).\"\"\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 81,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Публикует проверенный черновик из staging в боевую базу данных тренажёра.\"\"\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 85,
+  "kind": "string",
+  "category": "server-text",
+  "text": "return {\"success\": True, \"message\": f\"Черновик {slug} успешно опубликован в каталог!\"}"
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 90,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Удаляет черновик из staging.\"\"\""
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 93,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Черновик не найден\")"
+ },
+ {
+  "file": "app/routers/admin.py",
+  "line": 94,
+  "kind": "string",
+  "category": "server-text",
+  "text": "return {\"success\": True, \"message\": f\"Черновик {slug} удален из staging.\"}"
+ },
+ {
+  "file": "app/routers/reading.py",
+  "line": 16,
+  "kind": "string",
+  "category": "server-text",
+  "text": "user_id: str = Query(\"default-user\", description=\"ID сессии или пользователя (для перемешивания вариантов)\"),"
+ },
+ {
+  "file": "app/routers/reports.py",
+  "line": 24,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Задание не найдено\")"
+ },
+ {
+  "file": "app/routers/reports.py",
+  "line": 40,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"message\": \"Жалоба принята. Спасибо за помощь в улучшении качества!\" if not deactivated else \"Жалоба принята. Задание автоматически скрыто из-за превышения порога замечаний.\""
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 24,
+  "kind": "string",
+  "category": "server-text",
+  "text": "user_id: str = Query(\"default-user\", description=\"ID сессии или пользователя\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 25,
+  "kind": "string",
+  "category": "server-text",
+  "text": "profile_key: Optional[str] = Query(None, description=\"Ключ профиля сложности, например N5:short:detail:1:XS\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 26,
+  "kind": "string",
+  "category": "server-text",
+  "text": "level: Optional[str] = Query(\"N5\", description=\"Уровень JLPT (N5-N1), если profile_key не указан\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 27,
+  "kind": "string",
+  "category": "server-text",
+  "text": "category: Optional[str] = Query(\"short\", description=\"Категория (short, medium, long, info_search)\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 77,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f\"Ошибка фиксации задания: {str(e)}\")"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 82,
+  "kind": "string",
+  "category": "server-text",
+  "text": "user_id: str = Query(\"default-user\", description=\"ID сессии или пользователя\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 83,
+  "kind": "string",
+  "category": "server-text",
+  "text": "level: Optional[str] = Query(None, description=\"Фильтр по уровню: N5-N1\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 84,
+  "kind": "string",
+  "category": "server-text",
+  "text": "only_perfect: Optional[bool] = Query(None, description=\"Только решённые на 100% без ошибок\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 85,
+  "kind": "string",
+  "category": "server-text",
+  "text": "only_errors: Optional[bool] = Query(None, description=\"Только с ошибками\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 86,
+  "kind": "string",
+  "category": "server-text",
+  "text": "page: int = Query(1, ge=1, description=\"Номер страницы\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 87,
+  "kind": "string",
+  "category": "server-text",
+  "text": "page_size: int = Query(20, ge=1, le=100, description=\"Количество на страницу\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 107,
+  "kind": "string",
+  "category": "server-text",
+  "text": "user_id: str = Query(\"default-user\", description=\"ID сессии или пользователя\"),"
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 122,
+  "kind": "string",
+  "category": "server-text",
+  "text": "detail=\"Anti-Cheat: Задание ещё не решено. Разбор ответов недоступен.\""
+ },
+ {
+  "file": "app/routers/stream.py",
+  "line": 153,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Задание не найдено\")"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 11,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"私\", \"reading\": \"わたし\", \"level\": \"N5\", \"meaning\": \"я (вежливо)\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 12,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"学生\", \"reading\": \"がくせい\", \"level\": \"N5\", \"meaning\": \"студент, учащийся\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 13,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"学校\", \"reading\": \"がっこう\", \"level\": \"N5\", \"meaning\": \"школа\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 14,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"先生\", \"reading\": \"せんせい\", \"level\": \"N5\", \"meaning\": \"учитель, преподаватель\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 15,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"本\", \"reading\": \"ほん\", \"level\": \"N5\", \"meaning\": \"книга, основа\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 16,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"日本語\", \"reading\": \"にほんご\", \"level\": \"N5\", \"meaning\": \"японский язык\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 17,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"友達\", \"reading\": \"ともだち\", \"level\": \"N5\", \"meaning\": \"друг, друзья\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 18,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"時間\", \"reading\": \"じかん\", \"level\": \"N5\", \"meaning\": \"время, часы\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 19,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"毎日\", \"reading\": \"まいにち\", \"level\": \"N5\", \"meaning\": \"каждый день\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 20,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"今日\", \"reading\": \"きょう\", \"level\": \"N5\", \"meaning\": \"сегодня\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 21,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"明日\", \"reading\": \"あした\", \"level\": \"N5\", \"meaning\": \"завтра\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 22,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"昨日\", \"reading\": \"きのう\", \"level\": \"N5\", \"meaning\": \"вчера\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 23,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"図書館\", \"reading\": \"としょかん\", \"level\": \"N5\", \"meaning\": \"библиотека\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 24,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"電車\", \"reading\": \"でんしゃ\", \"level\": \"N5\", \"meaning\": \"поезд, электричка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 25,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"食べる\", \"reading\": \"たべる\", \"level\": \"N5\", \"meaning\": \"есть, кушать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 26,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"飲む\", \"reading\": \"のむ\", \"level\": \"N5\", \"meaning\": \"пить\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 27,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"行く\", \"reading\": \"いく\", \"level\": \"N5\", \"meaning\": \"идти, ехать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 28,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"来る\", \"reading\": \"くる\", \"level\": \"N5\", \"meaning\": \"приходить, приезжать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 29,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"見る\", \"reading\": \"みる\", \"level\": \"N5\", \"meaning\": \"смотреть, видеть\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 30,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"聞く\", \"reading\": \"きく\", \"level\": \"N5\", \"meaning\": \"слушать, спрашивать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 31,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"読む\", \"reading\": \"よむ\", \"level\": \"N5\", \"meaning\": \"читать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 32,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"書く\", \"reading\": \"かく\", \"level\": \"N5\", \"meaning\": \"писать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 33,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"買う\", \"reading\": \"かう\", \"level\": \"N5\", \"meaning\": \"покупать\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 34,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"新しい\", \"reading\": \"あたらしい\", \"level\": \"N5\", \"meaning\": \"новый\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 35,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"古い\", \"reading\": \"ふるい\", \"level\": \"N5\", \"meaning\": \"старый\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 36,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"大きい\", \"reading\": \"おおきい\", \"level\": \"N5\", \"meaning\": \"большой\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 37,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"小さい\", \"reading\": \"ちいさい\", \"level\": \"N5\", \"meaning\": \"маленький\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 38,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"高い\", \"reading\": \"たかい\", \"level\": \"N5\", \"meaning\": \"высокий, дорогой\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 39,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"安い\", \"reading\": \"やすい\", \"level\": \"N5\", \"meaning\": \"дешёвый, спокойный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 40,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"面白い\", \"reading\": \"おもしろい\", \"level\": \"N5\", \"meaning\": \"интересный, забавный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 43,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"案内\", \"reading\": \"あんない\", \"level\": \"N4\", \"meaning\": \"руководство, извещение, показ\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 44,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"安心\", \"reading\": \"あんしん\", \"level\": \"N4\", \"meaning\": \"спокойствие, душевный покой\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 45,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"利用\", \"reading\": \"りよう\", \"level\": \"N4\", \"meaning\": \"использование, применение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 46,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"注意\", \"reading\": \"ちゅうい\", \"level\": \"N4\", \"meaning\": \"внимание, предостережение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 47,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"用意\", \"reading\": \"ようい\", \"level\": \"N4\", \"meaning\": \"подготовка, готовность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 48,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"意見\", \"reading\": \"いけん\", \"level\": \"N4\", \"meaning\": \"мнение, точка зрения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 49,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"連絡\", \"reading\": \"れんらく\", \"level\": \"N4\", \"meaning\": \"связь, контакт, сообщение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 50,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"都合\", \"reading\": \"つごう\", \"level\": \"N4\", \"meaning\": \"обстоятельства, удобство времени\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 51,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"遠慮\", \"reading\": \"えんりょ\", \"level\": \"N4\", \"meaning\": \"стеснение, воздержание\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 52,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"危険\", \"reading\": \"きけん\", \"level\": \"N4\", \"meaning\": \"опасность, опасный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 53,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"便利\", \"reading\": \"べんり\", \"level\": \"N4\", \"meaning\": \"удобный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 54,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"不便\", \"reading\": \"ふべん\", \"level\": \"N4\", \"meaning\": \"неудобный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 55,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"簡単\", \"reading\": \"かんたん\", \"level\": \"N4\", \"meaning\": \"простой, лёгкий\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 56,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"複雑\", \"reading\": \"ふくざつ\", \"level\": \"N4\", \"meaning\": \"сложный, запутанный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 57,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"経験\", \"reading\": \"けいけん\", \"level\": \"N4\", \"meaning\": \"опыт, жизненная практика\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 58,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"説明\", \"reading\": \"せつめい\", \"level\": \"N4\", \"meaning\": \"объяснение, пояснение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 59,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"理由\", \"reading\": \"りゆう\", \"level\": \"N4\", \"meaning\": \"причина, основание\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 60,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"目的\", \"reading\": \"もくてき\", \"level\": \"N4\", \"meaning\": \"цель, намерение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 61,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"場合\", \"reading\": \"ばあい\", \"level\": \"N4\", \"meaning\": \"случай, обстоятельство\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 62,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"習慣\", \"reading\": \"しゅうかん\", \"level\": \"N4\", \"meaning\": \"обычай, привычка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 63,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"約束\", \"reading\": \"やくそく\", \"level\": \"N4\", \"meaning\": \"обещание, договорённость\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 64,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"関係\", \"reading\": \"かんけい\", \"level\": \"N4\", \"meaning\": \"отношение, связь\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 65,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"手伝う\", \"reading\": \"てつだう\", \"level\": \"N4\", \"meaning\": \"помогать, оказывать содействие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 66,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"参加\", \"reading\": \"さんか\", \"level\": \"N4\", \"meaning\": \"участие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 67,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"予定\", \"reading\": \"よてい\", \"level\": \"N4\", \"meaning\": \"план, расписание\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 70,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"関する\", \"reading\": \"かんする\", \"level\": \"N3\", \"meaning\": \"иметь отношение, касаться\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 71,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"影響\", \"reading\": \"えいきょう\", \"level\": \"N3\", \"meaning\": \"влияние, воздействие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 72,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"環境\", \"reading\": \"かんきょう\", \"level\": \"N3\", \"meaning\": \"окружающая среда, обстановка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 73,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"変化\", \"reading\": \"へんか\", \"level\": \"N3\", \"meaning\": \"изменение, перемена\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 74,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"結果\", \"reading\": \"けっか\", \"level\": \"N3\", \"meaning\": \"результат, последствие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 75,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"効果\", \"reading\": \"こうか\", \"level\": \"N3\", \"meaning\": \"эффект, действие, результат\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 76,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"増加\", \"reading\": \"ぞうか\", \"level\": \"N3\", \"meaning\": \"увеличение, рост\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 77,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"減少\", \"reading\": \"げんしょう\", \"level\": \"N3\", \"meaning\": \"уменьшение, спад\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 78,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"原因\", \"reading\": \"げんいん\", \"level\": \"N3\", \"meaning\": \"причина, повод\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 79,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"解決\", \"reading\": \"かいけつ\", \"level\": \"N3\", \"meaning\": \"решение (проблемы, вопроса)\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 80,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"必要\", \"reading\": \"ひつよう\", \"level\": \"N3\", \"meaning\": \"необходимость, нужный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 81,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"重要\", \"reading\": \"じゅうよう\", \"level\": \"N3\", \"meaning\": \"важный, существенный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 82,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"可能\", \"reading\": \"かのう\", \"level\": \"N3\", \"meaning\": \"возможный, выполнимый\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 83,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"不可能\", \"reading\": \"ふかのう\", \"level\": \"N3\", \"meaning\": \"невозможный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 84,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"価値\", \"reading\": \"かち\", \"level\": \"N3\", \"meaning\": \"ценность, стоимость\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 85,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"調査\", \"reading\": \"ちょうさ\", \"level\": \"N3\", \"meaning\": \"исследование, опрос\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 86,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"発表\", \"reading\": \"はっぴょう\", \"level\": \"N3\", \"meaning\": \"публикация, объявление, доклад\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 87,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"開発\", \"reading\": \"かいはつ\", \"level\": \"N3\", \"meaning\": \"разработка, освоение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 88,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"発展\", \"reading\": \"はってん\", \"level\": \"N3\", \"meaning\": \"развитие, прогресс\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 89,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"比較\", \"reading\": \"ひかく\", \"level\": \"N3\", \"meaning\": \"сравнение, сопоставление\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 90,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"傾向\", \"reading\": \"けいこう\", \"level\": \"N3\", \"meaning\": \"тенденция, склонность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 91,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"意識\", \"reading\": \"いしき\", \"level\": \"N3\", \"meaning\": \"сознание, осознание\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 92,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"特徴\", \"reading\": \"とくちょう\", \"level\": \"N3\", \"meaning\": \"особенность, характерная черта\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 93,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"態度\", \"reading\": \"たいど\", \"level\": \"N3\", \"meaning\": \"отношение, позиция, поведение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 94,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"状況\", \"reading\": \"じょうきょう\", \"level\": \"N3\", \"meaning\": \"ситуация, положение дел\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 97,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"持続可能\", \"reading\": \"じぞくかのう\", \"level\": \"N2\", \"meaning\": \"устойчивый, экологичный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 98,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"意思決定\", \"reading\": \"いしけってい\", \"level\": \"N2\", \"meaning\": \"принятие решений\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 99,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"深刻\", \"reading\": \"しんこく\", \"level\": \"N2\", \"meaning\": \"серьёзный, глубокий, острый\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 100,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"課題\", \"reading\": \"かだい\", \"level\": \"N2\", \"meaning\": \"задача, вызов, проблема\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 101,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"対象\", \"reading\": \"たいしょう\", \"level\": \"N2\", \"meaning\": \"объект, целевая группа\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 102,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"批判\", \"reading\": \"ひはん\", \"level\": \"N2\", \"meaning\": \"критика, суждение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 103,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"主張\", \"reading\": \"しゅちょう\", \"level\": \"N2\", \"meaning\": \"утверждение, позиция автора\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 104,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"把握\", \"reading\": \"はあく\", \"level\": \"N2\", \"meaning\": \"понимание, схватывание сути\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 105,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"背景\", \"reading\": \"はいけい\", \"level\": \"N2\", \"meaning\": \"фон, подоплёка, контекст\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 106,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"指摘\", \"reading\": \"してき\", \"level\": \"N2\", \"meaning\": \"указание (на факт/ошибку)\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 107,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"共通\", \"reading\": \"きょうつう\", \"level\": \"N2\", \"meaning\": \"общий, единый\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 108,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"独自\", \"reading\": \"どくじ\", \"level\": \"N2\", \"meaning\": \"своеобразный, оригинальный, собственный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 109,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"普及\", \"reading\": \"ふきゅう\", \"level\": \"N2\", \"meaning\": \"распространение, популяризация\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 110,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"導入\", \"reading\": \"どうにゅう\", \"level\": \"N2\", \"meaning\": \"внедрение, введение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 111,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"義務\", \"reading\": \"ぎむ\", \"level\": \"N2\", \"meaning\": \"обязанность, долг\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 112,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"懸念\", \"reading\": \"けねん\", \"level\": \"N2\", \"meaning\": \"опасение, тревога\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 113,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"視点\", \"reading\": \"してん\", \"level\": \"N2\", \"meaning\": \"точка зрения, угол обзора\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 114,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"観点\", \"reading\": \"かんてん\", \"level\": \"N2\", \"meaning\": \"аспект, точка зрения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 115,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"基準\", \"reading\": \"きじゅん\", \"level\": \"N2\", \"meaning\": \"стандарт, норма, критерий\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 116,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"柔軟\", \"reading\": \"じゅうなん\", \"level\": \"N2\", \"meaning\": \"гибкий, адаптивный\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 119,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"根底\", \"reading\": \"こんてい\", \"level\": \"N1\", \"meaning\": \"фундамент, глубинная основа\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 120,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"概念\", \"reading\": \"がいねん\", \"level\": \"N1\", \"meaning\": \"концепция, понятие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 121,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"本質\", \"reading\": \"ほんしつ\", \"level\": \"N1\", \"meaning\": \"суть, подлинная природа\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 122,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"妥協\", \"reading\": \"だきょう\", \"level\": \"N1\", \"meaning\": \"компромисс, уступка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 123,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"示唆\", \"reading\": \"しさ\", \"level\": \"N1\", \"meaning\": \"намек, внушение, подсказка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 124,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"乖離\", \"reading\": \"かいり\", \"level\": \"N1\", \"meaning\": \"расхождение, отчуждение, разрыв\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 125,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"看過\", \"reading\": \"かんか\", \"level\": \"N1\", \"meaning\": \"упущение из виду, недосмотр\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 126,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"卓越\", \"reading\": \"たくえつ\", \"level\": \"N1\", \"meaning\": \"выдающийся характер, превосходство\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 127,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"変遷\", \"reading\": \"へんせん\", \"level\": \"N1\", \"meaning\": \"эволюция, смена эпох, переходы\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 128,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"象徴\", \"reading\": \"しょうちょう\", \"level\": \"N1\", \"meaning\": \"символ, олицетворение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 129,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"共生\", \"reading\": \"きょうせい\", \"level\": \"N1\", \"meaning\": \"сосуществование, симбиоз\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 130,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"吟味\", \"reading\": \"ぎんみ\", \"level\": \"N1\", \"meaning\": \"тщательное рассмотрение, проба\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 131,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"固定観念\", \"reading\": \"こていかんねん\", \"level\": \"N1\", \"meaning\": \"стереотип, закостенелое представление\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 132,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"自律\", \"reading\": \"じりつ\", \"level\": \"N1\", \"meaning\": \"автономия, саморегуляция\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 133,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"持続可能性\", \"reading\": \"じぞくかのうせい\", \"level\": \"N1\", \"meaning\": \"устойчивость, устойчивое развитие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 136,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"短文\", \"reading\": \"たんぶん\", \"level\": \"N4\", \"meaning\": \"короткий текст, предложение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 137,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"短文メモ\", \"reading\": \"たんぶんめも\", \"level\": \"N4\", \"meaning\": \"короткая памятка, заметка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 138,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"利用カード\", \"reading\": \"りようかーど\", \"level\": \"N4\", \"meaning\": \"читательский билет, карта пользователя\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 139,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"開館時間\", \"reading\": \"かいかんじかん\", \"level\": \"N4\", \"meaning\": \"часы работы, время открытия\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 140,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"公園清掃\", \"reading\": \"こうえんせいそう\", \"level\": \"N4\", \"meaning\": \"уборка парка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 141,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"清掃\", \"reading\": \"せいそう\", \"level\": \"N4\", \"meaning\": \"уборка, чистка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 142,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"地域活動\", \"reading\": \"ちいきかつどう\", \"level\": \"N3\", \"meaning\": \"общественная деятельность в районе\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 143,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"参加資格\", \"reading\": \"さんかしかく\", \"level\": \"N3\", \"meaning\": \"требования к участникам\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 144,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"雨天順延\", \"reading\": \"うてんじゅんえん\", \"level\": \"N2\", \"meaning\": \"перенос в случае дождя\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 145,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"交流会\", \"reading\": \"こうりゅうかい\", \"level\": \"N4\", \"meaning\": \"встреча для общения, нетворкинг\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 146,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"会費無料\", \"reading\": \"かいひむりょう\", \"level\": \"N4\", \"meaning\": \"бесплатное участие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 147,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"事前申込\", \"reading\": \"じぜんもうしこみ\", \"level\": \"N3\", \"meaning\": \"предварительная заявка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 148,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"窓口対応\", \"reading\": \"まどぐちたいおう\", \"level\": \"N3\", \"meaning\": \"обслуживание в окне / на стойке\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 149,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"保管期間\", \"reading\": \"ほかんきかん\", \"level\": \"N3\", \"meaning\": \"срок хранения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 150,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"身分証\", \"reading\": \"みぶんしょう\", \"level\": \"N4\", \"meaning\": \"удостоверение личности\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 151,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"拾得物\", \"reading\": \"しゅうとくぶつ\", \"level\": \"N2\", \"meaning\": \"найденные вещи, находка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 152,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"ビル管理\", \"reading\": \"びるかんり\", \"level\": \"N3\", \"meaning\": \"управление зданием\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 153,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"停電注意\", \"reading\": \"ていでんちゅうい\", \"level\": \"N4\", \"meaning\": \"внимание: отключение электричества\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 154,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"階段利用\", \"reading\": \"かいだんりよう\", \"level\": \"N5\", \"meaning\": \"использование лестницы\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 155,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"安全点検\", \"reading\": \"あんぜんてんけん\", \"level\": \"N3\", \"meaning\": \"проверка безопасности\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 156,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"健康管理\", \"reading\": \"けんこうかんり\", \"level\": \"N3\", \"meaning\": \"забота о здоровье\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 157,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"問診票\", \"reading\": \"もんしんひょう\", \"level\": \"N2\", \"meaning\": \"медицинская анкета\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 158,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"前日絶食\", \"reading\": \"ぜんじつぜっしょく\", \"level\": \"N1\", \"meaning\": \"воздержание от еды накануне\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 159,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"受診時間\", \"reading\": \"じゅしんじかん\", \"level\": \"N3\", \"meaning\": \"время приема у врача\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 160,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"勤務調整\", \"reading\": \"きんむちょうせい\", \"level\": \"N2\", \"meaning\": \"корректировка рабочего графика\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 161,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"代替要員\", \"reading\": \"だいたいよういん\", \"level\": \"N1\", \"meaning\": \"сменщик, замещающий сотрудник\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 162,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"店長承認\", \"reading\": \"てんちょうしょうにん\", \"level\": \"N3\", \"meaning\": \"одобрение управляющего\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 163,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"連絡締切\", \"reading\": \"れんらくしめきり\", \"level\": \"N3\", \"meaning\": \"дедлайн для связи\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 164,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"不在票\", \"reading\": \"ふざいひょう\", \"level\": \"N3\", \"meaning\": \"извещение о доставке в отсутствие адресата\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 165,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"保管期限\", \"reading\": \"ほかんきげん\", \"level\": \"N3\", \"meaning\": \"предельный срок хранения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 166,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"自動受付\", \"reading\": \"じどううけつけ\", \"level\": \"N3\", \"meaning\": \"автоматический прием заявок\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 167,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"指定時間\", \"reading\": \"していじかん\", \"level\": \"N3\", \"meaning\": \"указанное время\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 168,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"新商品\", \"reading\": \"しんしょうひん\", \"level\": \"N4\", \"meaning\": \"новый товар, новинка\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 169,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"数量限定\", \"reading\": \"すうりょうげんてい\", \"level\": \"N2\", \"meaning\": \"ограниченное количество\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 170,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"道路工事\", \"reading\": \"どうろこうじ\", \"level\": \"N4\", \"meaning\": \"дорожные работы\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 171,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"迂回運行\", \"reading\": \"うかいうんこう\", \"level\": \"N1\", \"meaning\": \"движение в объезд\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 172,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"乗降場所\", \"reading\": \"じょうこうばしょ\", \"level\": \"N2\", \"meaning\": \"место посадки и высадки\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 173,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"工事期間\", \"reading\": \"こうじきかん\", \"level\": \"N3\", \"meaning\": \"период ремонтных работ\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 174,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"大会要項\", \"reading\": \"たいかいようこう\", \"level\": \"N2\", \"meaning\": \"положение о конкурсе\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 175,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"原稿提出\", \"reading\": \"げんこうていしゅつ\", \"level\": \"N2\", \"meaning\": \"подача рукописи / текста\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 176,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"審査基準\", \"reading\": \"しんさきじゅん\", \"level\": \"N2\", \"meaning\": \"критерии оценки жюри\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 177,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"表彰規定\", \"reading\": \"ひょうしょうきてい\", \"level\": \"N1\", \"meaning\": \"правила награждения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 178,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"休講連絡\", \"reading\": \"きゅうこうれんらく\", \"level\": \"N3\", \"meaning\": \"сообщение об отмене лекции\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 179,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"補講日程\", \"reading\": \"ほこうにってい\", \"level\": \"N2\", \"meaning\": \"расписание дополнительных занятий\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 180,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"課題提出\", \"reading\": \"かだいていしゅつ\", \"level\": \"N3\", \"meaning\": \"сдача домашнего задания\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 181,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"教務課\", \"reading\": \"きょうむか\", \"level\": \"N2\", \"meaning\": \"учебная часть, деканат\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 182,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"環境問題\", \"reading\": \"かんきょうもんだい\", \"level\": \"N3\", \"meaning\": \"экологические проблемы\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 183,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"資源回収\", \"reading\": \"しげんかいしゅう\", \"level\": \"N3\", \"meaning\": \"сбор вторсырья\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 184,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"市民の意識\", \"reading\": \"しみんのいしき\", \"level\": \"N3\", \"meaning\": \"сознательность горожан\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 185,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"地域差\", \"reading\": \"ちいきさ\", \"level\": \"N2\", \"meaning\": \"региональные различия\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 186,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"深夜営業\", \"reading\": \"しんやえいぎょう\", \"level\": \"N3\", \"meaning\": \"круглосуточная работа ночью\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 187,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"利便性\", \"reading\": \"りべんせい\", \"level\": \"N2\", \"meaning\": \"удобство, практичность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 188,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"社会基盤\", \"reading\": \"しゃかいきばん\", \"level\": \"N2\", \"meaning\": \"социальная инфраструктура\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 189,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"無人レジ\", \"reading\": \"むじんれじ\", \"level\": \"N3\", \"meaning\": \"касса самообслуживания\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 190,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"地方創生\", \"reading\": \"ちほうそうせい\", \"level\": \"N1\", \"meaning\": \"возрождение регионов\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 191,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"仕事と休暇\", \"reading\": \"しごとときゅうか\", \"level\": \"N4\", \"meaning\": \"работа и отдых\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 192,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"自己管理\", \"reading\": \"じこかんり\", \"level\": \"N2\", \"meaning\": \"самодисциплина, самоконтроль\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 193,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"一汁三菜\", \"reading\": \"いちじゅうさんさい\", \"level\": \"N2\", \"meaning\": \"традиционный обед (суп и три блюда)\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 194,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"発酵食品\", \"reading\": \"はっこうしょくひん\", \"level\": \"N2\", \"meaning\": \"ферментированные продукты\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 195,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"無形文化遺産\", \"reading\": \"むけいぶんかいさん\", \"level\": \"N1\", \"meaning\": \"нематериальное культурное наследие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 196,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"栄養バランス\", \"reading\": \"えいようばらんす\", \"level\": \"N3\", \"meaning\": \"баланс питательных веществ\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 197,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"治安の良さ\", \"reading\": \"ちあんのよさ\", \"level\": \"N3\", \"meaning\": \"общественная безопасность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 198,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"冷温同時\", \"reading\": \"れいおんどうじ\", \"level\": \"N2\", \"meaning\": \"одновременный подогрев и охлаждение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 199,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"災害時支援\", \"reading\": \"さいがいじしえん\", \"level\": \"N2\", \"meaning\": \"поддержка при стихийных бедствиях\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 200,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"技術革新\", \"reading\": \"ぎじゅつかくしん\", \"level\": \"N2\", \"meaning\": \"технологические инновации\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 201,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"孤独の価値\", \"reading\": \"こどくのかち\", \"level\": \"N2\", \"meaning\": \"ценность уединения\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 202,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"自由な選択\", \"reading\": \"じゆうなせんたく\", \"level\": \"N3\", \"meaning\": \"свободный выбор\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 203,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"未知の体験\", \"reading\": \"みちのたいけん\", \"level\": \"N2\", \"meaning\": \"новый, неизведанный опыт\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 204,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"自立心\", \"reading\": \"じりつしん\", \"level\": \"N2\", \"meaning\": \"чувство независимости, самостоятельность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 205,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"手書きの記憶\", \"reading\": \"てがきのきおく\", \"level\": \"N3\", \"meaning\": \"память рукописного письма\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 206,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"スケジュール管理\", \"reading\": \"すけじゅーるかんり\", \"level\": \"N3\", \"meaning\": \"управление расписанием\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 207,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"愛着\", \"reading\": \"あいちゃく\", \"level\": \"N1\", \"meaning\": \"привязанность, теплое чувство\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 208,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"デジタル併用\", \"reading\": \"でじたるへいよう\", \"level\": \"N2\", \"meaning\": \"совместное использование с цифровыми инструментами\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 209,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"飼い主の責任\", \"reading\": \"かいぬしのせきにん\", \"level\": \"N3\", \"meaning\": \"ответственность владельца животного\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 210,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"動物愛護\", \"reading\": \"どうぶつあいご\", \"level\": \"N2\", \"meaning\": \"защита животных\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 211,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"公共の場\", \"reading\": \"こうきょうのば\", \"level\": \"N3\", \"meaning\": \"общественное место\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 212,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"共生ルール\", \"reading\": \"きょうせいるーる\", \"level\": \"N2\", \"meaning\": \"правила совместного сосуществования\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 213,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"短距離移動\", \"reading\": \"たんきょりいどう\", \"level\": \"N3\", \"meaning\": \"передвижение на короткие расстояния\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 214,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"エコ通勤\", \"reading\": \"えこつうきん\", \"level\": \"N3\", \"meaning\": \"экологичные поездки на работу\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 215,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"専用ポート\", \"reading\": \"せんようぽーと\", \"level\": \"N3\", \"meaning\": \"специальная станция проката\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 216,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"駐輪マナー\", \"reading\": \"ちゅうりんまなー\", \"level\": \"N3\", \"meaning\": \"культура парковки велосипедов\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 217,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"個性の表現\", \"reading\": \"こせいのひょうげん\", \"level\": \"N3\", \"meaning\": \"выражение индивидуальности\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 218,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"衣類再利用\", \"reading\": \"いるいさいりよう\", \"level\": \"N3\", \"meaning\": \"вторичное использование одежды\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 219,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"循環型社会\", \"reading\": \"じゅんかんがたしゃかい\", \"level\": \"N2\", \"meaning\": \"общество с экономикой замкнутого цикла\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 220,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"癒しの空間\", \"reading\": \"いやしのくうかん\", \"level\": \"N2\", \"meaning\": \"пространство для душевного отдыха\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 221,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"温冷交代浴\", \"reading\": \"おんれいこうたいよく\", \"level\": \"N1\", \"meaning\": \"контрастные водные процедуры\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 222,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"地域アイデンティティ\", \"reading\": \"ちいきあいでんてぃてぃ\", \"level\": \"N2\", \"meaning\": \"региональная идентичность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 223,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"親しみやすさ\", \"reading\": \"したしみやすさ\", \"level\": \"N3\", \"meaning\": \"доступность, душевность\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 224,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"場面に応じた言葉\", \"reading\": \"ばめんにおうじたことば\", \"level\": \"N2\", \"meaning\": \"речь, уместная в конкретной обстановке\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 225,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"文化の多様性\", \"reading\": \"ぶんかのたようせい\", \"level\": \"N2\", \"meaning\": \"культурное разнообразие\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 226,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"都市計画\", \"reading\": \"としけいかく\", \"level\": \"N2\", \"meaning\": \"градостроительное планирование\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 227,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"緑地保全\", \"reading\": \"りょくちほぜん\", \"level\": \"N1\", \"meaning\": \"сохранение зеленых насаждений\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 228,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"生態系ネットワーク\", \"reading\": \"せいたいけいねっとわーく\", \"level\": \"N1\", \"meaning\": \"экологическая сеть\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 229,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"心理的充足\", \"reading\": \"しんりてきじゅうそく\", \"level\": \"N1\", \"meaning\": \"психологическое удовлетворение\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 230,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"著作権\", \"reading\": \"ちょさくけん\", \"level\": \"N2\", \"meaning\": \"авторское право\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 231,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"感情の模倣\", \"reading\": \"かんじょうのもほう\", \"level\": \"N1\", \"meaning\": \"имитация человеческих эмоций\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 232,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"独自の美意識\", \"reading\": \"どくじのびいしき\", \"level\": \"N1\", \"meaning\": \"самобытное эстетическое чувство\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 233,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"複言語教育\", \"reading\": \"ふくげんごきょういく\", \"level\": \"N1\", \"meaning\": \"многоязычное образование\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 234,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"思考の枠組み\", \"reading\": \"しこうのわくぐみ\", \"level\": \"N1\", \"meaning\": \"каркас и парадигма мышления\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 235,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"言語消滅\", \"reading\": \"げんごしょうめつ\", \"level\": \"N1\", \"meaning\": \"исчезновение языков\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 236,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"即時性の代償\", \"reading\": \"そくじせいのだいしょう\", \"level\": \"N1\", \"meaning\": \"цена мгновенного доступа к информации\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 237,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"思索の停滞\", \"reading\": \"しさくのていたい\", \"level\": \"N1\", \"meaning\": \"застой глубокого размышления\"},"
+ },
+ {
+  "file": "app/services/dictionary_service.py",
+  "line": 238,
+  "kind": "string",
+  "category": "server-dictionary-data",
+  "text": "{\"word\": \"余白の価値\", \"reading\": \"よはくのかち\", \"level\": \"N1\", \"meaning\": \"ценность пауз и свободного пространства\"}"
+ },
+ {
+  "file": "app/services/stream_service.py",
+  "line": 256,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"message\": \"Допущены ошибки в вопросах. Перепроверьте текст.\""
+ },
+ {
+  "file": "app/services/stream_service.py",
+  "line": 267,
+  "kind": "string",
+  "category": "server-text",
+  "text": "raise ValueError(\"Задание не найдено\")"
+ },
+ {
+  "file": "app/services/stream_service.py",
+  "line": 400,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"message\": f\"Ошибки в {len(error_question_ids)} вопросах. Попробуйте исправить их (попытка {user_state.attempts_count} из {all_correct_max_attempts}).\""
+ },
+ {
+  "file": "app/services/stream_service.py",
+  "line": 424,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Возвращает полный аналитический разбор завершённого задания.\"\"\""
+ },
+ {
+  "file": "app/services/stream_service.py",
+  "line": 516,
+  "kind": "string",
+  "category": "server-text",
+  "text": "\"\"\"Возвращает список решённых заданий пользователя с пагинацией и фильтрами.\"\"\""
+ },
+ {
+  "file": "static/index.html",
+  "line": 95,
+  "kind": "text",
+  "category": "html",
+  "text": "📱 На устройстве"
+ },
+ {
+  "file": "static/index.html",
+  "line": 99,
+  "kind": "text",
+  "category": "html",
+  "text": "Русский"
+ },
+ {
+  "file": "static/index.html",
+  "line": 112,
+  "kind": "text",
+  "category": "html",
+  "text": "Продолжить незавершённое задание?"
+ },
+ {
+  "file": "static/index.html",
+  "line": 113,
+  "kind": "text",
+  "category": "html",
+  "text": "Вопрос 1 из 3 • N5"
+ },
+ {
+  "file": "static/index.html",
+  "line": 196,
+  "kind": "text",
+  "category": "html",
+  "text": "Загрузка активных заданий..."
+ },
+ {
+  "file": "static/index.html",
+  "line": 217,
+  "kind": "text",
+  "category": "html",
+  "text": "Здесь будут сохраняться решённые вами задания."
+ },
+ {
+  "file": "static/index.html",
+  "line": 218,
+  "kind": "text",
+  "category": "html",
+  "text": "Выберите любое задание из левой колонки «Задания», чтобы начать!"
+ },
+ {
+  "file": "static/index.html",
+  "line": 247,
+  "kind": "text",
+  "category": "html",
+  "text": "100% ВЕРНО"
+ },
+ {
+  "file": "static/index.html",
+  "line": 250,
+  "kind": "text",
+  "category": "html",
+  "text": "Отличный результат!"
+ },
+ {
+  "file": "static/index.html",
+  "line": 251,
+  "kind": "text",
+  "category": "html",
+  "text": "Затрачено: 01:45 | Рекомендовано: 3 мин"
+ },
+ {
+  "file": "static/index.html",
+  "line": 260,
+  "kind": "text",
+  "category": "html",
+  "text": "ВКЛ"
+ },
+ {
+  "file": "static/index.html",
+  "line": 265,
+  "kind": "text",
+  "category": "html",
+  "text": "ВКЛ"
+ },
+ {
+  "file": "static/index.html",
+  "line": 310,
+  "kind": "text",
+  "category": "html",
+  "text": "3 мин"
+ },
+ {
+  "file": "static/index.html",
+  "line": 316,
+  "kind": "text",
+  "category": "html",
+  "text": "ВКЛ"
+ },
+ {
+  "file": "static/index.html",
+  "line": 346,
+  "kind": "text",
+  "category": "html",
+  "text": "Вопрос 1 из 1"
+ },
+ {
+  "file": "static/index.html",
+  "line": 364,
+  "kind": "attr:title",
+  "category": "html",
+  "text": "Вернуться на главную"
+ },
+ {
+  "file": "static/index.html",
+  "line": 364,
+  "kind": "text",
+  "category": "html",
+  "text": "← На главную"
+ },
+ {
+  "file": "static/index.html",
+  "line": 433,
+  "kind": "text",
+  "category": "html",
+  "text": "Всего сохранённых слов: 0"
+ },
+ {
+  "file": "static/index.html",
+  "line": 519,
+  "kind": "text",
+  "category": "html",
+  "text": "Идёт анализ и извлечение вопросов..."
+ },
+ {
+  "file": "static/index.html",
+  "line": 552,
+  "kind": "text",
+  "category": "html",
+  "text": "Название текста"
+ },
+ {
+  "file": "static/index.html",
+  "line": 562,
+  "kind": "text",
+  "category": "html",
+  "text": "Рекомендуется для тренировки"
+ },
+ {
+  "file": "static/index.html",
+  "line": 579,
+  "kind": "text",
+  "category": "html",
+  "text": "Режим анализа"
+ },
+ {
+  "file": "static/index.html",
+  "line": 598,
+  "kind": "text",
+  "category": "html",
+  "text": "По желанию"
+ },
+ {
+  "file": "static/index.html",
+  "line": 642,
+  "kind": "text",
+  "category": "html",
+  "text": "Название текста"
+ },
+ {
+  "file": "static/index.html",
+  "line": 696,
+  "kind": "text",
+  "category": "html",
+  "text": "Сохранение на этом устройстве"
+ },
+ {
+  "file": "static/index.html",
+  "line": 697,
+  "kind": "text",
+  "category": "html",
+  "text": "Все решённые тексты, словарь и настройки надёжно сохраняются в памяти браузера (IndexedDB). Данные не пропадут при закрытии вкладки или перезапуске сервера."
+ },
+ {
+  "file": "static/index.html",
+  "line": 710,
+  "kind": "text",
+  "category": "html",
+  "text": "Пользователь"
+ },
+ {
+  "file": "static/index.html",
+  "line": 781,
+  "kind": "text",
+  "category": "html",
+  "text": "устойчивый, экологичный; способный продолжаться долго"
+ },
+ {
+  "file": "static/index.html",
+  "line": 785,
+  "kind": "text",
+  "category": "html",
+  "text": "В мой словарь"
+ },
+ {
+  "file": "static/js/features/analysis/submit_flow.js",
+  "line": 188,
+  "kind": "string",
+  "category": "js-ui",
+  "text": "console.error('Ошибка отправки ответов на проверку:', err);"
+ },
+ {
+  "file": "static/js/features/exercise/exercise_view.js",
+  "line": 157,
+  "kind": "string",
+  "category": "js-ui",
+  "text": "console.error('Ошибка инициализации упражнения:', err);"
+ },
+ {
+  "file": "static/js/features/solved/report_modal.js",
+  "line": 62,
+  "kind": "string",
+  "category": "js-ui",
+  "text": "const reason = elements?.reportReasonSelect ? elements.reportReasonSelect.value : 'Опечатка';"
+ },
+ {
+  "file": "static/manifest.json",
+  "line": 4,
+  "kind": "string",
+  "category": "static-other",
+  "text": "\"description\": \"Тренажёр по чтению японского языка (JLPT N5–N1) с непрерывным потоком заданий и Anti-Cheat контролем\","
+ }
+]

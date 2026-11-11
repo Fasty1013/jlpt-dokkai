@@ -2,6 +2,8 @@
  * JLPT Dokkai Master - Report Defect Modal Feature Module
  */
 
+import { localizeServerMessage } from '../../i18n/server_messages.js';
+import { t, setI18nText } from '../../i18n/index.js';
 import { reportTextIssue } from '../../api/texts.js';
 import { getUserId } from '../../utils/user.js';
 import { state as storeState } from '../../state/store.js';
@@ -23,7 +25,7 @@ export function openReportModal(textId, title, context = {}) {
   }
 
   if (elements?.reportModalTaskTitle) {
-    elements.reportModalTaskTitle.textContent = title || `Задание #${textId}`;
+    elements.reportModalTaskTitle.textContent = title || t('report.taskFallback', { id: textId });
   }
   if (elements?.reportDetailsTextarea) {
     elements.reportDetailsTextarea.value = '';
@@ -63,7 +65,7 @@ export async function submitReportDefect(context = {}) {
   try {
     if (elements?.btnSubmitReport) {
       elements.btnSubmitReport.disabled = true;
-      elements.btnSubmitReport.textContent = 'Отправка...';
+      setI18nText(elements.btnSubmitReport, 'report.sending');
     }
 
     const resData = await reportTextIssue(state.reportingTextId, {
@@ -73,7 +75,7 @@ export async function submitReportDefect(context = {}) {
     });
 
     closeReportModal(context);
-    alert(resData?.message || 'Жалоба принята. Спасибо за помощь!');
+    alert(resData?.message ? localizeServerMessage(resData.message) : t('report.thanks'));
 
     if (typeof context.onRefreshSlots === 'function') {
       context.onRefreshSlots();
@@ -82,11 +84,11 @@ export async function submitReportDefect(context = {}) {
     }
   } catch (e) {
     console.error(e);
-    alert('Не удалось отправить замечание.');
+    alert(t('report.failed'));
   } finally {
     if (elements?.btnSubmitReport) {
       elements.btnSubmitReport.disabled = false;
-      elements.btnSubmitReport.textContent = 'Отправить замечание';
+      setI18nText(elements.btnSubmitReport, 'report.submit');
     }
   }
 }
