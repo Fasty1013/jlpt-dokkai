@@ -912,7 +912,7 @@
    "info": {
     "description": "Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
     "title": "JLPT Dokkai Master (読解トレーナー)",
-    "version": "2.3.0"
+    "version": "2.3.1"
    },
    "openapi": "3.1.0",
    "paths": {
@@ -6904,7 +6904,7 @@
    "commit": "<COMMIT>",
    "database_backend": "sqlite",
    "env": "development",
-   "version": "2.3.0"
+   "version": "2.3.1"
   },
   "headers": {
    "cache-control": null,

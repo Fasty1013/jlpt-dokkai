@@ -20,6 +20,12 @@ const CATEGORY_NAMES = {
 
 class AuthError extends Error {}
 
+// Latest-request-wins: a slower earlier response must not overwrite a newer one
+// (e.g. opening "Задания" then searching immediately).
+const requestSeq = {};
+function nextSeq(key) { requestSeq[key] = (requestSeq[key] || 0) + 1; return requestSeq[key]; }
+function isStale(key, seq) { return requestSeq[key] !== seq; }
+
 async function api(path, options = {}) {
   const resp = await adminFetch(path, options);
   if (resp.status === 401) throw new AuthError('unauthorized');
@@ -199,7 +205,9 @@ function reportCard(r) {
 
 async function loadReports() {
   $$('[data-report-status]').forEach((b) => b.classList.toggle('is-active', b.dataset.reportStatus === state.reportStatus));
+  const seq = nextSeq('reports');
   const data = await api(`/api/admin/reports?status=${state.reportStatus}`);
+  if (isStale('reports', seq)) return;
   const list = $('#adm-reports-list');
   if (!data.items.length) {
     list.replaceChildren(el('p', { class: 'adm-empty', text: state.reportStatus === 'new' ? 'Новых сообщений нет.' : 'Сообщений нет.' }));
@@ -237,7 +245,9 @@ async function loadTexts() {
   if ($('#adm-texts-level').value) params.set('level', $('#adm-texts-level').value);
   if ($('#adm-texts-active').value) params.set('active', $('#adm-texts-active').value);
   if ($('#adm-texts-reported').checked) params.set('reported', 'true');
+  const seq = nextSeq('texts');
   const data = await api(`/api/admin/texts?${params}`);
+  if (isStale('texts', seq)) return;
 
   const rows = data.items.map((t) => el('tr', { class: t.is_active ? '' : 'is-hidden-row' },
     el('td', { text: t.id }),

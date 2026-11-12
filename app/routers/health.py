@@ -1,5 +1,6 @@
 import os
 
+from app.core.database import DATABASE_BACKEND
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -36,8 +37,8 @@ def version_info():
             commit_sha = "unknown"
 
     return {
-        "version": "2.3.0",
+        "version": "2.3.1",
         "commit": commit_sha,
         "env": os.getenv("ENV", os.getenv("APP_ENV", "development")),
-        "database_backend": "postgresql" if os.getenv("DATABASE_URL", "").startswith("postgres") else "sqlite"
+        "database_backend": DATABASE_BACKEND
     }
