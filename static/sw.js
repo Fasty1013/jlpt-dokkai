@@ -10,6 +10,9 @@ const NETWORK_TIMEOUT_MS = 3500;
 const PRECACHE_ASSETS = [
   '/',
   '/static/manifest.json',
+  '/static/icons/favicon.ico',
+  '/static/icons/icon-32.png',
+  '/static/icons/apple-touch-icon.png',
   '/static/css/variables.css',
   '/static/css/base.css',
   '/static/css/layout.css',
