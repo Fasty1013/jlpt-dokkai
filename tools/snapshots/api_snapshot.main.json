@@ -335,6 +335,142 @@
       "title": "Body_upload_pdf_api_admin_upload_pdf_post",
       "type": "object"
      },
+     "EditOption": {
+      "properties": {
+       "explanation": {
+        "default": "",
+        "maxLength": 4000,
+        "title": "Explanation",
+        "type": "string"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "is_correct": {
+        "title": "Is Correct",
+        "type": "boolean"
+       },
+       "text": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "title": "Text",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "text",
+       "is_correct"
+      ],
+      "title": "EditOption",
+      "type": "object"
+     },
+     "EditPayload": {
+      "properties": {
+       "frame": {
+        "anyOf": [
+         {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Frame"
+       },
+       "html": {
+        "anyOf": [
+         {
+          "maxLength": 40000,
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Html"
+       },
+       "markup": {
+        "anyOf": [
+         {
+          "maxLength": 20000,
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Markup"
+       },
+       "mode": {
+        "pattern": "^(markup|html)$",
+        "title": "Mode",
+        "type": "string"
+       },
+       "questions": {
+        "items": {
+         "$ref": "#/components/schemas/EditQuestion"
+        },
+        "title": "Questions",
+        "type": "array"
+       },
+       "title": {
+        "maxLength": 255,
+        "minLength": 1,
+        "title": "Title",
+        "type": "string"
+       },
+       "translation_ru": {
+        "default": "",
+        "maxLength": 20000,
+        "title": "Translation Ru",
+        "type": "string"
+       }
+      },
+      "required": [
+       "mode",
+       "title",
+       "questions"
+      ],
+      "title": "EditPayload",
+      "type": "object"
+     },
+     "EditQuestion": {
+      "properties": {
+       "explanation": {
+        "default": "",
+        "maxLength": 8000,
+        "title": "Explanation",
+        "type": "string"
+       },
+       "id": {
+        "title": "Id",
+        "type": "integer"
+       },
+       "options": {
+        "items": {
+         "$ref": "#/components/schemas/EditOption"
+        },
+        "title": "Options",
+        "type": "array"
+       },
+       "text": {
+        "maxLength": 4000,
+        "minLength": 1,
+        "title": "Text",
+        "type": "string"
+       }
+      },
+      "required": [
+       "id",
+       "text",
+       "options"
+      ],
+      "title": "EditQuestion",
+      "type": "object"
+     },
      "HTTPValidationError": {
       "properties": {
        "detail": {
@@ -418,6 +554,56 @@
        "option_text"
       ],
       "title": "OptionReadSchema",
+      "type": "object"
+     },
+     "PassagePayload": {
+      "properties": {
+       "frame": {
+        "anyOf": [
+         {
+          "additionalProperties": true,
+          "type": "object"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Frame"
+       },
+       "html": {
+        "anyOf": [
+         {
+          "maxLength": 40000,
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Html"
+       },
+       "markup": {
+        "anyOf": [
+         {
+          "maxLength": 20000,
+          "type": "string"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Markup"
+       },
+       "mode": {
+        "pattern": "^(markup|html)$",
+        "title": "Mode",
+        "type": "string"
+       }
+      },
+      "required": [
+       "mode"
+      ],
+      "title": "PassagePayload",
       "type": "object"
      },
      "QuestionAnalysisSchema": {
@@ -912,7 +1098,7 @@
    "info": {
     "description": "Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
     "title": "JLPT Dokkai Master (読解トレーナー)",
-    "version": "2.3.1"
+    "version": "2.4.0"
    },
    "openapi": "3.1.0",
    "paths": {
@@ -1306,6 +1492,121 @@
        }
       },
       "summary": "Publish Staging Draft"
+     }
+    },
+    "/api/admin/passage/furigana": {
+     "post": {
+      "description": "Readings for kanji that have none (janome dictionary readings); existing ones are kept.",
+      "operationId": "admin_passage_furigana_api_admin_passage_furigana_post",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/PassagePayload"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Passage Furigana",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/passage/preview": {
+     "post": {
+      "operationId": "admin_passage_preview_api_admin_passage_preview_post",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/PassagePayload"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Passage Preview",
+      "tags": [
+       "Admin"
+      ]
      }
     },
     "/api/admin/reports": {
@@ -1843,6 +2144,126 @@
       "tags": [
        "Admin"
       ]
+     },
+     "put": {
+      "operationId": "admin_text_save_api_admin_texts__text_id__put",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/EditPayload"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Text Save",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}/edit": {
+     "get": {
+      "operationId": "admin_text_edit_view_api_admin_texts__text_id__edit_get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Text Edit View",
+      "tags": [
+       "Admin"
+      ]
      }
     },
     "/api/admin/texts/{text_id}/hide": {
@@ -1896,6 +2317,127 @@
        }
       },
       "summary": "Admin Hide Text",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}/revisions": {
+     "get": {
+      "operationId": "admin_text_revisions_api_admin_texts__text_id__revisions_get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Text Revisions",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}/revisions/{revision_id}/restore": {
+     "post": {
+      "operationId": "admin_text_restore_api_admin_texts__text_id__revisions__revision_id__restore_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "path",
+        "name": "revision_id",
+        "required": true,
+        "schema": {
+         "title": "Revision Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Text Restore",
       "tags": [
        "Admin"
       ]
@@ -6904,7 +7446,7 @@
    "commit": "<COMMIT>",
    "database_backend": "sqlite",
    "env": "development",
-   "version": "2.3.1"
+   "version": "2.4.0"
   },
   "headers": {
    "cache-control": null,
