@@ -2,7 +2,9 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+
+from app.core.security import require_admin
 
 from tools.pdf_import.pipeline import run_pdf_import_pipeline
 from tools.pdf_import.review import (
@@ -13,7 +15,8 @@ from tools.pdf_import.review import (
     reject_draft
 )
 
-router = APIRouter()
+# PDF import / staging: admin only (ADMIN_TOKEN, see app/core/security.py)
+router = APIRouter(dependencies=[Depends(require_admin)])
 
 
 @router.post("/api/admin/upload-pdf")

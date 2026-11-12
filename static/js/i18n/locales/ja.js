@@ -168,6 +168,7 @@ export const ja = {
   "srv.commitFailed": "問題の記録に失敗しました: {detail}",
   "srv.reportOk": "報告を受け付けました。品質向上にご協力ありがとうございます。",
   "srv.reportHidden": "報告を受け付けました。報告数が上限を超えたため、この問題は自動的に非表示になりました。",
+  "srv.adminRequired": "管理者キーが必要です",
   "resume.title": "テスト「{title}」を続けますか？",
   "resume.meta": "問題{n} • {level}",
   "resume.failed": "未完了の問題を復元できませんでした。",

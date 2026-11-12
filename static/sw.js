@@ -2,7 +2,7 @@
 // Scope: Same-origin static assets ONLY (/ and /static/*)
 // Strategy: Network-First with 3.5s Timeout & Offline Cache Fallback
 
-const CACHE_VERSION = '2.2.0';
+const CACHE_VERSION = '2.3.0';
 const CACHE_NAME = `dokkai-v${CACHE_VERSION}`;
 const NETWORK_TIMEOUT_MS = 3500;
 
@@ -61,6 +61,7 @@ const PRECACHE_ASSETS = [
   '/static/js/api/texts.js',
   '/static/js/api/dictionary.js',
   '/static/js/api/admin.js',
+  '/static/js/api/admin_token.js',
   '/static/js/api/index.js',
   '/static/js/state/store.js',
   '/static/js/state/elements.js',

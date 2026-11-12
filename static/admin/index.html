@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Админ-панель | JLPT Dokkai Master</title>
+    <link rel="icon" href="/static/icons/favicon.ico" sizes="any">
+    <link rel="icon" href="/static/icons/icon-32.png" type="image/png" sizes="32x32">
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <header class="adm-header">
+        <a class="adm-brand" href="/" title="На сайт">
+            <span class="adm-monogram">読</span>
+            <span class="adm-brand-text">Dokkai Master <small>Админ-панель</small></span>
+        </a>
+        <nav class="adm-tabs" id="adm-tabs" hidden>
+            <button type="button" class="adm-tab is-active" data-tab="dashboard">Сводка</button>
+            <button type="button" class="adm-tab" data-tab="reports">Жалобы <span class="adm-badge" id="adm-reports-badge" hidden>0</span></button>
+            <button type="button" class="adm-tab" data-tab="texts">Задания</button>
+            <button type="button" class="adm-tab" data-tab="activity">Активность</button>
+            <button type="button" class="adm-tab" data-tab="import">Импорт PDF</button>
+        </nav>
+        <button type="button" class="adm-btn adm-btn-ghost" id="adm-logout" hidden>Выйти</button>
+    </header>
+
+    <main class="adm-main">
+        <section class="adm-card adm-login" id="adm-login" hidden>
+            <h1>Вход администратора</h1>
+            <p class="adm-muted">Введите ключ из переменной <code>ADMIN_TOKEN</code> (Render → Environment). Браузер запомнит его на этом устройстве.</p>
+            <form id="adm-login-form" autocomplete="off">
+                <input type="password" id="adm-token-input" class="adm-input" placeholder="Ключ администратора" required>
+                <button type="submit" class="adm-btn adm-btn-primary">Войти</button>
+            </form>
+            <p class="adm-error" id="adm-login-error" hidden></p>
+        </section>
+
+        <section class="adm-panel" id="panel-dashboard" hidden>
+            <div class="adm-toolbar">
+                <h2>Сводка</h2>
+                <button type="button" class="adm-btn adm-btn-ghost" data-refresh="dashboard">Обновить</button>
+            </div>
+            <div class="adm-stats" id="adm-stats"></div>
+            <h3>Задания по уровням</h3>
+            <div class="adm-table-wrap"><table class="adm-table" id="adm-levels"></table></div>
+        </section>
+
+        <section class="adm-panel" id="panel-reports" hidden>
+            <div class="adm-toolbar">
+                <h2>Сообщения об ошибках</h2>
+                <div class="adm-filters">
+                    <button type="button" class="adm-pill is-active" data-report-status="new">Новые</button>
+                    <button type="button" class="adm-pill" data-report-status="resolved">Решённые</button>
+                    <button type="button" class="adm-pill" data-report-status="all">Все</button>
+                    <button type="button" class="adm-btn adm-btn-ghost" id="adm-reports-csv">Скачать CSV</button>
+                </div>
+            </div>
+            <div id="adm-reports-list" class="adm-list"></div>
+        </section>
+
+        <section class="adm-panel" id="panel-texts" hidden>
+            <div class="adm-toolbar">
+                <h2>Задания</h2>
+                <form class="adm-filters" id="adm-texts-form">
+                    <input type="search" class="adm-input" id="adm-texts-q" placeholder="Поиск по названию или slug">
+                    <select class="adm-input" id="adm-texts-level">
+                        <option value="">Все уровни</option>
+                        <option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option>
+                    </select>
+                    <select class="adm-input" id="adm-texts-active">
+                        <option value="">Активные и скрытые</option>
+                        <option value="active">Только активные</option>
+                        <option value="hidden">Только скрытые</option>
+                    </select>
+                    <label class="adm-check"><input type="checkbox" id="adm-texts-reported"> с жалобами</label>
+                    <button type="submit" class="adm-btn adm-btn-primary">Найти</button>
+                </form>
+            </div>
+            <div class="adm-table-wrap"><table class="adm-table" id="adm-texts-table"></table></div>
+            <div class="adm-pager" id="adm-texts-pager"></div>
+        </section>
+
+        <section class="adm-panel" id="panel-activity" hidden>
+            <div class="adm-toolbar">
+                <h2>Последние попытки</h2>
+                <button type="button" class="adm-btn adm-btn-ghost" data-refresh="activity">Обновить</button>
+            </div>
+            <div class="adm-table-wrap"><table class="adm-table" id="adm-activity-table"></table></div>
+        </section>
+
+        <section class="adm-panel" id="panel-import" hidden>
+            <h2>Импорт PDF</h2>
+            <p>Импорт заданий из PDF работает на основном сайте, во вкладке «Импорт PDF». Ключ администратора уже сохранён в этом браузере, поэтому загрузка, правка и публикация черновиков там будут доступны.</p>
+            <a class="adm-btn adm-btn-primary" href="/">Открыть сайт</a>
+        </section>
+    </main>
+
+    <dialog class="adm-dialog" id="adm-text-dialog">
+        <div class="adm-dialog-head">
+            <h2 id="adm-dialog-title">Задание</h2>
+            <button type="button" class="adm-btn adm-btn-ghost" id="adm-dialog-close">Закрыть</button>
+        </div>
+        <div id="adm-dialog-body"></div>
+    </dialog>
+
+    <div class="adm-toast" id="adm-toast" role="status" aria-live="polite" hidden></div>
+
+    <script type="module" src="/static/js/admin/admin.js"></script>
+</body>
+</html>

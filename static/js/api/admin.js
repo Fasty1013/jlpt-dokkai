@@ -3,6 +3,10 @@
  */
 
 import { request } from './client.js';
+import { withAdminHeaders } from './admin_token.js';
+
+// /api/admin/* needs the admin key in production (X-Admin-Token, see admin_token.js).
+const adminRequest = (url, options = {}) => request(url, { ...options, headers: withAdminHeaders(options.headers || {}) });
 
 /**
  * Upload PDF and extract JLPT reading exercises.
@@ -10,7 +14,7 @@ import { request } from './client.js';
  * @returns {Promise<any>}
  */
 export async function uploadPdf(formData) {
-  return request('/api/admin/upload-pdf', {
+  return adminRequest('/api/admin/upload-pdf', {
     method: 'POST',
     body: formData
   });
@@ -21,7 +25,7 @@ export async function uploadPdf(formData) {
  * @returns {Promise<Array>}
  */
 export async function fetchDrafts() {
-  return request('/api/admin/drafts');
+  return adminRequest('/api/admin/drafts');
 }
 
 /**
@@ -30,7 +34,7 @@ export async function fetchDrafts() {
  * @returns {Promise<any>}
  */
 export async function fetchDraft(slug) {
-  return request(`/api/admin/drafts/${slug}`);
+  return adminRequest(`/api/admin/drafts/${slug}`);
 }
 
 /**
@@ -40,7 +44,7 @@ export async function fetchDraft(slug) {
  * @returns {Promise<any>}
  */
 export async function updateDraft(slug, data) {
-  return request(`/api/admin/drafts/${slug}`, {
+  return adminRequest(`/api/admin/drafts/${slug}`, {
     method: 'PUT',
     body: JSON.stringify(data)
   });
@@ -52,7 +56,7 @@ export async function updateDraft(slug, data) {
  * @returns {Promise<any>}
  */
 export async function publishDraft(slug) {
-  return request(`/api/admin/drafts/${slug}/publish`, {
+  return adminRequest(`/api/admin/drafts/${slug}/publish`, {
     method: 'POST'
   });
 }
@@ -63,7 +67,7 @@ export async function publishDraft(slug) {
  * @returns {Promise<any>}
  */
 export async function deleteDraft(slug) {
-  return request(`/api/admin/drafts/${slug}`, {
+  return adminRequest(`/api/admin/drafts/${slug}`, {
     method: 'DELETE'
   });
 }
