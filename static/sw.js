@@ -2,7 +2,7 @@
 // Scope: Same-origin static assets ONLY (/ and /static/*)
 // Strategy: Network-First with 3.5s Timeout & Offline Cache Fallback
 
-const CACHE_VERSION = '2.3.1';
+const CACHE_VERSION = '2.4.0';
 const CACHE_NAME = `dokkai-v${CACHE_VERSION}`;
 const NETWORK_TIMEOUT_MS = 3500;
 

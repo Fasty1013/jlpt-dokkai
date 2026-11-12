@@ -177,3 +177,18 @@ class DefectReport(Base):
     resolved_at = Column(DateTime, nullable=True)
 
     text = relationship("Text")
+
+
+class TextRevision(Base):
+    """
+    Снимок задания перед правкой из админ-панели (для отката).
+    snapshot: title, content_html, translation_ru, questions[{id, question_text,
+    general_explanation, options[{id, option_text, option_explanation, is_correct}]}].
+    """
+    __tablename__ = "text_revisions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    text_id = Column(Integer, ForeignKey("texts.id", ondelete="CASCADE"), index=True, nullable=False)
+    snapshot = Column(JSON, nullable=False)
+    note = Column(String(200), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)

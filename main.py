@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from app.core.config import STATIC_DIR, SHUFFLE_SECRET_IS_DEFAULT
 from app.core.database import engine, Base
 from app.routers import (
-    health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel, pages,
+    health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel, admin_editor, pages,
 )
 from seed import seed_database
 
@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="JLPT Dokkai Master (読解トレーナー)",
     description="Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
-    version="2.3.1",
+    version="2.4.0",
     lifespan=lifespan
 )
 
@@ -63,7 +63,7 @@ async def add_static_cache_headers(request: Request, call_next):
 
 
 # Registration order is part of the public OpenAPI contract: keep it stable.
-for _module in (health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel):
+for _module in (health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel, admin_editor):
     app.include_router(_module.router)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

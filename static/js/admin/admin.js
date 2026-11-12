@@ -308,12 +308,209 @@ async function openText(textId) {
 
   $('#adm-dialog-body').replaceChildren(
     el('div', { class: 'adm-muted', text: `${t.level} · ${CATEGORY_NAMES[t.category] || t.category} · ${t.origin} · жалоб: ${t.report_count} · ${t.is_active ? 'активно' : 'скрыто'}${t.source_exam ? ` · ${t.source_exam}` : ''}` }),
-    el('div', { class: 'adm-actions' }, toggle),
+    el('div', { class: 'adm-actions' },
+      el('button', { type: 'button', class: 'adm-btn adm-btn-primary', 'data-edit-text': t.id, onclick: () => guarded(() => openEditor(t.id)) }, 'Редактировать'),
+      toggle),
     el('h3', { text: 'Текст' }), passage,
     el('h3', { text: 'Вопросы и правильные ответы' }), ...questions,
     el('h3', { text: 'Перевод' }), el('p', { class: 'adm-translation', text: t.translation_ru || '—' }),
     el('h3', { text: 'Жалобы на это задание' }), el('ul', { class: 'adm-report-mini' }, reports),
   );
+  const dialog = $('#adm-text-dialog');
+  if (!dialog.open) dialog.showModal();
+}
+
+// ------------------------------------------------------------------ task editor
+
+const editor = { textId: null, view: null, dirty: false };
+
+function jsonBody(method, payload) {
+  return { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) };
+}
+
+function sandboxPassage(html) {
+  const frame = el('iframe', { class: 'adm-passage', sandbox: '', title: 'Предпросмотр текста' });
+  frame.srcdoc = `<!DOCTYPE html><meta charset="utf-8"><style>body{font-family:'Noto Sans JP','Yu Gothic',sans-serif;line-height:1.9;margin:12px;color:#18191a}rt{font-size:.55em;color:#767e85}[data-evidence]{background:#fff3bf}</style>${html}`;
+  return frame;
+}
+
+function field(label, control, hint) {
+  return el('label', { class: 'adm-field' },
+    el('span', { class: 'adm-field-label', text: label }),
+    control,
+    hint ? el('span', { class: 'adm-field-hint', text: hint }) : null);
+}
+
+function textarea(value, attrs = {}) {
+  const node = el('textarea', { class: 'adm-input adm-textarea', ...attrs });
+  node.value = value || '';
+  node.addEventListener('input', () => { editor.dirty = true; });
+  return node;
+}
+
+function passagePayload() {
+  const v = editor.view;
+  return v.mode === 'markup'
+    ? { mode: 'markup', markup: $('#ed-passage').value, frame: v.frame }
+    : { mode: 'html', html: $('#ed-passage').value };
+}
+
+function collectEdit() {
+  const v = editor.view;
+  return {
+    ...passagePayload(),
+    title: $('#ed-title').value,
+    translation_ru: $('#ed-translation').value,
+    questions: v.questions.map((q) => ({
+      id: q.id,
+      text: document.querySelector(`[data-q-text="${q.id}"]`).value,
+      explanation: document.querySelector(`[data-q-expl="${q.id}"]`).value,
+      options: q.options.map((o) => ({
+        id: o.id,
+        text: document.querySelector(`[data-o-text="${o.id}"]`).value,
+        explanation: document.querySelector(`[data-o-expl="${o.id}"]`).value,
+        is_correct: document.querySelector(`[data-o-correct="${o.id}"]`).checked,
+      })),
+    })),
+  };
+}
+
+function showEditorError(message) {
+  const box = $('#ed-error');
+  box.textContent = message || '';
+  box.hidden = !message;
+  if (message) box.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+async function editorCall(path, options) {
+  const resp = await adminFetch(path, options);
+  if (resp.status === 401) throw new AuthError('unauthorized');
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    const detail = Array.isArray(data.detail)
+      ? data.detail.map((d) => `${(d.loc || []).slice(1).join('.')}: ${d.msg}`).join('; ')
+      : data.detail;
+    const err = new Error(detail || `Ошибка ${resp.status}`);
+    err.validation = resp.status === 422;
+    throw err;
+  }
+  return data;
+}
+
+function confirmDiscard() {
+  return !editor.dirty || confirm('Есть несохранённые изменения. Закрыть без сохранения?');
+}
+
+async function loadRevisions(textId) {
+  const list = $('#ed-revisions');
+  const data = await api(`/api/admin/texts/${textId}/revisions`);
+  if (!data.items.length) {
+    list.replaceChildren(el('li', { class: 'adm-muted', text: 'Правок ещё не было' }));
+    return;
+  }
+  list.replaceChildren(...data.items.map((r) => el('li', {},
+    el('span', { text: `${fmtDate(r.created_at)} — ${r.note || 'версия'} ` }),
+    el('span', { class: 'adm-muted', lang: 'ja', text: r.title || '' }), ' ',
+    el('button', { type: 'button', class: 'adm-btn adm-btn-ghost adm-btn-sm', 'data-restore': r.id, onclick: () => guarded(async () => {
+      if (!confirmDiscard()) return;
+      if (!confirm(`Вернуть задание к версии от ${fmtDate(r.created_at)}? Текущая версия тоже сохранится в истории.`)) return;
+      await editorCall(`/api/admin/texts/${textId}/revisions/${r.id}/restore`, { method: 'POST' });
+      editor.dirty = false;
+      toast('Версия восстановлена');
+      await openEditor(textId);
+    }) }, 'Вернуть эту версию'))));
+}
+
+async function openEditor(textId) {
+  const v = await api(`/api/admin/texts/${textId}/edit`);
+  editor.textId = textId;
+  editor.view = v;
+  editor.dirty = false;
+  $('#adm-dialog-title').textContent = `Редактирование #${v.id}`;
+
+  const passage = textarea(v.mode === 'markup' ? v.markup : v.html, { id: 'ed-passage', rows: 14, lang: 'ja', spellcheck: 'false' });
+  const preview = el('div', { id: 'ed-preview' });
+
+  const passageTools = el('div', { class: 'adm-actions' },
+    v.mode === 'markup' ? el('button', { type: 'button', class: 'adm-btn', id: 'ed-furigana', onclick: () => guarded(async () => {
+      showEditorError('');
+      try {
+        const data = await editorCall('/api/admin/passage/furigana', jsonBody('POST', passagePayload()));
+        if (data.markup !== passage.value) { passage.value = data.markup; editor.dirty = true; toast('Чтения расставлены — проверьте их'); }
+        else toast('Все кандзи уже с чтениями');
+      } catch (e) { if (e.validation) showEditorError(e.message); else throw e; }
+    }) }, 'Расставить фуригану') : null,
+    el('button', { type: 'button', class: 'adm-btn', id: 'ed-preview-btn', onclick: () => guarded(async () => {
+      showEditorError('');
+      try {
+        const data = await editorCall('/api/admin/passage/preview', jsonBody('POST', passagePayload()));
+        preview.replaceChildren(sandboxPassage(data.html), ...data.warnings.map((w) => el('p', { class: 'adm-flag', text: w })));
+      } catch (e) { if (e.validation) showEditorError(e.message); else throw e; }
+    }) }, 'Предпросмотр'));
+
+  const hint = v.mode === 'markup'
+    ? 'Абзацы — через пустую строку. Чтение: 図書館《としょかん》. Если в слове есть кана или перед ним кандзи без чтения: ｜お願《ねが》い. Доказательство для разбора: [ev-q1]…[/ev-q1] — не удаляйте метки.'
+    : 'Это объявление с таблицей — правится HTML. Скрипты и опасные атрибуты сервер удалит.';
+
+  const questions = v.questions.map((q) => el('fieldset', { class: 'adm-q-edit' },
+    el('legend', { text: `Вопрос ${q.number}${q.evidence_span_id ? ` · доказательство [${q.evidence_span_id}]` : ''}` }),
+    field('Текст вопроса', textarea(q.text, { rows: 2, lang: 'ja', 'data-q-text': q.id })),
+    el('div', { class: 'adm-field-label', text: 'Варианты (отметьте правильный)' }),
+    ...q.options.map((o) => {
+      const radio = el('input', { type: 'radio', name: `ed-correct-${q.id}`, 'data-o-correct': o.id, 'aria-label': `Вариант ${o.number} правильный` });
+      radio.checked = o.is_correct;
+      radio.addEventListener('change', () => { editor.dirty = true; });
+      const input = el('input', { type: 'text', class: 'adm-input', lang: 'ja', 'data-o-text': o.id });
+      input.value = o.text;
+      input.addEventListener('input', () => { editor.dirty = true; });
+      return el('div', { class: 'adm-option-edit' },
+        el('div', { class: 'adm-option-row' }, radio, el('span', { class: 'adm-option-num', text: `${o.number}.` }), input),
+        textarea(o.explanation, { rows: 1, 'data-o-expl': o.id, placeholder: 'Пояснение к варианту', 'aria-label': `Пояснение к варианту ${o.number}` }));
+    }),
+    field('Общее пояснение к вопросу', textarea(q.explanation, { rows: 2, 'data-q-expl': q.id }))));
+
+  const title = el('input', { type: 'text', class: 'adm-input', id: 'ed-title', lang: 'ja' });
+  title.value = v.title;
+  title.addEventListener('input', () => { editor.dirty = true; });
+
+  const save = el('button', { type: 'button', class: 'adm-btn adm-btn-primary', id: 'ed-save', onclick: () => guarded(async () => {
+    showEditorError('');
+    save.disabled = true;
+    try {
+      const data = await editorCall(`/api/admin/texts/${textId}`, jsonBody('PUT', collectEdit()));
+      editor.dirty = false;
+      toast(data.warnings && data.warnings.length ? `Сохранено. ${data.warnings.join(' ')}` : 'Сохранено');
+      await openText(textId);
+      if (state.tab === 'texts') await loadTexts();
+      if (state.tab === 'reports') await loadReports();
+    } catch (e) {
+      if (e.validation) showEditorError(e.message); else throw e;
+    } finally {
+      save.disabled = false;
+    }
+  }) }, 'Сохранить');
+
+  const cancel = el('button', { type: 'button', class: 'adm-btn adm-btn-ghost', onclick: () => {
+    if (!confirmDiscard()) return;
+    editor.dirty = false;
+    guarded(() => openText(textId));
+  } }, 'Отмена');
+
+  $('#adm-dialog-body').replaceChildren(...[
+    el('p', { class: 'adm-error-box', id: 'ed-error', hidden: true }),
+    field('Название', title),
+    el('h3', { text: 'Текст' }),
+    el('p', { class: 'adm-field-hint', text: hint }),
+    v.stray_span_closers ? el('p', { class: 'adm-field-hint', text: `В исходном HTML ${v.stray_span_closers} лишн. </span> без пары — браузер их не показывает; при сохранении они будут убраны.` }) : null,
+    passage, passageTools, preview,
+    el('h3', { text: 'Вопросы' }), ...questions,
+    el('h3', { text: 'Перевод' }),
+    textarea(v.translation_ru, { id: 'ed-translation', rows: 4 }),
+    el('div', { class: 'adm-actions adm-editor-footer' }, save, cancel),
+    el('h3', { text: 'История правок' }),
+    el('ul', { class: 'adm-report-mini', id: 'ed-revisions' }),
+  ].filter(Boolean));
+  await loadRevisions(textId);
   const dialog = $('#adm-text-dialog');
   if (!dialog.open) dialog.showModal();
 }
@@ -360,7 +557,16 @@ function init() {
     state.textsOffset = 0;
     guarded(loadTexts);
   });
-  $('#adm-dialog-close').addEventListener('click', () => $('#adm-text-dialog').close());
+  $('#adm-dialog-close').addEventListener('click', () => {
+    if (!confirmDiscard()) return;
+    editor.dirty = false;
+    $('#adm-text-dialog').close();
+  });
+  // Esc closes <dialog>: ask first when the editor has unsaved changes
+  $('#adm-text-dialog').addEventListener('cancel', (e) => {
+    if (!confirmDiscard()) { e.preventDefault(); return; }
+    editor.dirty = false;
+  });
   checkAuth();
 }
 

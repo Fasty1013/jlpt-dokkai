@@ -37,7 +37,7 @@ def version_info():
             commit_sha = "unknown"
 
     return {
-        "version": "2.3.1",
+        "version": "2.4.0",
         "commit": commit_sha,
         "env": os.getenv("ENV", os.getenv("APP_ENV", "development")),
         "database_backend": DATABASE_BACKEND

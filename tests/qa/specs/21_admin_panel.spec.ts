@@ -55,8 +55,8 @@ test.describe('21. Admin panel', () => {
     // An active N4 task without reports: hide → return leaves it exactly as it was
     // ("return" resets the report counter, so a reported task would not be restored).
     const candidates = await (await request.get('/api/admin/texts?level=N4&active=active&limit=200')).json();
-    // Different task per project: desktop and mobile run in parallel workers.
-    const target = candidates.items.filter((t) => t.report_count === 0)[testInfo.project.name.includes('mobile') ? 1 : 0];
+    // Different task per project and repeat: parallel workers never toggle the same task.
+    const target = candidates.items.filter((t) => t.report_count === 0)[(testInfo.project.name.includes('mobile') ? 1 : 0) + 2 * testInfo.repeatEachIndex];
     expect(target, 'an active N4 task without reports').toBeTruthy();
     const textId = target.id;
     const detail = await (await request.get(`/api/admin/texts/${textId}`)).json();
@@ -74,12 +74,12 @@ test.describe('21. Admin panel', () => {
     await expect(dialog.locator('.adm-question li.is-correct').first()).toBeVisible();
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `${testInfo.project.name}_task.png`) });
 
-    const toggle = dialog.locator('.adm-actions button').first();
+    const toggle = dialog.getByRole('button', { name: /Скрыть из потока|Вернуть в поток/ });
     const wasActive = detail.is_active;
     await toggle.click();
-    await expect(dialog.locator('.adm-actions button').first()).toHaveText(wasActive ? 'Вернуть в поток' : 'Скрыть из потока');
-    await dialog.locator('.adm-actions button').first().click();
-    await expect(dialog.locator('.adm-actions button').first()).toHaveText(wasActive ? 'Скрыть из потока' : 'Вернуть в поток');
+    await expect(dialog.getByRole('button', { name: /Скрыть из потока|Вернуть в поток/ })).toHaveText(wasActive ? 'Вернуть в поток' : 'Скрыть из потока');
+    await dialog.getByRole('button', { name: /Скрыть из потока|Вернуть в поток/ }).click();
+    await expect(dialog.getByRole('button', { name: /Скрыть из потока|Вернуть в поток/ })).toHaveText(wasActive ? 'Скрыть из потока' : 'Вернуть в поток');
     await page.click('#adm-dialog-close');
     await expect(dialog).toBeHidden();
   });
