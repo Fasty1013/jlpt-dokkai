@@ -168,6 +168,7 @@ export const en = {
   "srv.commitFailed": "Failed to record the task: {detail}",
   "srv.reportOk": "Report received. Thank you for helping improve the quality!",
   "srv.reportHidden": "Report received. The task was automatically hidden because it exceeded the report threshold.",
+  "srv.adminRequired": "Administrator key required",
   "resume.title": "Continue the test “{title}”?",
   "resume.meta": "Question {n} • {level}",
   "resume.failed": "Could not restore the unfinished task.",

@@ -169,6 +169,7 @@ export const uz = {
   "srv.commitFailed": "Topshiriqni qayd etishda xato: {detail}",
   "srv.reportOk": "Shikoyat qabul qilindi. Sifatni yaxshilashga yordam bergani uchun rahmat!",
   "srv.reportHidden": "Shikoyat qabul qilindi. Topshiriq shikoyatlar chegarasidan oshgani uchun avtomatik yashirildi.",
+  "srv.adminRequired": "Administrator kaliti talab qilinadi",
   "resume.title": "«{title}» testini davom ettirasizmi?",
   "resume.meta": "{n}-savol • {level}",
   "resume.failed": "Tugallanmagan topshiriqni tiklab bo'lmadi.",

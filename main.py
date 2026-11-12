@@ -4,6 +4,7 @@ Thin composition root (Step 8b): application object, lifespan, middleware and ro
 Business logic lives in app/services, HTTP endpoints in app/routers.
 """
 import logging
+import os
 import sys
 from contextlib import asynccontextmanager
 
@@ -17,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from app.core.config import STATIC_DIR, SHUFFLE_SECRET_IS_DEFAULT
 from app.core.database import engine, Base
 from app.routers import (
-    health, catalog, reading, dictionary, analysis, stream, reports, admin, pages,
+    health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel, pages,
 )
 from seed import seed_database
 
@@ -35,13 +36,18 @@ async def lifespan(app: FastAPI):
             "SHUFFLE_SECRET is not set: using the public development key. "
             "Set SHUFFLE_SECRET in production (Render > Environment)."
         )
+    if not os.environ.get("ADMIN_TOKEN") and os.environ.get("DOKKAI_TEST_MODE") != "1":
+        logging.getLogger("uvicorn.error").warning(
+            "ADMIN_TOKEN is not set: the admin panel (/admin) and PDF import API are closed. "
+            "Set ADMIN_TOKEN in Render > Environment to use them."
+        )
     yield
 
 
 app = FastAPI(
     title="JLPT Dokkai Master (読解トレーナー)",
     description="Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
-    version="2.2.0",
+    version="2.3.0",
     lifespan=lifespan
 )
 
@@ -57,7 +63,7 @@ async def add_static_cache_headers(request: Request, call_next):
 
 
 # Registration order is part of the public OpenAPI contract: keep it stable.
-for _module in (health, catalog, reading, dictionary, analysis, stream, reports, admin):
+for _module in (health, catalog, reading, dictionary, analysis, stream, reports, admin, admin_panel):
     app.include_router(_module.router)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

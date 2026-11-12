@@ -912,7 +912,7 @@
    "info": {
     "description": "Exam-flow Japanese reading comprehension training with anti-cheat and deep analysis.",
     "title": "JLPT Dokkai Master (読解トレーナー)",
-    "version": "2.2.0"
+    "version": "2.3.0"
    },
    "openapi": "3.1.0",
    "paths": {
@@ -932,10 +932,39 @@
       "summary": "Serve Index"
      }
     },
-    "/api/admin/drafts": {
+    "/api/admin/activity": {
      "get": {
-      "description": "Возвращает список всех черновиков в staging.",
-      "operationId": "get_staging_drafts_api_admin_drafts_get",
+      "operationId": "admin_activity_api_admin_activity_get",
+      "parameters": [
+       {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+         "default": 50,
+         "maximum": 200,
+         "minimum": 1,
+         "title": "Limit",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
       "responses": {
        "200": {
         "content": {
@@ -944,6 +973,112 @@
          }
         },
         "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Activity",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/check": {
+     "get": {
+      "description": "Lets the /admin page validate the stored key.",
+      "operationId": "admin_check_api_admin_check_get",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Check",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/drafts": {
+     "get": {
+      "description": "Возвращает список всех черновиков в staging.",
+      "operationId": "get_staging_drafts_api_admin_drafts_get",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
        }
       },
       "summary": "Get Staging Drafts"
@@ -961,6 +1096,22 @@
         "schema": {
          "title": "Slug",
          "type": "string"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
         }
        }
       ],
@@ -998,6 +1149,22 @@
          "title": "Slug",
          "type": "string"
         }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
        }
       ],
       "responses": {
@@ -1033,6 +1200,22 @@
         "schema": {
          "title": "Slug",
          "type": "string"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
         }
        }
       ],
@@ -1084,6 +1267,22 @@
          "title": "Slug",
          "type": "string"
         }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
        }
       ],
       "responses": {
@@ -1109,10 +1308,688 @@
       "summary": "Publish Staging Draft"
      }
     },
+    "/api/admin/reports": {
+     "get": {
+      "operationId": "admin_reports_api_admin_reports_get",
+      "parameters": [
+       {
+        "in": "query",
+        "name": "status",
+        "required": false,
+        "schema": {
+         "default": "new",
+         "pattern": "^(new|resolved|all)$",
+         "title": "Status",
+         "type": "string"
+        }
+       },
+       {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+         "default": 200,
+         "maximum": 1000,
+         "minimum": 1,
+         "title": "Limit",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Reports",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/reports.csv": {
+     "get": {
+      "operationId": "admin_reports_csv_api_admin_reports_csv_get",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Reports Csv",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/reports/{report_id}": {
+     "delete": {
+      "operationId": "admin_delete_report_api_admin_reports__report_id__delete",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "report_id",
+        "required": true,
+        "schema": {
+         "title": "Report Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Delete Report",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/reports/{report_id}/reopen": {
+     "post": {
+      "operationId": "admin_reopen_report_api_admin_reports__report_id__reopen_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "report_id",
+        "required": true,
+        "schema": {
+         "title": "Report Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Reopen Report",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/reports/{report_id}/resolve": {
+     "post": {
+      "operationId": "admin_resolve_report_api_admin_reports__report_id__resolve_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "report_id",
+        "required": true,
+        "schema": {
+         "title": "Report Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Resolve Report",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/stats": {
+     "get": {
+      "operationId": "admin_stats_api_admin_stats_get",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Stats",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts": {
+     "get": {
+      "operationId": "admin_texts_api_admin_texts_get",
+      "parameters": [
+       {
+        "in": "query",
+        "name": "q",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "maxLength": 100,
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Q"
+        }
+       },
+       {
+        "in": "query",
+        "name": "level",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "pattern": "^N[1-5]$",
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Level"
+        }
+       },
+       {
+        "in": "query",
+        "name": "category",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "maxLength": 50,
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Category"
+        }
+       },
+       {
+        "in": "query",
+        "name": "active",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "pattern": "^(active|hidden)$",
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Active"
+        }
+       },
+       {
+        "in": "query",
+        "name": "reported",
+        "required": false,
+        "schema": {
+         "default": false,
+         "title": "Reported",
+         "type": "boolean"
+        }
+       },
+       {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+         "default": 50,
+         "maximum": 200,
+         "minimum": 1,
+         "title": "Limit",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "query",
+        "name": "offset",
+        "required": false,
+        "schema": {
+         "default": 0,
+         "minimum": 0,
+         "title": "Offset",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Texts",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}": {
+     "get": {
+      "description": "Full task for moderation, including correct answers (admin only).",
+      "operationId": "admin_text_detail_api_admin_texts__text_id__get",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Text Detail",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}/hide": {
+     "post": {
+      "operationId": "admin_hide_text_api_admin_texts__text_id__hide_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Hide Text",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
+    "/api/admin/texts/{text_id}/show": {
+     "post": {
+      "description": "Return a task to the stream; by default also resets the counter so that it is not\nauto-hidden again by the next report (threshold 3).",
+      "operationId": "admin_show_text_api_admin_texts__text_id__show_post",
+      "parameters": [
+       {
+        "in": "path",
+        "name": "text_id",
+        "required": true,
+        "schema": {
+         "title": "Text Id",
+         "type": "integer"
+        }
+       },
+       {
+        "in": "query",
+        "name": "reset_reports",
+        "required": false,
+        "schema": {
+         "default": true,
+         "title": "Reset Reports",
+         "type": "boolean"
+        }
+       },
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "content": {
+         "application/json": {
+          "schema": {}
+         }
+        },
+        "description": "Successful Response"
+       },
+       "422": {
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HTTPValidationError"
+          }
+         }
+        },
+        "description": "Validation Error"
+       }
+      },
+      "summary": "Admin Show Text",
+      "tags": [
+       "Admin"
+      ]
+     }
+    },
     "/api/admin/upload-pdf": {
      "post": {
       "description": "Загружает PDF книгу/материал, запускает процесс извлечения и сегментации,\nи сохраняет распознанные тексты в staging черновики для ревью.",
       "operationId": "upload_pdf_api_admin_upload_pdf_post",
+      "parameters": [
+       {
+        "in": "header",
+        "name": "x-admin-token",
+        "required": false,
+        "schema": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "X-Admin-Token"
+        }
+       }
+      ],
       "requestBody": {
        "content": {
         "multipart/form-data": {
@@ -6027,7 +6904,7 @@
    "commit": "<COMMIT>",
    "database_backend": "sqlite",
    "env": "development",
-   "version": "2.2.0"
+   "version": "2.3.0"
   },
   "headers": {
    "cache-control": null,

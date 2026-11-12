@@ -17,6 +17,18 @@ def serve_index():
     return {"message": "JLPT Dokkai API running. Frontend static/index.html not found."}
 
 
+@router.get("/admin", include_in_schema=False)
+def serve_admin():
+    """Admin panel page (data comes from /api/admin/*, protected by ADMIN_TOKEN)."""
+    admin_path = os.path.join(STATIC_DIR, "admin", "index.html")
+    if not os.path.exists(admin_path):
+        raise HTTPException(status_code=404, detail="Admin page not found")
+    return FileResponse(admin_path, headers={
+        "Cache-Control": "no-cache, must-revalidate",
+        "X-Robots-Tag": "noindex, nofollow",
+    })
+
+
 @router.get("/sw.js")
 def serve_service_worker(request: Request, version: Optional[str] = None):
     sw_path = os.path.join(STATIC_DIR, "sw.js")

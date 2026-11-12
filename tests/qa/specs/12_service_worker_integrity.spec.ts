@@ -139,7 +139,7 @@ test.describe('12. Service Worker Safety, Network-First Strategy & Cache Integri
 
     // 1. Ensure initial Service Worker is active and cached
     await page.waitForFunction(() => {
-      return caches.keys().then(keys => keys.includes('dokkai-v2.2.0'));
+      return caches.keys().then(keys => keys.includes('dokkai-v2.3.0'));
     }, { timeout: 10000 });
 
     // 1.1 Preflight diagnostic: Verify DOKKAI_TEST_MODE is active on the server

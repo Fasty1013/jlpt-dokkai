@@ -7,7 +7,7 @@ import { ru } from './locales/ru.js';
 import { t } from './index.js';
 
 const EXACT = new Map(
-  ['srv.taskNotFound', 'srv.draftNotFound', 'srv.pdfOnly', 'srv.notSolved', 'srv.reportOk', 'srv.reportHidden']
+  ['srv.taskNotFound', 'srv.draftNotFound', 'srv.pdfOnly', 'srv.notSolved', 'srv.reportOk', 'srv.reportHidden', 'srv.adminRequired']
     .map((key) => [ru[key], key])
 );
 const COMMIT_FAILED_PREFIX = 'Ошибка фиксации задания: ';

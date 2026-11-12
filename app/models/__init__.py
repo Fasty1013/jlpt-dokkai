@@ -158,3 +158,22 @@ class GenerationJob(Base):
     params = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
+
+
+class DefectReport(Base):
+    """
+    Жалоба пользователя «Сообщить об ошибке» (текст сообщения для админ-панели).
+    Раньше сервер хранил только счётчик texts.report_count, а сам текст терялся.
+    """
+    __tablename__ = "defect_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    text_id = Column(Integer, ForeignKey("texts.id", ondelete="CASCADE"), index=True, nullable=False)
+    reason = Column(String(200), nullable=False)
+    details = Column(SqlText, nullable=True)
+    user_id = Column(String(100), nullable=True)
+    status = Column(String(20), default="new", nullable=False, index=True)  # new, resolved
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    resolved_at = Column(DateTime, nullable=True)
+
+    text = relationship("Text")

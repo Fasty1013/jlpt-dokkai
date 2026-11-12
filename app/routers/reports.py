@@ -23,6 +23,14 @@ def report_task_defect(
     if not text:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Задание не найдено")
 
+    # Keep the message for the admin panel (response contract unchanged).
+    db.add(models.DefectReport(
+        text_id=text.id,
+        reason=(payload.reason or "")[:200],
+        details=(payload.details or "")[:2000] or None,
+        user_id=(payload.user_id or "")[:100] or None,
+    ))
+
     text.report_count = (text.report_count or 0) + 1
     deactivated = False
     if text.report_count >= 3:

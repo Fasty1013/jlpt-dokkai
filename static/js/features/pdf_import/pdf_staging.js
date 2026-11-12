@@ -2,10 +2,13 @@
  * JLPT Dokkai Master - PDF Ingestion & Staging Management
  * Client-side interface for PDF book upload, preview of extracted exercises,
  * question/option correction, and publishing into active catalog.
- * Note: Never commits user PDFs to git. Server-side /api/admin/* endpoints remain untouched.
+ * Note: Never commits user PDFs to git. /api/admin/* requires the admin key (ADMIN_TOKEN) in production;
+ * adminFetch() sends it when it is stored in this browser (set on the /admin page).
  */
 
 import { t } from '../../i18n/index.js';
+import { localizeServerMessage } from '../../i18n/server_messages.js';
+import { adminFetch } from '../../api/admin_token.js';
 import { getCategoryName } from '../../constants/labels.js';
 import { formatFileSize, escapeHtml } from '../../utils/index.js';
 import { state as storeState } from '../../state/store.js';
@@ -87,14 +90,14 @@ export async function handlePdfUpload(e) {
     if (els.uploadStatusText) els.uploadStatusText.textContent = t('pdf.recognizing');
 
     try {
-        const resp = await fetch('/api/admin/upload-pdf', {
+        const resp = await adminFetch('/api/admin/upload-pdf', {
             method: 'POST',
             body: formData
         });
 
         const data = await resp.json();
         if (!resp.ok || !data.success) {
-            throw new Error(data.error || data.detail || t('pdf.recognizeFailed'));
+            throw new Error(data.error || localizeServerMessage(data.detail) || t('pdf.recognizeFailed'));
         }
 
         clearSelectedPdfFile();
@@ -119,7 +122,7 @@ export async function handlePdfUpload(e) {
 export async function fetchAndRenderDrafts() {
     const els = getElements();
     try {
-        const resp = await fetch('/api/admin/drafts');
+        const resp = await adminFetch('/api/admin/drafts');
         if (!resp.ok) return;
         const drafts = await resp.json();
         currentDraftsCache = Array.isArray(drafts) ? drafts : [];
@@ -288,13 +291,13 @@ export async function saveDraft(slug) {
     if (!draft) return;
 
     try {
-        const resp = await fetch(`/api/admin/drafts/${slug}`, {
+        const resp = await adminFetch(`/api/admin/drafts/${slug}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(draft)
         });
         const data = await resp.json();
-        if (!resp.ok) throw new Error(data.detail || t('pdf.saveFailed'));
+        if (!resp.ok) throw new Error(localizeServerMessage(data.detail) || t('pdf.saveFailed'));
         alert(t('pdf.saved'));
     } catch (err) {
         alert(t('pdf.saveError', { message: err.message }));
@@ -318,19 +321,19 @@ export async function publishDraft(slug) {
     try {
         // Save current modifications first
         if (draft) {
-            await fetch(`/api/admin/drafts/${slug}`, {
+            await adminFetch(`/api/admin/drafts/${slug}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(draft)
             });
         }
 
-        const resp = await fetch(`/api/admin/drafts/${slug}/publish`, {
+        const resp = await adminFetch(`/api/admin/drafts/${slug}/publish`, {
             method: 'POST'
         });
         const data = await resp.json();
         if (!resp.ok || !data.success) {
-            const errList = data.detail?.errors ? data.detail.errors.join('\n') : (data.detail || t('pdf.errorGeneric'));
+            const errList = localizeServerMessage(data.detail)?.errors ? localizeServerMessage(data.detail).errors.join('\n') : (localizeServerMessage(data.detail) || t('pdf.errorGeneric'));
             throw new Error(errList);
         }
 
@@ -351,7 +354,7 @@ export async function publishDraft(slug) {
 export async function deleteDraft(slug) {
     if (!confirm(t('pdf.confirmDelete'))) return;
     try {
-        const resp = await fetch(`/api/admin/drafts/${slug}`, {
+        const resp = await adminFetch(`/api/admin/drafts/${slug}`, {
             method: 'DELETE'
         });
         if (!resp.ok) throw new Error(t('pdf.deleteFailed'));
