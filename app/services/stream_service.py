@@ -60,11 +60,14 @@ def get_default_profile_for_level(level: str, category: str = "short") -> str:
 def get_or_create_slots(
     db: Session,
     user_id: str,
-    profile_key: str
+    profile_key: str,
+    refresh: bool = False
 ) -> List[Dict[str, Any]]:
     """
     Возвращает 3 активных слота для данного профиля сложности и пользователя.
     Если слотов меньше 3, атомарно дозаполняет их новыми непройденными заданиями.
+    refresh=True (кнопка «Обновить слоты»): каждое задание в слоте заменяется другим
+    случайным непройденным заданием из пула; если замены нет, слот остаётся прежним.
     """
     slots = (
         db.query(TaskSlot)
@@ -78,6 +81,23 @@ def get_or_create_slots(
     active_text_ids = {s.text_id for s in slots if s.text_id is not None}
 
     updated = False
+    if refresh:
+        # Прежние задания исключаются целиком, чтобы новые не повторяли ни одно из них.
+        exclude_ids = set(active_text_ids)
+        for s in slots:
+            if s.text_id is None:
+                continue
+            # Только пул: при перемешивании не создаём новых параметрических текстов в БД.
+            next_text = pick_next(db, user_id, profile_key, exclude_text_ids=exclude_ids, allow_generate=False)
+            if next_text:
+                active_text_ids.discard(s.text_id)
+                s.text_id = next_text.id
+                s.state = "active"
+                s.updated_at = datetime.utcnow()
+                exclude_ids.add(next_text.id)
+                active_text_ids.add(next_text.id)
+                updated = True
+
     for pos in range(1, ACTIVE_SLOTS_PER_PROFILE + 1):
         if pos not in slot_positions:
             # Подбираем задание
@@ -153,7 +173,8 @@ def pick_next(
     db: Session,
     user_id: str,
     profile_key: str,
-    exclude_text_ids: Optional[Set[int]] = None
+    exclude_text_ids: Optional[Set[int]] = None,
+    allow_generate: bool = True
 ) -> Optional[Text]:
     """
     Серверный подбор следующего задания:
@@ -214,7 +235,7 @@ def pick_next(
             return fallback_candidate
 
     # 3. Для уровней N5 и N4 используем детерминированный параметрический генератор
-    if profile_key.startswith("N5") or profile_key.startswith("N4"):
+    if allow_generate and (profile_key.startswith("N5") or profile_key.startswith("N4")):
         lvl = "N5" if profile_key.startswith("N5") else "N4"
         cat = parts[1] if len(parts) >= 2 else "short"
         param_text = generate_parametric_text(db, level=lvl, category=cat)

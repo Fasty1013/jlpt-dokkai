@@ -51,6 +51,9 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
   test('03. Slot Refresh: Manual slot replenishment button requests updated slots', async ({ page }) => {
     await page.goto('/');
     await page.waitForSelector('#btn-refresh-slots', { timeout: 15000 });
+    const cards = page.locator('#active-slots-list .stream-slot-card');
+    await expect(cards.first()).toBeVisible({ timeout: 15000 });
+    const before = await cards.evaluateAll(els => els.map(el => (el as HTMLElement).dataset.textId));
 
     const [response] = await Promise.all([
       page.waitForResponse(resp => resp.url().includes('/api/stream/slots')),
@@ -58,8 +61,16 @@ test.describe('15. Stream Catalog, Slot Dynamic Filters & Solved Archive', () =>
     ]);
 
     expect(response.status()).toBe(200);
+    // The button must ask the server to reshuffle, not just re-read the same slots.
+    expect(new URL(response.url()).searchParams.get('refresh')).toBe('true');
     const slots = page.locator('#active-slots-list .stream-slot-card, #active-slots-list .stream-slot-placeholder');
     await expect(slots.first()).toBeVisible();
+
+    // The N5 short pool is larger than 2 × 3 slots, so every refreshed task is new.
+    await expect.poll(async () => {
+      const after = await cards.evaluateAll(els => els.map(el => (el as HTMLElement).dataset.textId));
+      return after.length > 0 && after.every(id => !before.includes(id));
+    }, { timeout: 10000 }).toBe(true);
   });
 
   test('04. Solved Archive: Filters "Все", "100%", "С ошибками" correctly partition results', async ({ page }) => {

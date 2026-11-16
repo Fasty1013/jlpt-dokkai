@@ -31,7 +31,7 @@ export function initStreamEvents({ state, elements, actions }) {
           localStorage.setItem('dokkai_stream_solved_when', state.streamProfile.solvedWhen);
         } catch (err) { }
       },
-      'refresh-slots': () => actions.fetchAndRenderSlots(),
+      'refresh-slots': () => actions.fetchAndRenderSlots(true),
       'filter-solved': (el, e, ds) => {
         if (elements.solvedFilterPills) {
           elements.solvedFilterPills.querySelectorAll('.mini-pill').forEach(p => p.classList.remove('active'));

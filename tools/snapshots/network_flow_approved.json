@@ -1,0 +1,10 @@
+{
+  "description": "Approved request differences against main for tools/compare_network_flow.cjs. Remove an entry (or this file) once the change is merged into main.",
+  "approved": [
+    {
+      "reason": "INTENTIONAL_DIFFERENCES I32: the refresh-slots button sends refresh=true",
+      "main": {"method":"GET","path":"/api/stream/slots","query":{"user_id":"<USER_ID>","level":"N5","category":"short","_t":"<TIMESTAMP>"},"body":null,"key_headers":{"content-type":null,"accept":null}},
+      "branch": {"method":"GET","path":"/api/stream/slots","query":{"user_id":"<USER_ID>","level":"N5","category":"short","refresh":"true","_t":"<TIMESTAMP>"},"body":null,"key_headers":{"content-type":null,"accept":null}}
+    }
+  ]
+}
