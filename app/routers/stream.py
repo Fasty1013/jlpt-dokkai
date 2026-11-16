@@ -25,6 +25,7 @@ def get_stream_slots(
     profile_key: Optional[str] = Query(None, description="Ключ профиля сложности, например N5:short:detail:1:XS"),
     level: Optional[str] = Query("N5", description="Уровень JLPT (N5-N1), если profile_key не указан"),
     category: Optional[str] = Query("short", description="Категория (short, medium, long, info_search)"),
+    refresh: bool = Query(False, description="Заменить задания в слотах другими случайными непройденными"),
     db: Session = Depends(get_db),
     response: Response = Response()
 ):
@@ -39,7 +40,7 @@ def get_stream_slots(
         response.headers["Expires"] = "0"
     if not profile_key:
         profile_key = get_default_profile_for_level(level or "N5", category or "short")
-    slots = get_or_create_slots(db, user_id=user_id, profile_key=profile_key)
+    slots = get_or_create_slots(db, user_id=user_id, profile_key=profile_key, refresh=refresh)
     return {
         "profile_key": profile_key,
         "user_id": user_id,

@@ -231,6 +231,17 @@ async function main() {
   console.log('Recording on refactor/decomposition (http://localhost:8000)...');
   const refactorReqs = await runScenario('http://localhost:8000', fileRefactor);
 
+  // Approved intentional differences (INTENTIONAL_DIFFERENCES I32): a pair of requests
+  // { main, branch } is accepted only when both sides match an entry exactly.
+  // Disable with --no-approved; another file via NETWORK_FLOW_APPROVED.
+  const approvedFile = process.env.NETWORK_FLOW_APPROVED
+    || path.resolve(__dirname, 'snapshots/network_flow_approved.json');
+  let approved = [];
+  if (!process.argv.includes('--no-approved') && fs.existsSync(approvedFile)) {
+    approved = JSON.parse(fs.readFileSync(approvedFile, 'utf-8')).approved || [];
+  }
+  const approvedKeys = new Set(approved.map(a => JSON.stringify(a.main) + '\u0000' + JSON.stringify(a.branch)));
+
   // Automated Diff
   const strMain = JSON.stringify(mainReqs, null, 2);
   const strRefactor = JSON.stringify(refactorReqs, null, 2);
@@ -240,17 +251,22 @@ async function main() {
     fs.writeFileSync(fileDiff, diffReport, 'utf-8');
     console.log(diffReport);
   } else {
-    let diffReport = 'AUTOMATED DIFF RESULT:\nDISCREPANCIES DETECTED:\n';
+    let newReport = '';
+    let approvedCount = 0;
     const maxLen = Math.max(mainReqs.length, refactorReqs.length);
     for (let i = 0; i < maxLen; i++) {
-      const m = mainReqs[i];
-      const r = refactorReqs[i];
-      const sm = JSON.stringify(m);
-      const sr = JSON.stringify(r);
-      if (sm !== sr) {
-        diffReport += `\nStep ${i + 1}:\n  MAIN:     ${sm}\n  REFACTOR: ${sr}\n`;
+      const sm = JSON.stringify(mainReqs[i]);
+      const sr = JSON.stringify(refactorReqs[i]);
+      if (sm === sr) continue;
+      if (approvedKeys.has(sm + '\u0000' + sr)) {
+        approvedCount++;
+        continue;
       }
+      newReport += `\nStep ${i + 1}:\n  MAIN:     ${sm}\n  REFACTOR: ${sr}\n`;
     }
+    const diffReport = newReport
+      ? 'AUTOMATED DIFF RESULT:\nDISCREPANCIES DETECTED:\n' + newReport
+      : `AUTOMATED DIFF RESULT:\n0 DISCREPANCIES FOUND outside the approved baseline (${approvedCount} approved)\n\nAll ${mainReqs.length} API requests match main or an approved difference in ${path.relative(process.cwd(), approvedFile)}.\n`;
     fs.writeFileSync(fileDiff, diffReport, 'utf-8');
     console.log(diffReport);
   }

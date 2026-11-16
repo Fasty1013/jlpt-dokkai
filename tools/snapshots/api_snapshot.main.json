@@ -2810,6 +2810,18 @@
          "description": "Категория (short, medium, long, info_search)",
          "title": "Category"
         }
+       },
+       {
+        "description": "Заменить задания в слотах другими случайными непройденными",
+        "in": "query",
+        "name": "refresh",
+        "required": false,
+        "schema": {
+         "default": false,
+         "description": "Заменить задания в слотах другими случайными непройденными",
+         "title": "Refresh",
+         "type": "boolean"
+        }
        }
       ],
       "responses": {
