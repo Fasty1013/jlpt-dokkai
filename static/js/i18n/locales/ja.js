@@ -275,6 +275,7 @@ export const ja = {
   "stream.originParam": "⚡ パラメトリック",
   "stream.originAi": "🤖 AI生成",
   "stream.originOpen": "📖 オープン素材",
+  "stream.originArchive": "📝 JLPT形式",
   "stream.slot": "枠 #{n}",
   "stream.questions": "❓ {n}問",
   "stream.start": "解き始める →",

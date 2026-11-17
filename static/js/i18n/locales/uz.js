@@ -276,6 +276,7 @@ export const uz = {
   "stream.originParam": "⚡ Parametrik",
   "stream.originAi": "🤖 AI yaratgan",
   "stream.originOpen": "📖 Ochiq manba",
+  "stream.originArchive": "📝 JLPT uslubida",
   "stream.slot": "Uyacha #{n}",
   "stream.questions": "❓ {n} savol",
   "stream.start": "Yechishni boshlash →",

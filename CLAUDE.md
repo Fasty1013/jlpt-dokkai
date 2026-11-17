@@ -218,7 +218,7 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
    ```
    *Сравнивает 15 экранов и модальных окон в десктопном и мобильном разрешениях. Допустимый процент расхождения: строго 0.0000%.*
 
-   > Эталоны одобренных отличий: если есть `tools/snapshots/computed_styles_approved.json` / `tools/snapshots/network_flow_approved.json` (I32; удалён после слияния PR #12) / `tools/snapshots/pixel_approved/meta.json`, скрипты 2, 3 и 4 не считают одобренные отличия (INTENTIONAL_DIFFERENCES I17–I20). Сейчас (после слияния i18n в `main`, I17а) эталонов нет — режим строгий, допуск 0. Для ветки с намеренными отличиями: `APPROVED_REFERENCE=<commit> … --write-approved` против актуального `main` на :8001.
+   > Эталоны одобренных отличий: если есть `tools/snapshots/computed_styles_approved.json` / `tools/snapshots/network_flow_approved.json` (I32; удалён после слияния PR #12) / `tools/snapshots/pixel_approved/meta.json`, скрипты 2, 3 и 4 не считают одобренные отличия (INTENTIONAL_DIFFERENCES I17–I20). Сейчас эталоны есть только на ветке исправления бейджа I33 (против `main` `0625295`: 12 записей стилей, 5 экранов пикселей); после её слияния — удалить, режим снова строгий. Для ветки с намеренными отличиями: `APPROVED_REFERENCE=<commit> … --write-approved` против актуального `main` на :8001.
 
 5. **Проверка графа зависимостей ES-модулей (DAG, 0 циклов):**
    ```bash
@@ -244,7 +244,7 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
 
 ## 📍 6. Текущий статус репозитория (Точка передачи эстафеты)
 
-* **Ветки:** всё влито в `main`: PR #1 Часть III → `05a87ef`, PR #2 i18n → `9b4836f`, #3–#4 доделки, #5 иконка, #6 заметки, #7 версия 2.2.0 (релиз `v2.2.0`), #8 админ-панель (`v2.3.0`), #9 драйвер Postgres (`v2.3.1`, `e94bf72`). Слитые ветки на GitHub не удалялись. Локальная копия `main` для :8001 — `Dokkai-main-compare` (обновлять `git merge --ff-only origin/main` после каждого слияния).
+* **Ветки:** всё влито в `main`: PR #1 Часть III → `05a87ef`, PR #2 i18n → `9b4836f`, #3–#4 доделки, #5 иконка, #6 заметки, #7 версия 2.2.0 (релиз `v2.2.0`), #8 админ-панель (`v2.3.0`), #9 драйвер Postgres (`v2.3.1`, `e94bf72`). Слитые ветки на GitHub не удалялись. Полный список веток — `docs/BRANCHES.md`. Локальная копия `main` для :8001 — `Dokkai-main-compare` (обновлять `git merge --ff-only origin/main` после каждого слияния).
 * **Состояние:** Части I–III и i18n (подитерации 1–3) выполнены и в `main`. Отчёт Части III — `docs/REPORT_PART_III.md`; отличия — `docs/INTENTIONAL_DIFFERENCES.md` (п. 13–35, D5, I1–I31, I17а); i18n — `docs/i18n/`; заметки — `docs/notes/`.
 * **Проверки (приёмка, 2026-11-11):** Часть III — Playwright 99 passed / 1 skipped, api_snapshot 38/38, shuffle_check ALL PASSED; i18n — Playwright 133 passed / 1 flaky (таймаут `page.goto`) / 4 skipped, api_snapshot 38/38, dictionary_i18n_check и i18n_check OK, граф 87 модулей; строгий паритет ветки с новым `main` — обход 92/92, стили 0, сеть 28/28, пиксели 0.
 * **Прод (Render):** сервис `jlpt-dokkai` (Docker, создан вручную — `render.yaml` не применяется), автодеплой из `main`. Переменные — только в Render → Environment: `SHUFFLE_SECRET` (задан 2026-11-11, не менять), `ADMIN_TOKEN` (админка `/admin` и импорт PDF), `DATABASE_URL` (Neon Postgres, us-west-2; с v2.3.1 прод на `postgresql`, данные переживают деплой). Драйвер закреплён `postgresql+psycopg2://` (SQLAlchemy 2.1 по умолчанию берёт psycopg v3 — I28).

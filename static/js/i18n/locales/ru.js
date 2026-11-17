@@ -276,6 +276,7 @@ export const ru = {
   "stream.originParam": "⚡ Параметрический",
   "stream.originAi": "🤖 ИИ-генерация",
   "stream.originOpen": "📖 Открытый источник",
+  "stream.originArchive": "📝 В стиле JLPT",
   "stream.slot": "Слот #{n}",
   "stream.questions": "❓ {n} вопр.",
   "stream.start": "Начать решение →",

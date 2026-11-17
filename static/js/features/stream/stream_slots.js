@@ -38,7 +38,8 @@ export function renderSlotCardHtml(slot, profileKey = '') {
   } else if (t.category === 'nhk' || (t.title && t.title.includes('NHK'))) {
     originBadge = '<span class="nhk-badge">NHK WORLD</span>';
   } else {
-    originBadge = '<span class="exam-archive-badge">📜 JLPT 過去問</span>';
+    // Project's own tasks (exam-style or adapted): not past JLPT papers (I33)
+    originBadge = `<span class="exam-archive-badge">${tr('stream.originArchive')}</span>`;
   }
 
   return `

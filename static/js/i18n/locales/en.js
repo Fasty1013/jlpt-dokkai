@@ -275,6 +275,7 @@ export const en = {
   "stream.originParam": "⚡ Parametric",
   "stream.originAi": "🤖 AI-generated",
   "stream.originOpen": "📖 Open license",
+  "stream.originArchive": "📝 JLPT-style",
   "stream.slot": "Slot #{n}",
   "stream.questions": "❓ {n} q.",
   "stream.start": "Start solving →",
