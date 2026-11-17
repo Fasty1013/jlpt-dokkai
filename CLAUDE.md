@@ -218,7 +218,7 @@ $env:DOKKAI_TEST_MODE="1"; python -m uvicorn main:app --port 8001
    ```
    *Сравнивает 15 экранов и модальных окон в десктопном и мобильном разрешениях. Допустимый процент расхождения: строго 0.0000%.*
 
-   > Эталоны одобренных отличий: если есть `tools/snapshots/computed_styles_approved.json` / `tools/snapshots/network_flow_approved.json` (I32; удалён после слияния PR #12) / `tools/snapshots/pixel_approved/meta.json`, скрипты 2, 3 и 4 не считают одобренные отличия (INTENTIONAL_DIFFERENCES I17–I20). Сейчас эталоны есть только на ветке исправления бейджа I33 (против `main` `0625295`: 12 записей стилей, 5 экранов пикселей); после её слияния — удалить, режим снова строгий. Для ветки с намеренными отличиями: `APPROVED_REFERENCE=<commit> … --write-approved` против актуального `main` на :8001.
+   > Эталоны одобренных отличий: если есть `tools/snapshots/computed_styles_approved.json` / `tools/snapshots/network_flow_approved.json` (I32; удалён после слияния PR #12) / `tools/snapshots/pixel_approved/meta.json`, скрипты 2, 3 и 4 не считают одобренные отличия (INTENTIONAL_DIFFERENCES I17–I20). Сейчас (после слияния PR #15, I33) эталонов нет — режим строгий, допуск 0. Для ветки с намеренными отличиями: `APPROVED_REFERENCE=<commit> … --write-approved` против актуального `main` на :8001.
 
 5. **Проверка графа зависимостей ES-модулей (DAG, 0 циклов):**
    ```bash
