@@ -2,7 +2,7 @@
 // Scope: Same-origin static assets ONLY (/ and /static/*)
 // Strategy: Network-First with 3.5s Timeout & Offline Cache Fallback
 
-const CACHE_VERSION = '2.4.0';
+const CACHE_VERSION = '2.5.0';
 const CACHE_NAME = `dokkai-v${CACHE_VERSION}`;
 const NETWORK_TIMEOUT_MS = 3500;
 
@@ -21,7 +21,6 @@ const PRECACHE_ASSETS = [
   '/static/css/wizard.css',
   '/static/css/analysis.css',
   '/static/css/dictionary.css',
-  '/static/css/pdf_import.css',
   '/static/css/modals.css',
   '/static/css/responsive.css',
   '/static/js/storage/storage.js',
@@ -105,9 +104,6 @@ const PRECACHE_ASSETS = [
   '/static/js/features/sync_ui/sync_modal.js',
   '/static/js/features/sync_ui/sync_events.js',
   '/static/js/features/sync_ui/index.js',
-  '/static/js/features/pdf_import/pdf_staging.js',
-  '/static/js/features/pdf_import/pdf_events.js',
-  '/static/js/features/pdf_import/index.js',
   '/static/js/features/events/action_dispatcher.js',
   '/static/js/features/events/navigation_events.js',
   '/static/js/features/events/swipe_rows.js',

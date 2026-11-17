@@ -109,8 +109,6 @@ def main():
         ('mobile_solved_col', 'main_mobile_solved_col.png', 'refactor_mobile_solved_col.png'),
         ('desktop_sync_modal', 'main_desktop_sync_modal.png', 'refactor_desktop_sync_modal.png'),
         ('mobile_sync_modal', 'main_mobile_sync_modal.png', 'refactor_mobile_sync_modal.png'),
-        ('desktop_pdf_import', 'main_desktop_pdf_import.png', 'refactor_desktop_pdf_import.png'),
-        ('mobile_pdf_import', 'main_mobile_pdf_import.png', 'refactor_mobile_pdf_import.png'),
         ('desktop_exercise', 'main_desktop_exercise.png', 'refactor_desktop_exercise.png'),
         ('mobile_exercise', 'main_mobile_exercise.png', 'refactor_mobile_exercise.png'),
         ('desktop_analysis', 'main_desktop_analysis.png', 'refactor_desktop_analysis.png'),

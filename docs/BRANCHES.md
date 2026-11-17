@@ -1,10 +1,10 @@
 # Ветки репозитория
 
-Состояние на 2026-11-17 по `git branch -a`, `git branch -a --merged origin/main` и `gh pr list --state all`. `main` = `23e7cb9` (Merge PR #15). Все ветки ниже уже слиты в `main`; на GitHub их не удаляли.
+Состояние на 2026-11-17 по `git branch -a`, `git branch -a --merged origin/main` и `gh pr list --state all`. `main` = `f9946e0` (Merge PR #16). Все ветки ниже уже слиты в `main`; на GitHub их не удаляли.
 
 | Ветка | PR | Слита в `main` | Последний коммит ветки | Что в ней |
 | --- | --- | --- | --- | --- |
-| `main` | — | — | `23e7cb9` (2026-11-17) | Основная ветка, автодеплой на Render |
+| `main` | — | — | `f9946e0` (2026-11-17) | Основная ветка, автодеплой на Render |
 | `refactor/decomposition` | без PR | `6103f28` (merge напрямую) | локально `e27a0fb`, на GitHub `1ddccf1` | Часть II: рефакторинг фронтенда и бэкенда (шаги 6–10) |
 | `fix/sync-speech-mobile-ui-shuffle` | #1 | 2026-11-11 (`05a87ef`) | `404012d` | Часть III (шаг 11): мобильный UX, Firestore, озвучка, HMAC-перемешивание вариантов |
 | `feat/i18n-switcher` | #2 | 2026-11-11 (`9b4836f`) | `fd486c6` | Переключатель языков ru/uz/en/ja, словарь на языке интерфейса |
@@ -18,9 +18,10 @@
 | `docs/notes-neon-live` | #10 | 2026-11-12 | `3b4f16b` | Заметки: прод на Neon |
 | `feat/admin-task-editor` | #11 | 2026-11-12 (`2eeaefd`) | `9bf6ebb` | Редактор задания в админке (v2.4.0) |
 | `fix/refresh-slots` | #12 | 2026-11-16 (`c4965bb`) | `feb6e17` | Кнопка «Обновить слоты» перемешивает задания (I32) |
-| `chore/drop-network-baseline` | #13 | 2026-11-17 (`b579a96`) | на GitHub `2cec141`; локально впереди на `8ac09ed` и `12c442e` (те же коммиты, что в `feat/open-content` и `fix/jlpt-style-badge`) | Удаление эталона сети после PR #12 |
+| `chore/drop-network-baseline` | #13 | 2026-11-17 (`b579a96`) | на GitHub `2cec141`; локально впереди на `8ac09ed`, `12c442e`, `92a290e` (те же коммиты, что в `feat/open-content`, `fix/jlpt-style-badge`, `chore/drop-badge-baselines`) | Удаление эталона сети после PR #12 |
 | `feat/open-content` | #14 | 2026-11-17 (`0625295`) | `8ac09ed` | Задания из открытых источников, пилот 10 шт. (I34, I35) |
 | `fix/jlpt-style-badge` | #15 | 2026-11-17 (`23e7cb9`) | `12c442e` | Бейдж «📝 В стиле JLPT» вместо «JLPT 過去問» (I33), этот список веток |
+| `chore/drop-badge-baselines` | #16 | 2026-11-17 (`f9946e0`) | `92a290e` | Удаление эталонов после PR #15, строка PR #15 в этом списке |
 
 ## Не слито
 Нет.

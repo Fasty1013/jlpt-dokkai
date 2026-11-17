@@ -177,16 +177,7 @@ async function captureScreenshotsForTarget(baseUrl, targetName, outDir) {
     });
     await page.waitForSelector('#sync-modal-backdrop', { state: 'hidden', timeout: 10000 });
 
-    // 3c. PDF Import Screen
-    await page.evaluate(() => {
-      const btn = document.getElementById('btn-tab-import');
-      if (btn) btn.click();
-    });
-    await page.waitForSelector('#import-view:not(.hidden)', { timeout: 10000 });
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(500);
-    const pdfImportPath = path.join(outDir, `${targetName}_${vp.name}_pdf_import.png`);
-    await page.screenshot({ path: pdfImportPath, fullPage: false });
+    // 3c. PDF Import Screen: removed from the main site (I36).
 
     // Return to catalog view cleanly
     await page.evaluate(() => {

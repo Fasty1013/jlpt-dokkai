@@ -3,6 +3,7 @@
  * All user-supplied text (report details, titles) is rendered with textContent — never innerHTML.
  */
 import { getAdminToken, setAdminToken, adminFetch } from '../api/admin_token.js';
+import { initPdfImport, loadDrafts } from './pdf_import.js';
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
@@ -122,7 +123,7 @@ function switchTab(tab) {
   state.tab = tab;
   $$('.adm-tab').forEach((b) => b.classList.toggle('is-active', b.dataset.tab === tab));
   $$('.adm-panel').forEach((p) => { p.hidden = p.id !== `panel-${tab}`; });
-  const loaders = { dashboard: loadDashboard, reports: loadReports, texts: loadTexts, activity: loadActivity };
+  const loaders = { dashboard: loadDashboard, reports: loadReports, texts: loadTexts, activity: loadActivity, import: loadDrafts };
   if (loaders[tab]) guarded(loaders[tab]);
 }
 
@@ -567,6 +568,7 @@ function init() {
     if (!confirmDiscard()) { e.preventDefault(); return; }
     editor.dirty = false;
   });
+  initPdfImport({ el, toast, guarded, AuthError });
   checkAuth();
 }
 

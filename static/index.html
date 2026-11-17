@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="/static/css/wizard.css">
     <link rel="stylesheet" href="/static/css/analysis.css">
     <link rel="stylesheet" href="/static/css/dictionary.css">
-    <link rel="stylesheet" href="/static/css/pdf_import.css">
     <link rel="stylesheet" href="/static/css/modals.css">
     <link rel="stylesheet" href="/static/css/responsive.css">
 </head>
@@ -85,12 +84,6 @@
                     <span class="nav-icon">⭐</span>
                     <span class="nav-label" data-i18n="nav.notebook.label">Мой словарь</span>
                     <span class="notebook-badge" id="header-saved-count">0</span>
-                </button>
-                <button type="button" class="nav-tab" id="btn-tab-import" data-action="switch-main-tab" data-tab="import"
-                    title="Импорт книги PDF" data-i18n-attr="title:nav.import.title">
-                    <span class="nav-icon">📥</span>
-                    <span class="nav-label" data-i18n="nav.import.label">Импорт PDF</span>
-                    <span class="notebook-badge hidden" id="header-drafts-count">0</span>
                 </button>
                 <button type="button" class="nav-tab sync-status-tab" id="btn-sync-status" data-action="open-sync-modal"
                     title="Статус синхронизации и бэкап прогресса" data-i18n-attr="title:html.btn-sync-status.title">
@@ -436,109 +429,6 @@
                             <span class="notebook-stats" id="notebook-stats-text">Всего сохранённых слов: 0</span>
                             <button type="button" class="btn btn-ghost btn-sm text-danger"
                                 id="btn-clear-notebook" data-action="clear-notebook" data-i18n="html.btn-clear-notebook">Очистить весь словарь</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- VIEW 4: PDF IMPORT VIEW (Вкладка "Импорт PDF") -->
-            <section id="import-view" class="view import-view hidden">
-                <div class="import-page-container">
-                    <div class="catalog-hero">
-                        <div class="hero-badge">AI & HEURISTIC PDF INGESTION</div>
-                        <h1 class="hero-title" data-i18n="html.import-view">📥 Импорт заданий из PDF книг</h1>
-                        <p class="hero-desc" data-i18n="html.import-view.2">
-                            Загрузите PDF японского учебника или сборника тестов JLPT. Система автоматически извлечёт тексты для чтения, вопросы, 4 варианта ответа и сопоставит ключ ответов из конца книги.
-                        </p>
-                    </div>
-
-                    <!-- Upload Form Card -->
-                    <div class="import-card">
-                        <div class="import-card-header">
-                            <span class="import-header-icon">📄</span>
-                            <div>
-                                <h3 class="import-card-title" data-i18n="html.import-view.3">Загрузка PDF документа</h3>
-                                <p class="import-card-desc" data-i18n="html.import-view.4">Поддерживаются цифровые PDF книги и экзаменационные буклеты с текстовым слоем</p>
-                            </div>
-                        </div>
-
-                        <form id="form-pdf-upload" class="upload-form">
-                            <!-- Dropzone -->
-                            <div class="dropzone" id="pdf-dropzone">
-                                <input type="file" id="pdf-file-input" accept=".pdf" class="file-input-hidden">
-                                <div class="dropzone-content" id="dropzone-prompt">
-                                    <span class="dropzone-icon">📥</span>
-                                    <p class="dropzone-text"><strong data-i18n="html.dropzone-prompt">Нажмите для выбора</strong> <span data-i18n="html.dropzone-prompt.2">или перетащите PDF файл книги сюда</span></p>
-                                    <span class="dropzone-hint" data-i18n="html.dropzone-prompt.3">Формат .pdf, до 50 МБ</span>
-                                </div>
-                                <div class="dropzone-file-info hidden" id="dropzone-file-info">
-                                    <span class="file-icon">📑</span>
-                                    <div class="file-meta-wrap">
-                                        <span class="file-name" id="dropzone-file-name">filename.pdf</span>
-                                        <span class="file-size" id="dropzone-file-size">0 KB</span>
-                                    </div>
-                                    <button type="button" class="btn-clear-file" id="btn-clear-file" data-action="clear-pdf-file" title="Убрать файл" data-i18n-attr="title:html.btn-clear-file.title">✕</button>
-                                </div>
-                            </div>
-
-                            <!-- Meta Configuration Grid -->
-                            <div class="upload-meta-grid">
-                                <div class="meta-field">
-                                    <label class="field-label" for="import-level" data-i18n="html.form-pdf-upload">Целевой уровень JLPT:</label>
-                                    <select id="import-level" class="field-select">
-                                        <option value="N5" data-i18n="html.import-level">N5 (Начальный)</option>
-                                        <option value="N4" data-i18n="html.import-level.2">N4 (Базовый)</option>
-                                        <option value="N3" selected data-i18n="html.import-level.3">N3 (Средний)</option>
-                                        <option value="N2" data-i18n="html.import-level.4">N2 (Продвинутый)</option>
-                                        <option value="N1" data-i18n="html.import-level.5">N1 (Высший)</option>
-                                    </select>
-                                </div>
-
-                                <div class="meta-field">
-                                    <label class="field-label" for="import-category" data-i18n="html.form-pdf-upload.2">Тип заданий в книге:</label>
-                                    <select id="import-category" class="field-select">
-                                        <option value="short" selected data-i18n="html.import-category">短文 (Короткие тексты, 1-2 вопроса)</option>
-                                        <option value="medium" data-i18n="html.import-category.2">中文 (Средние тексты, 3-4 вопроса)</option>
-                                        <option value="long" data-i18n="html.import-category.3">長文 (Длинные тексты, 4-5 вопросов)</option>
-                                        <option value="info_search" data-i18n="html.import-category.4">情報検索 (Поиск информации / объявления)</option>
-                                        <option value="article" data-i18n="html.import-category.5">記事・論説 (Статьи и эссе)</option>
-                                    </select>
-                                </div>
-
-                                <div class="meta-field meta-field-full">
-                                    <label class="field-label" for="import-title-override" data-i18n="html.form-pdf-upload.3">Название книги / источника (необязательно):</label>
-                                    <input type="text" id="import-title-override" class="field-input"
-                                        placeholder="Например: 新完全マスター N3 読解 (Глава 2)" data-i18n-attr="placeholder:html.import-title-override.placeholder">
-                                </div>
-                            </div>
-
-                            <!-- Upload Action Button -->
-                            <div class="upload-actions">
-                                <button type="submit" class="btn btn-primary btn-lg" id="btn-start-upload">
-                                    <span class="btn-icon">⚡</span> <span data-i18n="html.btn-start-upload">Запустить распознавание книги</span>
-                                </button>
-                                <div class="upload-loading hidden" id="upload-loading-spinner">
-                                    <span class="spinner"></span>
-                                    <span class="loading-text" id="upload-status-text">Идёт анализ и извлечение вопросов...</span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Staging Drafts Container -->
-                    <div class="staging-section" id="staging-section">
-                        <div class="staging-header">
-                            <div>
-                                <h2 class="staging-title"><span data-i18n="html.staging-section">Песочница черновиков (</span><span id="drafts-count">0</span>)</h2>
-                                <p class="staging-subtitle" data-i18n="html.staging-section.2">Распознанные материалы сохраняются здесь. Проверьте варианты и нажмите «Опубликовать», чтобы они появились в каталоге.</p>
-                            </div>
-                            <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-drafts" data-action="refresh-pdf-drafts" data-i18n="html.btn-refresh-drafts">
-                                🔄 Обновить список
-                            </button>
-                        </div>
-
-                        <div id="staging-drafts-list" class="staging-drafts-list">
-                            <!-- Dynamically populated drafts -->
                         </div>
                     </div>
                 </div>

@@ -202,12 +202,7 @@ async function runScenario(baseUrl, outputFilename) {
   });
   await page.waitForTimeout(400);
 
-  // 12. Вкладка импорта PDF (запрос списка черновиков)
-  await page.evaluate(() => {
-    const btn = document.getElementById('btn-tab-import');
-    if (btn) btn.click();
-  });
-  await page.waitForTimeout(500);
+  // 12. Вкладка импорта PDF убрана с сайта (I36): черновики грузятся только в /admin.
 
   await browser.close();
 
@@ -240,19 +235,34 @@ async function main() {
   if (!process.argv.includes('--no-approved') && fs.existsSync(approvedFile)) {
     approved = JSON.parse(fs.readFileSync(approvedFile, 'utf-8')).approved || [];
   }
-  const approvedKeys = new Set(approved.map(a => JSON.stringify(a.main) + '\u0000' + JSON.stringify(a.branch)));
+  const approvedKeys = new Set(approved.filter(a => a.main && a.branch)
+    .map(a => JSON.stringify(a.main) + '\u0000' + JSON.stringify(a.branch)));
+
+  // Approved removed/added requests (I36): { main_only: req } drops one exactly-matching request
+  // from the main recording, { branch_only: req } from the branch one, before the step-by-step diff.
+  let approvedCount = 0;
+  const dropOnce = (reqs, wanted) => {
+    const key = JSON.stringify(wanted);
+    const idx = reqs.findIndex(r => JSON.stringify(r) === key);
+    if (idx !== -1) { reqs.splice(idx, 1); approvedCount++; }
+  };
+  for (const a of approved) {
+    if (a.main_only) dropOnce(mainReqs, a.main_only);
+    if (a.branch_only) dropOnce(refactorReqs, a.branch_only);
+  }
 
   // Automated Diff
   const strMain = JSON.stringify(mainReqs, null, 2);
   const strRefactor = JSON.stringify(refactorReqs, null, 2);
 
   if (strMain === strRefactor) {
-    const diffReport = 'AUTOMATED DIFF RESULT:\n0 DISCREPANCIES FOUND (100% BIT-FOR-BIT MATCH)\n\nAll ' + mainReqs.length + ' API requests match identically between main and refactor/decomposition.\n';
+    const diffReport = approvedCount
+      ? `AUTOMATED DIFF RESULT:\n0 DISCREPANCIES FOUND outside the approved baseline (${approvedCount} approved)\n\nAll other ${mainReqs.length} API requests match identically between main and the branch.\n`
+      : 'AUTOMATED DIFF RESULT:\n0 DISCREPANCIES FOUND (100% BIT-FOR-BIT MATCH)\n\nAll ' + mainReqs.length + ' API requests match identically between main and refactor/decomposition.\n';
     fs.writeFileSync(fileDiff, diffReport, 'utf-8');
     console.log(diffReport);
   } else {
     let newReport = '';
-    let approvedCount = 0;
     const maxLen = Math.max(mainReqs.length, refactorReqs.length);
     for (let i = 0; i < maxLen; i++) {
       const sm = JSON.stringify(mainReqs[i]);

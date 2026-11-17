@@ -164,3 +164,24 @@ h3 { font-size: 16px; margin-top: 20px; }
 .adm-error-box { background: var(--vermilion-soft); color: var(--vermilion); border-radius: var(--radius-sm); padding: 10px 12px; font-weight: 600; white-space: pre-wrap; }
 .adm-editor-footer { position: sticky; bottom: 0; background: #fff; padding: 10px 0; border-top: 1px solid var(--washi-border); }
 .adm-btn-sm { min-height: 32px; padding: 4px 10px; font-size: 13px; }
+
+/* PDF import (I36) */
+.adm-imp-form { margin: 12px 0 24px; }
+.adm-imp-dropzone {
+    border: 2px dashed var(--washi-border); border-radius: var(--radius-md); padding: 24px 16px;
+    text-align: center; cursor: pointer; background: var(--washi-bg);
+}
+.adm-imp-dropzone:hover, .adm-imp-dropzone:focus-visible, .adm-imp-dropzone.is-dragover { border-color: var(--sumi-500); background: var(--washi-accent); }
+.adm-imp-file { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; word-break: break-all; }
+.adm-imp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 12px; margin-top: 8px; }
+.adm-imp-wide { grid-column: 1 / -1; }
+.adm-imp-drafts-head { border-top: 1px solid var(--washi-border); padding-top: 16px; }
+.adm-imp-draft.is-ready { border-left-color: var(--bamboo); }
+.adm-imp-warnings { margin: 8px 0; padding-left: 20px; color: var(--vermilion); font-size: 13px; }
+.adm-imp-details { margin-top: 10px; }
+.adm-imp-details summary { cursor: pointer; font-weight: 600; }
+.adm-imp-details .adm-passage { margin-top: 8px; }
+.adm-imp-option { margin: 4px 0; cursor: pointer; font-family: var(--font-gothic); }
+.adm-imp-option input[type="radio"] { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--bamboo); }
+.adm-imp-ok { color: var(--bamboo); font-size: 13px; font-weight: 600; }
+.adm-imp-missing { color: var(--vermilion); font-size: 13px; font-weight: 600; }

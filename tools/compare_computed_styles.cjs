@@ -289,13 +289,13 @@ async function runComparison() {
   };
 
   // 1. Каталог
-  console.log('[1/9] Comparing Screen: Catalog...');
+  console.log('[1/8] Comparing Screen: Catalog...');
   let mapM = await extractStylesMap(pageMain, 'catalog');
   let mapR = await extractStylesMap(pageRef, 'catalog');
   await compareMaps('Каталог', mapM, mapR, pageMain, pageRef);
 
   // 2. Предстартовое окно
-  console.log('[2/9] Comparing Screen: Pretest Modal...');
+  console.log('[2/8] Comparing Screen: Pretest Modal...');
   await pageMain.click('#active-slots-list .stream-slot-card button');
   await pageRef.click('#active-slots-list .stream-slot-card button');
   await pageMain.waitForSelector('#pretest-modal-backdrop:not(.hidden)');
@@ -307,7 +307,7 @@ async function runComparison() {
   await compareMaps('Предстартовое окно', mapM, mapR, pageMain, pageRef);
 
   // 3. Экран теста
-  console.log('[3/9] Comparing Screen: Exercise View...');
+  console.log('[3/8] Comparing Screen: Exercise View...');
   await pageMain.click('#modal-btn-start');
   await pageRef.click('#modal-btn-start');
   await pageMain.waitForSelector('#exercise-view:not(.hidden)');
@@ -319,7 +319,7 @@ async function runComparison() {
   await compareMaps('Экран теста', mapM, mapR, pageMain, pageRef);
 
   // 4. Разбор (Analysis)
-  console.log('[4/9] Comparing Screen: Analysis View...');
+  console.log('[4/8] Comparing Screen: Analysis View...');
   await pageMain.click('.option-item');
   await pageRef.click('.option-item');
   await pageMain.waitForTimeout(200);
@@ -352,7 +352,7 @@ async function runComparison() {
   await pageRef.waitForTimeout(300);
 
   // 5. Окно жалобы
-  console.log('[5/9] Comparing Screen: Report Modal...');
+  console.log('[5/8] Comparing Screen: Report Modal...');
   await pageMain.evaluate(() => {
     const modal = document.getElementById('report-modal-backdrop');
     if (modal) modal.classList.remove('hidden');
@@ -370,7 +370,7 @@ async function runComparison() {
   await pageRef.evaluate(() => document.getElementById('report-modal-backdrop').classList.add('hidden'));
 
   // 6. Окно синхронизации
-  console.log('[6/9] Comparing Screen: Sync Modal...');
+  console.log('[6/8] Comparing Screen: Sync Modal...');
   await pageMain.click('#btn-sync-status');
   await pageRef.click('#btn-sync-status');
   await pageMain.waitForSelector('#sync-modal-backdrop:not(.hidden)');
@@ -384,7 +384,7 @@ async function runComparison() {
   await pageRef.waitForSelector('#sync-modal-backdrop', { state: 'hidden' });
 
   // 7. «Мой словарь»
-  console.log('[7/9] Comparing Screen: Notebook View...');
+  console.log('[7/8] Comparing Screen: Notebook View...');
   await pageMain.click('#btn-tab-notebook');
   await pageRef.click('#btn-tab-notebook');
   await pageMain.waitForSelector('#notebook-view:not(.hidden)');
@@ -394,7 +394,7 @@ async function runComparison() {
   await compareMaps('Мой словарь', mapM, mapR, pageMain, pageRef);
 
   // 8. Карточка словаря (Popup Dictionary Card)
-  console.log('[8/9] Comparing Screen: Popup Dictionary Card...');
+  console.log('[8/8] Comparing Screen: Popup Dictionary Card...');
   await pageMain.evaluate(() => {
     if (window.showPopupDictionary) {
       window.showPopupDictionary({ word: '環境', reading: 'かんきょう', meaning: 'окружающая среда', level: 'N3' }, 200, 200);
@@ -413,15 +413,7 @@ async function runComparison() {
   await pageMain.evaluate(() => { if (window.hidePopupDictionary) window.hidePopupDictionary(); });
   await pageRef.evaluate(() => { if (window.hidePopupDictionary) window.hidePopupDictionary(); });
 
-  // 9. Импорт PDF
-  console.log('[9/9] Comparing Screen: PDF Import View...');
-  await pageMain.click('#btn-tab-import');
-  await pageRef.click('#btn-tab-import');
-  await pageMain.waitForSelector('#import-view:not(.hidden)');
-  await pageRef.waitForSelector('#import-view:not(.hidden)');
-  mapM = await extractStylesMap(pageMain, 'pdf_import');
-  mapR = await extractStylesMap(pageRef, 'pdf_import');
-  await compareMaps('Импорт PDF', mapM, mapR, pageMain, pageRef);
+  // 9. Импорт PDF: экран убран с сайта, импорт — во вкладке /admin (I36).
 
   await browser.close();
 

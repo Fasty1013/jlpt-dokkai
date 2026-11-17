@@ -113,18 +113,73 @@ test.describe('21. Admin panel', () => {
     expect(await page.evaluate(() => localStorage.getItem('dokkai_admin_token'))).toBeNull();
   });
 
-  test('05. Main site PDF import sends the key only when it is stored', async ({ page }) => {
-    const headers: (string | undefined)[] = [];
-    page.on('request', (r) => { if (r.url().includes('/api/admin/drafts')) headers.push(r.headers()['x-admin-token']); });
-
+  test('05. PDF import lives only in /admin: no tab or drafts request on the main site (I36)', async ({ page }) => {
+    const draftCalls: string[] = [];
+    page.on('request', (r) => { if (r.url().includes('/api/admin/')) draftCalls.push(r.url()); });
     await page.goto('/');
-    await page.evaluate(async () => { const m = await import('/static/js/features/pdf_import/pdf_staging.js'); await m.fetchAndRenderDrafts(); });
-    expect(headers.length).toBeGreaterThan(0);
-    expect(headers.every((h) => h === undefined)).toBeTruthy();
+    await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
+    await expect(page.locator('#btn-tab-import')).toHaveCount(0);
+    await expect(page.locator('#import-view')).toHaveCount(0);
+    await page.waitForTimeout(300);
+    expect(draftCalls).toEqual([]);
+  });
 
-    headers.length = 0;
-    await page.evaluate(() => localStorage.setItem('dokkai_admin_token', 'pw-import-key'));
-    await page.evaluate(async () => { const m = await import('/static/js/features/pdf_import/pdf_staging.js'); await m.fetchAndRenderDrafts(); });
-    expect(headers).toContain('pw-import-key');
+  test('06. Admin PDF import tab: drafts render safely, answer is saved, key is sent', async ({ page }) => {
+    const draft = {
+      slug: 'pw_draft_1', level: 'N3', category: 'short', title: 'PW <img src=x onerror="window.__xss=1"> 下書き',
+      source_note: 'PDF: pw.pdf, стр. 1', confidence: 0.55, needs_review: true,
+      needs_manual_review: ['Вопрос 1: правильный ответ в ключе не найден'],
+      body_html: '<div class="passage-body"><p>本文<script>parent.__xss=2</script></p></div>',
+      questions: [{ question_number: 1, prompt: '<b>質問</b>', answer_matched: false, options: [1, 2, 3, 4].map((n) => ({ option_number: n, text: `選択肢${n}`, is_correct: false })) }],
+    };
+    const puts: any[] = [];
+    const keys: (string | undefined)[] = [];
+    let published = false;
+    await page.route('**/api/admin/drafts**', async (route) => {
+      const req = route.request();
+      keys.push(req.headers()['x-admin-token']);
+      if (req.method() === 'PUT') { puts.push(req.postDataJSON()); return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }); }
+      if (req.method() === 'POST' && req.url().endsWith('/publish')) { published = true; return route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' }); }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(published ? [] : [draft]) });
+    });
+    await page.addInitScript(() => localStorage.setItem('dokkai_admin_token', 'pw-import-key'));
+    await page.goto('/admin');
+    await page.click('[data-tab="import"]');
+    const card = page.locator('[data-draft-slug="pw_draft_1"]');
+    await expect(card).toHaveCount(1);
+    await expect(page.locator('#imp-drafts-count')).toHaveText('1');
+    await expect(page.locator('#adm-drafts-badge')).toHaveText('1');
+    await expect(card.locator('img, b, script')).toHaveCount(0);
+    await expect(card).toContainText('<b>質問</b>');
+    await card.locator('summary').click();
+    await expect(card.locator('iframe[sandbox=""]')).toHaveCount(1);
+    expect(await page.evaluate(() => (window as any).__xss)).toBeUndefined();
+    expect(keys.every((k) => k === 'pw-import-key')).toBeTruthy();
+
+    await card.locator('[data-draft-publish]').click();
+    await expect(page.locator('#adm-toast')).toContainText('Отметьте правильный ответ');
+    expect(published).toBeFalsy();
+
+    await card.locator('[data-draft-option="pw_draft_1:0:3"]').check();
+    await card.locator('[data-draft-save]').click();
+    await expect.poll(() => puts.length).toBe(1);
+    expect(puts[0].questions[0].options.map((o: any) => o.is_correct)).toEqual([false, false, true, false]);
+
+    await card.locator('[data-draft-publish]').click();
+    await expect.poll(() => published).toBeTruthy();
+    await expect(page.locator('#imp-drafts-list .adm-empty')).toBeVisible();
+    await expect(page.locator('#adm-drafts-badge')).toBeHidden();
+  });
+
+  test('07. Admin PDF import: only .pdf files are accepted', async ({ page }) => {
+    await page.goto('/admin');
+    await page.click('[data-tab="import"]');
+    await page.setInputFiles('#imp-file-input', { name: 'notes.txt', mimeType: 'text/plain', buffer: Buffer.from('x') });
+    await expect(page.locator('#adm-toast')).toContainText('.pdf');
+    await expect(page.locator('#imp-file-info')).toBeHidden();
+    await page.setInputFiles('#imp-file-input', { name: 'book.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4') });
+    await expect(page.locator('#imp-file-name')).toHaveText('book.pdf');
+    await page.click('#imp-file-clear');
+    await expect(page.locator('#imp-file-prompt')).toBeVisible();
   });
 });
