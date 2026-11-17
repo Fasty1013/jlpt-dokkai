@@ -15,7 +15,6 @@ import { initExerciseEvents } from '../features/exercise/index.js';
 import { initAnalysisEvents } from '../features/analysis/index.js';
 import { initDictionaryEvents } from '../features/dictionary/index.js';
 import { initNotebookEvents } from '../features/notebook/index.js';
-import { initPdfEvents, clearSelectedPdfFile, fetchAndRenderDrafts } from '../features/pdf_import/index.js';
 import { initSyncEvents, openSyncModal, closeSyncModal, exportProgressJson } from '../features/sync_ui/index.js';
 import { initReportEvents } from '../features/solved/index.js';
 import * as A from './actions.js';
@@ -130,15 +129,6 @@ export function initEventListeners() {
       speakJapanese: A.speakJapanese,
       getSavedWords: A.getSavedWords,
       saveWordsToStorage: A.saveWordsToStorage
-    }
-  });
-
-  initPdfEvents({
-    state,
-    elements,
-    actions: {
-      clearSelectedPdfFile,
-      fetchAndRenderDrafts
     }
   });
 

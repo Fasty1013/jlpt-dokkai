@@ -10,7 +10,6 @@ import './state/index.js';
 import './utils/index.js';
 import './api/index.js';
 import './features/events/index.js';
-import { fetchAndRenderDrafts } from './features/pdf_import/index.js';
 import { initEventListeners } from './app/init_events.js';
 import { initPersistenceAndSync } from './app/persistence.js';
 import * as actions from './app/actions.js';
@@ -56,7 +55,6 @@ async function boot() {
     console.warn('[Dokkai] Persistence/Sync init non-blocking warning:', err);
   }
   actions.fetchAndRenderCatalog();
-  fetchAndRenderDrafts();
 }
 
 // Module scripts are deferred: the DOM is parsed, but DOMContentLoaded has not fired yet.

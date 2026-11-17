@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-// The header tabs + language select do not fit on ~900px: the row must scroll sideways
+// The header tabs + language select do not fit on ~800px (900px before the PDF import tab moved to /admin, I36): the row must scroll sideways
 // (wheel / drag with a mouse; touch swipes natively) instead of being clipped.
 test.describe('19. Header tab row scrolls sideways when it does not fit', () => {
   test.beforeEach(async ({ page, isMobile }) => {
     test.skip(isMobile, 'mouse wheel / drag is a desktop interaction; touch swipe is native');
-    await page.setViewportSize({ width: 900, height: 700 });
+    await page.setViewportSize({ width: 800, height: 700 });
     await page.goto('/');
     await page.waitForSelector('.header-nav .nav-tab');
   });

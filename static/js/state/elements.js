@@ -13,14 +13,12 @@ export function initElementsCache(rootDoc = (typeof document !== 'undefined' ? d
     elements.headerNav = rootDoc.getElementById('header-nav');
     elements.btnTabCatalog = rootDoc.getElementById('btn-tab-catalog');
     elements.btnTabNotebook = rootDoc.getElementById('btn-tab-notebook');
-    elements.btnTabImport = rootDoc.getElementById('btn-tab-import');
     elements.exerciseHeaderControls = rootDoc.getElementById('exercise-header-controls');
     elements.headerLevelTag = rootDoc.getElementById('header-level-tag');
     elements.headerCategoryTag = rootDoc.getElementById('header-category-tag');
     elements.headerExamBadge = rootDoc.getElementById('header-exam-badge');
     elements.btnAbortExercise = rootDoc.getElementById('btn-abort-exercise');
     elements.headerSavedCount = rootDoc.getElementById('header-saved-count');
-    elements.headerDraftsCount = rootDoc.getElementById('header-drafts-count');
 
     // Timer Elements in Header
     elements.timerBox = rootDoc.getElementById('timer-box');
@@ -37,27 +35,6 @@ export function initElementsCache(rootDoc = (typeof document !== 'undefined' ? d
     elements.catalogView = rootDoc.getElementById('catalog-view');
     elements.exerciseView = rootDoc.getElementById('exercise-view');
     elements.notebookView = rootDoc.getElementById('notebook-view');
-    elements.importView = rootDoc.getElementById('import-view');
-
-    // PDF Import Elements
-    elements.formPdfUpload = rootDoc.getElementById('form-pdf-upload');
-    elements.pdfDropzone = rootDoc.getElementById('pdf-dropzone');
-    elements.pdfFileInput = rootDoc.getElementById('pdf-file-input');
-    elements.dropzonePrompt = rootDoc.getElementById('dropzone-prompt');
-    elements.dropzoneFileInfo = rootDoc.getElementById('dropzone-file-info');
-    elements.dropzoneFileName = rootDoc.getElementById('dropzone-file-name');
-    elements.dropzoneFileSize = rootDoc.getElementById('dropzone-file-size');
-    elements.btnClearFile = rootDoc.getElementById('btn-clear-file');
-    elements.importLevel = rootDoc.getElementById('import-level');
-    elements.importCategory = rootDoc.getElementById('import-category');
-    elements.importTitleOverride = rootDoc.getElementById('import-title-override');
-    elements.btnStartUpload = rootDoc.getElementById('btn-start-upload');
-    elements.uploadLoadingSpinner = rootDoc.getElementById('upload-loading-spinner');
-    elements.uploadStatusText = rootDoc.getElementById('upload-status-text');
-    elements.stagingDraftsList = rootDoc.getElementById('staging-drafts-list');
-    elements.draftsCount = rootDoc.getElementById('drafts-count');
-    elements.btnRefreshDrafts = rootDoc.getElementById('btn-refresh-drafts');
-
     // Continuous Stream Elements
     elements.activeSlotsList = rootDoc.getElementById('active-slots-list');
     elements.solvedTasksList = rootDoc.getElementById('solved-tasks-list');

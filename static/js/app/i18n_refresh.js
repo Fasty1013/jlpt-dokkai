@@ -14,7 +14,6 @@ import { renderWizard } from '../features/exercise/wizard.js';
 import { renderAnalysisView } from '../features/analysis/analysis_view.js';
 import { updateModalSettingTags } from '../features/pretest/pretest_modal.js';
 import { getCategoryName } from '../constants/labels.js';
-import { fetchAndRenderDrafts } from '../features/pdf_import/index.js';
 
 function onOff(flag) {
   return flag ? t('common.on') : t('common.off');
@@ -74,9 +73,6 @@ export function refreshLocalizedViews() {
   if (state.currentView === 'analysis' && state.activeText && Array.isArray(state.activeText.questions)) {
     safely('exercise header', refreshExerciseHeader);
     safely('analysis', () => renderAnalysisView(state.activeText, state, elements));
-  }
-  if (state.activeTab === 'import') {
-    safely('drafts', () => fetchAndRenderDrafts());
   }
 }
 

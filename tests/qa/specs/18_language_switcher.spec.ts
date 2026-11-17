@@ -121,7 +121,7 @@ test.describe('18. Language switcher (feat/i18n-switcher)', () => {
   });
 
   for (const lang of ['en', 'uz', 'ja']) {
-    test(`06. [${lang}] no Russian interface text on catalog, notebook, import and modals`, async ({ page }) => {
+    test(`06. [${lang}] no Russian interface text on catalog, notebook and modals`, async ({ page }) => {
       await page.addInitScript((l) => localStorage.setItem('dokkai_ui_lang', l), lang);
       await page.goto('/');
       await page.waitForSelector('#active-slots-list .stream-slot-card', { timeout: 15000 });
@@ -131,8 +131,6 @@ test.describe('18. Language switcher (feat/i18n-switcher)', () => {
 
       await page.evaluate(() => (window as any).switchMainTab('notebook'));
       expect(await leftoverCyrillic(page, '#notebook-view'), 'notebook').toEqual([]);
-      await page.evaluate(() => (window as any).switchMainTab('import'));
-      expect(await leftoverCyrillic(page, '#import-view'), 'import').toEqual([]);
       await page.evaluate(() => (window as any).switchMainTab('catalog'));
 
       await page.evaluate(() => (window as any).openPretestModal(25));

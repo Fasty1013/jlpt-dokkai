@@ -21,7 +21,6 @@ import * as Analysis from '../features/analysis/index.js';
 import * as Speech from '../features/speech/index.js';
 import * as Notebook from '../features/notebook/index.js';
 import * as Dictionary from '../features/dictionary/index.js';
-import { fetchAndRenderDrafts } from '../features/pdf_import/index.js';
 
 // ============================================================================
 // Timer
@@ -282,7 +281,6 @@ export function switchMainTab(tabName, pushState = true) {
     state.currentView = 'notebook';
     elements.catalogView.classList.add('hidden');
     elements.exerciseView.classList.add('hidden');
-    if (elements.importView) elements.importView.classList.add('hidden');
     elements.exerciseHeaderControls.classList.add('hidden');
     elements.supplementaryDrawer.classList.add('hidden');
     elements.hardcoreNotice.classList.add('hidden');
@@ -290,31 +288,11 @@ export function switchMainTab(tabName, pushState = true) {
 
     if (elements.btnTabCatalog) elements.btnTabCatalog.classList.remove('active');
     if (elements.btnTabNotebook) elements.btnTabNotebook.classList.add('active');
-    if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
 
     if (pushState) {
       history.pushState({ view: 'notebook' }, '', '#notebook');
     }
     renderNotebookWords();
-  } else if (tabName === 'import') {
-    stopTimer();
-    state.currentView = 'import';
-    elements.catalogView.classList.add('hidden');
-    elements.exerciseView.classList.add('hidden');
-    elements.notebookView.classList.add('hidden');
-    elements.exerciseHeaderControls.classList.add('hidden');
-    elements.supplementaryDrawer.classList.add('hidden');
-    elements.hardcoreNotice.classList.add('hidden');
-    if (elements.importView) elements.importView.classList.remove('hidden');
-
-    if (elements.btnTabCatalog) elements.btnTabCatalog.classList.remove('active');
-    if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
-    if (elements.btnTabImport) elements.btnTabImport.classList.add('active');
-
-    if (pushState) {
-      history.pushState({ view: 'import' }, '', '#import');
-    }
-    fetchAndRenderDrafts();
   } else {
     returnToCatalog(pushState);
   }
@@ -332,14 +310,12 @@ export function returnToCatalog(pushState = true) {
   elements.exerciseView.classList.add('hidden');
   elements.exerciseHeaderControls.classList.add('hidden');
   elements.notebookView.classList.add('hidden');
-  if (elements.importView) elements.importView.classList.add('hidden');
   elements.catalogView.classList.remove('hidden');
   elements.supplementaryDrawer.classList.add('hidden');
   elements.hardcoreNotice.classList.add('hidden');
 
   if (elements.btnTabCatalog) elements.btnTabCatalog.classList.add('active');
   if (elements.btnTabNotebook) elements.btnTabNotebook.classList.remove('active');
-  if (elements.btnTabImport) elements.btnTabImport.classList.remove('active');
 
   closePretestModal();
   closeReportModal();

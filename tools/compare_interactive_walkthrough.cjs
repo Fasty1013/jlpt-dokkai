@@ -422,11 +422,7 @@ async function runInteractiveWalkthrough() {
     return { notebook: await page.evaluate(() => !document.getElementById('notebook-view').classList.contains('hidden')) };
   });
 
-  await testElementAction('Catalog', '#btn-tab-import', 'Switch to Import PDF Tab', async (page, sel) => {
-    await page.click(sel);
-    await page.waitForTimeout(100);
-    return { import: await page.evaluate(() => !document.getElementById('import-view').classList.contains('hidden')) };
-  });
+  // #btn-tab-import was removed from the main site: PDF import lives in /admin (I36).
 
   await testElementAction('Catalog', '#btn-tab-catalog', 'Switch back to Catalog Tab', async (page, sel) => {
     await page.click(sel);
@@ -837,56 +833,8 @@ async function runInteractiveWalkthrough() {
     return { wordsCount: await page.evaluate(() => document.querySelectorAll('#notebook-words-list .notebook-word-card').length) };
   });
 
-  // =========================================================================
-  // 7. PDF Import View & Form Controls
-  // =========================================================================
-  console.log('[7/10] Testing Walkthrough: PDF Import View...');
-  await pageMain.click('#btn-tab-import');
-  await pageRef.click('#btn-tab-import');
-  await pageMain.waitForSelector('#import-view:not(.hidden)');
-  await pageRef.waitForSelector('#import-view:not(.hidden)');
-
-  await testElementAction('PDF Import', '#import-level', 'Select Import Level Dropdown', async (page, sel) => {
-    await page.selectOption(sel, 'N4');
-    const val = await page.evaluate((s) => document.querySelector(s).value, sel);
-    await page.selectOption(sel, 'N5');
-    return { val };
-  });
-
-  await testElementAction('PDF Import', '#import-category', 'Select Import Category Dropdown', async (page, sel) => {
-    await page.selectOption(sel, 'medium');
-    const val = await page.evaluate((s) => document.querySelector(s).value, sel);
-    await page.selectOption(sel, 'short');
-    return { val };
-  });
-
-  await testElementAction('PDF Import', '#import-title-override', 'Fill Title Override Input', async (page, sel) => {
-    await page.fill(sel, 'Тестовый текст');
-    const val = await page.evaluate((s) => document.querySelector(s).value, sel);
-    await page.fill(sel, '');
-    return { val };
-  });
-
-  await testElementAction('PDF Import', '#btn-clear-file', 'Clear Staged PDF File Button', async (page, sel) => {
-    return { exists: await page.evaluate((s) => Boolean(document.querySelector(s)), sel) };
-  });
-
-  await testElementAction('PDF Import', '#btn-refresh-drafts', 'Click Refresh Drafts Button', async (page, sel) => {
-    await page.click(sel);
-    await page.waitForTimeout(200);
-    return { draftsCount: await page.evaluate(() => document.querySelectorAll('#staging-drafts-list .staging-draft-card').length) };
-  });
-
-  // Dynamic Draft Card Actions
-  await testElementAction('PDF Import', '.staging-draft-card .draft-option-row input', 'Select Draft Radio Correct Option', async (page, sel) => {
-    await page.locator(sel).last().click();
-    return { checked: await page.evaluate((s) => document.querySelectorAll(s)[1]?.checked, sel) };
-  });
-
-  await testElementAction('PDF Import', '.staging-draft-card .draft-footer-left .btn-ghost:not(.text-danger)', 'Click Save Draft Button', async (page, sel) => {
-    await page.locator(sel).first().click();
-    return { clicked: true };
-  });
+  // 7. PDF Import View: removed from the main site, now the "Импорт PDF" tab of /admin (I36);
+  //    covered by tests/qa/specs/21_admin_panel.spec.ts.
 
   // =========================================================================
   // 8. Sync Modal Controls & Config Form
@@ -1090,7 +1038,9 @@ async function runInteractiveWalkthrough() {
   // 72 data-action elements + 12 form controls = 84 total.
   // 3 hidden file inputs (#notebook-import-backup-input, #sync-import-file-input, #pdf-file-input)
   // are triggered via their explicit trigger buttons tested above.
-  console.log(`Покрытие: 81 непосредственно протестировано действием + 3 скрытых input[type=file] проверены через кнопки вызова = 84/84 (100% ПОКРЫТИЕ).`);
+  // I36: the PDF import tab and its 8 controls (tab button, level, category, title, clear file,
+  // refresh drafts, draft radio, save draft) and #pdf-file-input moved to /admin -> 75 on the main site.
+  console.log(`Покрытие: 73 непосредственно протестировано действием + 2 скрытых input[type=file] проверены через кнопки вызова = 75/75 (100% ПОКРЫТИЕ; 9 контролов импорта PDF перенесены в /admin — I36).`);
 
   if (totalDiscrepancies === 0 && unexpectedBranchErrors.length === 0) {
     console.log('✓ 100% INTERACTIVE PARITY CONFIRMED!');

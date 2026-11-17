@@ -1,0 +1,141 @@
+{
+ "reference": "f9946e0",
+ "captured_at": "2026-11-17T11:31:01+00:00",
+ "note": "Approved pixel differences vs the reference served on :8001 (main_*.png). See docs/INTENTIONAL_DIFFERENCES.md (I19). Recapture after the reference changes.",
+ "screens": {
+  "desktop_catalog": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 7860,
+   "bbox": [
+    453,
+    12,
+    949,
+    57
+   ]
+  },
+  "desktop_pretest": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 19076,
+   "bbox": [
+    448,
+    7,
+    961,
+    56
+   ]
+  },
+  "desktop_report": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 22936,
+   "bbox": [
+    448,
+    7,
+    961,
+    65
+   ]
+  },
+  "mobile_catalog": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "mobile_pretest": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "mobile_report": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "mobile_solved_col": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "desktop_sync_modal": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 22066,
+   "bbox": [
+    448,
+    7,
+    961,
+    58
+   ]
+  },
+  "mobile_sync_modal": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "desktop_exercise": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 14625,
+   "bbox": [
+    206,
+    10,
+    1250,
+    58
+   ]
+  },
+  "mobile_exercise": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  },
+  "desktop_analysis": {
+   "size": [
+    1280,
+    800
+   ],
+   "diff_pixels": 14625,
+   "bbox": [
+    206,
+    10,
+    1250,
+    58
+   ]
+  },
+  "mobile_analysis": {
+   "size": [
+    780,
+    1688
+   ],
+   "diff_pixels": 0,
+   "bbox": null
+  }
+ }
+}

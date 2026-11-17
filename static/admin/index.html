@@ -21,7 +21,7 @@
             <button type="button" class="adm-tab" data-tab="reports">Жалобы <span class="adm-badge" id="adm-reports-badge" hidden>0</span></button>
             <button type="button" class="adm-tab" data-tab="texts">Задания</button>
             <button type="button" class="adm-tab" data-tab="activity">Активность</button>
-            <button type="button" class="adm-tab" data-tab="import">Импорт PDF</button>
+            <button type="button" class="adm-tab" data-tab="import">Импорт PDF <span class="adm-badge" id="adm-drafts-badge" hidden>0</span></button>
         </nav>
         <button type="button" class="adm-btn adm-btn-ghost" id="adm-logout" hidden>Выйти</button>
     </header>
@@ -91,9 +91,48 @@
         </section>
 
         <section class="adm-panel" id="panel-import" hidden>
-            <h2>Импорт PDF</h2>
-            <p>Импорт заданий из PDF работает на основном сайте, во вкладке «Импорт PDF». Ключ администратора уже сохранён в этом браузере, поэтому загрузка, правка и публикация черновиков там будут доступны.</p>
-            <a class="adm-btn adm-btn-primary" href="/">Открыть сайт</a>
+            <div class="adm-toolbar">
+                <h2>Импорт заданий из PDF</h2>
+            </div>
+            <p class="adm-muted">Цифровой PDF учебника или сборника JLPT с текстовым слоем. Тексты, вопросы и варианты извлекаются автоматически, ответы сверяются с ключом в конце книги. Результат попадает в черновики — проверьте их и опубликуйте.</p>
+            <form id="imp-form" class="adm-imp-form" autocomplete="off">
+                <div class="adm-imp-dropzone" id="imp-dropzone" role="button" tabindex="0" aria-label="Выбрать PDF-файл">
+                    <input type="file" id="imp-file-input" accept=".pdf,application/pdf" hidden>
+                    <div id="imp-file-prompt"><strong>Нажмите для выбора</strong> или перетащите PDF сюда<br><span class="adm-muted">Формат .pdf, до 50 МБ</span></div>
+                    <div id="imp-file-info" class="adm-imp-file" hidden>
+                        <span>📑 <span id="imp-file-name"></span> <span class="adm-muted" id="imp-file-size"></span></span>
+                        <button type="button" class="adm-btn adm-btn-ghost adm-btn-sm" id="imp-file-clear">Убрать</button>
+                    </div>
+                </div>
+                <div class="adm-imp-grid">
+                    <label class="adm-field"><span class="adm-field-label">Уровень JLPT</span>
+                        <select class="adm-input" id="imp-level">
+                            <option>N5</option><option>N4</option><option selected>N3</option><option>N2</option><option>N1</option>
+                        </select>
+                    </label>
+                    <label class="adm-field"><span class="adm-field-label">Тип заданий</span>
+                        <select class="adm-input" id="imp-category">
+                            <option value="short" selected>短文 — короткие тексты</option>
+                            <option value="medium">中文 — средние тексты</option>
+                            <option value="long">長文 — длинные тексты</option>
+                            <option value="info_search">情報検索 — поиск информации</option>
+                            <option value="article">記事・論説 — статьи и эссе</option>
+                        </select>
+                    </label>
+                    <label class="adm-field adm-imp-wide"><span class="adm-field-label">Название книги / источника (необязательно)</span>
+                        <input type="text" class="adm-input" id="imp-title" placeholder="Например: 新完全マスター N3 読解 (Глава 2)">
+                    </label>
+                </div>
+                <div class="adm-actions">
+                    <button type="submit" class="adm-btn adm-btn-primary" id="imp-upload-btn">Распознать PDF</button>
+                    <span class="adm-muted" id="imp-progress" hidden>Идёт распознавание…</span>
+                </div>
+            </form>
+            <div class="adm-toolbar adm-imp-drafts-head">
+                <h2>Черновики (<span id="imp-drafts-count">0</span>)</h2>
+                <button type="button" class="adm-btn adm-btn-ghost" data-refresh="import">Обновить</button>
+            </div>
+            <div id="imp-drafts-list" class="adm-list"></div>
         </section>
     </main>
 
