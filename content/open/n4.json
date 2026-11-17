@@ -1,0 +1,202 @@
+[
+ {
+  "slug": "n4-open-medium-001",
+  "level": "N4",
+  "category": "medium",
+  "title": "新幹線",
+  "source_type": "open_adapted",
+  "source_note": "出典：Wikipedia日本語版「新幹線」（CC BY-SA 4.0・改変）",
+  "recommended_time_min": 4,
+  "body_html": "<div class=\"passage-body\">\n<p><ruby>新幹線<rt>しんかんせん</rt></ruby>は、<ruby>日本<rt>にほん</rt></ruby>の<ruby>速<rt>はや</rt></ruby>い<ruby>電車<rt>でんしゃ</rt></ruby>です。<ruby>時速<rt>じそく</rt></ruby>200キロ<ruby>以上<rt>いじょう</rt></ruby>で<ruby>走<rt>はし</rt></ruby>ることができます。</p>\n<p><ruby>最初<rt>さいしょ</rt></ruby>の<ruby>新幹線<rt>しんかんせん</rt></ruby>は、1964<ruby>年<rt>ねん</rt></ruby>に、<ruby>東京<rt>とうきょう</rt></ruby><ruby>駅<rt>えき</rt></ruby>と<ruby>新大阪<rt>しんおおさか</rt></ruby><ruby>駅<rt>えき</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>で<ruby>走<rt>はし</rt></ruby>り<ruby>始<rt>はじ</rt></ruby>めました。その<ruby>後<rt>ご</rt></ruby>、<ruby>新<rt>あたら</rt></ruby>しい<ruby>線<rt>せん</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>しずつ<ruby>増<rt>ふ</rt></ruby>えて、<ruby>今<rt>いま</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>のいろいろな<ruby>所<rt>ところ</rt></ruby>へ<ruby>新幹線<rt>しんかんせん</rt></ruby>で<ruby>行<rt>い</rt></ruby>けるようになりました。</p>\n<p><ruby>新幹線<rt>しんかんせん</rt></ruby>は、<ruby>時間<rt>じかん</rt></ruby>にとても<ruby>正確<rt>せいかく</rt></ruby>です。<span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>多<rt>おお</rt></ruby>い<ruby>日<rt>ひ</rt></ruby>には<ruby>一<rt>いち</rt></ruby><ruby>日<rt>にち</rt></ruby>に400<ruby>本<rt>ぽん</rt></ruby><ruby>近<rt>ちか</rt></ruby>くの<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>走<rt>はし</rt></ruby>る<ruby>東海道新幹線<rt>とうかいどうしんかんせん</rt></ruby>でも、<ruby>一<rt>いち</rt></ruby><ruby>年間<rt>ねんかん</rt></ruby>の<ruby>平均<rt>へいきん</rt></ruby>の<ruby>遅<rt>おく</rt></ruby>れは、たった12<ruby>秒<rt>びょう</rt></ruby>でした（2019<ruby>年<rt>ねん</rt></ruby>）。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\">また、60<ruby>年<rt>ねん</rt></ruby><ruby>以上<rt>いじょう</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で、<ruby>車両<rt>しゃりょう</rt></ruby>や<ruby>線路<rt>せんろ</rt></ruby>の<ruby>問題<rt>もんだい</rt></ruby>などで<ruby>乗客<rt>じょうきゃく</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなった<ruby>事故<rt>じこ</rt></ruby>は、<ruby>一<rt>いち</rt></ruby><ruby>度<rt>ど</rt></ruby>も<ruby>起<rt>お</rt></ruby>きていません。</span></p>\n</div>",
+  "translation_ru": "Синкансэн — скоростные поезда Японии. Они могут ездить со скоростью более 200 км/ч. Первый синкансэн начал курсировать в 1964 году между станциями Токио и Син-Осака. Затем понемногу добавлялись новые линии, и теперь на синкансэне можно доехать во многие места Японии. Синкансэн очень пунктуален: даже на Токайдо-синкансэне, где в отдельные дни ходит почти 400 поездов, среднее опоздание за год составило всего 12 секунд (2019 г.). Кроме того, за более чем 60 лет истории не было ни одной аварии, в которой из-за неисправности поездов, путей и т. п. погибли бы пассажиры.",
+  "vocabulary": [
+   {
+    "word": "正確",
+    "furigana": "せいかく",
+    "translation": "точный, пунктуальный"
+   },
+   {
+    "word": "遅れ",
+    "furigana": "おくれ",
+    "translation": "опоздание, задержка"
+   },
+   {
+    "word": "乗客",
+    "furigana": "じょうきゃく",
+    "translation": "пассажир"
+   }
+  ],
+  "needs_manual_review": [
+   "日本: janome にっぽん → にほん — поставлено вручную",
+   "間: janome ま → あいだ — поставлено вручную",
+   "400本: janome ほん → ぽん (よんひゃっぽん) — поставлено вручную"
+  ],
+  "attribution": {
+   "source": "wikipedia_ja",
+   "work": "新幹線",
+   "author": "Wikipedia日本語版の執筆者",
+   "url": "https://ja.wikipedia.org/wiki/%E6%96%B0%E5%B9%B9%E7%B7%9A",
+   "revision": "111141496 (2026-09-24T23:22:19Z)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.ja",
+   "changes": "Вводный раздел и раздел «概要» сокращены и упрощены до уровня N4; факты и цифры не менялись."
+  },
+  "questions": [
+   {
+    "slug": "n4-open-medium-001-q1",
+    "question_number": 1,
+    "type": "detail",
+    "prompt": "東海道新幹線について、文章の内容と合うものはどれですか。",
+    "evidence_span_id": "ev-q1",
+    "general_explanation": "В ev-q1: поездов много (в отдельные дни почти 400 в день), а среднее опоздание за год — всего 12 секунд. Ловушки переставляют числа и годы.",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "電車がたくさん走っているが、遅れはとても少ない。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. Почти 400 поездов в день и всего 12 секунд среднего опоздания (ev-q1)."
+     },
+     {
+      "option_number": 2,
+      "text": "電車は一日に12本しか走らない。",
+      "is_correct": false,
+      "trap_type": "misinterpretation",
+      "explanation_ru": "Неверно. 12 — это секунды среднего опоздания, а поездов почти 400 в день."
+     },
+     {
+      "option_number": 3,
+      "text": "一年間の平均の遅れは、400秒ぐらいだった。",
+      "is_correct": false,
+      "trap_type": "misinterpretation",
+      "explanation_ru": "Неверно. 400 — число поездов в день, а опоздание — 12 секунд."
+     },
+     {
+      "option_number": 4,
+      "text": "2019年に走り始めた。",
+      "is_correct": false,
+      "trap_type": "temporal_mismatch",
+      "explanation_ru": "Неверно. 2019 — год, к которому относится статистика опозданий; первый синкансэн пошёл в 1964 году."
+     }
+    ]
+   },
+   {
+    "slug": "n4-open-medium-001-q2",
+    "question_number": 2,
+    "type": "detail",
+    "prompt": "新幹線の安全について、文章の内容と合うものはどれですか。",
+    "evidence_span_id": "ev-q2",
+    "general_explanation": "В ev-q2: за более чем 60 лет не было ни одной аварии, в которой из-за неисправности поездов, путей и т. п. погибли бы пассажиры.",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "車両の問題で、乗客が亡くなった事故が一度あった。",
+      "is_correct": false,
+      "trap_type": "opposite_meaning",
+      "explanation_ru": "Неверно. В ev-q2 сказано, что таких аварий не было ни одной (一度も起きていません)."
+     },
+     {
+      "option_number": 2,
+      "text": "車両や線路の問題などで、乗客が亡くなった事故はない。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. Это точный пересказ ev-q2."
+     },
+     {
+      "option_number": 3,
+      "text": "速すぎるので、安全ではない。",
+      "is_correct": false,
+      "trap_type": "opposite_meaning",
+      "explanation_ru": "Неверно. Текст, наоборот, подчёркивает безопасность синкансэна."
+     },
+     {
+      "option_number": 4,
+      "text": "1964年に、大きな事故が起きた。",
+      "is_correct": false,
+      "trap_type": "not_mentioned",
+      "explanation_ru": "Неверно. В 1964 году синкансэн начал курсировать; ни о какой аварии в тексте не сказано."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "n4-open-short-001",
+  "level": "N4",
+  "category": "short",
+  "title": "招き猫の色",
+  "source_type": "open_adapted",
+  "source_note": "出典：Wikipedia日本語版「招き猫」（CC BY-SA 4.0・改変）",
+  "recommended_time_min": 2,
+  "body_html": "<div class=\"passage-body\">\n<p><ruby>招<rt>まね</rt></ruby>き<ruby>猫<rt>ねこ</rt></ruby>は、<ruby>前<rt>まえ</rt></ruby>の<ruby>足<rt>あし</rt></ruby>で<ruby>人<rt>ひと</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ぶような<ruby>形<rt>かたち</rt></ruby>をした、<ruby>猫<rt>ねこ</rt></ruby>の<ruby>置物<rt>おきもの</rt></ruby>です。お<ruby>客<rt>きゃく</rt></ruby>さんがたくさん<ruby>来<rt>き</rt></ruby>て、<ruby>商売<rt>しょうばい</rt></ruby>がうまくいくようにと<ruby>願<rt>ねが</rt></ruby>って<ruby>飾<rt>かざ</rt></ruby>られます。</p>\n<p><ruby>招<rt>まね</rt></ruby>き<ruby>猫<rt>ねこ</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>は、<ruby>昔<rt>むかし</rt></ruby>は<ruby>白<rt>しろ</rt></ruby>か<ruby>黒<rt>くろ</rt></ruby>がほとんどでしたが、<ruby>最近<rt>さいきん</rt></ruby>はいろいろな<ruby>色<rt>いろ</rt></ruby>があります。<span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>色<rt>いろ</rt></ruby>によって<ruby>意味<rt>いみ</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>い、たとえば<ruby>黒<rt>くろ</rt></ruby>は「<ruby>悪<rt>わる</rt></ruby>いことから<ruby>守<rt>まも</rt></ruby>る」、<ruby>金色<rt>きんいろ</rt></ruby>は「お<ruby>金<rt>かね</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まる」、<ruby>赤<rt>あか</rt></ruby>は「<ruby>元気<rt>げんき</rt></ruby>で<ruby>長生<rt>ながい</rt></ruby>きする」という<ruby>意味<rt>いみ</rt></ruby>だと<ruby>言<rt>い</rt></ruby>われています。</span></p>\n</div>",
+  "translation_ru": "Манэки-нэко — фигурка кошки, которая будто подзывает людей передней лапой. Её ставят в надежде, что придёт много покупателей и торговля пойдёт хорошо. Раньше манэки-нэко были почти всегда белыми или чёрными, а сейчас бывают разных цветов. Считается, что у каждого цвета своё значение: чёрный «защищает от плохого», золотой — «собирает деньги», красный — «здоровье и долгая жизнь».",
+  "vocabulary": [
+   {
+    "word": "置物",
+    "furigana": "おきもの",
+    "translation": "декоративная фигурка"
+   },
+   {
+    "word": "商売",
+    "furigana": "しょうばい",
+    "translation": "торговля, бизнес"
+   },
+   {
+    "word": "長生き",
+    "furigana": "ながいき",
+    "translation": "долгая жизнь"
+   }
+  ],
+  "needs_manual_review": [],
+  "attribution": {
+   "source": "wikipedia_ja",
+   "work": "招き猫",
+   "author": "Wikipedia日本語版の執筆者",
+   "url": "https://ja.wikipedia.org/wiki/%E6%8B%9B%E3%81%8D%E7%8C%AB",
+   "revision": "111795130 (2026-11-16T15:58:51Z)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.ja",
+   "changes": "Фрагмент раздела «概要» пересказан упрощённым языком уровня N4; факты не менялись."
+  },
+  "questions": [
+   {
+    "slug": "n4-open-short-001-q1",
+    "question_number": 1,
+    "type": "detail",
+    "prompt": "赤い招き猫には、どんな意味がありますか。",
+    "evidence_span_id": "ev-q1",
+    "general_explanation": "В ev-q1 каждому цвету сопоставлено значение; красному — 元気で長生きする (здоровье и долгая жизнь). Ловушки — значения других цветов и общее назначение фигурки.",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "お金が集まる。",
+      "is_correct": false,
+      "trap_type": "subject_swap",
+      "explanation_ru": "Неверно. Это значение золотого (金色) цвета."
+     },
+     {
+      "option_number": 2,
+      "text": "悪いことから守る。",
+      "is_correct": false,
+      "trap_type": "subject_swap",
+      "explanation_ru": "Неверно. Это значение чёрного (黒) цвета."
+     },
+     {
+      "option_number": 3,
+      "text": "お客さんがたくさん来る。",
+      "is_correct": false,
+      "trap_type": "partial_match",
+      "explanation_ru": "Неверно. Так в тексте описано назначение манэки-нэко вообще, а не красного цвета."
+     },
+     {
+      "option_number": 4,
+      "text": "元気で長生きする。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. В ev-q1: 赤は「元気で長生きする」という意味."
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -26,7 +26,7 @@ CONTENT_DIR = BASE_DIR / "content"
 
 VALID_LEVELS = {"N5", "N4", "N3", "N2", "N1"}
 VALID_CATEGORIES = {"short", "medium", "long", "info_search", "article"}
-VALID_SOURCE_TYPES = {"jlpt_official", "news_adapted", "original", "pdf_import"}
+VALID_SOURCE_TYPES = {"jlpt_official", "news_adapted", "original", "pdf_import", "open_adapted"}
 VALID_QUESTION_TYPES = {"claim", "detail", "reference", "inference", "integrated", "info_search"}
 VALID_TRAP_TYPES = {
     "overgeneralization",

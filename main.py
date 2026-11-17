@@ -28,6 +28,14 @@ async def lifespan(app: FastAPI):
     # Ensure database schema exists and seed data is present on startup
     Base.metadata.create_all(bind=engine)
     seed_database()
+    # Texts from open sources (content/open): insert-only by slug, never updates or deletes (I35)
+    try:
+        from tools.import_open_content import import_open_content
+        added = import_open_content()["inserted"]
+        if added:
+            logging.getLogger("uvicorn.error").info("Open-source texts added: %d", len(added))
+    except (Exception, SystemExit) as exc:  # never block startup because of content
+        logging.getLogger("uvicorn.error").error("Open-source text import skipped: %s", exc)
     from tools.migrations.add_stream_tables import migrate
     migrate()
     if SHUFFLE_SECRET_IS_DEFAULT:

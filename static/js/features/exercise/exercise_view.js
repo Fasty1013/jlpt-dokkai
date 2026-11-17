@@ -137,6 +137,9 @@ export async function startExercise(textId, options = {}) {
       els.passageContent.classList.remove('show-evidence');
     }
 
+    // Source and license line for texts from open sources (only when the API sends `attribution`)
+    renderAttribution(els.passageContent, textData.attribution);
+
     // Hardcore Mode Notice
     if (els.hardcoreNotice) {
       if (!pretestConfig.showHintsAndAnalysis) {
@@ -157,4 +160,50 @@ export async function startExercise(textId, options = {}) {
     console.error('Ошибка инициализации упражнения:', err);
     throw err;
   }
+}
+
+/**
+ * Show (or remove) the source/license line under the passage.
+ * Rendered only for texts that carry `attribution` (origin=open_source), so other
+ * texts keep exactly the same DOM as before.
+ * @param {HTMLElement|null} passageEl
+ * @param {Object|null|undefined} attribution
+ */
+export function renderAttribution(passageEl, attribution) {
+  if (!passageEl || !passageEl.parentNode) return;
+  const doc = passageEl.ownerDocument;
+  const old = doc.getElementById('passage-attribution');
+  if (old) old.remove();
+  if (!attribution || !attribution.url) return;
+
+  const safeUrl = (u) => (/^https:\/\//.test(String(u || '')) ? String(u) : null);
+  const label = (key) => {
+    const span = doc.createElement('span');
+    span.setAttribute('data-i18n', key);
+    span.textContent = t(key);
+    return span;
+  };
+  const link = (href, text) => {
+    const url = safeUrl(href);
+    if (!url) return doc.createTextNode(text);
+    const a = doc.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = text;
+    return a;
+  };
+
+  const p = doc.createElement('p');
+  p.id = 'passage-attribution';
+  p.className = 'passage-attribution';
+  p.append(
+    label('exercise.sourceLabel'), ': ',
+    link(attribution.url, `「${attribution.work}」`),
+    ` — ${attribution.author} · `,
+    link(attribution.license_url, attribution.license),
+    ' · ',
+    label('exercise.sourceAdapted')
+  );
+  passageEl.insertAdjacentElement('afterend', p);
 }

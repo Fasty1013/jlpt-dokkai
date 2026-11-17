@@ -1,0 +1,203 @@
+[
+ {
+  "slug": "n5-open-medium-001",
+  "level": "N5",
+  "category": "medium",
+  "title": "おにぎり",
+  "source_type": "open_adapted",
+  "source_note": "出典：Wikipedia日本語版「おにぎり」（CC BY-SA 4.0・改変）",
+  "recommended_time_min": 4,
+  "body_html": "<div class=\"passage-body\">\n<p>おにぎりは、<ruby>日本<rt>にほん</rt></ruby>の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>です。「おむすび」とも<ruby>言<rt>い</rt></ruby>います。</p>\n<p>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>三角<rt>さんかく</rt></ruby>などの<ruby>形<rt>かたち</rt></ruby>にして、のりで<ruby>包<rt>つつ</rt></ruby>みます。<span id=\"ev-q1\" data-evidence=\"ev-q1\">ご<ruby>飯<rt>はん</rt></ruby>の<ruby>中<rt>なか</rt></ruby>には、<ruby>梅干<rt>うめぼ</rt></ruby>しや<ruby>昆布<rt>こんぶ</rt></ruby>、<ruby>鮭<rt>さけ</rt></ruby>などを<ruby>入<rt>い</rt></ruby>れます。</span></p>\n<p><span id=\"ev-q2\" data-evidence=\"ev-q2\"><ruby>手<rt>て</rt></ruby>で<ruby>持<rt>も</rt></ruby>って<ruby>食<rt>た</rt></ruby>べることができますから、<ruby>昔<rt>むかし</rt></ruby>から、お<ruby>弁当<rt>べんとう</rt></ruby>として<ruby>人気<rt>にんき</rt></ruby>があります。</span></p>\n<p><ruby>今<rt>いま</rt></ruby>は、コンビニやスーパーでも<ruby>売<rt>う</rt></ruby>っています。<ruby>外国<rt>がいこく</rt></ruby>でも、おにぎりを<ruby>売<rt>う</rt></ruby>っている<ruby>店<rt>みせ</rt></ruby>があります。</p>\n</div>",
+  "translation_ru": "Онигири — японская еда. Её также называют «омусуби». Рис формуют, например, треугольником и заворачивают в нори. Внутрь кладут умэбоси (солёную сливу), комбу, лосося и т. п. Онигири можно есть, держа в руке, поэтому с давних времён они популярны как еда в дорогу (бэнто). Сейчас их продают и в магазинах у дома, и в супермаркетах. За границей тоже есть магазины, где продают онигири.",
+  "vocabulary": [
+   {
+    "word": "包む",
+    "furigana": "つつむ",
+    "translation": "заворачивать"
+   },
+   {
+    "word": "梅干し",
+    "furigana": "うめぼし",
+    "translation": "умэбоси, солёная слива"
+   },
+   {
+    "word": "お弁当",
+    "furigana": "おべんとう",
+    "translation": "бэнто, еда с собой"
+   }
+  ],
+  "needs_manual_review": [
+   "日本: janome にっぽん → にほん — поставлено вручную"
+  ],
+  "attribution": {
+   "source": "wikipedia_ja",
+   "work": "おにぎり",
+   "author": "Wikipedia日本語版の執筆者",
+   "url": "https://ja.wikipedia.org/wiki/%E3%81%8A%E3%81%AB%E3%81%8E%E3%82%8A",
+   "revision": "111696177 (2026-11-08T17:54:18Z)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.ja",
+   "changes": "Вводный раздел статьи сокращён и упрощён до уровня N5; факты не менялись."
+  },
+  "questions": [
+   {
+    "slug": "n5-open-medium-001-q1",
+    "question_number": 1,
+    "type": "detail",
+    "prompt": "おにぎりの中に、何を入れますか。",
+    "evidence_span_id": "ev-q1",
+    "general_explanation": "В ev-q1 перечислено, что кладут внутрь: 梅干し, 昆布, 鮭. Нори (のり) — снаружи, ею рис заворачивают.",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "梅干しや鮭などを入れます。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. Это перечислено в ev-q1."
+     },
+     {
+      "option_number": 2,
+      "text": "のりを入れます。",
+      "is_correct": false,
+      "trap_type": "misinterpretation",
+      "explanation_ru": "Неверно. Нори не кладут внутрь — ею заворачивают рис снаружи (のりで包みます)."
+     },
+     {
+      "option_number": 3,
+      "text": "パンや卵を入れます。",
+      "is_correct": false,
+      "trap_type": "not_mentioned",
+      "explanation_ru": "Неверно. Хлеб и яйца в тексте не упоминаются."
+     },
+     {
+      "option_number": 4,
+      "text": "何も入れません。",
+      "is_correct": false,
+      "trap_type": "opposite_meaning",
+      "explanation_ru": "Неверно. В тексте прямо сказано, что внутрь что-то кладут (中には…を入れます)."
+     }
+    ]
+   },
+   {
+    "slug": "n5-open-medium-001-q2",
+    "question_number": 2,
+    "type": "detail",
+    "prompt": "おにぎりは、どうして昔からお弁当として人気がありますか。",
+    "evidence_span_id": "ev-q2",
+    "general_explanation": "В ev-q2 причина выражена через から: онигири можно есть, держа в руке (手で持って食べることができますから).",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "コンビニで買うことができるからです。",
+      "is_correct": false,
+      "trap_type": "temporal_mismatch",
+      "explanation_ru": "Неверно. Магазины у дома — это про сегодняшний день (今は), а популярность «с давних времён» (昔から) объясняется другим."
+     },
+     {
+      "option_number": 2,
+      "text": "外国でも売っているからです。",
+      "is_correct": false,
+      "trap_type": "partial_match",
+      "explanation_ru": "Неверно. Это факт из текста, но он не объясняет, почему онигири издавна берут с собой."
+     },
+     {
+      "option_number": 3,
+      "text": "手で持って食べることができるからです。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. Причина прямо названа в ev-q2."
+     },
+     {
+      "option_number": 4,
+      "text": "三角の形がきれいだからです。",
+      "is_correct": false,
+      "trap_type": "not_mentioned",
+      "explanation_ru": "Неверно. О красоте формы в тексте ничего не сказано."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "n5-open-short-001",
+  "level": "N5",
+  "category": "short",
+  "title": "富士山",
+  "source_type": "open_adapted",
+  "source_note": "出典：Wikipedia日本語版「富士山」（CC BY-SA 4.0・改変）",
+  "recommended_time_min": 2,
+  "body_html": "<div class=\"passage-body\">\n<p><ruby>富士山<rt>ふじさん</rt></ruby>は、<ruby>日本<rt>にほん</rt></ruby>でいちばん<ruby>高<rt>たか</rt></ruby>い<ruby>山<rt>やま</rt></ruby>です。<ruby>高<rt>たか</rt></ruby>さは3776メートルです。</p>\n<p><ruby>富士山<rt>ふじさん</rt></ruby>は、<ruby>山梨<rt>やまなし</rt></ruby><ruby>県<rt>けん</rt></ruby>と<ruby>静岡<rt>しずおか</rt></ruby><ruby>県<rt>けん</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>にあります。<ruby>外国<rt>がいこく</rt></ruby>でも、<ruby>日本<rt>にほん</rt></ruby>のシンボルとして<ruby>有名<rt>ゆうめい</rt></ruby>です。</p>\n<p><span id=\"ev-q1\" data-evidence=\"ev-q1\"><ruby>夏<rt>なつ</rt></ruby>は、たくさんの<ruby>人<rt>ひと</rt></ruby>が<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ります。</span></p>\n<p>2013<ruby>年<rt>ねん</rt></ruby>に、<ruby>富士山<rt>ふじさん</rt></ruby>は<ruby>世界<rt>せかい</rt></ruby><ruby>文化<rt>ぶんか</rt></ruby><ruby>遺産<rt>いさん</rt></ruby>になりました。</p>\n</div>",
+  "translation_ru": "Фудзи — самая высокая гора Японии. Её высота — 3776 метров. Фудзи находится между префектурами Яманаси и Сидзуока. За границей она тоже известна как символ Японии. Летом на Фудзи поднимается много людей. В 2013 году Фудзи стала объектом Всемирного культурного наследия.",
+  "vocabulary": [
+   {
+    "word": "高い",
+    "furigana": "たかい",
+    "translation": "высокий"
+   },
+   {
+    "word": "登る",
+    "furigana": "のぼる",
+    "translation": "подниматься (на гору)"
+   },
+   {
+    "word": "世界文化遺産",
+    "furigana": "せかいぶんかいさん",
+    "translation": "объект Всемирного культурного наследия"
+   }
+  ],
+  "needs_manual_review": [
+   "日本: janome にっぽん → にほん — поставлено вручную",
+   "間: janome ま → あいだ — поставлено вручную"
+  ],
+  "attribution": {
+   "source": "wikipedia_ja",
+   "work": "富士山",
+   "author": "Wikipedia日本語版の執筆者",
+   "url": "https://ja.wikipedia.org/wiki/%E5%AF%8C%E5%A3%AB%E5%B1%B1",
+   "revision": "111782484 (2026-11-15T15:01:06Z)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.ja",
+   "changes": "Вводный раздел статьи сокращён и упрощён до уровня N5; факты не менялись."
+  },
+  "questions": [
+   {
+    "slug": "n5-open-short-001-q1",
+    "question_number": 1,
+    "type": "detail",
+    "prompt": "富士山について、正しいものはどれですか。",
+    "evidence_span_id": "ev-q1",
+    "general_explanation": "В предложении ev-q1 сказано: летом (夏は) на Фудзи поднимается много людей. Остальные варианты противоречат тексту: гора стоит между Яманаси и Сидзуокой и она самая высокая в Японии.",
+    "options": [
+     {
+      "option_number": 1,
+      "text": "夏に、たくさんの人が登ります。",
+      "is_correct": true,
+      "trap_type": null,
+      "explanation_ru": "Верно. Это прямо сказано в ev-q1: 夏は、たくさんの人が富士山に登ります。"
+     },
+     {
+      "option_number": 2,
+      "text": "冬に、たくさんの人が登ります。",
+      "is_correct": false,
+      "trap_type": "temporal_mismatch",
+      "explanation_ru": "Неверно. В тексте говорится о лете (夏), а не о зиме (冬)."
+     },
+     {
+      "option_number": 3,
+      "text": "東京にあります。",
+      "is_correct": false,
+      "trap_type": "not_mentioned",
+      "explanation_ru": "Неверно. Фудзи находится между префектурами Яманаси и Сидзуока, о Токио в тексте ничего нет."
+     },
+     {
+      "option_number": 4,
+      "text": "日本で二番目に高い山です。",
+      "is_correct": false,
+      "trap_type": "opposite_meaning",
+      "explanation_ru": "Неверно. В первом предложении сказано いちばん高い — самая высокая, а не вторая по высоте."
+     }
+    ]
+   }
+  ]
+ }
+]

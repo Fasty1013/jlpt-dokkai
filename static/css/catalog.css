@@ -698,3 +698,14 @@
     }
 }
 
+
+/* Texts from open sources (origin=open_source, I35) */
+.origin-badge-open {
+    background: #f0f9ff;
+    color: #075985;
+    border: 1px solid #bae6fd;
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+}

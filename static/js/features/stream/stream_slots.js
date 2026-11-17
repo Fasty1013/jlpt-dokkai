@@ -33,6 +33,8 @@ export function renderSlotCardHtml(slot, profileKey = '') {
     originBadge = `<span class="origin-badge-param">${tr('stream.originParam')}</span>`;
   } else if (t.origin === 'ai_generated') {
     originBadge = `<span class="origin-badge-param" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe;">${tr('stream.originAi')}</span>`;
+  } else if (t.origin === 'open_source') {
+    originBadge = `<span class="origin-badge-open">${tr('stream.originOpen')}</span>`;
   } else if (t.category === 'nhk' || (t.title && t.title.includes('NHK'))) {
     originBadge = '<span class="nhk-badge">NHK WORLD</span>';
   } else {

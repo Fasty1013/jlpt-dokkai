@@ -271,3 +271,19 @@ span[id^="ev"] {
     margin-bottom: 0.6rem;
 }
 
+
+/* Source and license line under passages from open sources (I35) */
+.passage-attribution {
+    margin: 1rem 0 0;
+    padding-top: 0.6rem;
+    border-top: 1px dashed var(--sumi-200, #e5e5e5);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--sumi-500, #737373);
+    overflow-wrap: anywhere;
+}
+
+.passage-attribution a {
+    color: inherit;
+    text-decoration: underline;
+}
