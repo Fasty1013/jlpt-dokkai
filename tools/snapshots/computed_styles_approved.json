@@ -1,0 +1,17 @@
+{
+ "meta": {"reference":"0625295","captured_at":"2026-11-17T10:44:12.170Z","count":12,"note":"Approved computed-style differences vs the reference served on :8001. See docs/INTENTIONAL_DIFFERENCES.md (I17). Recapture after the reference changes."},
+ "entries": [
+  {"screen":"Каталог","element":"#active-slots-list > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Каталог","element":"#active-slots-list > div:nth-of-type(2) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Каталог","element":"#active-slots-list > div:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно жалобы","element":"#active-slots-list > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно жалобы","element":"#active-slots-list > div:nth-of-type(2) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно жалобы","element":"#active-slots-list > div:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно синхронизации","element":"#active-slots-list > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно синхронизации","element":"#active-slots-list > div:nth-of-type(2) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Окно синхронизации","element":"#active-slots-list > div:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Предстартовое окно","element":"#active-slots-list > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Предстартовое окно","element":"#active-slots-list > div:nth-of-type(2) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"},
+  {"screen":"Предстартовое окно","element":"#active-slots-list > div:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(3)","state":"normal","property":"width","mainVal":"96.375px","refVal":"102.266px"}
+ ]
+}
