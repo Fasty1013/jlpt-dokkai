@@ -236,3 +236,8 @@ MIT License.
 
 ### Данные словаря и благодарности
 Английские глоссы всплывающего словаря (`app/data/jmdict_en.json`) получены из **JMdict** — Dictionary data from JMdict, copyright The Electronic Dictionary Research and Development Group, licensed under CC BY-SA 4.0: https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project (лицензия: https://www.edrdg.org/edrdg/licence.html). Индекс собран `tools/build_jmdict_index.py` из релиза `jmdict-eng-common` 3.6.2 (словарь от 2026-11-09, проект jmdict-simplified) и остаётся под **CC BY-SA 4.0**; лицензия MIT выше относится к коду проекта. Узбекские и часть английских глосс — собственный глоссарий проекта (`app/data/dictionary_manual.txt`). Подробности: `docs/i18n/DICTIONARY_DATA.md`.
+
+### Тексты из открытых источников
+Часть заданий (`content/open/`, в приложении — бейдж «📖 Открытый источник» и строка «Источник» под текстом) построена на текстах под открытыми лицензиями: статьи **японской Википедии** (авторы — участники Википедии, **CC BY-SA 4.0**; адаптированные тексты распространяются на тех же условиях) и произведения из **Аодзоры Бунко** (общественное достояние). Вопросы, варианты ответов, пояснения и переводы написаны для проекта. Список текстов со ссылками на источники, версиями и описанием изменений — `docs/CONTENT_SOURCES.md`.
+
+Добавление новых: черновик в `content/open/src/*.json` → `python tools/build_open_content.py` (фуригана — токенизатор janome) → `python tools/import_open_content.py` (только вставка отсутствующих `slug`; на сервере выполняется автоматически при старте). Такие задания выдаются в потоке после того, как основные задания этой категории решены.

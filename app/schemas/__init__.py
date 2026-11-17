@@ -41,6 +41,16 @@ class QuestionReadSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class AttributionSchema(BaseModel):
+    """Source and license of a text from an open source (only for origin=open_source)."""
+    source: str
+    work: str
+    author: str
+    url: str
+    license: str
+    license_url: str
+
+
 class TextReadSchema(BaseModel):
     id: int
     title: str
@@ -51,6 +61,8 @@ class TextReadSchema(BaseModel):
     recommended_time_min: int
     content_html: str
     questions: List[QuestionReadSchema]
+    # Only present for texts from open sources; omitted otherwise (response_model_exclude_unset)
+    attribution: Optional[AttributionSchema] = None
 
     model_config = ConfigDict(from_attributes=True)
 

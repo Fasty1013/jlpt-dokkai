@@ -251,7 +251,7 @@
   "body": {
    "database": "connected",
    "status": "ok",
-   "texts_count": 314
+   "texts_count": 324
   },
   "headers": {
    "cache-control": null,
@@ -298,6 +298,45 @@
        "selected_option_id"
       ],
       "title": "AnswerSubmissionSchema",
+      "type": "object"
+     },
+     "AttributionSchema": {
+      "description": "Source and license of a text from an open source (only for origin=open_source).",
+      "properties": {
+       "author": {
+        "title": "Author",
+        "type": "string"
+       },
+       "license": {
+        "title": "License",
+        "type": "string"
+       },
+       "license_url": {
+        "title": "License Url",
+        "type": "string"
+       },
+       "source": {
+        "title": "Source",
+        "type": "string"
+       },
+       "url": {
+        "title": "Url",
+        "type": "string"
+       },
+       "work": {
+        "title": "Work",
+        "type": "string"
+       }
+      },
+      "required": [
+       "source",
+       "work",
+       "author",
+       "url",
+       "license",
+       "license_url"
+      ],
+      "title": "AttributionSchema",
       "type": "object"
      },
      "Body_upload_pdf_api_admin_upload_pdf_post": {
@@ -970,6 +1009,16 @@
      },
      "TextReadSchema": {
       "properties": {
+       "attribution": {
+        "anyOf": [
+         {
+          "$ref": "#/components/schemas/AttributionSchema"
+         },
+         {
+          "type": "null"
+         }
+        ]
+       },
        "category": {
         "title": "Category",
         "type": "string"
@@ -7154,6 +7203,106 @@
     "recommended_time_min": 2,
     "source_exam": null,
     "title": "Тест на дефекты"
+   },
+   {
+    "category": "long",
+    "id": 315,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 3,
+    "recommended_time_min": 8,
+    "source_exam": "出典：Wikipedia日本語版「わび・さび」（CC BY-SA 4.0・改変）",
+    "title": "侘の美意識"
+   },
+   {
+    "category": "short",
+    "id": 316,
+    "is_nhk": false,
+    "level": "N1",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "出典：寺田寅彦「科学者とあたま」（青空文庫・パブリックドメイン・改変）",
+    "title": "科学者とあたま（抜粋）"
+   },
+   {
+    "category": "article",
+    "id": 317,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "出典：Wikipedia日本語版「ことわざ」（CC BY-SA 4.0・改変）",
+    "title": "ことわざの形と働き"
+   },
+   {
+    "category": "medium",
+    "id": 318,
+    "is_nhk": false,
+    "level": "N2",
+    "question_count": 2,
+    "recommended_time_min": 5,
+    "source_exam": "出典：Wikipedia日本語版「招き猫」（CC BY-SA 4.0・改変）",
+    "title": "招き猫はどこで生まれたか"
+   },
+   {
+    "category": "long",
+    "id": 319,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 3,
+    "recommended_time_min": 7,
+    "source_exam": "出典：新美南吉「手袋を買いに」（青空文庫・パブリックドメイン・改変）",
+    "title": "手袋を買いに（再話）"
+   },
+   {
+    "category": "short",
+    "id": 320,
+    "is_nhk": false,
+    "level": "N3",
+    "question_count": 1,
+    "recommended_time_min": 3,
+    "source_exam": "出典：Wikipedia日本語版「ことわざ」（CC BY-SA 4.0・改変）",
+    "title": "文化によって意味が変わることわざ"
+   },
+   {
+    "category": "medium",
+    "id": 321,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "出典：Wikipedia日本語版「新幹線」（CC BY-SA 4.0・改変）",
+    "title": "新幹線"
+   },
+   {
+    "category": "short",
+    "id": 322,
+    "is_nhk": false,
+    "level": "N4",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "出典：Wikipedia日本語版「招き猫」（CC BY-SA 4.0・改変）",
+    "title": "招き猫の色"
+   },
+   {
+    "category": "medium",
+    "id": 323,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 2,
+    "recommended_time_min": 4,
+    "source_exam": "出典：Wikipedia日本語版「おにぎり」（CC BY-SA 4.0・改変）",
+    "title": "おにぎり"
+   },
+   {
+    "category": "short",
+    "id": 324,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "出典：Wikipedia日本語版「富士山」（CC BY-SA 4.0・改変）",
+    "title": "富士山"
    }
   ],
   "headers": {
@@ -7409,6 +7558,16 @@
     "recommended_time_min": 2,
     "source_exam": null,
     "title": "Тест на дефекты"
+   },
+   {
+    "category": "short",
+    "id": 324,
+    "is_nhk": false,
+    "level": "N5",
+    "question_count": 1,
+    "recommended_time_min": 2,
+    "source_exam": "出典：Wikipedia日本語版「富士山」（CC BY-SA 4.0・改変）",
+    "title": "富士山"
    }
   ],
   "headers": {

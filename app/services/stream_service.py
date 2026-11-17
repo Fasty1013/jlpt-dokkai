@@ -169,6 +169,33 @@ def get_or_create_slots(
     return serialized_slots
 
 
+OPEN_SOURCE_ORIGIN = "open_source"
+
+
+def _pick_from_pool(db: Session, profile_key: str, parts: List[str], exclude_ids: Set[int], open_pool: bool) -> Optional[Text]:
+    """Случайный текст пула: сначала точное совпадение profile_key, затем (level, category)."""
+    origin_filter = (Text.origin == OPEN_SOURCE_ORIGIN) if open_pool else (Text.origin != OPEN_SOURCE_ORIGIN)
+
+    # Поиск в существующем пуле по profile_key
+    query = db.query(Text).filter(Text.is_active == True, Text.profile_key == profile_key, origin_filter)
+    if exclude_ids:
+        query = query.filter(~Text.id.in_(exclude_ids))
+    candidate = query.order_by(func.random()).first()
+    if candidate:
+        return candidate
+
+    # Если точного совпадения по длине band нет, ищем по (level, category)
+    if len(parts) >= 2:
+        lvl, cat = parts[0], parts[1]
+        fallback_query = db.query(Text).filter(
+            Text.is_active == True, Text.level == lvl, Text.category == cat, origin_filter
+        )
+        if exclude_ids:
+            fallback_query = fallback_query.filter(~Text.id.in_(exclude_ids))
+        return fallback_query.order_by(func.random()).first()
+    return None
+
+
 def pick_next(
     db: Session,
     user_id: str,
@@ -200,39 +227,14 @@ def pick_next(
     }
     exclude_ids.update(active_slot_text_ids)
 
-    # 1. Поиск в существующем пуле по profile_key
-    query = (
-        db.query(Text)
-        .filter(
-            Text.is_active == True,
-            Text.profile_key == profile_key
-        )
-    )
-    if exclude_ids:
-        query = query.filter(~Text.id.in_(exclude_ids))
-
-    candidate = query.order_by(func.random()).first()
-    if candidate:
-        return candidate
-
-    # 2. Если точного совпадения по длине band нет, ищем по (level, category)
+    # 1–2. Сначала основной пул (точный profile_key, затем (level, category)),
+    # и только потом тексты из открытых источников (origin="open_source") — они
+    # выдаются после того, как основной пул этой категории исчерпан (I35).
     parts = profile_key.split(":")
-    if len(parts) >= 2:
-        lvl, cat = parts[0], parts[1]
-        fallback_query = (
-            db.query(Text)
-            .filter(
-                Text.is_active == True,
-                Text.level == lvl,
-                Text.category == cat
-            )
-        )
-        if exclude_ids:
-            fallback_query = fallback_query.filter(~Text.id.in_(exclude_ids))
-
-        fallback_candidate = fallback_query.order_by(func.random()).first()
-        if fallback_candidate:
-            return fallback_candidate
+    for open_pool in (False, True):
+        candidate = _pick_from_pool(db, profile_key, parts, exclude_ids, open_pool)
+        if candidate:
+            return candidate
 
     # 3. Для уровней N5 и N4 используем детерминированный параметрический генератор
     if allow_generate and (profile_key.startswith("N5") or profile_key.startswith("N4")):

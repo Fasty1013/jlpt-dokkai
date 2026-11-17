@@ -4,13 +4,15 @@ from sqlalchemy.orm import Session, joinedload
 from app import models
 from app.core.database import get_db
 from app.schemas import TextReadSchema, QuestionReadSchema, OptionReadSchema
+from app.services.open_content import attribution_for
 from app.services.option_shuffle import present_options
 from app.services.stream_service import get_attempt_epoch
 
 router = APIRouter()
 
 
-@router.get("/api/texts/{text_id}", response_model=TextReadSchema, tags=["Reading (Anti-Cheat)"])
+@router.get("/api/texts/{text_id}", response_model=TextReadSchema, response_model_exclude_unset=True,
+            tags=["Reading (Anti-Cheat)"])
 def get_text_for_reading(
     text_id: int,
     user_id: str = Query("default-user", description="ID сессии или пользователя (для перемешивания вариантов)"),
@@ -56,6 +58,11 @@ def get_text_for_reading(
             )
         )
 
+    extra = {}
+    if text.origin == "open_source":
+        attribution = attribution_for(text.slug)
+        if attribution:
+            extra["attribution"] = attribution
     return TextReadSchema(
         id=text.id,
         title=text.title,
@@ -65,5 +72,6 @@ def get_text_for_reading(
         is_nhk=text.is_nhk,
         recommended_time_min=text.recommended_time_min,
         content_html=text.content_html,
-        questions=questions_read
+        questions=questions_read,
+        **extra
     )
