@@ -224,7 +224,7 @@ export const uz = {
   "stream.loading": "Topshiriq uyachalari yuklanmoqda...",
   "stream.loadError": "Faol topshiriqlarni yuklab bo'lmadi.",
   "stream.retry": "🔄 Qayta urinish",
-  "sync.statusSynced": "Barcha yechilgan topshiriqlar, shaxsiy lug'at va sozlamalar Google Firebase bilan sinxronlangan ($0, bepul).",
+  "sync.statusSynced": "Barcha yechilgan topshiriqlar, shaxsiy lug'at va sozlamalar sinxronlangan.",
   "sync.statusSyncing": "Ma'lumotlar bulut bilan sinxronlanmoqda...",
   "sync.statusOffline": "Tarmoq mavjud emas. Barcha ma'lumotlar qurilmangizda (IndexedDB) saqlanadi va internet yoqilganda sinxronlanadi.",
   "sync.statusErrorWith": "Sinxronlash xatosi: {error}",

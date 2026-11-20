@@ -223,7 +223,7 @@ export const ja = {
   "stream.loading": "出題枠を読み込み中...",
   "stream.loadError": "アクティブな問題を読み込めませんでした。",
   "stream.retry": "🔄 再試行",
-  "sync.statusSynced": "解答済みの問題、単語帳、設定はすべてGoogle Firebaseと同期されています（無料）。",
+  "sync.statusSynced": "解答済みの問題、単語帳、設定はすべて同期されています。",
   "sync.statusSyncing": "クラウドとデータを同期中...",
   "sync.statusOffline": "ネットワークに接続できません。データはこの端末（IndexedDB）に保存され、接続が回復すると同期されます。",
   "sync.statusErrorWith": "同期エラー: {error}",

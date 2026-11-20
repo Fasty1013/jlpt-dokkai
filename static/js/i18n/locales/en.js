@@ -223,7 +223,7 @@ export const en = {
   "stream.loading": "Loading task slots...",
   "stream.loadError": "Could not load the active tasks.",
   "stream.retry": "🔄 Try again",
-  "sync.statusSynced": "All solved tasks, your personal vocabulary and settings are synced with Google Firebase ($0, free).",
+  "sync.statusSynced": "All solved tasks, your personal vocabulary and settings are synced.",
   "sync.statusSyncing": "Syncing data with the cloud...",
   "sync.statusOffline": "No network. All data is stored on your device (IndexedDB) and will sync when the internet is back.",
   "sync.statusErrorWith": "Sync error: {error}",
