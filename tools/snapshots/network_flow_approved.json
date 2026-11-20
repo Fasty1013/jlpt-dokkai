@@ -1,7 +1,0 @@
-{
-  "reference": "f9946e0",
-  "note": "I36: the main site no longer loads PDF drafts at start-up; the import moved to /admin. Delete this file after the merge into main.",
-  "approved": [
-    { "main_only": {"method":"GET","path":"/api/admin/drafts","query":{},"body":null,"key_headers":{"content-type":null,"accept":null}} }
-  ]
-}
